@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Lru," />
 
 
 
@@ -79,13 +79,25 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="许倩倩">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/index.html">
+<meta name="description" content="某年某月某日，糖葫芦同学在掘金app上看了几篇文章，偶然看到了一篇熟悉的词LRU算法，脑海里就想这不是经常说的嘛，就那么回事，当天晚上睡觉，LRU算法是啥来着，好像是什么最近最少使用的，白天在地铁上看的文章也不少，但是到晚上想想好像啥也没记住，就记得LRU算法，我发现人大多数是这样的啊，对于自己熟悉的部分呢还能记着点，不熟悉或者不会的可能真的是看过就忘啊~既然这样还不如先把熟悉的弄明白。  第二">
+<meta name="keywords" content="Lru">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LRU算法还一知半解？">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2017/12/19/lru/index.html">
 <meta property="og:site_name" content="许倩倩">
+<meta property="og:description" content="某年某月某日，糖葫芦同学在掘金app上看了几篇文章，偶然看到了一篇熟悉的词LRU算法，脑海里就想这不是经常说的嘛，就那么回事，当天晚上睡觉，LRU算法是啥来着，好像是什么最近最少使用的，白天在地铁上看的文章也不少，但是到晚上想想好像啥也没记住，就记得LRU算法，我发现人大多数是这样的啊，对于自己熟悉的部分呢还能记着点，不熟悉或者不会的可能真的是看过就忘啊~既然这样还不如先把熟悉的弄明白。  第二">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1948557-f0fd6e881cc5c29d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1948557-020001592d0a4451.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1948557-73dea54b94ba3a2b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/100">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1948557-76e9b1dc1c445a59.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/100">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1948557-5c761bb0bd3479fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1948557-24967fa7f6a4f1f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300">
+<meta property="og:updated_time" content="2017-12-19T09:47:22.800Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="许倩倩">
+<meta name="twitter:title" content="LRU算法还一知半解？">
+<meta name="twitter:description" content="某年某月某日，糖葫芦同学在掘金app上看了几篇文章，偶然看到了一篇熟悉的词LRU算法，脑海里就想这不是经常说的嘛，就那么回事，当天晚上睡觉，LRU算法是啥来着，好像是什么最近最少使用的，白天在地铁上看的文章也不少，但是到晚上想想好像啥也没记住，就记得LRU算法，我发现人大多数是这样的啊，对于自己熟悉的部分呢还能记着点，不熟悉或者不会的可能真的是看过就忘啊~既然这样还不如先把熟悉的弄明白。  第二">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1948557-f0fd6e881cc5c29d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300">
 
 
 
@@ -115,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2017/12/19/lru/"/>
 
 
 
 
 
-  <title>许倩倩</title>
+  <title>LRU算法还一知半解？ | 许倩倩</title>
   
 
 
@@ -140,8 +152,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -224,9 +235,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -256,9 +267,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/19/lru/" itemprop="url">LRU算法还一知半解？</a></h1>
+          <h1 class="post-title" itemprop="name headline">LRU算法还一知半解？</h1>
         
 
         <div class="post-meta">
@@ -308,9 +317,7 @@
       
 
       
-        
-          
-            <blockquote>
+        <blockquote>
 <p>某年某月某日，糖葫芦同学在掘金app上看了几篇文章，偶然看到了一篇熟悉的词LRU算法，脑海里就想这不是经常说的嘛，就那么回事，当天晚上睡觉，LRU算法是啥来着，好像是什么最近最少使用的，白天在地铁上看的文章也不少，但是到晚上想想好像啥也没记住，就记得LRU算法，我发现人大多数是这样的啊，对于自己熟悉的部分呢还能记着点，不熟悉或者不会的可能真的是看过就忘啊~既然这样还不如先把熟悉的弄明白。</p>
 </blockquote>
 <p><strong>第二天来到公司，我觉着还是有必要看一下这个LRU的源码，到底是怎么回事，嗯，糖葫芦同学刷刷得看，下面我们将进入正题，请戴眼镜的同学把眼镜擦一擦，哈哈哈</strong></p>
@@ -338,8 +345,6 @@
 <p><img src="http://upload-images.jianshu.io/upload_images/1948557-24967fa7f6a4f1f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300" alt="result.png"></p>
 <p>哇！真的跟我们想的一样耶，证明我们想的是对的，至此，LruCache就说完了，如果看完的你有不明白的地方可以留言，一起讨论下~</p>
 
-          
-        
       
     </div>
     
@@ -347,6 +352,12 @@
     
 	
 	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
   
    </div>
 
@@ -358,146 +369,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2017/12/11/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="许倩倩">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/11/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-11T15:18:57+08:00">
-                2017-12-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/Lru/" rel="tag"># Lru</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/11/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -507,10 +408,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -518,6 +420,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -538,8 +444,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -592,6 +507,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#First"><span class="nav-number">1.</span> <span class="nav-text"><a href="#First" class="headerlink" title="First"></a>First</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#有什么用呢？"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x6709;&#x4EC0;&#x4E48;&#x7528;&#x5462;&#xFF1F;" class="headerlink" title="&#x6709;&#x4EC0;&#x4E48;&#x7528;&#x5462;&#xFF1F;"></a>&#x6709;&#x4EC0;&#x4E48;&#x7528;&#x5462;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Second"><span class="nav-number">3.</span> <span class="nav-text"><a href="#Second" class="headerlink" title="Second"></a>Second</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置场景"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x8BBE;&#x7F6E;&#x573A;&#x666F;" class="headerlink" title="&#x8BBE;&#x7F6E;&#x573A;&#x666F;"></a>&#x8BBE;&#x7F6E;&#x573A;&#x666F;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -739,6 +670,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
