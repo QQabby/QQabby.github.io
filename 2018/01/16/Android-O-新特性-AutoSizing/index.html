@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="get/set.template," />
+  <meta name="keywords" content="Android O," />
 
 
 
@@ -79,26 +79,21 @@
 
 
 
-<meta name="description" content="今天看到面对接口脏数据你还在V层if str==null else setText? 一文，觉着写得挺好，开发过程中多思考多动手，会带来意想不到的效果。底下评论大家也都说了各自的方法和见解，文中有一些问题作者后来也解决了，看到评论里有人说： 说到配置as,就可以实现在创建bean时自动生成return xx==null?&amp;quot;&amp;quot;:xx; 觉着很好，因为我觉着这是一种挺简单的方法，但">
-<meta name="keywords" content="get&#x2F;set.template">
+<meta name="description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
+<meta name="keywords" content="Android O">
 <meta property="og:type" content="article">
-<meta property="og:title" content="修改自动生成get&#x2F;set方法模板代码">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/01/11/修改自动生成get-set方法模板代码/index.html">
+<meta property="og:title" content="Android O 新特性 AutoSizing">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="今天看到面对接口脏数据你还在V层if str==null else setText? 一文，觉着写得挺好，开发过程中多思考多动手，会带来意想不到的效果。底下评论大家也都说了各自的方法和见解，文中有一些问题作者后来也解决了，看到评论里有人说： 说到配置as,就可以实现在创建bean时自动生成return xx==null?&amp;quot;&amp;quot;:xx; 觉着很好，因为我觉着这是一种挺简单的方法，但">
+<meta property="og:description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b35580365?w=658&h=389&f=png&s=25367">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3568a2be?w=389&h=636&f=png&s=16071">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b531389d1?w=787&h=609&f=png&s=47221">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3c7e8344?w=431&h=149&f=png&s=7606">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b357e2825?w=262&h=269&f=png&s=4331">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b38fb2a31?w=1240&h=679&f=png&s=129573">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b56ef9685?w=394&h=643&f=png&s=17595">
-<meta property="og:updated_time" content="2018-01-11T10:08:26.932Z">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&h=713&f=gif&s=764107">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe486f97e25be?w=888&h=158&f=png&s=18247">
+<meta property="og:updated_time" content="2018-01-16T09:44:04.317Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="修改自动生成get&#x2F;set方法模板代码">
-<meta name="twitter:description" content="今天看到面对接口脏数据你还在V层if str==null else setText? 一文，觉着写得挺好，开发过程中多思考多动手，会带来意想不到的效果。底下评论大家也都说了各自的方法和见解，文中有一些问题作者后来也解决了，看到评论里有人说： 说到配置as,就可以实现在创建bean时自动生成return xx==null?&amp;quot;&amp;quot;:xx; 觉着很好，因为我觉着这是一种挺简单的方法，但">
-<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b35580365?w=658&h=389&f=png&s=25367">
+<meta name="twitter:title" content="Android O 新特性 AutoSizing">
+<meta name="twitter:description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&h=713&f=gif&s=764107">
 
 
 
@@ -128,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/11/修改自动生成get-set方法模板代码/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/"/>
 
 
 
 
 
-  <title>修改自动生成get/set方法模板代码 | 糖葫芦</title>
+  <title>Android O 新特性 AutoSizing | 糖葫芦</title>
   
 
 
@@ -285,7 +280,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/11/修改自动生成get-set方法模板代码/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -302,7 +297,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">修改自动生成get/set方法模板代码</h1>
+          <h1 class="post-title" itemprop="name headline">Android O 新特性 AutoSizing</h1>
         
 
         <div class="post-meta">
@@ -314,8 +309,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-11T14:00:14+08:00">
-                2018-01-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-16T17:43:30+08:00">
+                2018-01-16
               </time>
             
 
@@ -333,9 +328,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/11/修改自动生成get-set方法模板代码/#comments" itemprop="discussionUrl">
+                <a href="/2018/01/16/Android-O-新特性-AutoSizing/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/11/修改自动生成get-set方法模板代码/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/01/16/Android-O-新特性-AutoSizing/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -363,20 +358,31 @@
       
 
       
-        <p>今天看到<br><a href="https://juejin.im/post/5a55c8896fb9a01caf374e93" target="_blank">面对接口脏数据你还在V层if str==null else setText?</a><br> 一文，觉着写得挺好，开发过程中多思考多动手，会带来意想不到的效果。底下评论大家也都说了各自的方法和见解，文中有一些问题作者后来也解决了，看到评论里有人说：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b35580365?w=658&amp;h=389&amp;f=png&amp;s=25367" alt="image.png"></p>
-<p>说到配置as,就可以实现在创建bean时自动生成<code>return xx==null?&quot;&quot;:xx;</code> 觉着很好，因为我觉着这是一种挺简单的方法，但是就如同底下人问了怎么配置呀，我也不知道，于是我就在自己<code>as</code>工具里新建了一个bean对象，按住<code>alt+insert</code>添加<code>get/set</code>方法，发现了解决办法。如下图：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3568a2be?w=389&amp;h=636&amp;f=png&amp;s=16071" alt="image.png"></p>
-<p>平时手快也没注意，今天仔细看了看，那上面的意思不就是，<code>get</code> 方法模块，<code>set</code>方法模板吗，后面跟着 <code>IntelliJ Default</code>大概就是默认的生成模板吧，点击后面的三个点<br>按钮进去看看，如下：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b531389d1?w=787&amp;h=609&amp;f=png&amp;s=47221" alt="image.png"></p>
-<p>这是<code>set</code>的，<code>get</code>方法也类似是这样的，大概也能看懂，想着是不是可以直接模板就好了，发现无法修改，后来又发现左上角的<code>+</code>号，原来是自己可以新建一个模板，然后再生成的时候选择自己的模板就好了，如我们在<code>get</code>模板中新建一个自己的模板：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3c7e8344?w=431&amp;h=149&amp;f=png&amp;s=7606" alt="image.png"></p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b357e2825?w=262&amp;h=269&amp;f=png&amp;s=4331" alt="image.png"></p>
-<p>我们知道我们只需要改一下最后<code>get</code>方法<code>return</code>那个地方的代码，也就是这儿：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b38fb2a31?w=1240&amp;h=679&amp;f=png&amp;s=129573" alt="image.png"></p>
-<p>不确定是不是，我们可以在后面跟着一个“#”号试试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">  return $field.name+&quot;#&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在生成的时候选择我们自定义的模板：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b56ef9685?w=394&amp;h=643&amp;f=png&amp;s=17595" alt="image.png"></p>
-<p>发现最后生成的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public String getAge() &#123;</span><br><span class="line">    return age + &quot;#&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setAge(String age) &#123;</span><br><span class="line">    this.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样证明确定是这样的，那么我么可以继续进行真正的判断了：<br>我们先把这个默认里的<code>get</code>方法代码拷贝到 <code>MyGetter</code>中，我们再根据我们自己的需要修改模板代码,其它地方不变，就修改需要修改的地方：<br>我们想要实现这样的：<code>return xx==null?&quot;&quot;:xx</code>,Ok ，那么我认为大概是这么写的，首先判断是否是字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">	#if(field.String)&#123;</span><br><span class="line">		return $field.name == null ? &quot;&quot; : $field.name;</span><br><span class="line">	&#125;</span><br><span class="line">	#else</span><br><span class="line">		return $field.name;</span><br><span class="line">	#end </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>我们对比一个<code>default</code>的写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">  return $field.name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>好的，我们再继续生成一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public String getAge() &#123;</span><br><span class="line">        return age == null ? &quot;&quot; : age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(String age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>好的，达成效果，耶，居然还可以这么玩，以后可根据自己需求自行修改，谢谢大家。</p>
+        <h1 id="自动调整TextView的大小的使用autoSizing"><a href="#自动调整TextView的大小的使用autoSizing" class="headerlink" title="自动调整TextView的大小的使用autoSizing"></a>自动调整TextView的大小的使用autoSizing</h1><blockquote>
+<p>Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。</p>
+</blockquote>
+<p>在之前看 <a href="https://juejin.im/post/5a56f70cf265da3e5468fa59" target="_blank" rel="noopener">文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！</a> 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用的时候遇到了一些小问题，导致一直出不来。</p>
+<p><a href="https://developer.android.com/guide/topics/ui/look-and-feel/autosizing-textview.html" target="_blank" rel="noopener">官方文档</a> 点击即可查看，可以看别人讲解的同时也可自行查阅文档，双方对比着看，感觉会好一点。</p>
+<p>如下图可以简单明了的说明该特性：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&amp;h=713&amp;f=gif&amp;s=764107" alt=""></p>
+<p>具体最简单的使用有两种：</p>
+<h1 id="1-一种就是api-gt-api-26的可以直接在xml里面该属性："><a href="#1-一种就是api-gt-api-26的可以直接在xml里面该属性：" class="headerlink" title="1.一种就是api &gt;= api 26的可以直接在xml里面该属性："></a>1.一种就是api &gt;= api 26的可以直接在xml里面该属性：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;TextView</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;200dp&quot;</span><br><span class="line">    android:autoSizeTextType=&quot;uniform&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在此需要注意的是：使用这个<code>autoSizeTextType</code>的时候，控件的<code>layout_width</code> <code>layout_height</code> 不能使用这个<code>wrap_content</code>否则看不出什么效果，要使用具体可衡量的。这个也不难理解，因为它要计算，你设置一个模糊的宽和高，就算不出来了。</p>
+</blockquote>
+<h1 id="2-api-lt-26-的低设备-的兼容写法"><a href="#2-api-lt-26-的低设备-的兼容写法" class="headerlink" title="2. api&lt;26 的低设备 的兼容写法"></a>2. api&lt;26 的低设备 的兼容写法</h1><blockquote>
+<p>官方文档里也明确说明了兼容低版本<code>The library provides support to Android 4.0 (API level 14) and higher.</code> 也就是兼容到4.0以上，写法有些不同，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout</span><br><span class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;TextView</span><br><span class="line">      android:layout_width=&quot;match_parent&quot;</span><br><span class="line">      android:layout_height=&quot;200dp&quot;</span><br><span class="line">      tools:ignore=&quot;MissingPrefix&quot;</span><br><span class="line">      app:autoSizeTextType=&quot;uniform&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这个<code>app</code>是这个<code>xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</code> 我们在自定义控件的时候经常遇到它，<code>tools</code>是这个<code>xmlns:tools=&quot;http://schemas.android.com/tools&quot;</code> 当然以上写法都支持动态编码，具体可查阅文档</p>
+<h1 id="敲黑板重点"><a href="#敲黑板重点" class="headerlink" title="敲黑板重点"></a>敲黑板重点</h1><p>你会发现你写完之后编译是报错的，错误类似是这样的：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/16/160fe486f97e25be?w=888&amp;h=158&amp;f=png&amp;s=18247" alt=""></p>
+<p>找不到！！！</p>
+<p>在写那篇文章作者的帮助下，发现首先要兼容低版本，<code>module</code> 的 <code>build.gradle</code> 文件添加依赖时候 就是这个<code>com.android.support:appcompat-v7:xx</code> 后面的版本号要26以上，你看看你自己项目里有哪个版本你就写上哪个，还要在<code>project</code> 的 <code>build.gradle</code> 文件里添加：<br><code>maven{
+            url &#39;https://maven.google.com&#39;
+        }</code>添加到对应的位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        //添加如下内容</span><br><span class="line">        maven&#123;</span><br><span class="line">            url &apos;https://maven.google.com&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>至此我发现我的项目终于不报错了，可以运行起来并进行下一步的实践操作了，大家如果在项目中也遇到这样的问题，按我那样改应该没啥问题了，顺便把我写的代码上传到<code>github</code> 上了，又需要的可以下载看看：<br><a href="&quot;https://github.com/QQabby/AutoSizingDemo&quot;">demo</a></p>
+<p>另外在查看 <code>Android O</code>新特性中发现一个比较好玩的东西：现在，<code>findViewById()</code> 函数的全部实例均返回 <t extends="" view=""> T，而不是 View。以后就可以这么写啦：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EditText et =  findViewById(R.id.et);</span><br></pre></td></tr></table></figure></t></p>
+<p>就是那样，无需强转了，当然了使用了<code>Kotlin</code>的话就忽略吧，因为<code>Kotlin</code>连<code>findViewById</code>也不用写，哈哈。更多好玩特性可查看 <a href="https://developer.android.com/about/versions/oreo/android-8.0.html#fvbi-signature" target="_blank" rel="noopener">文档</a>。</p>
 
       
     </div>
@@ -404,7 +410,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/get-set-template/" rel="tag"># get/set.template</a>
+            <a href="/tags/Android-O/" rel="tag"># Android O</a>
           
         </div>
       
@@ -417,8 +423,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/09/Activity启动模式/" rel="next" title="Activity启动模式">
-                <i class="fa fa-chevron-left"></i> Activity启动模式
+              <a href="/2018/01/11/修改自动生成get-set方法模板代码/" rel="next" title="修改自动生成get/set方法模板代码">
+                <i class="fa fa-chevron-left"></i> 修改自动生成get/set方法模板代码
               </a>
             
           </div>
@@ -426,10 +432,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/16/Android-O-新特性-AutoSizing/" rel="prev" title="Android O 新特性 AutoSizing">
-                Android O 新特性 AutoSizing <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -491,8 +493,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -545,6 +556,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#自动调整TextView的大小的使用autoSizing"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing" class="headerlink" title="&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing"></a>&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-一种就是api-gt-api-26的可以直接在xml里面该属性："><span class="nav-number">2.</span> <span class="nav-text"><a href="#1-&#x4E00;&#x79CD;&#x5C31;&#x662F;api-gt-api-26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;" class="headerlink" title="1.&#x4E00;&#x79CD;&#x5C31;&#x662F;api &gt;= api 26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;"></a>1.&#x4E00;&#x79CD;&#x5C31;&#x662F;api &gt;= api 26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-api-lt-26-的低设备-的兼容写法"><span class="nav-number">3.</span> <span class="nav-text"><a href="#2-api-lt-26-&#x7684;&#x4F4E;&#x8BBE;&#x5907;-&#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;" class="headerlink" title="2. api&lt;26 &#x7684;&#x4F4E;&#x8BBE;&#x5907; &#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;"></a>2. api&lt;26 &#x7684;&#x4F4E;&#x8BBE;&#x5907; &#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#敲黑板重点"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;" class="headerlink" title="&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;"></a>&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -716,9 +743,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/01/11/修改自动生成get-set方法模板代码/';
-          this.page.identifier = '2018/01/11/修改自动生成get-set方法模板代码/';
-          this.page.title = '修改自动生成get/set方法模板代码';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/';
+          this.page.identifier = '2018/01/16/Android-O-新特性-AutoSizing/';
+          this.page.title = 'Android O 新特性 AutoSizing';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
