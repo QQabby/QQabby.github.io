@@ -273,6 +273,151 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" itemprop="url">如何给TextView上的drawable上的图片添加动画？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-24T16:29:52+08:00">
+                2018-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>可能你遇到过这样的场景，就是在 <code>xml</code> 里，给<code>TextView</code>添加了一个<code>drawableLeft</code>或者<code>drawableRight</code>等，你想给这个图片添加一个动画，然而你会发现当你给这个<code>TextView</code>加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。</p>
+<h1 id="第一种做法"><a href="#第一种做法" class="headerlink" title="第一种做法"></a>第一种做法</h1><blockquote>
+<p>也是比较通俗的方法，说这个<code>drawable 单独弄成ImageView</code>不就好了，在<code>xml</code>里新增一个<code>ImageView</code> 是吧，干嘛非要加在一个标签里面，要相信布局都是很强大的，肯定可以实现效果。</p>
+</blockquote>
+<h1 id="第二种做法"><a href="#第二种做法" class="headerlink" title="第二种做法"></a>第二种做法</h1><blockquote>
+<p>你说真的没办法，必须写在一个里面，也是有办法的，那就不能在<code>xml</code>里设置<code>drawableLeft</code>了，代码设置，如下：  </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AnimationDrawable d = (AnimationDrawable) getResources().getDrawable(R.drawable.animation_draw);  </span><br><span class="line">d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());</span><br><span class="line"> messageText.setCompoundDrawables(d, null, null, null);</span><br></pre></td></tr></table></figure>
+<p>这个具体的动画在这个<code>animation_draw</code>里，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;animation-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">                android:oneshot=&quot;false&quot;</span><br><span class="line">       &gt;</span><br><span class="line"></span><br><span class="line">    &lt;item android:drawable=&quot;@drawable/ic_launcher&quot;</span><br><span class="line">           android:duration=&quot;500&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/animation-list&gt;</span><br></pre></td></tr></table></figure>
+<p>这是一个帧动画，里面可以放很多的<code>item</code>,从而形成动画,碰到了这种情况记录下，方便以后查阅。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1368,7 +1513,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1381,7 +1526,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

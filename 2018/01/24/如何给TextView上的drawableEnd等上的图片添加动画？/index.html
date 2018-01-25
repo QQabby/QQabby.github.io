@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Android O," />
+  <meta name="keywords" content="add animation to drawable," />
 
 
 
@@ -79,21 +79,18 @@
 
 
 
-<meta name="description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
-<meta name="keywords" content="Android O">
+<meta name="description" content="可能你遇到过这样的场景，就是在 xml 里，给TextView添加了一个drawableLeft或者drawableRight等，你想给这个图片添加一个动画，然而你会发现当你给这个TextView加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。 第一种做法 也是比较通俗的方法，说这个drawable 单独弄成ImageView不就好了，在xml里新增一">
+<meta name="keywords" content="add animation to drawable">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android O 新特性 AutoSizing">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/index.html">
+<meta property="og:title" content="如何给TextView上的drawable上的图片添加动画？">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
+<meta property="og:description" content="可能你遇到过这样的场景，就是在 xml 里，给TextView添加了一个drawableLeft或者drawableRight等，你想给这个图片添加一个动画，然而你会发现当你给这个TextView加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。 第一种做法 也是比较通俗的方法，说这个drawable 单独弄成ImageView不就好了，在xml里新增一">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&h=713&f=gif&s=764107">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe486f97e25be?w=888&h=158&f=png&s=18247">
-<meta property="og:updated_time" content="2018-01-16T09:44:04.317Z">
+<meta property="og:updated_time" content="2018-01-25T03:07:32.855Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android O 新特性 AutoSizing">
-<meta name="twitter:description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
-<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&h=713&f=gif&s=764107">
+<meta name="twitter:title" content="如何给TextView上的drawable上的图片添加动画？">
+<meta name="twitter:description" content="可能你遇到过这样的场景，就是在 xml 里，给TextView添加了一个drawableLeft或者drawableRight等，你想给这个图片添加一个动画，然而你会发现当你给这个TextView加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。 第一种做法 也是比较通俗的方法，说这个drawable 单独弄成ImageView不就好了，在xml里新增一">
 
 
 
@@ -123,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/"/>
 
 
 
 
 
-  <title>Android O 新特性 AutoSizing | 糖葫芦</title>
+  <title>如何给TextView上的drawable上的图片添加动画？ | 糖葫芦</title>
   
 
 
@@ -280,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -297,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android O 新特性 AutoSizing</h1>
+          <h1 class="post-title" itemprop="name headline">如何给TextView上的drawable上的图片添加动画？</h1>
         
 
         <div class="post-meta">
@@ -309,8 +306,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-16T17:43:30+08:00">
-                2018-01-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-24T16:29:52+08:00">
+                2018-01-24
               </time>
             
 
@@ -328,9 +325,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/16/Android-O-新特性-AutoSizing/#comments" itemprop="discussionUrl">
+                <a href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/16/Android-O-新特性-AutoSizing/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -358,31 +355,17 @@
       
 
       
-        <h1 id="自动调整TextView的大小的使用autoSizing"><a href="#自动调整TextView的大小的使用autoSizing" class="headerlink" title="自动调整TextView的大小的使用autoSizing"></a>自动调整TextView的大小的使用autoSizing</h1><blockquote>
-<p>Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。</p>
+        <p>可能你遇到过这样的场景，就是在 <code>xml</code> 里，给<code>TextView</code>添加了一个<code>drawableLeft</code>或者<code>drawableRight</code>等，你想给这个图片添加一个动画，然而你会发现当你给这个<code>TextView</code>加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。</p>
+<h1 id="第一种做法"><a href="#第一种做法" class="headerlink" title="第一种做法"></a>第一种做法</h1><blockquote>
+<p>也是比较通俗的方法，说这个<code>drawable 单独弄成ImageView</code>不就好了，在<code>xml</code>里新增一个<code>ImageView</code> 是吧，干嘛非要加在一个标签里面，要相信布局都是很强大的，肯定可以实现效果。</p>
 </blockquote>
-<p>在之前看 <a href="https://juejin.im/post/5a56f70cf265da3e5468fa59" target="_blank" rel="noopener">文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！</a> 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用的时候遇到了一些小问题，导致一直出不来。</p>
-<p><a href="https://developer.android.com/guide/topics/ui/look-and-feel/autosizing-textview.html" target="_blank" rel="noopener">官方文档</a> 点击即可查看，可以看别人讲解的同时也可自行查阅文档，双方对比着看，感觉会好一点。</p>
-<p>如下图可以简单明了的说明该特性：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&amp;h=713&amp;f=gif&amp;s=764107" alt=""></p>
-<p>具体最简单的使用有两种：</p>
-<h1 id="1-一种就是api-gt-api-26的可以直接在xml里面该属性："><a href="#1-一种就是api-gt-api-26的可以直接在xml里面该属性：" class="headerlink" title="1.一种就是api &gt;= api 26的可以直接在xml里面该属性："></a>1.一种就是api &gt;= api 26的可以直接在xml里面该属性：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;TextView</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;200dp&quot;</span><br><span class="line">    android:autoSizeTextType=&quot;uniform&quot; /&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在此需要注意的是：使用这个<code>autoSizeTextType</code>的时候，控件的<code>layout_width</code> <code>layout_height</code> 不能使用这个<code>wrap_content</code>否则看不出什么效果，要使用具体可衡量的。这个也不难理解，因为它要计算，你设置一个模糊的宽和高，就算不出来了。</p>
+<h1 id="第二种做法"><a href="#第二种做法" class="headerlink" title="第二种做法"></a>第二种做法</h1><blockquote>
+<p>你说真的没办法，必须写在一个里面，也是有办法的，那就不能在<code>xml</code>里设置<code>drawableLeft</code>了，代码设置，如下：  </p>
 </blockquote>
-<h1 id="2-api-lt-26-的低设备-的兼容写法"><a href="#2-api-lt-26-的低设备-的兼容写法" class="headerlink" title="2. api&lt;26 的低设备 的兼容写法"></a>2. api&lt;26 的低设备 的兼容写法</h1><blockquote>
-<p>官方文档里也明确说明了兼容低版本<code>The library provides support to Android 4.0 (API level 14) and higher.</code> 也就是兼容到4.0以上，写法有些不同，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout</span><br><span class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;TextView</span><br><span class="line">      android:layout_width=&quot;match_parent&quot;</span><br><span class="line">      android:layout_height=&quot;200dp&quot;</span><br><span class="line">      tools:ignore=&quot;MissingPrefix&quot;</span><br><span class="line">      app:autoSizeTextType=&quot;uniform&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>这个<code>app</code>是这个<code>xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</code> 我们在自定义控件的时候经常遇到它，<code>tools</code>是这个<code>xmlns:tools=&quot;http://schemas.android.com/tools&quot;</code> 当然以上写法都支持动态编码，具体可查阅文档</p>
-<h1 id="敲黑板重点"><a href="#敲黑板重点" class="headerlink" title="敲黑板重点"></a>敲黑板重点</h1><p>你会发现你写完之后编译是报错的，错误类似是这样的：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/16/160fe486f97e25be?w=888&amp;h=158&amp;f=png&amp;s=18247" alt=""></p>
-<p>找不到！！！</p>
-<p>在写那篇文章作者的帮助下，发现首先要兼容低版本，<code>module</code> 的 <code>build.gradle</code> 文件添加依赖时候 就是这个<code>com.android.support:appcompat-v7:xx</code> 后面的版本号要26以上，你看看你自己项目里有哪个版本你就写上哪个，还要在<code>project</code> 的 <code>build.gradle</code> 文件里添加：<br><code>maven{
-            url &#39;https://maven.google.com&#39;
-        }</code>添加到对应的位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        //添加如下内容</span><br><span class="line">        maven&#123;</span><br><span class="line">            url &apos;https://maven.google.com&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>至此我发现我的项目终于不报错了，可以运行起来并进行下一步的实践操作了，大家如果在项目中也遇到这样的问题，按我那样改应该没啥问题了，顺便把我写的代码上传到<code>github</code> 上了，又需要的可以下载看看：<br><a href="&quot;https://github.com/QQabby/AutoSizingDemo&quot;">demo</a></p>
-<p>另外在查看 <code>Android O</code>新特性中发现一个比较好玩的东西：现在，<code>findViewById()</code> 函数的全部实例均返回 <t extends="" view=""> T，而不是 View。以后就可以这么写啦：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EditText et =  findViewById(R.id.et);</span><br></pre></td></tr></table></figure></t></p>
-<p>就是那样，无需强转了，当然了使用了<code>Kotlin</code>的话就忽略吧，因为<code>Kotlin</code>连<code>findViewById</code>也不用写，哈哈。更多好玩特性可查看 <a href="https://developer.android.com/about/versions/oreo/android-8.0.html#fvbi-signature" target="_blank" rel="noopener">文档</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AnimationDrawable d = (AnimationDrawable) getResources().getDrawable(R.drawable.animation_draw);  </span><br><span class="line">d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());</span><br><span class="line"> messageText.setCompoundDrawables(d, null, null, null);</span><br></pre></td></tr></table></figure>
+<p>这个具体的动画在这个<code>animation_draw</code>里，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;animation-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">                android:oneshot=&quot;false&quot;</span><br><span class="line">       &gt;</span><br><span class="line"></span><br><span class="line">    &lt;item android:drawable=&quot;@drawable/ic_launcher&quot;</span><br><span class="line">           android:duration=&quot;500&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/animation-list&gt;</span><br></pre></td></tr></table></figure>
+<p>这是一个帧动画，里面可以放很多的<code>item</code>,从而形成动画,碰到了这种情况记录下，方便以后查阅。</p>
 
       
     </div>
@@ -410,7 +393,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android-O/" rel="tag"># Android O</a>
+            <a href="/tags/add-animation-to-drawable/" rel="tag"># add animation to drawable</a>
           
         </div>
       
@@ -423,8 +406,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/11/修改自动生成get-set方法模板代码/" rel="next" title="修改自动生成get/set方法模板代码">
-                <i class="fa fa-chevron-left"></i> 修改自动生成get/set方法模板代码
+              <a href="/2018/01/16/Android-O-新特性-AutoSizing/" rel="next" title="Android O 新特性 AutoSizing">
+                <i class="fa fa-chevron-left"></i> Android O 新特性 AutoSizing
               </a>
             
           </div>
@@ -432,10 +415,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" rel="prev" title="如何给TextView上的drawable上的图片添加动画？">
-                如何给TextView上的drawable上的图片添加动画？ <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -570,7 +549,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#自动调整TextView的大小的使用autoSizing"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing" class="headerlink" title="&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing"></a>&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-一种就是api-gt-api-26的可以直接在xml里面该属性："><span class="nav-number">2.</span> <span class="nav-text"><a href="#1-&#x4E00;&#x79CD;&#x5C31;&#x662F;api-gt-api-26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;" class="headerlink" title="1.&#x4E00;&#x79CD;&#x5C31;&#x662F;api &gt;= api 26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;"></a>1.&#x4E00;&#x79CD;&#x5C31;&#x662F;api &gt;= api 26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-api-lt-26-的低设备-的兼容写法"><span class="nav-number">3.</span> <span class="nav-text"><a href="#2-api-lt-26-&#x7684;&#x4F4E;&#x8BBE;&#x5907;-&#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;" class="headerlink" title="2. api&lt;26 &#x7684;&#x4F4E;&#x8BBE;&#x5907; &#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;"></a>2. api&lt;26 &#x7684;&#x4F4E;&#x8BBE;&#x5907; &#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#敲黑板重点"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;" class="headerlink" title="&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;"></a>&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一种做法"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E00;&#x79CD;&#x505A;&#x6CD5;" class="headerlink" title="&#x7B2C;&#x4E00;&#x79CD;&#x505A;&#x6CD5;"></a>&#x7B2C;&#x4E00;&#x79CD;&#x505A;&#x6CD5;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二种做法"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E8C;&#x79CD;&#x505A;&#x6CD5;" class="headerlink" title="&#x7B2C;&#x4E8C;&#x79CD;&#x505A;&#x6CD5;"></a>&#x7B2C;&#x4E8C;&#x79CD;&#x505A;&#x6CD5;</span></a></li></ol></div>
             
 
           </div>
@@ -747,9 +726,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/';
-          this.page.identifier = '2018/01/16/Android-O-新特性-AutoSizing/';
-          this.page.title = 'Android O 新特性 AutoSizing';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/';
+          this.page.identifier = '2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/';
+          this.page.title = '如何给TextView上的drawable上的图片添加动画？';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
