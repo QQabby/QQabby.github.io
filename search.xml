@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[Dialog]]></title>
     <url>%2F2018%2F02%2F28%2FDialog%2F</url>
-    <content type="text"><![CDATA[快速初始化materialDialognew MaterialDialog.Builder(mContext) .title(&quot;title&quot;) .content(&quot;I&apos;m a content&quot;) .negativeText(&quot;cancel&quot;) .negativeColorRes(R.color.colorNegative) .positiveText(&quot;ok&quot;) .positiveColorRes(R.color.colorPositive) .onPositive(new MaterialDialog.SingleButtonCallback() { @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) { showMsg(&quot;click dialog ok&quot;); ... } })]]></content>
+    <content type="text"><![CDATA[快速初始化materialDialognew MaterialDialog.Builder(mContext) .title(&quot;title&quot;) .content(&quot;I&apos;m a content&quot;) .negativeText(&quot;cancel&quot;) .negativeColorRes(R.color.colorNegative) .positiveText(&quot;ok&quot;) .positiveColorRes(R.color.colorPositive) .onPositive(new MaterialDialog.SingleButtonCallback() { @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) { showMsg(&quot;click dialog ok&quot;); ... } }) .show();]]></content>
       <tags>
         <tag>materialDialog</tag>
       </tags>
