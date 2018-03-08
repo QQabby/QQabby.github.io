@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="懒加载," />
+  <meta name="keywords" content="keyboard," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用  1.首先新建一个BaseLazyFragment/**  * Created by xuqianqian on 2018/2/28.  */ public  abstract class BaseLazyFragment extends Frag">
-<meta name="keywords" content="懒加载">
+<meta name="description" content="项目中有时候需要监听keyboard的显示与隐藏，特此备注，方便使用。  12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970public class KeyboardWatcher &amp;#">
+<meta name="keywords" content="keyboard">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Fragment 懒加载">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Fragment-懒加载/index.html">
+<meta property="og:title" content="监听键盘显示与隐藏">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/03/08/监听键盘显示与隐藏/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用  1.首先新建一个BaseLazyFragment/**  * Created by xuqianqian on 2018/2/28.  */ public  abstract class BaseLazyFragment extends Frag">
+<meta property="og:description" content="项目中有时候需要监听keyboard的显示与隐藏，特此备注，方便使用。  12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970public class KeyboardWatcher &amp;#">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-28T10:02:15.572Z">
+<meta property="og:updated_time" content="2018-03-08T07:10:19.176Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Fragment 懒加载">
-<meta name="twitter:description" content="因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用  1.首先新建一个BaseLazyFragment/**  * Created by xuqianqian on 2018/2/28.  */ public  abstract class BaseLazyFragment extends Frag">
+<meta name="twitter:title" content="监听键盘显示与隐藏">
+<meta name="twitter:description" content="项目中有时候需要监听keyboard的显示与隐藏，特此备注，方便使用。  12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970public class KeyboardWatcher &amp;#">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Fragment-懒加载/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/08/监听键盘显示与隐藏/"/>
 
 
 
 
 
-  <title>Fragment 懒加载 | 糖葫芦</title>
+  <title>监听键盘显示与隐藏 | 糖葫芦</title>
   
 
 
@@ -277,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Fragment-懒加载/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/08/监听键盘显示与隐藏/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Fragment 懒加载</h1>
+          <h1 class="post-title" itemprop="name headline">监听键盘显示与隐藏</h1>
         
 
         <div class="post-meta">
@@ -306,8 +306,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T17:47:41+08:00">
-                2018-02-28
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-08T14:58:19+08:00">
+                2018-03-08
               </time>
             
 
@@ -325,9 +325,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/02/28/Fragment-懒加载/#comments" itemprop="discussionUrl">
+                <a href="/2018/03/08/监听键盘显示与隐藏/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/28/Fragment-懒加载/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/03/08/监听键盘显示与隐藏/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -356,166 +356,10 @@
 
       
         <blockquote>
-<p>因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用</p>
+<p>项目中有时候需要监听<code>keyboard</code>的显示与隐藏，特此备注，方便使用。</p>
 </blockquote>
-<h1 id="1-首先新建一个BaseLazyFragment"><a href="#1-首先新建一个BaseLazyFragment" class="headerlink" title="1.首先新建一个BaseLazyFragment"></a>1.首先新建一个<code>BaseLazyFragment</code></h1><pre><code>/**
- * Created by xuqianqian on 2018/2/28.
- */
-public  abstract class BaseLazyFragment extends Fragment {
-
-    protected View mRootView;
-    public Context mContext;
-    protected boolean isVisible;
-    private boolean isPrepared;
-    private boolean isLoad = false;
-
-    //最先执行
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getUserVisibleHint()) {//当前显示
-            isVisible = true;
-            if(!isLoad){
-                lazyLoad();
-            }
-        } else {
-            isVisible = false;
-            //onInvisible();
-        }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = getActivity();
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        if (mRootView == null) {
-            mRootView = getLayout();
-        }
-        return mRootView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        isPrepared = true;
-        //如果已经加载过了，就无需再重新加载
-        if(!isLoad){
-            lazyLoad();
-        }
-    }
-
-    /**
-     * 懒加载
-     */
-    protected void lazyLoad() {
-        if (!isPrepared || !isVisible) {
-            return;
-        }
-        isLoad = true;
-        initData();
-    }
-
-//    protected void onInvisible() {
-//
-//    }
-    //初始化布局View
-    public abstract View getLayout();
-
-    public abstract void initData();
-}
-</code></pre><h1 id="2-让你的fragment-extend-BaseLazyFragment"><a href="#2-让你的fragment-extend-BaseLazyFragment" class="headerlink" title="2.让你的fragment extend BaseLazyFragment"></a>2.让你的<code>fragment extend BaseLazyFragment</code></h1><pre><code>public class GankFragment extends BaseLazyFragment {
-
-String type;
-public static GankFragment newInstance(String type) {
-    GankFragment gankFragment = new GankFragment();
-    Bundle bundle = new Bundle();
-    bundle.putString(&quot;type&quot;, type);
-    gankFragment.setArguments(bundle);
-    return gankFragment;
-}
-//加载布局
-@Override
-public View getLayout() {
-
-    type = getArguments().getString(&quot;type&quot;);
-    TextView tv = new TextView(getActivity());
-    tv.setText(type);
-    tv.setGravity(Gravity.CENTER);
-    return tv;
-}
-
-@Override
-public void initData() {
-
-    //初始化一些控件，加载网络数据
-}
-
-}
-</code></pre><h1 id="3-剩下的就是FragmentPagerAdapter了"><a href="#3-剩下的就是FragmentPagerAdapter了" class="headerlink" title="3.剩下的就是FragmentPagerAdapter了"></a>3.剩下的就是FragmentPagerAdapter了</h1><pre><code>public class TitleAdapter extends FragmentPagerAdapter {
-
-private List&lt;Fragment&gt; fragments;
-
-private List&lt;String&gt; types;
-
-public TitleAdapter(FragmentManager fm, List&lt;Fragment&gt; fragments, List&lt;String&gt; types) {
-    super(fm);
-    this.fragments = fragments;
-    this.types = types;
-}
-
-@Override
-public Fragment getItem(int position) {
-    return fragments.get(position);
-}
-
-@Override
-public int getCount() {
-    return fragments.size();
-}
-
-@Override
-public CharSequence getPageTitle(int position) {
-    return types.get(position);
-}
-}
-</code></pre><p><code>MainActivity.java</code></p>
-<pre><code>private List&lt;String&gt; titles = new ArrayList&lt;&gt;();
-
-private List&lt;Fragment&gt; fragments = new ArrayList&lt;&gt;();
-TitleAdapter titleAdapter;
-
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-
-    TabLayout tablayout = findViewById(R.id.tablayout);
-    ViewPager viewpager = findViewById(R.id.viewpager);
-
-    titles.add(&quot;android&quot;);
-    titles.add(&quot;ios&quot;);
-    titles.add(&quot;web&quot;);
-    titles.add(&quot;java&quot;);
-
-    fragments.add(GankFragment.newInstance(&quot;android&quot;));
-    fragments.add(GankFragment.newInstance(&quot;ios&quot;));
-    fragments.add(GankFragment.newInstance(&quot;web&quot;));
-    fragments.add(GankFragment.newInstance(&quot;java&quot;));
-
-    titleAdapter = new TitleAdapter(getSupportFragmentManager(), fragments, titles);
-    viewpager.setAdapter(titleAdapter);
-    tablayout.setTabMode(TabLayout.MODE_FIXED);
-    tablayout.setupWithViewPager(viewpager);
-}
-</code></pre><p><a href="https://github.com/QQabby/LazyFragmentApplication" title="源码地址">https://github.com/QQabby/LazyFragmentApplication</a></p>
-
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KeyboardWatcher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;</span><br><span class="line">    <span class="keyword">private</span> View rootView;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> viewSize = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> isShowing = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">private</span> OnKeyboardListener onKeyboardListener;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">KeyboardWatcher</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        rootView = activity.getWindow().getDecorView().getRootView();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> KeyboardWatcher <span class="title">register</span><span class="params">(OnKeyboardListener listener)</span></span>&#123;</span><br><span class="line">        onKeyboardListener = listener;</span><br><span class="line">        <span class="keyword">if</span>(onGlobalLayoutListener == <span class="keyword">null</span>) &#123;</span><br><span class="line">            onGlobalLayoutListener = <span class="keyword">new</span> ViewTreeObserver.OnGlobalLayoutListener() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onGlobalLayout</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Rect r = <span class="keyword">new</span> Rect();</span><br><span class="line">                    rootView.getWindowVisibleDisplayFrame(r);</span><br><span class="line">                    <span class="keyword">int</span> viewHeight = r.bottom - r.top;</span><br><span class="line">                    <span class="keyword">if</span>(viewSize &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                        viewSize = viewHeight;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span>(viewHeight != viewSize)&#123;</span><br><span class="line">                        <span class="comment">// 大于100dp才算变化</span></span><br><span class="line">                        <span class="keyword">if</span>(Math.abs(viewHeight - viewSize) &gt; dpToPx(rootView.getContext(),<span class="number">100</span>)) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (viewHeight &lt; viewSize &amp;&amp; !isShowing) &#123;</span><br><span class="line">                                onKeyboardListener.onShow(viewHeight);</span><br><span class="line">                                isShowing = <span class="keyword">true</span>;</span><br><span class="line">                            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(isShowing)&#123;</span><br><span class="line">                                onKeyboardListener.onHide();</span><br><span class="line">                                isShowing = <span class="keyword">false</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        viewSize = viewHeight;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        rootView.post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                viewSize = rootView.getHeight();</span><br><span class="line">                rootView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unRegister</span><span class="params">()</span></span>&#123;</span><br><span class="line">        rootView.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);</span><br><span class="line">        rootView = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnKeyboardListener</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onShow</span><span class="params">(<span class="keyword">int</span> viewSize)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onHide</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dpToPx</span><span class="params">(Context context,<span class="keyword">int</span> dp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span>) TypedValue.applyDimension(</span><br><span class="line">                TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">KeyBoardWatcher keyboardWatcher = <span class="keyword">new</span>  KeyboardWatcher()</span><br><span class="line">keyboardWatcher.register(<span class="keyword">this</span>)<span class="comment">//实现KeyboardWatcher.OnKeyboardListener接口</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//实现方法onShow() , onHide(),对应键盘的显示与隐藏</span></span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -542,7 +386,7 @@ protected void onCreate(Bundle savedInstanceState) {
       
         <div class="post-tags">
           
-            <a href="/tags/懒加载/" rel="tag"># 懒加载</a>
+            <a href="/tags/keyboard/" rel="tag"># keyboard</a>
           
         </div>
       
@@ -555,8 +399,8 @@ protected void onCreate(Bundle savedInstanceState) {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/28/Dialog/" rel="next" title="Dialog">
-                <i class="fa fa-chevron-left"></i> Dialog
+              <a href="/2018/02/28/Fragment-懒加载/" rel="next" title="Fragment 懒加载">
+                <i class="fa fa-chevron-left"></i> Fragment 懒加载
               </a>
             
           </div>
@@ -564,10 +408,6 @@ protected void onCreate(Bundle savedInstanceState) {
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/08/监听键盘显示与隐藏/" rel="prev" title="监听键盘显示与隐藏">
-                监听键盘显示与隐藏 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -702,7 +542,7 @@ protected void onCreate(Bundle savedInstanceState) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-首先新建一个BaseLazyFragment"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-&#x9996;&#x5148;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;BaseLazyFragment" class="headerlink" title="1.&#x9996;&#x5148;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;BaseLazyFragment"></a>1.&#x9996;&#x5148;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;<code>BaseLazyFragment</code></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-让你的fragment-extend-BaseLazyFragment"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-&#x8BA9;&#x4F60;&#x7684;fragment-extend-BaseLazyFragment" class="headerlink" title="2.&#x8BA9;&#x4F60;&#x7684;fragment extend BaseLazyFragment"></a>2.&#x8BA9;&#x4F60;&#x7684;<code>fragment extend BaseLazyFragment</code></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-剩下的就是FragmentPagerAdapter了"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3-&#x5269;&#x4E0B;&#x7684;&#x5C31;&#x662F;FragmentPagerAdapter&#x4E86;" class="headerlink" title="3.&#x5269;&#x4E0B;&#x7684;&#x5C31;&#x662F;FragmentPagerAdapter&#x4E86;"></a>3.&#x5269;&#x4E0B;&#x7684;&#x5C31;&#x662F;FragmentPagerAdapter&#x4E86;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x65B9;&#x6CD5;" class="headerlink" title="&#x4F7F;&#x7528;&#x65B9;&#x6CD5;"></a>&#x4F7F;&#x7528;&#x65B9;&#x6CD5;</span></a></li></ol></div>
             
 
           </div>
@@ -879,9 +719,9 @@ protected void onCreate(Bundle savedInstanceState) {
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Fragment-懒加载/';
-          this.page.identifier = '2018/02/28/Fragment-懒加载/';
-          this.page.title = 'Fragment 懒加载';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/03/08/监听键盘显示与隐藏/';
+          this.page.identifier = '2018/03/08/监听键盘显示与隐藏/';
+          this.page.title = '监听键盘显示与隐藏';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
