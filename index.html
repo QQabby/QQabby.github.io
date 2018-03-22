@@ -273,6 +273,393 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/" itemprop="url">四大组件是什么与它们的生命周期（及Fragment）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-22T10:30:22+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>首先当我们一开始学习安卓的时候想必就是四大组件了以及它们的生命周期，现在就来复习回想下。</p>
+</blockquote>
+<p>四大组件有：<code>Activity</code>, <code>ContentProvider</code>, <code>BroadcastReceiver</code>, <code>Service</code></p>
+<h1 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h1><blockquote>
+<p>提供与用户交互的界面或者可以说是一个窗口</p>
+</blockquote>
+<p>下面我是从官方文档中关于<code>Activity生命周期</code> 的一张图</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-eea2764dbf62c03a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="lifetcycle.jpg"></p>
+<p>正常启动时：<code>onCreate()</code> -&gt; <code>onStart()</code> -&gt; <code>onResume()</code>    </p>
+<ul>
+<li><p>而后我们看到当 <code>Another activity comes into the foreground</code> 执行 <code>onPause()</code> 方法<br>当按 <code>home</code> 键的时候： 当前<code>Activity</code> 已经不可见了，所以执行：<code>onPause() -&gt; onStop()</code>    </p>
+</li>
+<li><p>当重新回到<code>app</code>时，分为两种情况就是：①是app还在后台，执行：<code>onRestart() -&gt; onStart() -&gt; onResume()</code>; ②是app被系统杀死了，则执行：<code>onCreate() -&gt; onStart() &gt; onResume()</code>    </p>
+</li>
+<li><p>当在<code>app</code> 里 从 <code>A -&gt; B</code> 此时<code>A隐藏，B显示</code>，当重新返回<code>A</code> 时，执行：<code>onPause() -&gt; onResume()</code>,这种应用场景一般是比如需要返回做刷新操作的，可以将刷新方法写在<code>onResume()</code> 方法中执行。</p>
+</li>
+<li><p>最后当退出应用程序的时候执行 <code>onDestroy()</code></p>
+</li>
+</ul>
+<h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><blockquote>
+<p>服务，有前台服务和后台服务，一般提供需在后台长期运行的服务，例如：音乐播放器等</p>
+</blockquote>
+<p>它的生命周期如下图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/944365-cf5c1a9d2dddaaca.png" alt="lifetcycle.jpg"></p>
+<p>因为启动服务的方法有两个：<code>startService() 和 bindService()</code> 两者的生命周期略有不同。    </p>
+<ul>
+<li><p>首先来看：<code>startService()</code> 方式<br>启动：<code>onCreate() -&gt; onStartCommand()</code> 调用<code>stopServcie()</code> 停止服务，随后执行 <code>onDestroy()</code>    </p>
+</li>
+<li><p>其次是：<code>bindService()</code> 方式<br>启动：<code>onCreate() -&gt; onBind()</code> 服务启动起来了，调用<code>unbindService()</code> 停止服务，随后执行 <code>onUnbind() -&gt; onDestroy()</code></p>
+</li>
+</ul>
+<h1 id="Broadcastreceiver"><a href="#Broadcastreceiver" class="headerlink" title="Broadcastreceiver"></a>Broadcastreceiver</h1><blockquote>
+<p>广播，可以接受来自应用内或者应用外的广播，分为两个角色：广播发送者，广播接收者</p>
+</blockquote>
+<ul>
+<li>广播的注册方式有两种：一种是代码注册，一种是清单文件注册，代码注册的优先级要比清单文件注册的优先级要高；</li>
+<li>广播的发送可以是有序广播也可以是无序广播，有序广播接收到广播的顺序按照优先级的顺序；</li>
+<li>注意广播接收器<code>onReceive()</code> 方法运行在 <code>UI</code> 线程中，不可以做耗时操作，否则会导致<code>ANR</code>异常；</li>
+</ul>
+<h1 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h1><blockquote>
+<p>内容提供者，应用内数据共享</p>
+</blockquote>
+<h1 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h1><blockquote>
+<p>一般和 <code>viewpager</code> 配合使用，不能单独使用，要配合<code>Activity</code>使用，但是有自己的生命周期</p>
+</blockquote>
+<p><img src="http://img.blog.csdn.net/20160420203710750" alt="fragment"></p>
+<p>一般在<code>onAttach()</code>中获取参数值一些，<code>onCreateView()</code>中创建布局，布局加载完成后在<code>onActivityCreated()</code>中执行一些初始化操作，随后<code>onStart(),onResume().onPause(),onStop(),</code> fragment 销毁，<code>onDestroyView() -&gt; onDestroy() -&gt;onDetach()</code></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/22/Android知识点总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/22/Android知识点总结/" itemprop="url">Android知识点总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-22T10:20:32+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/22/Android知识点总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/22/Android知识点总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>网上别人列出一些来，我把它拿过来了，需要自己一项一项复习查阅，以后有会继续添加新的，特此总结。</p>
+</blockquote>
+<ul>
+<li><p><a href="/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）">四大组件是什么与它们的生命周期（及Fragment）</a>;</p>
+</li>
+<li><p>Acitivty的四种启动模式与特点。</p>
+</li>
+<li><p>Activity状态保存与恢复。</p>
+</li>
+<li><p>Service的生命周期，启动方法，有什么区别。</p>
+</li>
+<li><p>service和activity怎么进行数据交互。</p>
+</li>
+<li><p>怎么保证service不被杀死。</p>
+</li>
+<li><p>广播使用的方式和场景以及广播的几种分类。</p>
+</li>
+<li><p>Intent的使用方法，可以传递哪些数据类型。</p>
+</li>
+<li><p>ContentProvider使用方法。</p>
+</li>
+<li><p>ContentProvider、ContentResolver、ContentObserver 之间的关系。</p>
+</li>
+<li><p>Thread、AsycTask、IntentService的使用场景与特点。</p>
+</li>
+<li><p>FrameLayout 、 LinearLayout 、 RelativeLayout 各自特点及绘制效率对比。</p>
+</li>
+<li><p>Android的数据存储形式。</p>
+</li>
+<li><p>Android两种序列化的区别和作用。</p>
+</li>
+<li><p>Sqlite的基本操作。</p>
+</li>
+<li><p>Android中的MVC、MVP模式。</p>
+</li>
+<li><p>Merge、ViewStub的作用。</p>
+</li>
+<li><p>动画有哪几类，各有什么特点？</p>
+</li>
+<li><p>Handler、Loop消息队列模型，各部分的作用。</p>
+</li>
+<li><p>Android的消息机制，子线程更新UI的方法和原理。</p>
+</li>
+<li><p>Android怎么加速启动Activity。</p>
+</li>
+<li><p>App的启动过程。</p>
+</li>
+<li><p>Android优化方法。</p>
+</li>
+<li><p>如何防止内存泄漏？</p>
+</li>
+<li><p>Android中弱引用与软引用的应用场景。</p>
+</li>
+<li><p>Bitmap的四种属性，如何加载大图（inJustDecodeBounds）。</p>
+</li>
+<li><p>View与View Group分类。自定义View过程：onMeasure()、onLayout()、onDraw()。</p>
+</li>
+<li><p>View刷新机制和绘制流程。</p>
+</li>
+<li><p>Activity、Window、View的联系和理解。</p>
+</li>
+<li><p>invalidate和requestLayout的区别及使用。</p>
+</li>
+<li><p>Touch事件分发机制和冲突处理。</p>
+</li>
+<li><p>Android IPC:Binder原理。</p>
+</li>
+<li><p>Android5.0（UI库）、6.0（权限）、7.0特性、8.0特性。</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/14/Kotlin-传递数据/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1698,299 +2085,6 @@ fail : function(s){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/11/修改自动生成get-set方法模板代码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/11/修改自动生成get-set方法模板代码/" itemprop="url">修改自动生成get/set方法模板代码</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-11T14:00:14+08:00">
-                2018-01-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/11/修改自动生成get-set方法模板代码/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/11/修改自动生成get-set方法模板代码/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>今天看到<br><a href="https://juejin.im/post/5a55c8896fb9a01caf374e93" target="_blank">面对接口脏数据你还在V层if str==null else setText?</a><br> 一文，觉着写得挺好，开发过程中多思考多动手，会带来意想不到的效果。底下评论大家也都说了各自的方法和见解，文中有一些问题作者后来也解决了，看到评论里有人说：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b35580365?w=658&amp;h=389&amp;f=png&amp;s=25367" alt="image.png"></p>
-<p>说到配置as,就可以实现在创建bean时自动生成<code>return xx==null?&quot;&quot;:xx;</code> 觉着很好，因为我觉着这是一种挺简单的方法，但是就如同底下人问了怎么配置呀，我也不知道，于是我就在自己<code>as</code>工具里新建了一个bean对象，按住<code>alt+insert</code>添加<code>get/set</code>方法，发现了解决办法。如下图：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3568a2be?w=389&amp;h=636&amp;f=png&amp;s=16071" alt="image.png"></p>
-<p>平时手快也没注意，今天仔细看了看，那上面的意思不就是，<code>get</code> 方法模块，<code>set</code>方法模板吗，后面跟着 <code>IntelliJ Default</code>大概就是默认的生成模板吧，点击后面的三个点<br>按钮进去看看，如下：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b531389d1?w=787&amp;h=609&amp;f=png&amp;s=47221" alt="image.png"></p>
-<p>这是<code>set</code>的，<code>get</code>方法也类似是这样的，大概也能看懂，想着是不是可以直接模板就好了，发现无法修改，后来又发现左上角的<code>+</code>号，原来是自己可以新建一个模板，然后再生成的时候选择自己的模板就好了，如我们在<code>get</code>模板中新建一个自己的模板：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3c7e8344?w=431&amp;h=149&amp;f=png&amp;s=7606" alt="image.png"></p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b357e2825?w=262&amp;h=269&amp;f=png&amp;s=4331" alt="image.png"></p>
-<p>我们知道我们只需要改一下最后<code>get</code>方法<code>return</code>那个地方的代码，也就是这儿：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b38fb2a31?w=1240&amp;h=679&amp;f=png&amp;s=129573" alt="image.png"></p>
-<p>不确定是不是，我们可以在后面跟着一个“#”号试试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">  return $field.name+&quot;#&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在生成的时候选择我们自定义的模板：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b56ef9685?w=394&amp;h=643&amp;f=png&amp;s=17595" alt="image.png"></p>
-<p>发现最后生成的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public String getAge() &#123;</span><br><span class="line">    return age + &quot;#&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setAge(String age) &#123;</span><br><span class="line">    this.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样证明确定是这样的，那么我么可以继续进行真正的判断了：<br>我们先把这个默认里的<code>get</code>方法代码拷贝到 <code>MyGetter</code>中，我们再根据我们自己的需要修改模板代码,其它地方不变，就修改需要修改的地方：<br>我们想要实现这样的：<code>return xx==null?&quot;&quot;:xx</code>,Ok ，那么我认为大概是这么写的，首先判断是否是字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">	#if(field.String)&#123;</span><br><span class="line">		return $field.name == null ? &quot;&quot; : $field.name;</span><br><span class="line">	&#125;</span><br><span class="line">	#else</span><br><span class="line">		return $field.name;</span><br><span class="line">	#end </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>我们对比一个<code>default</code>的写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">  return $field.name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>好的，我们再继续生成一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public String getAge() &#123;</span><br><span class="line">        return age == null ? &quot;&quot; : age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(String age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>好的，达成效果，耶，居然还可以这么玩，以后可根据自己需求自行修改，谢谢大家。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/09/Activity启动模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/09/Activity启动模式/" itemprop="url">Activity启动模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-09T11:31:06+08:00">
-                2018-01-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/09/Activity启动模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/09/Activity启动模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>  ● standard 标准模式<br>    简述：对于使用standard模式的活动，系统不会在乎这个活动是否已经在返回栈中存在，每次启动都会创建该活动的一个新的实例。<br>例如：A启动A，A再接着启动A,A再接着启动A,，然后再分别出栈，如图所示：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1948557-bf56470a07ad09ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>  ● singleTop<br>简述：当活动的启动模式指定为 singleTop ,在启动活动时如果发现返回栈的栈顶已经<br>是该活动，则认为可以直接使用它，不会再创建新的活动实例。<br>例如：如果快速点击一个按钮，进入Activity，要保证启动的Activity不为多个，可以使用<br>将Activity的启动模式改为 singleTop，就不会启动多个了。如图所示：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1948557-d5f43b4894e1a4f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>  ● singleTask<br>简述：当活动的启动模式指定为singleTask，每次启动该活动时候，它会先在系统中查找属性值taskaffinity等于它的属性值taskAffinity的任务存在；如果存在这样的任务，他就会这个任务中启动，否则就会在新任务中启动。因此，如果我们想要设置了“singleTask”启动模式的Activity在新的任务中启动，就要为它设置一个独立的taskAffinity属性值。</p>
-<p>如果设置了“singleTask”启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已经存在在相应的Activity实例，如果存在，就会把位于这个Activity实例上面的Activity全部结束掉，即最终这个Activity实例会位于任务的堆栈顶端中。</p>
-<p>每次启动该活动时系统首先会在返回栈中检查是否存在该活动的实例，如果发现已经存在则直接使用该实例，并把在这个活动之上的所有活动统统出栈，如果没有发现就会创建一个新的活动实例。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1948557-9133171e9085b6cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">                             </p>
-<p>  ● singleInstance（单独任务栈）<br>简述：使用singleInstance 模式就可以解决这个问题，在这种模式下会有一个单独的返回栈来管理这个活动，不管是哪个应用程序来访问这个活动，都会共用同一个返回栈，也就解决了共享活动实例的问题。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1948557-358424952cd1bed5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>返回的页面顺序是：C-B-A</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2041,7 +2135,7 @@ fail : function(s){
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -2054,7 +2148,7 @@ fail : function(s){
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
