@@ -511,6 +511,9 @@
 <p>如果设置了“singleTask”启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已经存在在相应的Activity实例，如果存在，就会把位于这个Activity实例上面的Activity全部结束掉，即最终这个Activity实例会位于任务的堆栈顶端中。</p>
 <p>每次启动该活动时系统首先会在返回栈中检查是否存在该活动的实例，如果发现已经存在则直接使用该实例，并把在这个活动之上的所有活动统统出栈，如果没有发现就会创建一个新的活动实例。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/1948557-9133171e9085b6cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">                             </p>
+<blockquote>
+<p>当栈底部的 <code>A</code> 重新被启动打开时，会执行<code>onNewIntent()</code> 方法。</p>
+</blockquote>
 <p>  ● singleInstance（单独任务栈）<br>简述：使用singleInstance 模式就可以解决这个问题，在这种模式下会有一个单独的返回栈来管理这个活动，不管是哪个应用程序来访问这个活动，都会共用同一个返回栈，也就解决了共享活动实例的问题。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/1948557-358424952cd1bed5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <p>返回的页面顺序是：C-B-A</p>
