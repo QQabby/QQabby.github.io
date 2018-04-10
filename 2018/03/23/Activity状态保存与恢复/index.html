@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="生命周期," />
+  <meta name="keywords" content="Activity状态保存与恢复," />
 
 
 
@@ -79,22 +79,15 @@
 
 
 
-<meta name="description" content="首先当我们一开始学习安卓的时候想必就是四大组件了以及它们的生命周期，现在就来复习回想下。  四大组件有：Activity, ContentProvider, BroadcastReceiver, Service Activity 提供与用户交互的界面或者可以说是一个窗口  下面我是从官方文档中关于Activity生命周期 的一张图  正常启动时：onCreate() -&amp;gt; onStart(">
-<meta name="keywords" content="生命周期">
+<meta name="keywords" content="Activity状态保存与恢复">
 <meta property="og:type" content="article">
-<meta property="og:title" content="四大组件是什么与它们的生命周期（及Fragment）">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/index.html">
+<meta property="og:title" content="Activity状态保存与恢复">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/03/23/Activity状态保存与恢复/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="首先当我们一开始学习安卓的时候想必就是四大组件了以及它们的生命周期，现在就来复习回想下。  四大组件有：Activity, ContentProvider, BroadcastReceiver, Service Activity 提供与用户交互的界面或者可以说是一个窗口  下面我是从官方文档中关于Activity生命周期 的一张图  正常启动时：onCreate() -&amp;gt; onStart(">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-eea2764dbf62c03a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/944365-cf5c1a9d2dddaaca.png">
-<meta property="og:image" content="http://img.blog.csdn.net/20160420203710750">
-<meta property="og:updated_time" content="2018-03-22T09:11:14.544Z">
+<meta property="og:updated_time" content="2018-03-23T09:03:36.314Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="四大组件是什么与它们的生命周期（及Fragment）">
-<meta name="twitter:description" content="首先当我们一开始学习安卓的时候想必就是四大组件了以及它们的生命周期，现在就来复习回想下。  四大组件有：Activity, ContentProvider, BroadcastReceiver, Service Activity 提供与用户交互的界面或者可以说是一个窗口  下面我是从官方文档中关于Activity生命周期 的一张图  正常启动时：onCreate() -&amp;gt; onStart(">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-eea2764dbf62c03a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="Activity状态保存与恢复">
 
 
 
@@ -124,13 +117,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/23/Activity状态保存与恢复/"/>
 
 
 
 
 
-  <title>四大组件是什么与它们的生命周期（及Fragment） | 糖葫芦</title>
+  <title>Activity状态保存与恢复 | 糖葫芦</title>
   
 
 
@@ -281,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/23/Activity状态保存与恢复/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -298,7 +291,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">四大组件是什么与它们的生命周期（及Fragment）</h1>
+          <h1 class="post-title" itemprop="name headline">Activity状态保存与恢复</h1>
         
 
         <div class="post-meta">
@@ -310,8 +303,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-22T10:30:22+08:00">
-                2018-03-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-23T17:03:05+08:00">
+                2018-03-23
               </time>
             
 
@@ -329,9 +322,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/#comments" itemprop="discussionUrl">
+                <a href="/2018/03/23/Activity状态保存与恢复/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/03/23/Activity状态保存与恢复/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -359,55 +352,7 @@
       
 
       
-        <blockquote>
-<p>首先当我们一开始学习安卓的时候想必就是四大组件了以及它们的生命周期，现在就来复习回想下。</p>
-</blockquote>
-<p>四大组件有：<code>Activity</code>, <code>ContentProvider</code>, <code>BroadcastReceiver</code>, <code>Service</code></p>
-<h1 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h1><blockquote>
-<p>提供与用户交互的界面或者可以说是一个窗口</p>
-</blockquote>
-<p>下面我是从官方文档中关于<code>Activity生命周期</code> 的一张图</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-eea2764dbf62c03a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="lifetcycle.jpg"></p>
-<p>正常启动时：<code>onCreate()</code> -&gt; <code>onStart()</code> -&gt; <code>onResume()</code>    </p>
-<ul>
-<li><p>而后我们看到当 <code>Another activity comes into the foreground</code> 执行 <code>onPause()</code> 方法<br>当按 <code>home</code> 键的时候： 当前<code>Activity</code> 已经不可见了，所以执行：<code>onPause() -&gt; onStop()</code>    </p>
-</li>
-<li><p>当重新回到<code>app</code>时，分为两种情况就是：①是app还在后台，执行：<code>onRestart() -&gt; onStart() -&gt; onResume()</code>; ②是app被系统杀死了，则执行：<code>onCreate() -&gt; onStart() &gt; onResume()</code>    </p>
-</li>
-<li><p>当在<code>app</code> 里 从 <code>A -&gt; B</code> 此时<code>A隐藏，B显示</code>，当重新返回<code>A</code> 时，执行：<code>onPause() -&gt; onResume()</code>,这种应用场景一般是比如需要返回做刷新操作的，可以将刷新方法写在<code>onResume()</code> 方法中执行。</p>
-</li>
-<li><p>最后当退出应用程序的时候执行 <code>onDestroy()</code></p>
-</li>
-</ul>
-<h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><blockquote>
-<p>服务，有前台服务和后台服务，一般提供需在后台长期运行的服务，例如：音乐播放器等</p>
-</blockquote>
-<p>它的生命周期如下图：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/944365-cf5c1a9d2dddaaca.png" alt="lifetcycle.jpg"></p>
-<p>因为启动服务的方法有两个：<code>startService() 和 bindService()</code> 两者的生命周期略有不同。    </p>
-<ul>
-<li><p>首先来看：<code>startService()</code> 方式<br>启动：<code>onCreate() -&gt; onStartCommand()</code> 调用<code>stopServcie()</code> 停止服务，随后执行 <code>onDestroy()</code>    </p>
-</li>
-<li><p>其次是：<code>bindService()</code> 方式<br>启动：<code>onCreate() -&gt; onBind()</code> 服务启动起来了，调用<code>unbindService()</code> 停止服务，随后执行 <code>onUnbind() -&gt; onDestroy()</code></p>
-</li>
-</ul>
-<h1 id="Broadcastreceiver"><a href="#Broadcastreceiver" class="headerlink" title="Broadcastreceiver"></a>Broadcastreceiver</h1><blockquote>
-<p>广播，可以接受来自应用内或者应用外的广播，分为两个角色：广播发送者，广播接收者</p>
-</blockquote>
-<ul>
-<li>广播的注册方式有两种：一种是代码注册，一种是清单文件注册，代码注册的优先级要比清单文件注册的优先级要高；</li>
-<li>广播的发送可以是有序广播也可以是无序广播，有序广播接收到广播的顺序按照优先级的顺序；</li>
-<li>注意广播接收器<code>onReceive()</code> 方法运行在 <code>UI</code> 线程中，不可以做耗时操作，否则会导致<code>ANR</code>异常；</li>
-</ul>
-<h1 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h1><blockquote>
-<p>内容提供者，应用内数据共享</p>
-</blockquote>
-<h1 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h1><blockquote>
-<p>一般和 <code>viewpager</code> 配合使用，不能单独使用，要配合<code>Activity</code>使用，但是有自己的生命周期</p>
-</blockquote>
-<p><img src="http://img.blog.csdn.net/20160420203710750" alt="fragment"></p>
-<p>一般在<code>onAttach()</code>中获取参数值一些，<code>onCreateView()</code>中创建布局，布局加载完成后在<code>onActivityCreated()</code>中执行一些初始化操作，随后<code>onStart(),onResume().onPause(),onStop(),</code> fragment 销毁，<code>onDestroyView() -&gt; onDestroy() -&gt;onDetach()</code></p>
-
+        
       
     </div>
     
@@ -434,7 +379,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/生命周期/" rel="tag"># 生命周期</a>
+            <a href="/tags/Activity状态保存与恢复/" rel="tag"># Activity状态保存与恢复</a>
           
         </div>
       
@@ -447,8 +392,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/22/Android知识点总结/" rel="next" title="Android知识点总结">
-                <i class="fa fa-chevron-left"></i> Android知识点总结
+              <a href="/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/" rel="next" title="四大组件是什么与它们的生命周期（及Fragment）">
+                <i class="fa fa-chevron-left"></i> 四大组件是什么与它们的生命周期（及Fragment）
               </a>
             
           </div>
@@ -457,8 +402,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/23/Activity状态保存与恢复/" rel="prev" title="Activity状态保存与恢复">
-                Activity状态保存与恢复 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/08/EventBus-为什么订阅的方法必须是public？/" rel="prev" title="EventBus 为什么订阅的方法必须是public？">
+                EventBus 为什么订阅的方法必须是public？ <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -521,17 +466,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -584,22 +520,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Activity"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Service" class="headerlink" title="Service"></a>Service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Broadcastreceiver"><span class="nav-number">3.</span> <span class="nav-text"><a href="#Broadcastreceiver" class="headerlink" title="Broadcastreceiver"></a>Broadcastreceiver</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ContentProvider"><span class="nav-number">4.</span> <span class="nav-text"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fragment"><span class="nav-number">5.</span> <span class="nav-text"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -771,9 +691,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/';
-          this.page.identifier = '2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/';
-          this.page.title = '四大组件是什么与它们的生命周期（及Fragment）';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/03/23/Activity状态保存与恢复/';
+          this.page.identifier = '2018/03/23/Activity状态保存与恢复/';
+          this.page.title = 'Activity状态保存与恢复';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
