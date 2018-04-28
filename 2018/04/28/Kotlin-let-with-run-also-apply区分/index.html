@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="materialDialog," />
+  <meta name="keywords" content="let," />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="快速初始化materialDialognew MaterialDialog.Builder(mContext)                     .title(&amp;quot;title&amp;quot;)                     .content(&amp;quot;I&amp;apos;m a content&amp;quot;)                     .negativeText(&amp;qu">
-<meta name="keywords" content="materialDialog">
+<meta name="keywords" content="let">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Dialog">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Dialog/index.html">
+<meta property="og:title" content="Kotlin let with run also apply区分">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/04/28/Kotlin-let-with-run-also-apply区分/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="快速初始化materialDialognew MaterialDialog.Builder(mContext)                     .title(&amp;quot;title&amp;quot;)                     .content(&amp;quot;I&amp;apos;m a content&amp;quot;)                     .negativeText(&amp;qu">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-28T06:59:14.757Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-04-28T07:25:39.943Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dialog">
-<meta name="twitter:description" content="快速初始化materialDialognew MaterialDialog.Builder(mContext)                     .title(&amp;quot;title&amp;quot;)                     .content(&amp;quot;I&amp;apos;m a content&amp;quot;)                     .negativeText(&amp;qu">
+<meta name="twitter:title" content="Kotlin let with run also apply区分">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Dialog/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/28/Kotlin-let-with-run-also-apply区分/"/>
 
 
 
 
 
-  <title>Dialog | 糖葫芦</title>
+  <title>Kotlin let with run also apply区分 | 糖葫芦</title>
   
 
 
@@ -277,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Dialog/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/28/Kotlin-let-with-run-also-apply区分/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +293,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Dialog</h1>
+          <h1 class="post-title" itemprop="name headline">Kotlin let with run also apply区分</h1>
         
 
         <div class="post-meta">
@@ -306,8 +305,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T14:47:16+08:00">
-                2018-02-28
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-28T15:24:21+08:00">
+                2018-04-28
               </time>
             
 
@@ -325,9 +324,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/02/28/Dialog/#comments" itemprop="discussionUrl">
+                <a href="/2018/04/28/Kotlin-let-with-run-also-apply区分/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/28/Dialog/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/04/28/Kotlin-let-with-run-also-apply区分/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,22 +354,8 @@
       
 
       
-        <h1 id="快速初始化materialDialog"><a href="#快速初始化materialDialog" class="headerlink" title="快速初始化materialDialog"></a>快速初始化materialDialog</h1><pre><code>new MaterialDialog.Builder(mContext)
-                    .title(&quot;title&quot;)
-                    .content(&quot;I&apos;m a content&quot;)
-                    .negativeText(&quot;cancel&quot;)
-                    .negativeColorRes(R.color.colorNegative)
-                    .positiveText(&quot;ok&quot;)
-                    .positiveColorRes(R.color.colorPositive)
-                    .onPositive(new     MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog     dialog, @NonNull DialogAction which) {
-                            showMsg(&quot;click dialog ok&quot;);
-                            ...
-                    }
-                })
-                .show();
-</code></pre>
+        <p><img src="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+
       
     </div>
     
@@ -397,7 +382,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/materialDialog/" rel="tag"># materialDialog</a>
+            <a href="/tags/let/" rel="tag"># let</a>
           
         </div>
       
@@ -410,8 +395,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/30/微信小程序速查笔记/" rel="next" title="微信小程序速查笔记">
-                <i class="fa fa-chevron-left"></i> 微信小程序速查笔记
+              <a href="/2018/04/24/获取手机屏幕的密度/" rel="next" title="获取手机屏幕的密度">
+                <i class="fa fa-chevron-left"></i> 获取手机屏幕的密度
               </a>
             
           </div>
@@ -419,10 +404,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/28/Fragment-懒加载/" rel="prev" title="Fragment 懒加载">
-                Fragment 懒加载 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -484,17 +465,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -547,22 +519,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#快速初始化materialDialog"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5FEB;&#x901F;&#x521D;&#x59CB;&#x5316;materialDialog" class="headerlink" title="&#x5FEB;&#x901F;&#x521D;&#x59CB;&#x5316;materialDialog"></a>&#x5FEB;&#x901F;&#x521D;&#x59CB;&#x5316;materialDialog</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -734,9 +690,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Dialog/';
-          this.page.identifier = '2018/02/28/Dialog/';
-          this.page.title = 'Dialog';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/04/28/Kotlin-let-with-run-also-apply区分/';
+          this.page.identifier = '2018/04/28/Kotlin-let-with-run-also-apply区分/';
+          this.page.title = 'Kotlin let with run also apply区分';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
