@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title></title>
+    <url>%2F2018%2F06%2F27%2FKotlin-%E5%8F%AF%E8%A7%82%E5%AF%9F%E5%B1%9E%E6%80%A7%2F</url>
+    <content type="text"><![CDATA[�����ڹ۲���ģʽ�����������Ķ��������ı�ʱ���ܹ��յ��ص�֪ͨ�� ���磺���Ǽ���һ��������123456789var str: String by Delegates.observable("qianqian",&#123; property: KProperty&lt;*&gt;, oldValue: String, newValue: String -&gt; Log.i("xx","�ı����������ƣ�$&#123;property.name&#125; --- $&#123;oldValue&#125; -- $&#123;newValue&#125;" ) &#125;) //����һ����ť���ı�str��ֵ fun foo(view : View)&#123; str = "haha" &#125; ��ʱ�����ǻᷢ�֣����ı�str ��ֵ��ʱ�򣬻���ӡ��Ϣ��Ҳ�����յ��ص���1�ı����������ƣ�str --- qianqian -- haha �ٱ��磺����������������һ�����ԣ�1234567891011121314import kotlin.properties.Delegatesclass User &#123; var name: String by Delegates.observable("&lt;no name&gt;") &#123; prop, old, new -&gt; println("$old -&gt; $new") &#125;&#125;fun main(args: Array&lt;String&gt;) &#123; val user = User() user.name = "first" user.name = "second"&#125; ��ӡ��Ϣ��12&lt;no name&gt; -&gt; firstfirst -&gt; second]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[Kotlin let with run also apply区分]]></title>
     <url>%2F2018%2F04%2F28%2FKotlin-let-with-run-also-apply%E5%8C%BA%E5%88%86%2F</url>
     <content type="text"><![CDATA[]]></content>
