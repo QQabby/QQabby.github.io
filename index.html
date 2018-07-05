@@ -273,6 +273,168 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/07/05/小程序的爬坑之路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/05/小程序的爬坑之路/" itemprop="url">Activity启动模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-05T14:58:04+08:00">
+                2018-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/05/小程序的爬坑之路/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/05/小程序的爬坑之路/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>近期由于项目需要，需要编写小程序，遇到一些问题，记录下来，也是给自己开发的一个总结。</p>
+</blockquote>
+<h1 id="1-关于模板-template"><a href="#1-关于模板-template" class="headerlink" title="1.关于模板 template"></a>1.关于模板 template</h1><p>在看完 <a href="&quot;https://developers.weixin.qq.com/miniprogram/dev/index.html&quot;">官方文档</a> 里的说明之后，我并没有成功使用，按照它那个设置完成后，一直说找不到，最后在知道，原来除了实例那些之外，还要在当前 <code>wxml</code> 中 <code>import</code> 进来。</p>
+<ul>
+<li>1.先建一个 <code>template</code> 的文件夹，新建 <code>wxml</code>,根据具体的路径引入进来，例如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;import src=&quot;../template/line.wxml&quot; /&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>还有一个就是如果有相对应的 <code>wxss</code>文件，可在 <code>app.wxss</code>文件中引用，这样整个项目都不需要引用这个样式文件了。</p>
+<p><strong>注意：模板拥有自己的作用域，只能使用 data 传入的数据以及模版定义文件中定义的 <wxs> 模块。</wxs></strong></p>
+<h1 id="2-关于水平居中，垂直居中"><a href="#2-关于水平居中，垂直居中" class="headerlink" title="2. 关于水平居中，垂直居中"></a>2. 关于水平居中，垂直居中</h1><p>一开始感觉这啥玩意，不听话啊，让居中也不居中，就是不动啊，很是郁闷，后来发现了一些规律。</p>
+<p><strong>2.1 水平居中</strong></p>
+<ul>
+<li>首先如果是行内元素，例如 <text> 这样的，如果想水平居中，使用<code>text-align:center</code> 你会发现不好使啊，纹丝不动，原因是因为行内元素长度随内容变化，所以它不能让你在一行的中间，因为它的长度就是文字长度。</text></li>
+</ul>
+<p><strong>解决方案：</strong>可以换成<code>view</code> 控件，或者使用：<code>display:block</code> + <code>text-align:center</code></p>
+<ul>
+<li>其它元素可以使用<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">======3个一起使用==========</span><br><span class="line">text-align:center;</span><br><span class="line">align-items:center;</span><br><span class="line">justify-content: center;</span><br><span class="line">==================</span><br><span class="line">margin:auto # 子容器在父容器中居中,单独使用</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>2.2 垂直居中</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//可使用如下</span><br><span class="line">display:flex;</span><br><span class="line">align-items:center;</span><br><span class="line">justify-content:center;</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-关于几个控件平分整个屏幕宽度问题"><a href="#3-关于几个控件平分整个屏幕宽度问题" class="headerlink" title="3.关于几个控件平分整个屏幕宽度问题"></a>3.关于几个控件平分整个屏幕宽度问题</h1><blockquote>
+<p>一开始我还想着获取屏幕的宽和高，然后再动态给控件设置具体的值，后来发现有更简单的做法</p>
+</blockquote>
+<p>例如：像这样一行排四个<br><img src="https://upload-images.jianshu.io/upload_images/1948557-35b5b4254918c3fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>解决方案：</strong>设置控件的宽度为 ：25%，这样就自动平分啦。当然还有其它的方式，但是我认为百分比的这种写法感觉很直观。</p>
+<h1 id="4-flex-布局"><a href="#4-flex-布局" class="headerlink" title="4. flex 布局"></a>4. flex 布局</h1><p>熟练掌握 <code>flexbox</code> 布局，可以更轻松的编写任何常见的布局，可以查看相关专业的文章。</p>
+<p>未完待续…..</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/06/27/Kotlin-可观察属性/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1644,144 +1806,6 @@ xxxhdpi（超超超高）~640dpi density=4
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/08/监听键盘显示与隐藏/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/08/监听键盘显示与隐藏/" itemprop="url">监听键盘显示与隐藏</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-08T14:58:19+08:00">
-                2018-03-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/08/监听键盘显示与隐藏/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/08/监听键盘显示与隐藏/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>项目中有时候需要监听<code>keyboard</code>的显示与隐藏，特此备注，方便使用。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KeyboardWatcher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;</span><br><span class="line">    <span class="keyword">private</span> View rootView;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> viewSize = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> isShowing = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">private</span> OnKeyboardListener onKeyboardListener;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">KeyboardWatcher</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        rootView = activity.getWindow().getDecorView().getRootView();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> KeyboardWatcher <span class="title">register</span><span class="params">(OnKeyboardListener listener)</span></span>&#123;</span><br><span class="line">        onKeyboardListener = listener;</span><br><span class="line">        <span class="keyword">if</span>(onGlobalLayoutListener == <span class="keyword">null</span>) &#123;</span><br><span class="line">            onGlobalLayoutListener = <span class="keyword">new</span> ViewTreeObserver.OnGlobalLayoutListener() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onGlobalLayout</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Rect r = <span class="keyword">new</span> Rect();</span><br><span class="line">                    rootView.getWindowVisibleDisplayFrame(r);</span><br><span class="line">                    <span class="keyword">int</span> viewHeight = r.bottom - r.top;</span><br><span class="line">                    <span class="keyword">if</span>(viewSize &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                        viewSize = viewHeight;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span>(viewHeight != viewSize)&#123;</span><br><span class="line">                        <span class="comment">// 大于100dp才算变化</span></span><br><span class="line">                        <span class="keyword">if</span>(Math.abs(viewHeight - viewSize) &gt; dpToPx(rootView.getContext(),<span class="number">100</span>)) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (viewHeight &lt; viewSize &amp;&amp; !isShowing) &#123;</span><br><span class="line">                                onKeyboardListener.onShow(viewHeight);</span><br><span class="line">                                isShowing = <span class="keyword">true</span>;</span><br><span class="line">                            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(isShowing)&#123;</span><br><span class="line">                                onKeyboardListener.onHide();</span><br><span class="line">                                isShowing = <span class="keyword">false</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        viewSize = viewHeight;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        rootView.post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                viewSize = rootView.getHeight();</span><br><span class="line">                rootView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unRegister</span><span class="params">()</span></span>&#123;</span><br><span class="line">        rootView.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);</span><br><span class="line">        rootView = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnKeyboardListener</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onShow</span><span class="params">(<span class="keyword">int</span> viewSize)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onHide</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dpToPx</span><span class="params">(Context context,<span class="keyword">int</span> dp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span>) TypedValue.applyDimension(</span><br><span class="line">                TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">KeyBoardWatcher keyboardWatcher = <span class="keyword">new</span>  KeyboardWatcher()</span><br><span class="line">keyboardWatcher.register(<span class="keyword">this</span>)<span class="comment">//实现KeyboardWatcher.OnKeyboardListener接口</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//实现方法onShow() , onHide(),对应键盘的显示与隐藏</span></span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1832,7 +1856,7 @@ xxxhdpi（超超超高）~640dpi density=4
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1845,7 +1869,7 @@ xxxhdpi（超超超高）~640dpi density=4
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

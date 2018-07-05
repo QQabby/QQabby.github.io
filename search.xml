@@ -1,165 +1,944 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title><![CDATA[Kotlin-可观察属性]]></title>
-    <url>%2F2018%2F06%2F27%2FKotlin-%E5%8F%AF%E8%A7%82%E5%AF%9F%E5%B1%9E%E6%80%A7%2F</url>
-    <content type="text"><![CDATA[类似于观察者模式，当所监测的对象发生改变时，能够收到回调通知。 例如：我们监测一个变量：123456789var str: String by Delegates.observable("qianqian",&#123; property: KProperty&lt;*&gt;, oldValue: String, newValue: String -&gt; Log.i("xx","改变的属性名称：$&#123;property.name&#125; --- $&#123;oldValue&#125; -- $&#123;newValue&#125;" ) &#125;) //点击一个按钮，改变str的值 fun foo(view : View)&#123; str = "haha" &#125; 这时候我们会发现，当改变str 的值的时候，会打印信息，也就是收到回调：1改变的属性名称：str --- qianqian -- haha 再比如：检测对象里的其中一个属性：1234567891011121314import kotlin.properties.Delegatesclass User &#123; var name: String by Delegates.observable("&lt;no name&gt;") &#123; prop, old, new -&gt; println("$old -&gt; $new") &#125;&#125;fun main(args: Array&lt;String&gt;) &#123; val user = User() user.name = "first" user.name = "second"&#125; 打印信息：12&lt;no name&gt; -&gt; firstfirst -&gt; second]]></content>
-  </entry>
-  <entry>
-    <title><![CDATA[Kotlin let with run also apply区分]]></title>
-    <url>%2F2018%2F04%2F28%2FKotlin-let-with-run-also-apply%E5%8C%BA%E5%88%86%2F</url>
-    <content type="text"><![CDATA[]]></content>
-      <tags>
-        <tag>let</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[获取手机屏幕的密度]]></title>
-    <url>%2F2018%2F04%2F24%2F%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%B1%8F%E5%B9%95%E7%9A%84%E5%AF%86%E5%BA%A6%2F</url>
-    <content type="text"><![CDATA[目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低）~120dpi density=0.75 mdpi（中）~160dpi density=1 hdpi（高）~240dpi density=1.5 xhdpi（超高）~320dpi density=2 xxhdpi（超超高）~480dpi density=3 xxxhdpi（超超超高）~640dpi density=4 对应图片的目录应该是：xxhdpi 第二种：通过代码方式(系统定义的dpi)12float xdpi = getResources().getDisplayMetrics().xdpi;float ydpi = getResources().getDisplayMetrics().ydpi; 不同手机获取的xdpi ydpi 值有的一模一样，有的有些差异，但是相差不会太大，两者获取的值近乎一样。 两者计算出的结果并不完全相同，因为你们想，实际计算得出的dpi 很容易根据屏幕尺寸的不同，得出不同的dpi ，这样的话得到的值很多，无法适配。我查阅网上相关介绍，就是每个手机初始有一个固定的dpi ，分别是上述的：120，160，240，320，480，640，安卓实际进行缩放的时候按照的是系统定义的这些，而不是实际计算得出的dpi,这一点需要注意。]]></content>
-      <tags>
-        <tag>dpi</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[EventBus 为什么订阅的方法必须是public？]]></title>
-    <url>%2F2018%2F04%2F08%2FEventBus-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AE%A2%E9%98%85%E7%9A%84%E6%96%B9%E6%B3%95%E5%BF%85%E9%A1%BB%E6%98%AFpublic%EF%BC%9F%2F</url>
-    <content type="text"><![CDATA[在看了源码之后发现是这样的：12345678910111213141516171819202122232425262728293031323334353637383940private void findUsingReflectionInSingleClass(FindState findState) &#123; Method[] methods; try &#123; // This is faster than getMethods, especially when subscribers are fat classes like Activities //获取所有声明的方法 methods = findState.clazz.getDeclaredMethods(); &#125; catch (Throwable th) &#123; // Workaround for java.lang.NoClassDefFoundError, see https://github.com/greenrobot/EventBus/issues/149 methods = findState.clazz.getMethods(); findState.skipSuperClasses = true; &#125; for (Method method : methods) &#123; //获取方法的标识符 int modifiers = method.getModifiers(); //方法的标识符必须是public if ((modifiers &amp; Modifier.PUBLIC) != 0 &amp;&amp; (modifiers &amp; MODIFIERS_IGNORE) == 0) &#123; Class&lt;?&gt;[] parameterTypes = method.getParameterTypes(); if (parameterTypes.length == 1) &#123; Subscribe subscribeAnnotation = method.getAnnotation(Subscribe.class); if (subscribeAnnotation != null) &#123; Class&lt;?&gt; eventType = parameterTypes[0]; if (findState.checkAdd(method, eventType)) &#123; ThreadMode threadMode = subscribeAnnotation.threadMode(); findState.subscriberMethods.add(new SubscriberMethod(method, eventType, threadMode, subscribeAnnotation.priority(), subscribeAnnotation.sticky())); &#125; &#125; &#125; else if (strictMethodVerification &amp;&amp; method.isAnnotationPresent(Subscribe.class)) &#123; String methodName = method.getDeclaringClass().getName() + "." + method.getName(); throw new EventBusException("@Subscribe method " + methodName + "must have exactly 1 parameter but has " + parameterTypes.length); &#125; &#125; else if (strictMethodVerification &amp;&amp; method.isAnnotationPresent(Subscribe.class)) &#123; //否则抛出异常 ，说这个方法必须加上@Subscribe ,并且是public 的，不能是静态的，抽象的 String methodName = method.getDeclaringClass().getName() + "." + method.getName(); throw new EventBusException(methodName + " is a illegal @Subscribe method: must be public, non-static, and non-abstract"); &#125; &#125; &#125; 然后就没有然后了，之前怀疑private 修饰的方法，反射后不能被其他类调用，后来查了相关资料，发现可以，后来去网上寻找无果，后来在我微信关注的公众号里，群主伯特说：虽然可以反射调用private 的方法，但是必须通过setAccess来修改访问权限。说是修改，实则破坏了java中的作用域，迫不得已不推荐这么做。EventBus 作为三方库，显然不会在你设置为private 时，好心办坏事，强制访问。 仅此而已，仅此而已。分享给还不知道的童鞋。]]></content>
-      <tags>
-        <tag>EventBus</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Activity状态保存与恢复]]></title>
-    <url>%2F2018%2F03%2F23%2FActivity%E7%8A%B6%E6%80%81%E4%BF%9D%E5%AD%98%E4%B8%8E%E6%81%A2%E5%A4%8D%2F</url>
-    <content type="text"></content>
-      <tags>
-        <tag>Activity状态保存与恢复</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[四大组件是什么与它们的生命周期（及Fragment）]]></title>
-    <url>%2F2018%2F03%2F22%2F%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88%E4%B8%8E%E5%AE%83%E4%BB%AC%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%88%E5%8F%8AFragment%EF%BC%89%2F</url>
-    <content type="text"><![CDATA[首先当我们一开始学习安卓的时候想必就是四大组件了以及它们的生命周期，现在就来复习回想下。 四大组件有：Activity, ContentProvider, BroadcastReceiver, Service Activity 提供与用户交互的界面或者可以说是一个窗口 下面我是从官方文档中关于Activity生命周期 的一张图 正常启动时：onCreate() -&gt; onStart() -&gt; onResume() 而后我们看到当 Another activity comes into the foreground 执行 onPause() 方法当按 home 键的时候： 当前Activity 已经不可见了，所以执行：onPause() -&gt; onStop() 当重新回到app时，分为两种情况就是：①是app还在后台，执行：onRestart() -&gt; onStart() -&gt; onResume(); ②是app被系统杀死了，则执行：onCreate() -&gt; onStart() &gt; onResume() 当在app 里 从 A -&gt; B 此时A隐藏，B显示，当重新返回A 时，执行：onPause() -&gt; onResume(),这种应用场景一般是比如需要返回做刷新操作的，可以将刷新方法写在onResume() 方法中执行。 最后当退出应用程序的时候执行 onDestroy() Service 服务，有前台服务和后台服务，一般提供需在后台长期运行的服务，例如：音乐播放器等 它的生命周期如下图： 因为启动服务的方法有两个：startService() 和 bindService() 两者的生命周期略有不同。 首先来看：startService() 方式启动：onCreate() -&gt; onStartCommand() 调用stopServcie() 停止服务，随后执行 onDestroy() 其次是：bindService() 方式启动：onCreate() -&gt; onBind() 服务启动起来了，调用unbindService() 停止服务，随后执行 onUnbind() -&gt; onDestroy() Broadcastreceiver 广播，可以接受来自应用内或者应用外的广播，分为两个角色：广播发送者，广播接收者 广播的注册方式有两种：一种是代码注册，一种是清单文件注册，代码注册的优先级要比清单文件注册的优先级要高； 广播的发送可以是有序广播也可以是无序广播，有序广播接收到广播的顺序按照优先级的顺序； 注意广播接收器onReceive() 方法运行在 UI 线程中，不可以做耗时操作，否则会导致ANR异常； ContentProvider 内容提供者，应用内数据共享 Fragment 一般和 viewpager 配合使用，不能单独使用，要配合Activity使用，但是有自己的生命周期 一般在onAttach()中获取参数值一些，onCreateView()中创建布局，布局加载完成后在onActivityCreated()中执行一些初始化操作，随后onStart(),onResume().onPause(),onStop(), fragment 销毁，onDestroyView() -&gt; onDestroy() -&gt;onDetach()]]></content>
-      <tags>
-        <tag>生命周期</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Android知识点总结]]></title>
-    <url>%2F2018%2F03%2F22%2FAndroid%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93%2F</url>
-    <content type="text"><![CDATA[网上别人列出一些来，我把它拿过来了，需要自己一项一项复习查阅，以后有会继续添加新的，特此总结。 四大组件是什么与它们的生命周期（及Fragment）; Acitivty的四种启动模式与特点。 获取手机屏幕的密度 Activity状态保存与恢复。 Service的生命周期，启动方法，有什么区别。 service和activity怎么进行数据交互。 怎么保证service不被杀死。 广播使用的方式和场景以及广播的几种分类。 Intent的使用方法，可以传递哪些数据类型。 ContentProvider使用方法。 ContentProvider、ContentResolver、ContentObserver 之间的关系。 Thread、AsycTask、IntentService的使用场景与特点。 FrameLayout 、 LinearLayout 、 RelativeLayout 各自特点及绘制效率对比。 Android的数据存储形式。 Android两种序列化的区别和作用。 Sqlite的基本操作。 Android中的MVC、MVP模式。 Merge、ViewStub的作用。 动画有哪几类，各有什么特点？ Handler、Loop消息队列模型，各部分的作用。 Android的消息机制，子线程更新UI的方法和原理。 Android怎么加速启动Activity。 App的启动过程。 Android优化方法。 如何防止内存泄漏？ Android中弱引用与软引用的应用场景。 Bitmap的四种属性，如何加载大图（inJustDecodeBounds）。 View与View Group分类。自定义View过程：onMeasure()、onLayout()、onDraw()。 View刷新机制和绘制流程。 Activity、Window、View的联系和理解。 invalidate和requestLayout的区别及使用。 Touch事件分发机制和冲突处理。 Android IPC:Binder原理。 Android5.0（UI库）、6.0（权限）、7.0特性、8.0特性。]]></content>
-      <tags>
-        <tag>Android知识点</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Kotlin 传递数据]]></title>
-    <url>%2F2018%2F03%2F14%2FKotlin-%E4%BC%A0%E9%80%92%E6%95%B0%E6%8D%AE%2F</url>
-    <content type="text"><![CDATA[今天在掘金看到使用 Kotlin 高阶函数传递Intent 数据很简洁，觉着可以试试，并应用到项目中去，自己再加以理解，记录笔记，方便查阅。掘金原文章地址：https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw 传统的Intent 数据传递我就不介绍了，只介绍Kotlin实现方式：123456789101112131415161718192021//目标 假设叫`KTestActivity4` 定义 object IntentOptions&#123; private const val MSG_KEY = "key for message" var Intent.message: String? get() = getStringExtra(MSG_KEY) set(message) &#123; putExtra(MSG_KEY,message) &#125; &#125;//跳转时 with(KTestActivity4.IntentOptions)&#123; intent = Intent(this@KTestActivity5,KTestActivity4::class.java) intent.message = "I am KTestActivity5" startActivity(intent) &#125;//使用with(IntentOptions)&#123; var message= intent.message Toast.makeText(this@KTestActivity4,"显示信息："+message,Toast.LENGTH_SHORT).show() &#125; 假设有多个数据传递：1234567891011121314151617181920212223object IntentOptions&#123; private const val MSG_KEY = "key for message" private const val MSG_ID = "ID for message" var Intent.message: String? get() = getStringExtra(MSG_KEY) set(message) &#123; putExtra(MSG_KEY,message) &#125; // 再多增加一条即可 var Intent.id: String? get() = getStringExtra(MSG_ID) set(id) &#123; putExtra(MSG_ID,id) &#125; &#125;// 传递时with(KTestActivity4.IntentOptions)&#123; intent = Intent(this@KTestActivity5,KTestActivity4::class.java) intent.message = "I am KTestActivity5" intent.id = "I am id" startActivity(intent) &#125; 还有另外一种传递方式：委托机制，不是特别明白。国外大神封装的github地址：https://github.com/Takhion/android-extras-delegates]]></content>
-      <tags>
-        <tag>Kotlin#Intent</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[阿里巴巴Android开发手册]]></title>
-    <url>%2F2018%2F03%2F13%2F%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Android%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%2F</url>
-    <content type="text"><![CDATA[摘自阿里巴巴Android开发手册 强制要求的 1. Activity 间的数据通信，对于数据量比较大的，避免使用 intent + Parcelable 的方式，可以考虑 EventBus等替代方案，以免造成 TransationTooLargeException 2. Activity 间通过隐士 Intent的跳转，在发出 Intent 之前必须通过 resolveActivity 检查，避免找不到合适的调用组件，造成 ActivityNotFoundException 的异常。 12345678910 public void viewUrl(String url, String mimeType) &#123; Intent intent = new Intent(Intent.ACTION_VIEW); intent.setDataAndType(Uri.parse(url), mimeType); if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) &#123; startActivity(intent); &#125;else &#123; // 找不到指定的 Activity &#125;&#125; 而不应该：1234567Intent intent = new Intent();intent.setAction("com.example.DemoIntent ");try &#123; startActivity(intent);&#125; catch (ActivityNotFoundException e) &#123; e.printStackTrace();&#125; 3. 避免在Service#onStartCommand/onBind()方法中执行耗时操作，如果确实有需求，应采用IntentService 或采用其他异步机制完成。正例： 12345678910111213141516171819202122232425public class MainActivity extends Activity &#123; @Override public void onCreate(Bundle savedInstanceState) &#123; super.onCreate(savedInstanceState); setContentView(R.layout.main); &#125; public void startIntentService(View source) &#123; Intent intent = new Intent(this, MyIntentService.class); startService(intent); &#125;&#125;public class MyIntentService extends IntentService &#123; public MyIntentService() &#123; super("MyIntentService"); &#125; @Override protected void onHandleIntent(Intent intent) &#123; synchronized (this) &#123; try &#123;...... &#125; catch (Exception e) &#123; &#125; &#125; &#125;&#125; 4. 避免在 BroadcastReceive#onReceive()中执行耗时操作，如果有耗时工作，应该创建 IntentService完成，而不应该在BroadcastReceiver 内创建子线程去做。 说明：由于该方法是在主线程执行，如果执行耗时操作会导致 UI 不流畅，可以使用 IntentService,创建 HanlderThread 或者调用 Context#registerReceiver(BroadcastReceiver,IntentFitter,String,Handler) 方法等方式，在其他 Worker 线程执行 onReceive.BroadcastReceiver#onReceive() 方法耗时超过10秒钟，可能会被系统杀死。正例： 1234567891011IntentFilter filter = new IntentFilter();filter.addAction(LOGIN_SUCCESS);this.registerReceiver(mBroadcastReceiver, filter);mBroadcastReceiver = new BroadcastReceiver() &#123; @Override public void onReceive(Context context, Intent intent) &#123; Intent userHomeIntent = new Intent(); userHomeIntent.setClass(this, UserHomeService.class); this.startService(userHomeIntent); &#125;&#125;; 反例：123456789mBroadcastReceiver = new BroadcastReceiver() &#123; @Override public void onReceive(Context context, Intent intent) &#123; MyDatabaseHelper myDB = new MyDatabaseHelper(context); myDB.initData(); // have more database operation here &#125;&#125;; 5. 避免使用隐士 Intent 广播敏感信息，信息可能被其他注册了对应 BroadcastReceiver 的App接收。 说明：通过Context#sendBroadcast()发送的隐士广播会被感兴趣的 receiver 接收，恶意应用注册监听该广播的 receiver可能会获取到 Intent 中传递的敏感信息，并进行其他危险操作。如果发送的广播为使用 Context#sendOrderedBroadcast()方法发送的有序广播，优先级较高的恶意 receiver可能直接丢弃该广播，造成服务不可用，或者向广播结果塞入恶意数据。 如果广播仅限于应用内，则可以是iyongLocalBroadcastManager#sendBroadcast()实现，避免敏感信息外泄和intent拦截的风险。 正例：123Intent intent = new Intent("my-sensitive-event");intent.putExtra("event", "this is a test event");LocalBroadcastManager.getInstance(this).sendBroadcast(intent); 反例：1234567891011Intent intent = new Intent();v1.setAction("com.sample.action.server_running");v1.putExtra("local_ip", v0.h);v1.putExtra("port", v0.i);v1.putExtra("code", v0.g);v1.putExtra("connected", v0.s);v1.putExtra("pwd_predefined", v0.r);if (!TextUtils.isEmpty(v0.t)) &#123; v1.putExtra("connected_usr", v0.t);&#125;context.sendBroadcast(v1); 以上广播可能被其他应用的如下 receiver 接收导致敏感信息泄露：12345678910111213final class MyReceiver extends BroadcastReceiver &#123; public final void onReceive(Context context, Intent intent) &#123; if (intent != null &amp;&amp; intent.getAction() != null) &#123; String s = intent.getAction(); if (s.equals("com.sample.action.server_running") &#123; String ip = intent.getStringExtra("local_ip"); String pwd = intent.getStringExtra("code"); String port = intent.getIntExtra("port", 8888); boolean status = intent.getBooleanExtra("connected", false); &#125; &#125; &#125;&#125;]]></content>
-      <tags>
-        <tag>阿里巴巴Android开发手册规范</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[监听键盘显示与隐藏]]></title>
-    <url>%2F2018%2F03%2F08%2F%E7%9B%91%E5%90%AC%E9%94%AE%E7%9B%98%E6%98%BE%E7%A4%BA%E4%B8%8E%E9%9A%90%E8%97%8F%2F</url>
-    <content type="text"><![CDATA[项目中有时候需要监听keyboard的显示与隐藏，特此备注，方便使用。 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970public class KeyboardWatcher &#123; private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener; private View rootView; private int viewSize = -1; private boolean isShowing = false; private OnKeyboardListener onKeyboardListener; public KeyboardWatcher(Activity activity)&#123; rootView = activity.getWindow().getDecorView().getRootView(); &#125; public KeyboardWatcher register(OnKeyboardListener listener)&#123; onKeyboardListener = listener; if(onGlobalLayoutListener == null) &#123; onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() &#123; @Override public void onGlobalLayout() &#123; Rect r = new Rect(); rootView.getWindowVisibleDisplayFrame(r); int viewHeight = r.bottom - r.top; if(viewSize &lt; 0)&#123; viewSize = viewHeight; return; &#125; if(viewHeight != viewSize)&#123; // 大于100dp才算变化 if(Math.abs(viewHeight - viewSize) &gt; dpToPx(rootView.getContext(),100)) &#123; if (viewHeight &lt; viewSize &amp;&amp; !isShowing) &#123; onKeyboardListener.onShow(viewHeight); isShowing = true; &#125; else if(isShowing)&#123; onKeyboardListener.onHide(); isShowing = false; &#125; &#125; viewSize = viewHeight; &#125; &#125; &#125;; &#125; rootView.post(new Runnable() &#123; @Override public void run() &#123; viewSize = rootView.getHeight(); rootView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener); &#125; &#125;); return this; &#125; public void unRegister()&#123; rootView.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener); rootView = null; &#125; public interface OnKeyboardListener&#123; void onShow(int viewSize); void onHide(); &#125; private int dpToPx(Context context,int dp) &#123; return (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics() ); &#125;&#125; 使用方法1234KeyBoardWatcher keyboardWatcher = new KeyboardWatcher()keyboardWatcher.register(this)//实现KeyboardWatcher.OnKeyboardListener接口//实现方法onShow() , onHide(),对应键盘的显示与隐藏]]></content>
-      <tags>
-        <tag>keyboard</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Fragment 懒加载]]></title>
-    <url>%2F2018%2F02%2F28%2FFragment-%E6%87%92%E5%8A%A0%E8%BD%BD%2F</url>
-    <content type="text"><![CDATA[因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用 1.首先新建一个BaseLazyFragment/** * Created by xuqianqian on 2018/2/28. */ public abstract class BaseLazyFragment extends Fragment { protected View mRootView; public Context mContext; protected boolean isVisible; private boolean isPrepared; private boolean isLoad = false; //最先执行 @Override public void setUserVisibleHint(boolean isVisibleToUser) { super.setUserVisibleHint(isVisibleToUser); if (getUserVisibleHint()) {//当前显示 isVisible = true; if(!isLoad){ lazyLoad(); } } else { isVisible = false; //onInvisible(); } } @Override public void onCreate(@Nullable Bundle savedInstanceState) { super.onCreate(savedInstanceState); mContext = getActivity(); setHasOptionsMenu(true); } @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { if (mRootView == null) { mRootView = getLayout(); } return mRootView; } @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) { super.onActivityCreated(savedInstanceState); isPrepared = true; //如果已经加载过了，就无需再重新加载 if(!isLoad){ lazyLoad(); } } /** * 懒加载 */ protected void lazyLoad() { if (!isPrepared || !isVisible) { return; } isLoad = true; initData(); } // protected void onInvisible() { // // } //初始化布局View public abstract View getLayout(); public abstract void initData(); } 2.让你的fragment extend BaseLazyFragmentpublic class GankFragment extends BaseLazyFragment { String type; public static GankFragment newInstance(String type) { GankFragment gankFragment = new GankFragment(); Bundle bundle = new Bundle(); bundle.putString(&quot;type&quot;, type); gankFragment.setArguments(bundle); return gankFragment; } //加载布局 @Override public View getLayout() { type = getArguments().getString(&quot;type&quot;); TextView tv = new TextView(getActivity()); tv.setText(type); tv.setGravity(Gravity.CENTER); return tv; } @Override public void initData() { //初始化一些控件，加载网络数据 } } 3.剩下的就是FragmentPagerAdapter了public class TitleAdapter extends FragmentPagerAdapter { private List&lt;Fragment&gt; fragments; private List&lt;String&gt; types; public TitleAdapter(FragmentManager fm, List&lt;Fragment&gt; fragments, List&lt;String&gt; types) { super(fm); this.fragments = fragments; this.types = types; } @Override public Fragment getItem(int position) { return fragments.get(position); } @Override public int getCount() { return fragments.size(); } @Override public CharSequence getPageTitle(int position) { return types.get(position); } } MainActivity.java private List&lt;String&gt; titles = new ArrayList&lt;&gt;(); private List&lt;Fragment&gt; fragments = new ArrayList&lt;&gt;(); TitleAdapter titleAdapter; @Override protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.activity_main); TabLayout tablayout = findViewById(R.id.tablayout); ViewPager viewpager = findViewById(R.id.viewpager); titles.add(&quot;android&quot;); titles.add(&quot;ios&quot;); titles.add(&quot;web&quot;); titles.add(&quot;java&quot;); fragments.add(GankFragment.newInstance(&quot;android&quot;)); fragments.add(GankFragment.newInstance(&quot;ios&quot;)); fragments.add(GankFragment.newInstance(&quot;web&quot;)); fragments.add(GankFragment.newInstance(&quot;java&quot;)); titleAdapter = new TitleAdapter(getSupportFragmentManager(), fragments, titles); viewpager.setAdapter(titleAdapter); tablayout.setTabMode(TabLayout.MODE_FIXED); tablayout.setupWithViewPager(viewpager); } https://github.com/QQabby/LazyFragmentApplication]]></content>
-      <tags>
-        <tag>懒加载</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Dialog]]></title>
-    <url>%2F2018%2F02%2F28%2FDialog%2F</url>
-    <content type="text"><![CDATA[快速初始化materialDialognew MaterialDialog.Builder(mContext) .title(&quot;title&quot;) .content(&quot;I&apos;m a content&quot;) .negativeText(&quot;cancel&quot;) .negativeColorRes(R.color.colorNegative) .positiveText(&quot;ok&quot;) .positiveColorRes(R.color.colorPositive) .onPositive(new MaterialDialog.SingleButtonCallback() { @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) { showMsg(&quot;click dialog ok&quot;); ... } }) .show();]]></content>
-      <tags>
-        <tag>materialDialog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微信小程序速查笔记]]></title>
-    <url>%2F2018%2F01%2F30%2F%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%80%9F%E6%9F%A5%E7%AC%94%E8%AE%B0%2F</url>
-    <content type="text"><![CDATA[这个微信小程序也出来好长时间了，一直想做一个属于自己的小程序，这不说动手就动手实现一个吧，比较简易，中间也遇到不少问题，记录一下，方便以后自己查阅。 微信小程序的结构 默认没有这么些文件夹的，只有index ，然后这个标识 app 开头的文件都是一些全局的设置。可以自己查看下，都有注释，就从这个配置开始说。 修改启动页面默认启动页面是index页面，如果要修改，打开app.json配置文件，在顶部你会发现有一个pages的配置，如下： &quot;pages&quot;: [ &quot;pages/home/home&quot; 只需要将我们的想要显示的页面的路径写在 第一个 就可以成为启动页，特别注意路径一定要正确。 当然你会新建很多页面，所有的页面都必须写在这个里面，不然跳转的时候会找不到。 底部tab栏切换就是底部tab栏切换,同样还是在app.json 配置文件中修改如下： &quot;tabBar&quot;: { &quot;color&quot;: &quot;#333333&quot;, &quot;selectedColor&quot;: &quot;#2B91D8&quot;, &quot;backgroundColor&quot;: &quot;#eee&quot;, &quot;borderStyle&quot;: &quot;white&quot;, &quot;list&quot;: [ { &quot;pagePath&quot;: &quot;pages/home/home&quot;, &quot;text&quot;: &quot;首页&quot;, &quot;iconPath&quot;: &quot;pages/home/images/tab_icon_home_nor.png&quot;, &quot;selectedIconPath&quot;: &quot;pages/home/images/tab_icon_home_pre.png&quot; }, { &quot;pagePath&quot;: &quot;pages/myCenter/myCenter&quot;, &quot;text&quot;: &quot;我的&quot;, &quot;iconPath&quot;: &quot;pages/home/images/tab_icon_center_nor.png&quot;, &quot;selectedIconPath&quot;: &quot;pages/home/images/tab_icon_center_pre.png&quot; } ] }, 这里的 pagePath 就是页面的路径，text文字，iconPath图标，注意图片一定要带后缀，selectedIconPath点击态的图标，各自换成你自己的就行，问题不会太大。 加载中如下： 有标签可以直接显示这个,在wxml文件中编写： &lt;loading hidden=&quot;{{hidden}}&quot; bindchange=&quot;loadingChange&quot;&gt; 加载中... &lt;/loading&gt; 可以控制显示还是隐藏，在.js文件中可以控制： data: { hidden: false, } 可以在data 底下配置默认值，hidden: false 默认不显示，赋值的时候必须在这里面写： that.setData({ hidden: true }) 网络请求 wx.request({ //网络请求地址url url: &apos;https://xx&apos;, header: { // &apos;content-type&apos;: &apos;application/x-www-form-urlencoded&apos; &apos;content-type&apos;: &apos;application/json&apos; // &apos;content-type&apos;: &apos;text/xml&apos; }, //请求头参数配置 data: { page: pageNo, timestamp: timeStamps }, method: &quot;POST&quot;, success: function (res) { //xmlstring2json 是我使用第三方xml转json的一个库 var xml2json = require(&apos;..//lib/xmlstring2json/dist/xml2json&apos;); var json = JSON.stringify(xml2json(res.data), null, 4); var jsonObject = xml2json(res.data); var jokeObject = jsonObject.root.joke //timestamp if(pageNo == 0){ timeStamps = jsonObject.root.timestamp.text } // console.log(&apos;json::&apos; + jsonObject.root.timestamp.text) // var data = new Array(); // for (var i = 0; i &lt; jokeObject.length;i++){ // var text = JSON.stringify(jokeObject[i].text).replace(&quot;#&quot;, &quot;&quot;) // //JSON.parse(text).text // var value = JSON.parse(text).text; // data.push(value) // } // console.log(&apos;data::：&apos; + jokeObject[0].text.text ); // var l = jokeObject; var l; if(pageNo == 0){ l = jokeObject }else{ var l = that.data.list; for (var i = 0; i &lt; jokeObject.length; i++) { l.push(jokeObject[i]) } } //页面绑定的数据赋值 that.setData({ list: l }) pageNo++ that.setData({ hidden: true }) }, fail : function(s){ wx.showModal({ title: &apos;提示&apos;, content: &apos;请求接口失败&apos; + JSON.stringify(s) }) } 要进行网络请求，首先测试阶段可以将开发工具里的： 最后一个选项勾选上，不校验…,同时管理员还需在后台配置网络请求的域名，两个缺一不可。]]></content>
-      <tags>
-        <tag>微信小程序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[如何给TextView上的drawable上的图片添加动画？]]></title>
-    <url>%2F2018%2F01%2F24%2F%E5%A6%82%E4%BD%95%E7%BB%99TextView%E4%B8%8A%E7%9A%84drawableEnd%E7%AD%89%E4%B8%8A%E7%9A%84%E5%9B%BE%E7%89%87%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%EF%BC%9F%2F</url>
-    <content type="text"><![CDATA[可能你遇到过这样的场景，就是在 xml 里，给TextView添加了一个drawableLeft或者drawableRight等，你想给这个图片添加一个动画，然而你会发现当你给这个TextView加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。 第一种做法 也是比较通俗的方法，说这个drawable 单独弄成ImageView不就好了，在xml里新增一个ImageView 是吧，干嘛非要加在一个标签里面，要相信布局都是很强大的，肯定可以实现效果。 第二种做法 你说真的没办法，必须写在一个里面，也是有办法的，那就不能在xml里设置drawableLeft了，代码设置，如下： 123AnimationDrawable d = (AnimationDrawable) getResources().getDrawable(R.drawable.animation_draw); d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight()); messageText.setCompoundDrawables(d, null, null, null); 这个具体的动画在这个animation_draw里，如下： 12345678&lt;animation-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; android:oneshot=&quot;false&quot; &gt; &lt;item android:drawable=&quot;@drawable/ic_launcher&quot; android:duration=&quot;500&quot; /&gt;&lt;/animation-list&gt; 这是一个帧动画，里面可以放很多的item,从而形成动画,碰到了这种情况记录下，方便以后查阅。]]></content>
-      <tags>
-        <tag>add animation to drawable</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Android O 新特性 AutoSizing]]></title>
-    <url>%2F2018%2F01%2F16%2FAndroid-O-%E6%96%B0%E7%89%B9%E6%80%A7-AutoSizing%2F</url>
-    <content type="text"><![CDATA[自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。 在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用的时候遇到了一些小问题，导致一直出不来。 官方文档 点击即可查看，可以看别人讲解的同时也可自行查阅文档，双方对比着看，感觉会好一点。 如下图可以简单明了的说明该特性： 具体最简单的使用有两种： 1.一种就是api &gt;= api 26的可以直接在xml里面该属性：12345&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;TextView android:layout_width=&quot;match_parent&quot; android:layout_height=&quot;200dp&quot; android:autoSizeTextType=&quot;uniform&quot; /&gt; 在此需要注意的是：使用这个autoSizeTextType的时候，控件的layout_width layout_height 不能使用这个wrap_content否则看不出什么效果，要使用具体可衡量的。这个也不难理解，因为它要计算，你设置一个模糊的宽和高，就算不出来了。 2. api&lt;26 的低设备 的兼容写法 官方文档里也明确说明了兼容低版本The library provides support to Android 4.0 (API level 14) and higher. 也就是兼容到4.0以上，写法有些不同，如下：1234567891011121314&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot; android:layout_width=&quot;match_parent&quot; android:layout_height=&quot;match_parent&quot;&gt; &lt;TextView android:layout_width=&quot;match_parent&quot; android:layout_height=&quot;200dp&quot; tools:ignore=&quot;MissingPrefix&quot; app:autoSizeTextType=&quot;uniform&quot; /&gt;&lt;/LinearLayout&gt; 这个app是这个xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot; 我们在自定义控件的时候经常遇到它，tools是这个xmlns:tools=&quot;http://schemas.android.com/tools&quot; 当然以上写法都支持动态编码，具体可查阅文档 敲黑板重点你会发现你写完之后编译是报错的，错误类似是这样的： 找不到！！！ 在写那篇文章作者的帮助下，发现首先要兼容低版本，module 的 build.gradle 文件添加依赖时候 就是这个com.android.support:appcompat-v7:xx 后面的版本号要26以上，你看看你自己项目里有哪个版本你就写上哪个，还要在project 的 build.gradle 文件里添加：maven{ url &#39;https://maven.google.com&#39; }添加到对应的位置123456789allprojects &#123; repositories &#123; jcenter() //添加如下内容 maven&#123; url &apos;https://maven.google.com&apos; &#125; &#125;&#125; 至此我发现我的项目终于不报错了，可以运行起来并进行下一步的实践操作了，大家如果在项目中也遇到这样的问题，按我那样改应该没啥问题了，顺便把我写的代码上传到github 上了，又需要的可以下载看看：demo 另外在查看 Android O新特性中发现一个比较好玩的东西：现在，findViewById() 函数的全部实例均返回 T，而不是 View。以后就可以这么写啦：1EditText et = findViewById(R.id.et); 就是那样，无需强转了，当然了使用了Kotlin的话就忽略吧，因为Kotlin连findViewById也不用写，哈哈。更多好玩特性可查看 文档。]]></content>
-      <tags>
-        <tag>Android O</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[修改自动生成get/set方法模板代码]]></title>
-    <url>%2F2018%2F01%2F11%2F%E4%BF%AE%E6%94%B9%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90get-set%E6%96%B9%E6%B3%95%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81%2F</url>
-    <content type="text"><![CDATA[今天看到面对接口脏数据你还在V层if str==null else setText? 一文，觉着写得挺好，开发过程中多思考多动手，会带来意想不到的效果。底下评论大家也都说了各自的方法和见解，文中有一些问题作者后来也解决了，看到评论里有人说： 说到配置as,就可以实现在创建bean时自动生成return xx==null?&quot;&quot;:xx; 觉着很好，因为我觉着这是一种挺简单的方法，但是就如同底下人问了怎么配置呀，我也不知道，于是我就在自己as工具里新建了一个bean对象，按住alt+insert添加get/set方法，发现了解决办法。如下图： 平时手快也没注意，今天仔细看了看，那上面的意思不就是，get 方法模块，set方法模板吗，后面跟着 IntelliJ Default大概就是默认的生成模板吧，点击后面的三个点按钮进去看看，如下： 这是set的，get方法也类似是这样的，大概也能看懂，想着是不是可以直接模板就好了，发现无法修改，后来又发现左上角的+号，原来是自己可以新建一个模板，然后再生成的时候选择自己的模板就好了，如我们在get模板中新建一个自己的模板： 我们知道我们只需要改一下最后get方法return那个地方的代码，也就是这儿： 不确定是不是，我们可以在后面跟着一个“#”号试试：123$&#123;name&#125;() &#123; return $field.name+&quot;#&quot;;&#125; 在生成的时候选择我们自定义的模板： 发现最后生成的代码：1234567public String getAge() &#123; return age + &quot;#&quot;;&#125;public void setAge(String age) &#123; this.age = age;&#125; 这样证明确定是这样的，那么我么可以继续进行真正的判断了：我们先把这个默认里的get方法代码拷贝到 MyGetter中，我们再根据我们自己的需要修改模板代码,其它地方不变，就修改需要修改的地方：我们想要实现这样的：return xx==null?&quot;&quot;:xx,Ok ，那么我认为大概是这么写的，首先判断是否是字符串：12345678$&#123;name&#125;() &#123; #if(field.String)&#123; return $field.name == null ? &quot;&quot; : $field.name; &#125; #else return $field.name; #end &#125; 我们对比一个default的写法：123$&#123;name&#125;() &#123; return $field.name;&#125; 好的，我们再继续生成一下：1234567public String getAge() &#123; return age == null ? &quot;&quot; : age; &#125; public void setAge(String age) &#123; this.age = age; &#125; 好的，达成效果，耶，居然还可以这么玩，以后可根据自己需求自行修改，谢谢大家。]]></content>
-      <tags>
-        <tag>get/set.template</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Activity启动模式]]></title>
-    <url>%2F2018%2F01%2F09%2FActivity%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F%2F</url>
-    <content type="text"><![CDATA[● standard 标准模式 简述：对于使用standard模式的活动，系统不会在乎这个活动是否已经在返回栈中存在，每次启动都会创建该活动的一个新的实例。例如：A启动A，A再接着启动A,A再接着启动A,，然后再分别出栈，如图所示： ● singleTop简述：当活动的启动模式指定为 singleTop ,在启动活动时如果发现返回栈的栈顶已经是该活动，则认为可以直接使用它，不会再创建新的活动实例。例如：如果快速点击一个按钮，进入Activity，要保证启动的Activity不为多个，可以使用将Activity的启动模式改为 singleTop，就不会启动多个了。如图所示： ● singleTask简述：当活动的启动模式指定为singleTask，每次启动该活动时候，它会先在系统中查找属性值taskaffinity等于它的属性值taskAffinity的任务存在；如果存在这样的任务，他就会这个任务中启动，否则就会在新任务中启动。因此，如果我们想要设置了“singleTask”启动模式的Activity在新的任务中启动，就要为它设置一个独立的taskAffinity属性值。 如果设置了“singleTask”启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已经存在在相应的Activity实例，如果存在，就会把位于这个Activity实例上面的Activity全部结束掉，即最终这个Activity实例会位于任务的堆栈顶端中。 每次启动该活动时系统首先会在返回栈中检查是否存在该活动的实例，如果发现已经存在则直接使用该实例，并把在这个活动之上的所有活动统统出栈，如果没有发现就会创建一个新的活动实例。 当栈底部的 A 重新被启动打开时，会执行onNewIntent() 方法。 ● singleInstance（单独任务栈）简述：使用singleInstance 模式就可以解决这个问题，在这种模式下会有一个单独的返回栈来管理这个活动，不管是哪个应用程序来访问这个活动，都会共用同一个返回栈，也就解决了共享活动实例的问题。 返回的页面顺序是：C-B-A]]></content>
-      <tags>
-        <tag>launchMode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[AIDL实例]]></title>
-    <url>%2F2018%2F01%2F08%2FAIDL%E5%AE%9E%E4%BE%8B%2F</url>
-    <content type="text"><![CDATA[说到进程间通信，一般首先就会想到AIDL，也看了很多文章，做下笔记，记录一下，方便以后查阅。 对于 AIDL 我是这样理解的，首先进程间是无法通信的，那要通信就得有一个媒介或者说两个进程有统一对外的接口可以相互识别，从这个 AIDL全程的名字Android Interface Definition Language (android 接口定义语言) 来看不难看出它就是我们进程间通信的媒介，它可以实现我们想要的通信。 在翻阅网上各类文章的讲解后，我认为一个比较好的实例可以更好理解这个东西，具体如下： 第一步我们新创建两个module，代表我们两个进程，进程名称默认就是我们程序的包名： 第二步我们先编写service这个module里的代码，先定义一个 Person的一个bean对象，记住一定要implements Parcelable 接口，大致如下：1234567891011121314151617181920212223242526272829303132333435363738394041public class Person implements Parcelable &#123; private String mName; public Person(String name) &#123; mName = name; &#125; protected Person(Parcel in) &#123; mName = in.readString(); &#125; public static final Creator&lt;Person&gt; CREATOR = new Creator&lt;Person&gt;() &#123; @Override public Person createFromParcel(Parcel in) &#123; return new Person(in); &#125; @Override public Person[] newArray(int size) &#123; return new Person[size]; &#125; &#125;; @Override public int describeContents() &#123; return 0; &#125; @Override public void writeToParcel(Parcel dest, int flags) &#123; dest.writeString(mName); &#125; @Override public String toString() &#123; return "\nPerson&#123;" + "mName='" + mName + '\'' + '&#125;'; &#125;&#125; 然后我们再新建一个文件夹：aidl,新建一个包名和Person类一模一样的包名和与之对应的aidl,还有一个我们对外提供获取person集合的一个aidl: 在Person.aidl里，我们序列化我们java里的 Person 类： 12345package com.example.service.bean;//还要和声明的实体类在一个包里，同时注意不要新建aidl文件，因为你会发现，新建不了，//提示你名称唯一，此时你新建一个file,名字为Person.aidl就可以，需要特别注意下parcelable Person; IMyAidl.aidl 文件提供对外方法：12345678910111213141516// IMyAidl.aidlpackage com.example.service.bean;//特别注意一定要手动导包，不会自动导包import com.example.service.bean.Person;// Declare any non-default types here with import statements//可以理解为通信媒介interface IMyAidl &#123; /** * 除了基本数据类型，其他类型的参数都需要标上方向类型：in(输入), out(输出), inout(输入输出) */ void addPerson(in Person person); List&lt;Person&gt; getPersonList();&#125; 然后在我们的java文件里，新建一个MyAidlService,123456789101112131415161718192021222324252627282930313233343536373839public class MyAidlService extends Service &#123; private final String TAG = this.getClass().getSimpleName(); private ArrayList&lt;Person&gt; mPersons; /** * 创建生成本地的binder ,实现AIDL的方法 */ private IBinder mIBinder = new IMyAidl.Stub()&#123; @Override public void addPerson(Person person) throws RemoteException &#123; mPersons.add(person); &#125; @Override public List&lt;Person&gt; getPersonList() throws RemoteException &#123; return mPersons; &#125; &#125;; /** * 客户端与服务端绑定时的回调，返回IBinder对象后客户端就可以通过它远程调用服务端的方法，即实现了通讯 * @param intent * @return */ @Nullable @Override public IBinder onBind(Intent intent) &#123; mPersons = new ArrayList&lt;&gt;(); return mIBinder; &#125; @Override public void onCreate() &#123; super.onCreate(); &#125; 最后别忘了在清单文件中注册MyAidlService1234&lt;service android:name="com.example.service.MyAidlService" android:enabled="true" android:exported="true" /&gt; 到此，我们完成了service端的工作： 第三步将我们刚才创建好的aidl文件夹拷贝到 app module下main文件夹下，在MainActivity中绑定服务，123Intent intent = new Intent(); intent.setComponent(new ComponentName("com.example.service","com.example.service.MyAidlService")); bindService(intent,mConnection,BIND_AUTO_CREATE); 其中这个mConnection可以让我们拿到IMyAidl对象的代理123456789101112private ServiceConnection mConnection = new ServiceConnection() &#123; @Override public void onServiceConnected(ComponentName componentName, IBinder iBinder) &#123; mAidl = IMyAidl.Stub.asInterface(iBinder); &#125; @Override public void onServiceDisconnected(ComponentName componentName) &#123; mAidl = null; &#125; &#125;; 通过返回的IBinder 拿到这个IMyAidl，此时我们就可以通信了，例如我们调用IMyAidl中的addPerson方法，再调用getPersonList看看：1234567891011Random random = new Random(); Person person = new Person("qian"+random.nextInt(20)); try&#123; mAidl.addPerson(person); List&lt;Person&gt; mPersons = mAidl.getPersonList(); tvName.setText(mPersons.toString()); &#125;catch (Exception e)&#123; e.printStackTrace(); &#125; 打印发现list 返回了我们添加的Person，完成了app与service两个进程间的通信。demo地址：https://github.com/QQabby/AIDLDemo]]></content>
-      <tags>
-        <tag>AIDL实例</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[写文件相关]]></title>
-    <url>%2F2017%2F12%2F28%2F%E5%86%99%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3%2F</url>
-    <content type="text"><![CDATA[向sd卡根目录中写入文件123456789101112//首先判断是否存在sd卡if(Environment.getExternalStorageState().equals( Environment.MEDIA_MOUNTED))&#123; //获取外部设备 File file=new File(Environment.getExternalStorageDirectory(),"qianqian.txt"); FileOutputStream outStream=new FileOutputStream(file); //写入文件 outStream.write(content.getBytes()); outStream.close(); &#125; 读取assets下的文件路径123//格式如下file:///android_asset/myVideo.htmlfile:///android_asset/xx(文件名称) 读取assets下的文件转化为String123456789101112131415public String getFromAssets(String fileName) &#123; try &#123; InputStreamReader inputReader = new InputStreamReader( getResources().getAssets().open(fileName)); BufferedReader bufReader = new BufferedReader(inputReader); String line = ""; String Result = ""; while ((line = bufReader.readLine()) != null) Result += line; return Result; &#125; catch (Exception e) &#123; e.printStackTrace(); &#125; return ""; &#125;]]></content>
-      <tags>
-        <tag>向sd卡写入文件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[LRU算法还一知半解？]]></title>
-    <url>%2F2017%2F12%2F19%2Flru%2F</url>
-    <content type="text"><![CDATA[某年某月某日，糖葫芦同学在掘金app上看了几篇文章，偶然看到了一篇熟悉的词LRU算法，脑海里就想这不是经常说的嘛，就那么回事，当天晚上睡觉，LRU算法是啥来着，好像是什么最近最少使用的，白天在地铁上看的文章也不少，但是到晚上想想好像啥也没记住，就记得LRU算法，我发现人大多数是这样的啊，对于自己熟悉的部分呢还能记着点，不熟悉或者不会的可能真的是看过就忘啊~既然这样还不如先把熟悉的弄明白。 第二天来到公司，我觉着还是有必要看一下这个LRU的源码，到底是怎么回事，嗯，糖葫芦同学刷刷得看，下面我们将进入正题，请戴眼镜的同学把眼镜擦一擦，哈哈哈 First先看源码，再用具体的demo加以验证，我们先看一下这个LruCache这个类的大致结构和方法，如下图所示： 这又是 get(K)，put(K,V), remove(K) 的方法的 给人的感觉就像是一个Map的集合嘛，又有Key ，又有value 的，再看下具体的代码： 12345678910111213141516171819202122232425public class LruCache&lt;K, V&gt; &#123; private final LinkedHashMap&lt;K, V&gt; map; /** Size of this cache in units. Not necessarily the number of elements. */ private int size; private int maxSize; private int putCount; private int createCount; private int evictionCount; private int hitCount; private int missCount; /** * @param maxSize for caches that do not override &#123;@link #sizeOf&#125;, this is * the maximum number of entries in the cache. For all other caches, * this is the maximum sum of the sizes of the entries in this cache. */ public LruCache(int maxSize) &#123; if (maxSize &lt;= 0) &#123; throw new IllegalArgumentException("maxSize &lt;= 0"); &#125; this.maxSize = maxSize; this.map = new LinkedHashMap&lt;K, V&gt;(0, 0.75f, true); &#125; 看到开头，我们就明白了，哦原来这个LruCache类中维护一个LinkedHashMap的一个集合，缓存我们这个对象，而且构造方法里需要我们传入一个maxSize的一个值，根据上面的注释我们就明白了这个就是我们LruCache缓存对象的最大数目。 有什么用呢？根据惯性思维，我们可以认为，在put新的缓存对象的时候，根据我们设定的最大值remove集合里的某些缓存对象，进而添加新的缓存对象。 Second根据我们的分析，我们有必要去看一下这个put方法的源码：12345678910111213141516171819202122232425262728/** * Caches &#123;@code value&#125; for &#123;@code key&#125;. The value is moved to the head of * the queue. * * @return the previous value mapped by &#123;@code key&#125;. */public final V put(K key, V value) &#123; if (key == null || value == null) &#123; throw new NullPointerException("key == null || value == null"); &#125; V previous; synchronized (this) &#123; putCount++; size += safeSizeOf(key, value); previous = map.put(key, value); if (previous != null) &#123; size -= safeSizeOf(key, previous); &#125; &#125; if (previous != null) &#123; entryRemoved(false, key, previous, value); &#125; trimToSize(maxSize); return previous;&#125; 代码量也不是特别多，我们看下这个，在这个synchronized同步代码块里，我们看到这个 size,是对put进来缓存对象个数的累加，然后调用集合的map.put方法，返回一个对象 previous ，就是判断这个集合中是否添加了这个缓存对象，如果不为null,就对size减回去。 最后又调用一个 trimToSize(maxSize)方法，上面都是对添加一些逻辑的处理，那么不可能无限制添加啊，肯定有移除操作，那么我们推测这个逻辑可能在这个trimToSize(maxSize) 里处理。 源码如下：123456789101112131415161718192021222324252627282930313233/** * Remove the eldest entries until the total of remaining entries is at or * below the requested size. * * @param maxSize the maximum size of the cache before returning. May be -1 * to evict even 0-sized elements. */ public void trimToSize(int maxSize) &#123; while (true) &#123; K key; V value; synchronized (this) &#123; if (size &lt; 0 || (map.isEmpty() &amp;&amp; size != 0)) &#123; throw new IllegalStateException(getClass().getName() + ".sizeOf() is reporting inconsistent results!"); &#125; //只要当前size&lt;= maxSize 就结束循环 if (size &lt;= maxSize || map.isEmpty()) &#123; break; &#125; // 获取这个对象，然后从map中移除掉，保证size&lt;=maxSize Map.Entry&lt;K, V&gt; toEvict = map.entrySet().iterator().next(); key = toEvict.getKey(); value = toEvict.getValue(); map.remove(key); size -= safeSizeOf(key, value); evictionCount++; &#125; entryRemoved(true, key, value, null); &#125; &#125; 注释：Remove the eldest entries until the total of remaining entries is at or below the requested size 大概意思是说：清除时间最久的对象直到剩余缓存对象的大小小于设置的大小。没错是我们想找的。 这里说明一下：maxSize就是我们在构造方法里传入的，自己设置的1234567public LruCache(int maxSize) &#123; if (maxSize &lt;= 0) &#123; throw new IllegalArgumentException("maxSize &lt;= 0"); &#125; this.maxSize = maxSize; this.map = new LinkedHashMap&lt;K, V&gt;(0, 0.75f, true); &#125; 这样LruCache的核心方法 trimToSize方法我们就说完了，接下来我将通过实例再次验证下： 设置场景 假设我们设置maxSize 为2，布局里显示3个imageView,分别代表3张我们要显示的图片，我们添加3张图片，看看会不会显示3张？ xml布局显示如下（代码就不贴了，很简单）： activity代码如下：12345678910111213141516171819202122232425262728public final int MAX_SIZE = 2; @Override protected void onCreate(@Nullable Bundle savedInstanceState) &#123; super.onCreate(savedInstanceState); setContentView(R.layout.layout_lru); ImageView iv1 = (ImageView) findViewById(R.id.iv1); ImageView iv2 = (ImageView) findViewById(R.id.iv2); ImageView iv3 = (ImageView) findViewById(R.id.iv3); Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.bg); Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.header_img); Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher); LruCache&lt;String,Bitmap&gt; lruCache = new LruCache&lt;&gt;(MAX_SIZE); lruCache.put("1",bitmap1); lruCache.put("2",bitmap2); lruCache.put("3",bitmap3); Bitmap bitmap = lruCache.get("1"); iv1.setImageBitmap(bitmap); Bitmap b2 = lruCache.get("2"); iv2.setImageBitmap(b2); Bitmap b3 = lruCache.get("3"); iv3.setImageBitmap(b3); &#125; 图： 我们可以先尝试分析一下：因为我们设置的MaxSize 是2 ，那么在put第三个Bitmap的时候，在trimToSize方法中，发现这个size是3 ，maxSize 是2，会继续向下执行,不会break,结合下面代码看下12345678910111213141516171819202122232425262728public void trimToSize(int maxSize) &#123; while (true) &#123; K key; V value; synchronized (this) &#123; if (size &lt; 0 || (map.isEmpty() &amp;&amp; size != 0)) &#123; throw new IllegalStateException(getClass().getName() + ".sizeOf() is reporting inconsistent results!"); &#125; //第一次循环：此时 size 是3，maxSize 是 2 //第二次循环，此时 size 是 2 ，maxSize 是 2 ，满足条件，break,结束循环 if (size &lt;= maxSize || map.isEmpty()) &#123; break; &#125; //获取最先添加的第一个元素 Map.Entry&lt;K, V&gt; toEvict = map.entrySet().iterator().next(); key = toEvict.getKey(); value = toEvict.getValue(); //移除掉第一个缓存对象 map.remove(key); // size = 2,减去移除的元素 size -= safeSizeOf(key, value); evictionCount++; &#125; entryRemoved(true, key, value, null); &#125; &#125; 这个 safeSizeOf 是调用sizeOf方法。 那么也就是说，我们在put第三个bitmap的时候，LruCache 会自动帮我们移除掉第一个缓存对象，因为第一个最先添加进去，时间也最长，当然后添加的bitmap就是新的，最近的，那么我们推断这个iv1是显示不出图片的，因为被移除掉了，其它剩余两个可以显示，分析就到这里，看下运行结果是不是跟我们分析的一样： 哇！真的跟我们想的一样耶，证明我们想的是对的。这里我们思考一下就是为什么LruCache使用了这个LinkedHashMap,为什么LinkedHashMap的创造方法跟我们平时创建的不太一样，源码是这样的：1234567public LruCache(int maxSize) &#123; if (maxSize &lt;= 0) &#123; throw new IllegalArgumentException("maxSize &lt;= 0"); &#125; this.maxSize = maxSize; this.map = new LinkedHashMap&lt;K, V&gt;(0, 0.75f, true); &#125; 这里说一下在掘金发布的评论里 藏地情人评论是：new LinkedHashMap&lt;K, V&gt;(0, 0.75f, true)这句代码表示，初始容量为零，0.75是加载因子，表示容量达到最大容量的75%的时候会把内存增加一半。最后这个参数至关重要。表示访问元素的排序方式，true表示按照访问顺序排序，false表示按照插入的顺序排序。这个设置为true的时候，如果对一个元素进行了操作(put、get)，就会把那个元素放到集合的最后。 确实也是这样的，我们看下LinkedHashMap的源码：1234567891011121314151617/** * Constructs an empty &lt;tt&gt;LinkedHashMap&lt;/tt&gt; instance with the * specified initial capacity, load factor and ordering mode. * * @param initialCapacity the initial capacity * @param loadFactor the load factor * @param accessOrder the ordering mode - &lt;tt&gt;true&lt;/tt&gt; for * access-order, &lt;tt&gt;false&lt;/tt&gt; for insertion-order * @throws IllegalArgumentException if the initial capacity is negative * or the load factor is nonpositive */ public LinkedHashMap(int initialCapacity, float loadFactor, boolean accessOrder) &#123; super(initialCapacity, loadFactor); this.accessOrder = accessOrder; &#125; 里面这个assessOrder 注释里也说的很明白：the ordering mode - &lt;tt&gt;true&lt;/tt&gt; for access-order, &lt;tt&gt;false&lt;/tt&gt; for insertion-order -&gt; true 呢就表示会排序，false 就代表按照插入的顺序。默认不传就是 false ,而且我们每次 get(K) put(K,V) 的时候 会根据这个变量调整元素在集合里的位置。而这么做的目的也只有一个：保留最近使用的缓存对象，举个例子说明一下： 我们向这个集合里添加了三种元素 LruCache&lt;String, Bitmap&gt; lruCache = new LruCache&lt;&gt;(MAX_SIZE);(MAX_SIZE=2) lruCache.put(&quot;1&quot;, bitmap1); lruCache.put(&quot;2&quot;, bitmap2); lruCache.put(&quot;3&quot;, bitmap3); 此时它们在集合里的顺序是这样的： 那比如说我们在put 3 元素之前，使用了1元素，就是调用了get(&quot;1&quot;)方法，我们知道LinkedHashMap就会改变链表里元素的存储顺序，代码是这样的：1234lruCache.put("1", bitmap1);lruCache.put("2", bitmap2);lruCache.get("1");lruCache.put("3", bitmap3); 那么此时对应链表里的顺序就是： 当我们再调用显示的时候，循环遍历就会优先把第一个位置的key = &quot;2&quot; 的缓存对象移除掉，保证了最近使用的原则，当然了因为把这个max_size = 2所以在我们执行lruCache.put(&quot;3&quot;, bitmap3); 时，集合最终会变成这样： 集合里只剩下 1 ,3对应的缓存对象。 至此，LruCache就说完了，如果看完的你有不明白的地方可以留言，一起讨论下~]]></content>
-      <tags>
-        <tag>Lru</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2F2017%2F12%2F11%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
-  </entry>
+<search> 
+  
+    
+    <entry>
+      <title><![CDATA[Activity启动模式]]></title>
+      <url>/2018/07/05/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>近期由于项目需要，需要编写小程序，遇到一些问题，记录下来，也是给自己开发的一个总结。</p>
+</blockquote>
+<h1 id="1-关于模板-template"><a href="#1-关于模板-template" class="headerlink" title="1.关于模板 template"></a>1.关于模板 template</h1><p>在看完 <a href="&quot;https://developers.weixin.qq.com/miniprogram/dev/index.html&quot;">官方文档</a> 里的说明之后，我并没有成功使用，按照它那个设置完成后，一直说找不到，最后在知道，原来除了实例那些之外，还要在当前 <code>wxml</code> 中 <code>import</code> 进来。</p>
+<ul>
+<li>1.先建一个 <code>template</code> 的文件夹，新建 <code>wxml</code>,根据具体的路径引入进来，例如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;import src=&quot;../template/line.wxml&quot; /&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>还有一个就是如果有相对应的 <code>wxss</code>文件，可在 <code>app.wxss</code>文件中引用，这样整个项目都不需要引用这个样式文件了。</p>
+<p><strong>注意：模板拥有自己的作用域，只能使用 data 传入的数据以及模版定义文件中定义的 <wxs> 模块。</wxs></strong></p>
+<h1 id="2-关于水平居中，垂直居中"><a href="#2-关于水平居中，垂直居中" class="headerlink" title="2. 关于水平居中，垂直居中"></a>2. 关于水平居中，垂直居中</h1><p>一开始感觉这啥玩意，不听话啊，让居中也不居中，就是不动啊，很是郁闷，后来发现了一些规律。</p>
+<p><strong>2.1 水平居中</strong></p>
+<ul>
+<li>首先如果是行内元素，例如 <text> 这样的，如果想水平居中，使用<code>text-align:center</code> 你会发现不好使啊，纹丝不动，原因是因为行内元素长度随内容变化，所以它不能让你在一行的中间，因为它的长度就是文字长度。</text></li>
+</ul>
+<p><strong>解决方案：</strong>可以换成<code>view</code> 控件，或者使用：<code>display:block</code> + <code>text-align:center</code></p>
+<ul>
+<li>其它元素可以使用<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">======3个一起使用==========</span><br><span class="line">text-align:center;</span><br><span class="line">align-items:center;</span><br><span class="line">justify-content: center;</span><br><span class="line">==================</span><br><span class="line">margin:auto # 子容器在父容器中居中,单独使用</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>2.2 垂直居中</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//可使用如下</span><br><span class="line">display:flex;</span><br><span class="line">align-items:center;</span><br><span class="line">justify-content:center;</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-关于几个控件平分整个屏幕宽度问题"><a href="#3-关于几个控件平分整个屏幕宽度问题" class="headerlink" title="3.关于几个控件平分整个屏幕宽度问题"></a>3.关于几个控件平分整个屏幕宽度问题</h1><blockquote>
+<p>一开始我还想着获取屏幕的宽和高，然后再动态给控件设置具体的值，后来发现有更简单的做法</p>
+</blockquote>
+<p>例如：像这样一行排四个<br><img src="https://upload-images.jianshu.io/upload_images/1948557-35b5b4254918c3fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>解决方案：</strong>设置控件的宽度为 ：25%，这样就自动平分啦。当然还有其它的方式，但是我认为百分比的这种写法感觉很直观。</p>
+<h1 id="4-flex-布局"><a href="#4-flex-布局" class="headerlink" title="4. flex 布局"></a>4. flex 布局</h1><p>熟练掌握 <code>flexbox</code> 布局，可以更轻松的编写任何常见的布局，可以查看相关专业的文章。</p>
+<p>未完待续…..</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 小程序 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Kotlin-可观察属性]]></title>
+      <url>/2018/06/27/Kotlin-%E5%8F%AF%E8%A7%82%E5%AF%9F%E5%B1%9E%E6%80%A7/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>类似于观察者模式，当所监测的对象发生改变时，能够收到回调通知。</p>
+</blockquote>
+<p>例如：我们监测一个变量：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var str: String by Delegates.observable(<span class="string">"qianqian"</span>,&#123;</span><br><span class="line">        property: KProperty&lt;*&gt;, oldValue: String, newValue: String -&gt;</span><br><span class="line">        Log.i(<span class="string">"xx"</span>,<span class="string">"改变的属性名称：$&#123;property.name&#125; --- $&#123;oldValue&#125; -- $&#123;newValue&#125;"</span> )</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//点击一个按钮，改变str的值</span></span><br><span class="line">     <span class="function">fun <span class="title">foo</span><span class="params">(view : View)</span></span>&#123;</span><br><span class="line">        str = <span class="string">"haha"</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这时候我们会发现，当改变<code>str</code> 的值的时候，会打印信息，也就是收到回调：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">改变的属性名称：str --- qianqian -- haha</span><br></pre></td></tr></table></figure></p>
+<p>再比如：检测对象里的其中一个属性：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> kotlin.properties.Delegates</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    var name: String by Delegates.observable(<span class="string">"&lt;no name&gt;"</span>) &#123;</span><br><span class="line">        prop, old, <span class="keyword">new</span> -&gt;</span><br><span class="line">        println(<span class="string">"$old -&gt; $new"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">fun <span class="title">main</span><span class="params">(args: Array&lt;String&gt;)</span> </span>&#123;</span><br><span class="line">    val user = User()</span><br><span class="line">    user.name = <span class="string">"first"</span></span><br><span class="line">    user.name = <span class="string">"second"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;no name&gt; -&gt; first</span><br><span class="line">first -&gt; second</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Kotlin let with run also apply区分]]></title>
+      <url>/2018/04/28/Kotlin-let-with-run-also-apply%E5%8C%BA%E5%88%86/</url>
+      <content type="html"><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> let </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[获取手机屏幕的密度]]></title>
+      <url>/2018/04/24/%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%B1%8F%E5%B9%95%E7%9A%84%E5%AF%86%E5%BA%A6/</url>
+      <content type="html"><![CDATA[<p>目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。</p>
+<h1 id="第一种：根据手机分辨率进行计算-计算得出实际的dpi"><a href="#第一种：根据手机分辨率进行计算-计算得出实际的dpi" class="headerlink" title="第一种：根据手机分辨率进行计算(计算得出实际的dpi)"></a>第一种：根据手机分辨率进行计算(计算得出实际的dpi)</h1><p>比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：<br>(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)<br>dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401</p>
+<p>参照下图：</p>
+<pre><code>ldpi（低）~120dpi density=0.75
+mdpi（中）~160dpi density=1
+hdpi（高）~240dpi density=1.5
+xhdpi（超高）~320dpi density=2
+xxhdpi（超超高）~480dpi density=3
+xxxhdpi（超超超高）~640dpi density=4
+</code></pre><p>对应图片的目录应该是：xxhdpi</p>
+<h1 id="第二种：通过代码方式-系统定义的dpi"><a href="#第二种：通过代码方式-系统定义的dpi" class="headerlink" title="第二种：通过代码方式(系统定义的dpi)"></a>第二种：通过代码方式(系统定义的dpi)</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> xdpi = getResources().getDisplayMetrics().xdpi;</span><br><span class="line"><span class="keyword">float</span> ydpi = getResources().getDisplayMetrics().ydpi;</span><br></pre></td></tr></table></figure>
+<p>不同手机获取的<code>xdpi ydpi</code> 值有的一模一样，有的有些差异，但是相差不会太大，两者获取的值近乎一样。</p>
+<p>两者计算出的结果并不完全相同，因为你们想，实际计算得出的<code>dpi</code> 很容易根据屏幕尺寸的不同，得出不同的<code>dpi</code> ，这样的话得到的值很多，无法适配。我查阅网上相关介绍，就是每个手机初始有一个固定的<code>dpi</code> ，分别是上述的：120，160，240，320，480，640，安卓实际进行缩放的时候按照的是系统定义的这些，而不是实际计算得出的<code>dpi</code>,这一点需要注意。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> dpi </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[EventBus 为什么订阅的方法必须是public？]]></title>
+      <url>/2018/04/08/EventBus-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AE%A2%E9%98%85%E7%9A%84%E6%96%B9%E6%B3%95%E5%BF%85%E9%A1%BB%E6%98%AFpublic%EF%BC%9F/</url>
+      <content type="html"><![CDATA[<p>在看了源码之后发现是这样的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">findUsingReflectionInSingleClass</span><span class="params">(FindState findState)</span> </span>&#123;</span><br><span class="line">        Method[] methods;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// This is faster than getMethods, especially when subscribers are fat classes like Activities </span></span><br><span class="line">            <span class="comment">//获取所有声明的方法</span></span><br><span class="line">            methods = findState.clazz.getDeclaredMethods();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable th) &#123;</span><br><span class="line">            <span class="comment">// Workaround for java.lang.NoClassDefFoundError, see https://github.com/greenrobot/EventBus/issues/149</span></span><br><span class="line">            methods = findState.clazz.getMethods();</span><br><span class="line">            findState.skipSuperClasses = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (Method method : methods) &#123;</span><br><span class="line">            <span class="comment">//获取方法的标识符</span></span><br><span class="line">            <span class="keyword">int</span> modifiers = method.getModifiers();</span><br><span class="line">            <span class="comment">//方法的标识符必须是public </span></span><br><span class="line">            <span class="keyword">if</span> ((modifiers &amp; Modifier.PUBLIC) != <span class="number">0</span> &amp;&amp; (modifiers &amp; MODIFIERS_IGNORE) == <span class="number">0</span>) &#123;</span><br><span class="line">                Class&lt;?&gt;[] parameterTypes = method.getParameterTypes();</span><br><span class="line">                <span class="keyword">if</span> (parameterTypes.length == <span class="number">1</span>) &#123;</span><br><span class="line">                    Subscribe subscribeAnnotation = method.getAnnotation(Subscribe.class);</span><br><span class="line">                    <span class="keyword">if</span> (subscribeAnnotation != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        Class&lt;?&gt; eventType = parameterTypes[<span class="number">0</span>];</span><br><span class="line">                        <span class="keyword">if</span> (findState.checkAdd(method, eventType)) &#123;</span><br><span class="line">                            ThreadMode threadMode = subscribeAnnotation.threadMode();</span><br><span class="line">                            findState.subscriberMethods.add(<span class="keyword">new</span> SubscriberMethod(method, eventType, threadMode,</span><br><span class="line">                                    subscribeAnnotation.priority(), subscribeAnnotation.sticky()));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (strictMethodVerification &amp;&amp; method.isAnnotationPresent(Subscribe.class)) &#123;</span><br><span class="line">                    String methodName = method.getDeclaringClass().getName() + <span class="string">"."</span> + method.getName();</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> EventBusException(<span class="string">"@Subscribe method "</span> + methodName +</span><br><span class="line">                            <span class="string">"must have exactly 1 parameter but has "</span> + parameterTypes.length);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (strictMethodVerification &amp;&amp; method.isAnnotationPresent(Subscribe.class)) &#123;</span><br><span class="line">              <span class="comment">//否则抛出异常 ，说这个方法必须加上@Subscribe ,并且是public 的，不能是静态的，抽象的</span></span><br><span class="line">                String methodName = method.getDeclaringClass().getName() + <span class="string">"."</span> + method.getName();</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> EventBusException(methodName +</span><br><span class="line">                        <span class="string">" is a illegal @Subscribe method: must be public, non-static, and non-abstract"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后就没有然后了，之前怀疑<code>private</code> 修饰的方法，反射后不能被其他类调用，后来查了相关资料，发现可以，后来去网上寻找无果，后来在我微信关注的公众号里，群主伯特说：虽然可以反射调用<code>private</code> 的方法，但是必须通过<code>setAccess</code>来修改访问权限。说是修改，实则破坏了<code>java</code>中的作用域，迫不得已不推荐这么做。<code>EventBus</code> 作为三方库，显然不会在你设置为<code>private</code> 时，好心办坏事，强制访问。</p>
+<p>仅此而已，仅此而已。分享给还不知道的童鞋。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> EventBus </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Activity状态保存与恢复]]></title>
+      <url>/2018/03/23/Activity%E7%8A%B6%E6%80%81%E4%BF%9D%E5%AD%98%E4%B8%8E%E6%81%A2%E5%A4%8D/</url>
+      <content type="html"></content>
+      
+        
+        <tags>
+            
+            <tag> Activity状态保存与恢复 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[四大组件是什么与它们的生命周期（及Fragment）]]></title>
+      <url>/2018/03/22/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88%E4%B8%8E%E5%AE%83%E4%BB%AC%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%88%E5%8F%8AFragment%EF%BC%89/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>首先当我们一开始学习安卓的时候想必就是四大组件了以及它们的生命周期，现在就来复习回想下。</p>
+</blockquote>
+<p>四大组件有：<code>Activity</code>, <code>ContentProvider</code>, <code>BroadcastReceiver</code>, <code>Service</code></p>
+<h1 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h1><blockquote>
+<p>提供与用户交互的界面或者可以说是一个窗口</p>
+</blockquote>
+<p>下面我是从官方文档中关于<code>Activity生命周期</code> 的一张图</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-eea2764dbf62c03a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="lifetcycle.jpg"></p>
+<p>正常启动时：<code>onCreate()</code> -&gt; <code>onStart()</code> -&gt; <code>onResume()</code>    </p>
+<ul>
+<li><p>而后我们看到当 <code>Another activity comes into the foreground</code> 执行 <code>onPause()</code> 方法<br>当按 <code>home</code> 键的时候： 当前<code>Activity</code> 已经不可见了，所以执行：<code>onPause() -&gt; onStop()</code>    </p>
+</li>
+<li><p>当重新回到<code>app</code>时，分为两种情况就是：①是app还在后台，执行：<code>onRestart() -&gt; onStart() -&gt; onResume()</code>; ②是app被系统杀死了，则执行：<code>onCreate() -&gt; onStart() &gt; onResume()</code>    </p>
+</li>
+<li><p>当在<code>app</code> 里 从 <code>A -&gt; B</code> 此时<code>A隐藏，B显示</code>，当重新返回<code>A</code> 时，执行：<code>onPause() -&gt; onResume()</code>,这种应用场景一般是比如需要返回做刷新操作的，可以将刷新方法写在<code>onResume()</code> 方法中执行。</p>
+</li>
+<li><p>最后当退出应用程序的时候执行 <code>onDestroy()</code></p>
+</li>
+</ul>
+<h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><blockquote>
+<p>服务，有前台服务和后台服务，一般提供需在后台长期运行的服务，例如：音乐播放器等</p>
+</blockquote>
+<p>它的生命周期如下图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/944365-cf5c1a9d2dddaaca.png" alt="lifetcycle.jpg"></p>
+<p>因为启动服务的方法有两个：<code>startService() 和 bindService()</code> 两者的生命周期略有不同。    </p>
+<ul>
+<li><p>首先来看：<code>startService()</code> 方式<br>启动：<code>onCreate() -&gt; onStartCommand()</code> 调用<code>stopServcie()</code> 停止服务，随后执行 <code>onDestroy()</code>    </p>
+</li>
+<li><p>其次是：<code>bindService()</code> 方式<br>启动：<code>onCreate() -&gt; onBind()</code> 服务启动起来了，调用<code>unbindService()</code> 停止服务，随后执行 <code>onUnbind() -&gt; onDestroy()</code></p>
+</li>
+</ul>
+<h1 id="Broadcastreceiver"><a href="#Broadcastreceiver" class="headerlink" title="Broadcastreceiver"></a>Broadcastreceiver</h1><blockquote>
+<p>广播，可以接受来自应用内或者应用外的广播，分为两个角色：广播发送者，广播接收者</p>
+</blockquote>
+<ul>
+<li>广播的注册方式有两种：一种是代码注册，一种是清单文件注册，代码注册的优先级要比清单文件注册的优先级要高；</li>
+<li>广播的发送可以是有序广播也可以是无序广播，有序广播接收到广播的顺序按照优先级的顺序；</li>
+<li>注意广播接收器<code>onReceive()</code> 方法运行在 <code>UI</code> 线程中，不可以做耗时操作，否则会导致<code>ANR</code>异常；</li>
+</ul>
+<h1 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h1><blockquote>
+<p>内容提供者，应用内数据共享</p>
+</blockquote>
+<h1 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h1><blockquote>
+<p>一般和 <code>viewpager</code> 配合使用，不能单独使用，要配合<code>Activity</code>使用，但是有自己的生命周期</p>
+</blockquote>
+<p><img src="http://img.blog.csdn.net/20160420203710750" alt="fragment"></p>
+<p>一般在<code>onAttach()</code>中获取参数值一些，<code>onCreateView()</code>中创建布局，布局加载完成后在<code>onActivityCreated()</code>中执行一些初始化操作，随后<code>onStart(),onResume().onPause(),onStop(),</code> fragment 销毁，<code>onDestroyView() -&gt; onDestroy() -&gt;onDetach()</code></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 生命周期 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Android知识点总结]]></title>
+      <url>/2018/03/22/Android%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>网上别人列出一些来，我把它拿过来了，需要自己一项一项复习查阅，以后有会继续添加新的，特此总结。</p>
+</blockquote>
+<ul>
+<li><p><a href="/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）">四大组件是什么与它们的生命周期（及Fragment）</a>;</p>
+</li>
+<li><p><a href="/2018/01/09/Activity启动模式">Acitivty的四种启动模式与特点</a>。</p>
+</li>
+<li><p><a href="/2018/04/24/获取手机屏幕的密度">获取手机屏幕的密度</a></p>
+</li>
+<li><p>Activity状态保存与恢复。</p>
+</li>
+<li><p>Service的生命周期，启动方法，有什么区别。</p>
+</li>
+<li><p>service和activity怎么进行数据交互。</p>
+</li>
+<li><p>怎么保证service不被杀死。</p>
+</li>
+<li><p>广播使用的方式和场景以及广播的几种分类。</p>
+</li>
+<li><p>Intent的使用方法，可以传递哪些数据类型。</p>
+</li>
+<li><p>ContentProvider使用方法。</p>
+</li>
+<li><p>ContentProvider、ContentResolver、ContentObserver 之间的关系。</p>
+</li>
+<li><p>Thread、AsycTask、IntentService的使用场景与特点。</p>
+</li>
+<li><p>FrameLayout 、 LinearLayout 、 RelativeLayout 各自特点及绘制效率对比。</p>
+</li>
+<li><p>Android的数据存储形式。</p>
+</li>
+<li><p>Android两种序列化的区别和作用。</p>
+</li>
+<li><p>Sqlite的基本操作。</p>
+</li>
+<li><p>Android中的MVC、MVP模式。</p>
+</li>
+<li><p>Merge、ViewStub的作用。</p>
+</li>
+<li><p>动画有哪几类，各有什么特点？</p>
+</li>
+<li><p>Handler、Loop消息队列模型，各部分的作用。</p>
+</li>
+<li><p>Android的消息机制，子线程更新UI的方法和原理。</p>
+</li>
+<li><p>Android怎么加速启动Activity。</p>
+</li>
+<li><p>App的启动过程。</p>
+</li>
+<li><p>Android优化方法。</p>
+</li>
+<li><p>如何防止内存泄漏？</p>
+</li>
+<li><p>Android中弱引用与软引用的应用场景。</p>
+</li>
+<li><p>Bitmap的四种属性，如何加载大图（inJustDecodeBounds）。</p>
+</li>
+<li><p>View与View Group分类。自定义View过程：onMeasure()、onLayout()、onDraw()。</p>
+</li>
+<li><p>View刷新机制和绘制流程。</p>
+</li>
+<li><p>Activity、Window、View的联系和理解。</p>
+</li>
+<li><p>invalidate和requestLayout的区别及使用。</p>
+</li>
+<li><p>Touch事件分发机制和冲突处理。</p>
+</li>
+<li><p>Android IPC:Binder原理。</p>
+</li>
+<li><p>Android5.0（UI库）、6.0（权限）、7.0特性、8.0特性。</p>
+</li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Android知识点 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Kotlin 传递数据]]></title>
+      <url>/2018/03/14/Kotlin-%E4%BC%A0%E9%80%92%E6%95%B0%E6%8D%AE/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>今天在掘金看到使用 <code>Kotlin</code> 高阶函数传递<code>Intent</code> 数据很简洁，觉着可以试试，并应用到项目中去，自己再加以理解，记录笔记，方便查阅。掘金原文章地址：<a href="https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw</a></p>
+</blockquote>
+<p>传统的<code>Intent</code> 数据传递我就不介绍了，只介绍<code>Kotlin</code>实现方式：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//目标 假设叫`KTestActivity4`  定义   </span></span><br><span class="line">object IntentOptions&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_KEY = <span class="string">"key for message"</span></span><br><span class="line"></span><br><span class="line">        var Intent.message: String?</span><br><span class="line">            get() = getStringExtra(MSG_KEY)</span><br><span class="line">            set(message) &#123;</span><br><span class="line">                putExtra(MSG_KEY,message)</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//跳转时 </span></span><br><span class="line">with(KTestActivity4.IntentOptions)&#123;</span><br><span class="line">            intent = Intent(<span class="keyword">this</span><span class="meta">@KTestActivity</span>5,KTestActivity4::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class">            <span class="title">intent</span>.<span class="title">message</span> </span>= <span class="string">"I am KTestActivity5"</span></span><br><span class="line">             startActivity(intent)</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line">with(IntentOptions)&#123;</span><br><span class="line">            var message= intent.message</span><br><span class="line">            Toast.makeText(<span class="keyword">this</span><span class="meta">@KTestActivity</span>4,<span class="string">"显示信息："</span>+message,Toast.LENGTH_SHORT).show()</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>假设有多个数据传递：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">object IntentOptions&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_KEY = <span class="string">"key for message"</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_ID = <span class="string">"ID for message"</span></span><br><span class="line"></span><br><span class="line">        var Intent.message: String?</span><br><span class="line">            get() = getStringExtra(MSG_KEY)</span><br><span class="line">            set(message) &#123;</span><br><span class="line">                putExtra(MSG_KEY,message)</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="comment">// 再多增加一条即可</span></span><br><span class="line">          var Intent.id: String?</span><br><span class="line">              get() = getStringExtra(MSG_ID)</span><br><span class="line">              set(id) &#123;</span><br><span class="line">                putExtra(MSG_ID,id)</span><br><span class="line">              &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// 传递时</span></span><br><span class="line">with(KTestActivity4.IntentOptions)&#123;</span><br><span class="line">            intent = Intent(<span class="keyword">this</span><span class="meta">@KTestActivity</span>5,KTestActivity4::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class">            <span class="title">intent</span>.<span class="title">message</span> </span>= <span class="string">"I am KTestActivity5"</span></span><br><span class="line">             intent.id = <span class="string">"I am id"</span></span><br><span class="line">             startActivity(intent)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有另外一种传递方式：委托机制，不是特别明白。国外大神封装的<code>github</code>地址：<a href="https://github.com/Takhion/android-extras-delegates">https://github.com/Takhion/android-extras-delegates</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Kotlin#Intent </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[阿里巴巴Android开发手册]]></title>
+      <url>/2018/03/13/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Android%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>摘自阿里巴巴Android开发手册</p>
+</blockquote>
+<h1 id="强制要求的"><a href="#强制要求的" class="headerlink" title="强制要求的"></a>强制要求的</h1><ul>
+<li><strong>1.</strong> Activity 间的数据通信，对于数据量比较大的，避免使用 <code>intent + Parcelable</code> 的方式，可以考虑 <code>EventBus</code>等替代方案，以免造成 <code>TransationTooLargeException</code></li>
+<li><strong>2.</strong> <code>Activity</code> 间通过隐士 <code>Intent</code>的跳转，在发出 <code>Intent</code> 之前必须通过 <code>resolveActivity</code> 检查，避免找不到合适的调用组件，造成 <code>ActivityNotFoundException</code> 的异常。  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">viewUrl</span><span class="params">(String url, String mimeType)</span> </span>&#123;</span><br><span class="line"> Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW);</span><br><span class="line">	intent.setDataAndType(Uri.parse(url), mimeType);</span><br><span class="line">	<span class="keyword">if</span> (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_</span><br><span class="line">ONLY) != <span class="keyword">null</span>) &#123;</span><br><span class="line"> startActivity(intent);</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="comment">// 找不到指定的 Activity</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>而不应该：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">intent.setAction(<span class="string">"com.example.DemoIntent "</span>);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"> startActivity(intent);</span><br><span class="line">&#125; <span class="keyword">catch</span> (ActivityNotFoundException e) &#123;</span><br><span class="line"> e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p><strong>3.</strong> 避免在<code>Service#onStartCommand/onBind()</code>方法中执行耗时操作，如果确实有需求，应采用<code>IntentService</code> 或采用其他异步机制完成。<br>正例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line"> <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line"> setContentView(R.layout.main);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startIntentService</span><span class="params">(View source)</span> </span>&#123;</span><br><span class="line"> Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, MyIntentService.class);</span><br><span class="line"> startService(intent);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyIntentService</span> <span class="keyword">extends</span> <span class="title">IntentService</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">MyIntentService</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> <span class="keyword">super</span>(<span class="string">"MyIntentService"</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onHandleIntent</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line"> <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line"> <span class="keyword">try</span> &#123;</span><br><span class="line">......</span><br><span class="line"> &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>4.</strong> 避免在 <code>BroadcastReceive#onReceive()</code>中执行耗时操作，如果有耗时工作，应该创建 <code>IntentService</code>完成，而不应该在<code>BroadcastReceiver</code> 内创建子线程去做。    </p>
+</li>
+</ul>
+<p>说明：<br>由于该方法是在主线程执行，如果执行耗时操作会导致 <code>UI</code> 不流畅，可以使用 <code>IntentService</code>,创建 <code>HanlderThread</code> 或者调用 <code>Context#registerReceiver(BroadcastReceiver,IntentFitter,String,Handler)</code> 方法等方式，在其他 <code>Worker</code> 线程执行 <code>onReceive</code>.<code>BroadcastReceiver#onReceive()</code> 方法耗时超过10秒钟，可能会被系统杀死。<br>正例： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">IntentFilter filter = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">filter.addAction(LOGIN_SUCCESS);</span><br><span class="line"><span class="keyword">this</span>.registerReceiver(mBroadcastReceiver, filter);</span><br><span class="line">mBroadcastReceiver = <span class="keyword">new</span> BroadcastReceiver() &#123;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"> Intent userHomeIntent = <span class="keyword">new</span> Intent();</span><br><span class="line"> userHomeIntent.setClass(<span class="keyword">this</span>, UserHomeService.class);</span><br><span class="line"> <span class="keyword">this</span>.startService(userHomeIntent);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>反例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mBroadcastReceiver = <span class="keyword">new</span> BroadcastReceiver() &#123;</span><br><span class="line"></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"> MyDatabaseHelper myDB = <span class="keyword">new</span> MyDatabaseHelper(context);</span><br><span class="line"> myDB.initData();</span><br><span class="line"> <span class="comment">// have more database operation here</span></span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>5.</strong> 避免使用隐士 <code>Intent</code> 广播敏感信息，信息可能被其他注册了对应 <code>BroadcastReceiver</code> 的App接收。</li>
+</ul>
+<p>说明：<br>通过<code>Context#sendBroadcast()</code>发送的隐士广播会被感兴趣的 <code>receiver</code> 接收，恶意应用注册监听该广播的 <code>receiver</code>可能会获取到 <code>Intent</code> 中传递的敏感信息，并进行其他危险操作。如果发送的广播为使用 <code>Context#sendOrderedBroadcast()</code>方法发送的有序广播，优先级较高的恶意 <code>receiver</code>可能直接丢弃该广播，造成服务不可用，或者向广播结果塞入恶意数据。</p>
+<p>如果广播仅限于应用内，则可以是iyong<code>LocalBroadcastManager#sendBroadcast()</code>实现，避免敏感信息外泄和intent拦截的风险。</p>
+<p>正例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="string">"my-sensitive-event"</span>);</span><br><span class="line">intent.putExtra(<span class="string">"event"</span>, <span class="string">"this is a test event"</span>);</span><br><span class="line">LocalBroadcastManager.getInstance(<span class="keyword">this</span>).sendBroadcast(intent);</span><br></pre></td></tr></table></figure></p>
+<p>反例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">v1.setAction(<span class="string">"com.sample.action.server_running"</span>);</span><br><span class="line">v1.putExtra(<span class="string">"local_ip"</span>, v0.h);</span><br><span class="line">v1.putExtra(<span class="string">"port"</span>, v0.i);</span><br><span class="line">v1.putExtra(<span class="string">"code"</span>, v0.g);</span><br><span class="line">v1.putExtra(<span class="string">"connected"</span>, v0.s);</span><br><span class="line">v1.putExtra(<span class="string">"pwd_predefined"</span>, v0.r);</span><br><span class="line"><span class="keyword">if</span> (!TextUtils.isEmpty(v0.t)) &#123;</span><br><span class="line"> v1.putExtra(<span class="string">"connected_usr"</span>, v0.t);</span><br><span class="line">&#125;</span><br><span class="line">context.sendBroadcast(v1);</span><br></pre></td></tr></table></figure></p>
+<p>以上广播可能被其他应用的如下 <code>receiver</code> 接收导致敏感信息泄露：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"> <span class="keyword">if</span> (intent != <span class="keyword">null</span> &amp;&amp; intent.getAction() != <span class="keyword">null</span>) &#123;</span><br><span class="line"> String s = intent.getAction();</span><br><span class="line"> <span class="keyword">if</span> (s.equals(<span class="string">"com.sample.action.server_running"</span>) &#123;</span><br><span class="line"> String ip = intent.getStringExtra(<span class="string">"local_ip"</span>);</span><br><span class="line"> String pwd = intent.getStringExtra(<span class="string">"code"</span>);</span><br><span class="line"> String port = intent.getIntExtra(<span class="string">"port"</span>, <span class="number">8888</span>);</span><br><span class="line"> <span class="keyword">boolean</span> status = intent.getBooleanExtra(<span class="string">"connected"</span>, <span class="keyword">false</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 阿里巴巴Android开发手册规范 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[监听键盘显示与隐藏]]></title>
+      <url>/2018/03/08/%E7%9B%91%E5%90%AC%E9%94%AE%E7%9B%98%E6%98%BE%E7%A4%BA%E4%B8%8E%E9%9A%90%E8%97%8F/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>项目中有时候需要监听<code>keyboard</code>的显示与隐藏，特此备注，方便使用。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KeyboardWatcher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;</span><br><span class="line">    <span class="keyword">private</span> View rootView;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> viewSize = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> isShowing = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">private</span> OnKeyboardListener onKeyboardListener;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">KeyboardWatcher</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        rootView = activity.getWindow().getDecorView().getRootView();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> KeyboardWatcher <span class="title">register</span><span class="params">(OnKeyboardListener listener)</span></span>&#123;</span><br><span class="line">        onKeyboardListener = listener;</span><br><span class="line">        <span class="keyword">if</span>(onGlobalLayoutListener == <span class="keyword">null</span>) &#123;</span><br><span class="line">            onGlobalLayoutListener = <span class="keyword">new</span> ViewTreeObserver.OnGlobalLayoutListener() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onGlobalLayout</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Rect r = <span class="keyword">new</span> Rect();</span><br><span class="line">                    rootView.getWindowVisibleDisplayFrame(r);</span><br><span class="line">                    <span class="keyword">int</span> viewHeight = r.bottom - r.top;</span><br><span class="line">                    <span class="keyword">if</span>(viewSize &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                        viewSize = viewHeight;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span>(viewHeight != viewSize)&#123;</span><br><span class="line">                        <span class="comment">// 大于100dp才算变化</span></span><br><span class="line">                        <span class="keyword">if</span>(Math.abs(viewHeight - viewSize) &gt; dpToPx(rootView.getContext(),<span class="number">100</span>)) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (viewHeight &lt; viewSize &amp;&amp; !isShowing) &#123;</span><br><span class="line">                                onKeyboardListener.onShow(viewHeight);</span><br><span class="line">                                isShowing = <span class="keyword">true</span>;</span><br><span class="line">                            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(isShowing)&#123;</span><br><span class="line">                                onKeyboardListener.onHide();</span><br><span class="line">                                isShowing = <span class="keyword">false</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        viewSize = viewHeight;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        rootView.post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                viewSize = rootView.getHeight();</span><br><span class="line">                rootView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unRegister</span><span class="params">()</span></span>&#123;</span><br><span class="line">        rootView.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);</span><br><span class="line">        rootView = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnKeyboardListener</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onShow</span><span class="params">(<span class="keyword">int</span> viewSize)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onHide</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dpToPx</span><span class="params">(Context context,<span class="keyword">int</span> dp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span>) TypedValue.applyDimension(</span><br><span class="line">                TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">KeyBoardWatcher keyboardWatcher = <span class="keyword">new</span>  KeyboardWatcher()</span><br><span class="line">keyboardWatcher.register(<span class="keyword">this</span>)<span class="comment">//实现KeyboardWatcher.OnKeyboardListener接口</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//实现方法onShow() , onHide(),对应键盘的显示与隐藏</span></span><br></pre></td></tr></table></figure>]]></content>
+      
+        
+        <tags>
+            
+            <tag> keyboard </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Fragment 懒加载]]></title>
+      <url>/2018/02/28/Fragment-%E6%87%92%E5%8A%A0%E8%BD%BD/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用</p>
+</blockquote>
+<h1 id="1-首先新建一个BaseLazyFragment"><a href="#1-首先新建一个BaseLazyFragment" class="headerlink" title="1.首先新建一个BaseLazyFragment"></a>1.首先新建一个<code>BaseLazyFragment</code></h1><pre><code>/**
+ * Created by xuqianqian on 2018/2/28.
+ */
+public  abstract class BaseLazyFragment extends Fragment {
+
+    protected View mRootView;
+    public Context mContext;
+    protected boolean isVisible;
+    private boolean isPrepared;
+    private boolean isLoad = false;
+
+    //最先执行
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getUserVisibleHint()) {//当前显示
+            isVisible = true;
+            if(!isLoad){
+                lazyLoad();
+            }
+        } else {
+            isVisible = false;
+            //onInvisible();
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getActivity();
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        if (mRootView == null) {
+            mRootView = getLayout();
+        }
+        return mRootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        isPrepared = true;
+        //如果已经加载过了，就无需再重新加载
+        if(!isLoad){
+            lazyLoad();
+        }
+    }
+
+    /**
+     * 懒加载
+     */
+    protected void lazyLoad() {
+        if (!isPrepared || !isVisible) {
+            return;
+        }
+        isLoad = true;
+        initData();
+    }
+
+//    protected void onInvisible() {
+//
+//    }
+    //初始化布局View
+    public abstract View getLayout();
+
+    public abstract void initData();
+}
+</code></pre><h1 id="2-让你的fragment-extend-BaseLazyFragment"><a href="#2-让你的fragment-extend-BaseLazyFragment" class="headerlink" title="2.让你的fragment extend BaseLazyFragment"></a>2.让你的<code>fragment extend BaseLazyFragment</code></h1><pre><code>public class GankFragment extends BaseLazyFragment {
+
+String type;
+public static GankFragment newInstance(String type) {
+    GankFragment gankFragment = new GankFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString(&quot;type&quot;, type);
+    gankFragment.setArguments(bundle);
+    return gankFragment;
+}
+//加载布局
+@Override
+public View getLayout() {
+
+    type = getArguments().getString(&quot;type&quot;);
+    TextView tv = new TextView(getActivity());
+    tv.setText(type);
+    tv.setGravity(Gravity.CENTER);
+    return tv;
+}
+
+@Override
+public void initData() {
+
+    //初始化一些控件，加载网络数据
+}
+
+}
+</code></pre><h1 id="3-剩下的就是FragmentPagerAdapter了"><a href="#3-剩下的就是FragmentPagerAdapter了" class="headerlink" title="3.剩下的就是FragmentPagerAdapter了"></a>3.剩下的就是FragmentPagerAdapter了</h1><pre><code>public class TitleAdapter extends FragmentPagerAdapter {
+
+private List&lt;Fragment&gt; fragments;
+
+private List&lt;String&gt; types;
+
+public TitleAdapter(FragmentManager fm, List&lt;Fragment&gt; fragments, List&lt;String&gt; types) {
+    super(fm);
+    this.fragments = fragments;
+    this.types = types;
+}
+
+@Override
+public Fragment getItem(int position) {
+    return fragments.get(position);
+}
+
+@Override
+public int getCount() {
+    return fragments.size();
+}
+
+@Override
+public CharSequence getPageTitle(int position) {
+    return types.get(position);
+}
+}
+</code></pre><p><code>MainActivity.java</code></p>
+<pre><code>private List&lt;String&gt; titles = new ArrayList&lt;&gt;();
+
+private List&lt;Fragment&gt; fragments = new ArrayList&lt;&gt;();
+TitleAdapter titleAdapter;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    TabLayout tablayout = findViewById(R.id.tablayout);
+    ViewPager viewpager = findViewById(R.id.viewpager);
+
+    titles.add(&quot;android&quot;);
+    titles.add(&quot;ios&quot;);
+    titles.add(&quot;web&quot;);
+    titles.add(&quot;java&quot;);
+
+    fragments.add(GankFragment.newInstance(&quot;android&quot;));
+    fragments.add(GankFragment.newInstance(&quot;ios&quot;));
+    fragments.add(GankFragment.newInstance(&quot;web&quot;));
+    fragments.add(GankFragment.newInstance(&quot;java&quot;));
+
+    titleAdapter = new TitleAdapter(getSupportFragmentManager(), fragments, titles);
+    viewpager.setAdapter(titleAdapter);
+    tablayout.setTabMode(TabLayout.MODE_FIXED);
+    tablayout.setupWithViewPager(viewpager);
+}
+</code></pre><p><a href="https://github.com/QQabby/LazyFragmentApplication" title="源码地址">https://github.com/QQabby/LazyFragmentApplication</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 懒加载 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Dialog]]></title>
+      <url>/2018/02/28/Dialog/</url>
+      <content type="html"><![CDATA[<h1 id="快速初始化materialDialog"><a href="#快速初始化materialDialog" class="headerlink" title="快速初始化materialDialog"></a>快速初始化materialDialog</h1><pre><code>new MaterialDialog.Builder(mContext)
+                    .title(&quot;title&quot;)
+                    .content(&quot;I&apos;m a content&quot;)
+                    .negativeText(&quot;cancel&quot;)
+                    .negativeColorRes(R.color.colorNegative)
+                    .positiveText(&quot;ok&quot;)
+                    .positiveColorRes(R.color.colorPositive)
+                    .onPositive(new     MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog     dialog, @NonNull DialogAction which) {
+                            showMsg(&quot;click dialog ok&quot;);
+                            ...
+                    }
+                })
+                .show();
+</code></pre>]]></content>
+      
+        
+        <tags>
+            
+            <tag> materialDialog </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微信小程序速查笔记]]></title>
+      <url>/2018/01/30/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%80%9F%E6%9F%A5%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>这个微信小程序也出来好长时间了，一直想做一个属于自己的小程序，这不说动手就动手实现一个吧，比较简易，中间也遇到不少问题，记录一下，方便以后自己查阅。</p>
+</blockquote>
+<h1 id="微信小程序的结构"><a href="#微信小程序的结构" class="headerlink" title="微信小程序的结构"></a>微信小程序的结构</h1><p><img src="http://upload-images.jianshu.io/upload_images/1948557-4007311aabb448cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/800" alt="image.png"></p>
+<p>默认没有这么些文件夹的，只有<code>index</code> ，然后这个标识 <code>app</code> 开头的文件都是一些全局的设置。可以自己查看下，都有注释，就从这个配置开始说。</p>
+<h1 id="修改启动页面"><a href="#修改启动页面" class="headerlink" title="修改启动页面"></a>修改启动页面</h1><p>默认启动页面是<code>index</code>页面，如果要修改，打开<code>app.json</code>配置文件，在顶部你会发现有一个<code>pages</code>的配置，如下：</p>
+<pre><code>&quot;pages&quot;: [
+
+&quot;pages/home/home&quot;
+</code></pre><p>只需要将我们的想要显示的页面的路径写在 <strong>第一个</strong> 就可以成为启动页，特别注意路径一定要正确。</p>
+<p>当然你会新建很多页面，所有的页面都必须写在这个里面，不然跳转的时候会找不到。</p>
+<h1 id="底部tab栏切换"><a href="#底部tab栏切换" class="headerlink" title="底部tab栏切换"></a>底部tab栏切换</h1><p>就是底部<code>tab</code>栏切换,同样还是在<code>app.json</code> 配置文件中修改如下：</p>
+<pre><code>  &quot;tabBar&quot;: {
+  &quot;color&quot;: &quot;#333333&quot;,
+  &quot;selectedColor&quot;: &quot;#2B91D8&quot;,
+  &quot;backgroundColor&quot;: &quot;#eee&quot;,
+  &quot;borderStyle&quot;: &quot;white&quot;,
+      &quot;list&quot;: [
+    {
+  &quot;pagePath&quot;: &quot;pages/home/home&quot;,
+  &quot;text&quot;: &quot;首页&quot;,
+  &quot;iconPath&quot;: &quot;pages/home/images/tab_icon_home_nor.png&quot;,
+  &quot;selectedIconPath&quot;: &quot;pages/home/images/tab_icon_home_pre.png&quot;
+    },
+    {
+  &quot;pagePath&quot;: &quot;pages/myCenter/myCenter&quot;,
+  &quot;text&quot;: &quot;我的&quot;,
+  &quot;iconPath&quot;: &quot;pages/home/images/tab_icon_center_nor.png&quot;,
+  &quot;selectedIconPath&quot;: &quot;pages/home/images/tab_icon_center_pre.png&quot;
+    }
+  ]
+},
+</code></pre><p>这里的 <code>pagePath</code> 就是页面的路径，<code>text</code>文字，<code>iconPath</code>图标，注意图片一定要带后缀，<code>selectedIconPath</code>点击态的图标，各自换成你自己的就行，问题不会太大。</p>
+<h1 id="加载中"><a href="#加载中" class="headerlink" title="加载中"></a>加载中</h1><p>如下：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-8f82d095641d4734.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="image.png"></p>
+<p>有标签可以直接显示这个,在<code>wxml</code>文件中编写：</p>
+<pre><code>&lt;loading hidden=&quot;{{hidden}}&quot; bindchange=&quot;loadingChange&quot;&gt;  
+       加载中...  
+&lt;/loading&gt;  
+</code></pre><p>   <code></code> 可以控制显示还是隐藏，在<code>.js</code>文件中可以控制：</p>
+<pre><code>data: {
+    hidden: false,
+  }
+</code></pre><p> 可以在<code>data</code> 底下配置默认值，<code>hidden: false</code> 默认不显示，赋值的时候必须在这里面写：</p>
+<pre><code>that.setData({
+    hidden: true
+  })
+</code></pre><h1 id="网络请求"><a href="#网络请求" class="headerlink" title="网络请求"></a>网络请求</h1><pre><code> wx.request({
+//网络请求地址url
+url: &apos;https://xx&apos;,
+header: {
+  // &apos;content-type&apos;: &apos;application/x-www-form-urlencoded&apos;
+  &apos;content-type&apos;: &apos;application/json&apos;
+  // &apos;content-type&apos;: &apos;text/xml&apos;
+},
+//请求头参数配置
+data: {
+  page: pageNo,
+  timestamp: timeStamps
+
+},
+method: &quot;POST&quot;,
+
+success: function (res) {
+
+  //xmlstring2json  是我使用第三方xml转json的一个库
+  var xml2json = require(&apos;..//lib/xmlstring2json/dist/xml2json&apos;);
+  var json = JSON.stringify(xml2json(res.data), null, 4);
+
+
+  var jsonObject = xml2json(res.data);
+  var jokeObject = jsonObject.root.joke
+  //timestamp
+  if(pageNo == 0){
+    timeStamps = jsonObject.root.timestamp.text
+  }
+
+
+ // console.log(&apos;json::&apos; + jsonObject.root.timestamp.text)
+  // var data = new Array();
+  // for (var i = 0; i &lt; jokeObject.length;i++){
+  //   var text = JSON.stringify(jokeObject[i].text).replace(&quot;#&quot;, &quot;&quot;)
+  //   //JSON.parse(text).text
+  //   var value = JSON.parse(text).text;
+  //   data.push(value)
+  // }
+  // console.log(&apos;data::：&apos; + jokeObject[0].text.text );
+
+  // var l =  jokeObject;
+  var l;
+  if(pageNo == 0){
+    l = jokeObject
+
+  }else{
+    var l = that.data.list;
+    for (var i = 0; i &lt; jokeObject.length; i++) {
+      l.push(jokeObject[i])
+    } 
+  }
+    //页面绑定的数据赋值
+  that.setData({
+    list: l
+  })
+
+  pageNo++
+
+  that.setData({
+    hidden: true
+  })
+},
+fail : function(s){
+  wx.showModal({
+    title: &apos;提示&apos;,
+    content: &apos;请求接口失败&apos; + JSON.stringify(s)
+  })
+}
+</code></pre><p>要进行网络请求，首先测试阶段可以将开发工具里的：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-8bed851f43caa7a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>最后一个选项勾选上，不校验…,同时管理员还需在后台配置网络请求的域名，两个缺一不可。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 微信小程序 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[如何给TextView上的drawable上的图片添加动画？]]></title>
+      <url>/2018/01/24/%E5%A6%82%E4%BD%95%E7%BB%99TextView%E4%B8%8A%E7%9A%84drawableEnd%E7%AD%89%E4%B8%8A%E7%9A%84%E5%9B%BE%E7%89%87%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%EF%BC%9F/</url>
+      <content type="html"><![CDATA[<p>可能你遇到过这样的场景，就是在 <code>xml</code> 里，给<code>TextView</code>添加了一个<code>drawableLeft</code>或者<code>drawableRight</code>等，你想给这个图片添加一个动画，然而你会发现当你给这个<code>TextView</code>加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。</p>
+<h1 id="第一种做法"><a href="#第一种做法" class="headerlink" title="第一种做法"></a>第一种做法</h1><blockquote>
+<p>也是比较通俗的方法，说这个<code>drawable 单独弄成ImageView</code>不就好了，在<code>xml</code>里新增一个<code>ImageView</code> 是吧，干嘛非要加在一个标签里面，要相信布局都是很强大的，肯定可以实现效果。</p>
+</blockquote>
+<h1 id="第二种做法"><a href="#第二种做法" class="headerlink" title="第二种做法"></a>第二种做法</h1><blockquote>
+<p>你说真的没办法，必须写在一个里面，也是有办法的，那就不能在<code>xml</code>里设置<code>drawableLeft</code>了，代码设置，如下：  </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AnimationDrawable d = (AnimationDrawable) getResources().getDrawable(R.drawable.animation_draw);  </span><br><span class="line">d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());</span><br><span class="line"> messageText.setCompoundDrawables(d, null, null, null);</span><br></pre></td></tr></table></figure>
+<p>这个具体的动画在这个<code>animation_draw</code>里，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;animation-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">                android:oneshot=&quot;false&quot;</span><br><span class="line">       &gt;</span><br><span class="line"></span><br><span class="line">    &lt;item android:drawable=&quot;@drawable/ic_launcher&quot;</span><br><span class="line">           android:duration=&quot;500&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/animation-list&gt;</span><br></pre></td></tr></table></figure>
+<p>这是一个帧动画，里面可以放很多的<code>item</code>,从而形成动画,碰到了这种情况记录下，方便以后查阅。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> add animation to drawable </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Android O 新特性 AutoSizing]]></title>
+      <url>/2018/01/16/Android-O-%E6%96%B0%E7%89%B9%E6%80%A7-AutoSizing/</url>
+      <content type="html"><![CDATA[<h1 id="自动调整TextView的大小的使用autoSizing"><a href="#自动调整TextView的大小的使用autoSizing" class="headerlink" title="自动调整TextView的大小的使用autoSizing"></a>自动调整TextView的大小的使用autoSizing</h1><blockquote>
+<p>Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。</p>
+</blockquote>
+<p>在之前看 <a href="https://juejin.im/post/5a56f70cf265da3e5468fa59" target="_blank" rel="noopener">文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！</a> 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用的时候遇到了一些小问题，导致一直出不来。</p>
+<p><a href="https://developer.android.com/guide/topics/ui/look-and-feel/autosizing-textview.html" target="_blank" rel="noopener">官方文档</a> 点击即可查看，可以看别人讲解的同时也可自行查阅文档，双方对比着看，感觉会好一点。</p>
+<p>如下图可以简单明了的说明该特性：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&amp;h=713&amp;f=gif&amp;s=764107" alt=""></p>
+<p>具体最简单的使用有两种：</p>
+<h1 id="1-一种就是api-gt-api-26的可以直接在xml里面该属性："><a href="#1-一种就是api-gt-api-26的可以直接在xml里面该属性：" class="headerlink" title="1.一种就是api &gt;= api 26的可以直接在xml里面该属性："></a>1.一种就是api &gt;= api 26的可以直接在xml里面该属性：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;TextView</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;200dp&quot;</span><br><span class="line">    android:autoSizeTextType=&quot;uniform&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在此需要注意的是：使用这个<code>autoSizeTextType</code>的时候，控件的<code>layout_width</code> <code>layout_height</code> 不能使用这个<code>wrap_content</code>否则看不出什么效果，要使用具体可衡量的。这个也不难理解，因为它要计算，你设置一个模糊的宽和高，就算不出来了。</p>
+</blockquote>
+<h1 id="2-api-lt-26-的低设备-的兼容写法"><a href="#2-api-lt-26-的低设备-的兼容写法" class="headerlink" title="2. api&lt;26 的低设备 的兼容写法"></a>2. api&lt;26 的低设备 的兼容写法</h1><blockquote>
+<p>官方文档里也明确说明了兼容低版本<code>The library provides support to Android 4.0 (API level 14) and higher.</code> 也就是兼容到4.0以上，写法有些不同，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout</span><br><span class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;TextView</span><br><span class="line">      android:layout_width=&quot;match_parent&quot;</span><br><span class="line">      android:layout_height=&quot;200dp&quot;</span><br><span class="line">      tools:ignore=&quot;MissingPrefix&quot;</span><br><span class="line">      app:autoSizeTextType=&quot;uniform&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这个<code>app</code>是这个<code>xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</code> 我们在自定义控件的时候经常遇到它，<code>tools</code>是这个<code>xmlns:tools=&quot;http://schemas.android.com/tools&quot;</code> 当然以上写法都支持动态编码，具体可查阅文档</p>
+<h1 id="敲黑板重点"><a href="#敲黑板重点" class="headerlink" title="敲黑板重点"></a>敲黑板重点</h1><p>你会发现你写完之后编译是报错的，错误类似是这样的：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/16/160fe486f97e25be?w=888&amp;h=158&amp;f=png&amp;s=18247" alt=""></p>
+<p>找不到！！！</p>
+<p>在写那篇文章作者的帮助下，发现首先要兼容低版本，<code>module</code> 的 <code>build.gradle</code> 文件添加依赖时候 就是这个<code>com.android.support:appcompat-v7:xx</code> 后面的版本号要26以上，你看看你自己项目里有哪个版本你就写上哪个，还要在<code>project</code> 的 <code>build.gradle</code> 文件里添加：<br><code>maven{
+            url &#39;https://maven.google.com&#39;
+        }</code>添加到对应的位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        //添加如下内容</span><br><span class="line">        maven&#123;</span><br><span class="line">            url &apos;https://maven.google.com&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>至此我发现我的项目终于不报错了，可以运行起来并进行下一步的实践操作了，大家如果在项目中也遇到这样的问题，按我那样改应该没啥问题了，顺便把我写的代码上传到<code>github</code> 上了，又需要的可以下载看看：<br><a href="&quot;https://github.com/QQabby/AutoSizingDemo&quot;">demo</a></p>
+<p>另外在查看 <code>Android O</code>新特性中发现一个比较好玩的东西：现在，<code>findViewById()</code> 函数的全部实例均返回 <t extends="" view=""> T，而不是 View。以后就可以这么写啦：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EditText et =  findViewById(R.id.et);</span><br></pre></td></tr></table></figure></t></p>
+<p>就是那样，无需强转了，当然了使用了<code>Kotlin</code>的话就忽略吧，因为<code>Kotlin</code>连<code>findViewById</code>也不用写，哈哈。更多好玩特性可查看 <a href="https://developer.android.com/about/versions/oreo/android-8.0.html#fvbi-signature" target="_blank" rel="noopener">文档</a>。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Android O </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[修改自动生成get/set方法模板代码]]></title>
+      <url>/2018/01/11/%E4%BF%AE%E6%94%B9%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90get-set%E6%96%B9%E6%B3%95%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81/</url>
+      <content type="html"><![CDATA[<p>今天看到<br><a href="https://juejin.im/post/5a55c8896fb9a01caf374e93" target="_blank">面对接口脏数据你还在V层if str==null else setText?</a><br> 一文，觉着写得挺好，开发过程中多思考多动手，会带来意想不到的效果。底下评论大家也都说了各自的方法和见解，文中有一些问题作者后来也解决了，看到评论里有人说：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b35580365?w=658&amp;h=389&amp;f=png&amp;s=25367" alt="image.png"></p>
+<p>说到配置as,就可以实现在创建bean时自动生成<code>return xx==null?&quot;&quot;:xx;</code> 觉着很好，因为我觉着这是一种挺简单的方法，但是就如同底下人问了怎么配置呀，我也不知道，于是我就在自己<code>as</code>工具里新建了一个bean对象，按住<code>alt+insert</code>添加<code>get/set</code>方法，发现了解决办法。如下图：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3568a2be?w=389&amp;h=636&amp;f=png&amp;s=16071" alt="image.png"></p>
+<p>平时手快也没注意，今天仔细看了看，那上面的意思不就是，<code>get</code> 方法模块，<code>set</code>方法模板吗，后面跟着 <code>IntelliJ Default</code>大概就是默认的生成模板吧，点击后面的三个点<br>按钮进去看看，如下：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b531389d1?w=787&amp;h=609&amp;f=png&amp;s=47221" alt="image.png"></p>
+<p>这是<code>set</code>的，<code>get</code>方法也类似是这样的，大概也能看懂，想着是不是可以直接模板就好了，发现无法修改，后来又发现左上角的<code>+</code>号，原来是自己可以新建一个模板，然后再生成的时候选择自己的模板就好了，如我们在<code>get</code>模板中新建一个自己的模板：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3c7e8344?w=431&amp;h=149&amp;f=png&amp;s=7606" alt="image.png"></p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b357e2825?w=262&amp;h=269&amp;f=png&amp;s=4331" alt="image.png"></p>
+<p>我们知道我们只需要改一下最后<code>get</code>方法<code>return</code>那个地方的代码，也就是这儿：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b38fb2a31?w=1240&amp;h=679&amp;f=png&amp;s=129573" alt="image.png"></p>
+<p>不确定是不是，我们可以在后面跟着一个“#”号试试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">  return $field.name+&quot;#&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在生成的时候选择我们自定义的模板：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b56ef9685?w=394&amp;h=643&amp;f=png&amp;s=17595" alt="image.png"></p>
+<p>发现最后生成的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public String getAge() &#123;</span><br><span class="line">    return age + &quot;#&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setAge(String age) &#123;</span><br><span class="line">    this.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样证明确定是这样的，那么我么可以继续进行真正的判断了：<br>我们先把这个默认里的<code>get</code>方法代码拷贝到 <code>MyGetter</code>中，我们再根据我们自己的需要修改模板代码,其它地方不变，就修改需要修改的地方：<br>我们想要实现这样的：<code>return xx==null?&quot;&quot;:xx</code>,Ok ，那么我认为大概是这么写的，首先判断是否是字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">	#if(field.String)&#123;</span><br><span class="line">		return $field.name == null ? &quot;&quot; : $field.name;</span><br><span class="line">	&#125;</span><br><span class="line">	#else</span><br><span class="line">		return $field.name;</span><br><span class="line">	#end </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们对比一个<code>default</code>的写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">  return $field.name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>好的，我们再继续生成一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public String getAge() &#123;</span><br><span class="line">        return age == null ? &quot;&quot; : age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(String age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>好的，达成效果，耶，居然还可以这么玩，以后可根据自己需求自行修改，谢谢大家。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> get/set.template </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Activity启动模式]]></title>
+      <url>/2018/01/09/Activity%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F/</url>
+      <content type="html"><![CDATA[<p>  ● standard 标准模式<br>    简述：对于使用standard模式的活动，系统不会在乎这个活动是否已经在返回栈中存在，每次启动都会创建该活动的一个新的实例。<br>例如：A启动A，A再接着启动A,A再接着启动A,，然后再分别出栈，如图所示：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-bf56470a07ad09ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>  ● singleTop<br>简述：当活动的启动模式指定为 singleTop ,在启动活动时如果发现返回栈的栈顶已经<br>是该活动，则认为可以直接使用它，不会再创建新的活动实例。<br>例如：如果快速点击一个按钮，进入Activity，要保证启动的Activity不为多个，可以使用<br>将Activity的启动模式改为 singleTop，就不会启动多个了。如图所示：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-d5f43b4894e1a4f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>  ● singleTask<br>简述：当活动的启动模式指定为singleTask，每次启动该活动时候，它会先在系统中查找属性值taskaffinity等于它的属性值taskAffinity的任务存在；如果存在这样的任务，他就会这个任务中启动，否则就会在新任务中启动。因此，如果我们想要设置了“singleTask”启动模式的Activity在新的任务中启动，就要为它设置一个独立的taskAffinity属性值。</p>
+<p>如果设置了“singleTask”启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已经存在在相应的Activity实例，如果存在，就会把位于这个Activity实例上面的Activity全部结束掉，即最终这个Activity实例会位于任务的堆栈顶端中。</p>
+<p>每次启动该活动时系统首先会在返回栈中检查是否存在该活动的实例，如果发现已经存在则直接使用该实例，并把在这个活动之上的所有活动统统出栈，如果没有发现就会创建一个新的活动实例。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-9133171e9085b6cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">                             </p>
+<blockquote>
+<p>当栈底部的 <code>A</code> 重新被启动打开时，会执行<code>onNewIntent()</code> 方法。</p>
+</blockquote>
+<p>  ● singleInstance（单独任务栈）<br>简述：使用singleInstance 模式就可以解决这个问题，在这种模式下会有一个单独的返回栈来管理这个活动，不管是哪个应用程序来访问这个活动，都会共用同一个返回栈，也就解决了共享活动实例的问题。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-358424952cd1bed5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>返回的页面顺序是：C-B-A</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> launchMode </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[AIDL实例]]></title>
+      <url>/2018/01/08/AIDL%E5%AE%9E%E4%BE%8B/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>说到进程间通信，一般首先就会想到<code>AIDL</code>，也看了很多文章，做下笔记，记录一下，方便以后查阅。</p>
+</blockquote>
+<p>对于  <code>AIDL</code> 我是这样理解的，首先进程间是无法通信的，那要通信就得有一个媒介或者说两个进程有统一对外的接口可以相互识别，从这个 <code>AIDL</code>全程的名字<code>Android Interface Definition Language</code> (android 接口定义语言) 来看不难看出它就是我们进程间通信的媒介，它可以实现我们想要的通信。</p>
+<p>在翻阅网上各类文章的讲解后，我认为一个比较好的实例可以更好理解这个东西，具体如下：</p>
+<h1 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h1><p>我们新创建两个<code>module</code>，代表我们两个进程，进程名称默认就是我们程序的包名：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-2622b4af0ef4f45a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300" alt="image.png"></p>
+<h1 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h1><p>我们先编写<code>service</code>这个<code>module</code>里的代码，先定义一个  <code>Person</code>的一个<code>bean</code>对象，记住一定要<code>implements Parcelable</code> 接口，大致如下：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-2be1461f1e8c1cb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300" alt="image.png"><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String mName;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        mName = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">Person</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">        mName = in.readString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;Person&gt; CREATOR = <span class="keyword">new</span> Creator&lt;Person&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Person <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Person(in);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Person[] newArray(<span class="keyword">int</span> size) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Person[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel dest, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">        dest.writeString(mName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"\nPerson&#123;"</span> +</span><br><span class="line">                <span class="string">"mName='"</span> + mName + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们再新建一个文件夹：<code>aidl</code>,新建一个包名和<code>Person</code>类一模一样的包名和与之对应的<code>aidl</code>,还有一个我们对外提供获取<code>person</code>集合的一个<code>aidl</code>:<br><img src="http://upload-images.jianshu.io/upload_images/1948557-44cd8f26c62f570f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br> 在<code>Person.aidl</code>里，我们序列化我们<code>java</code>里的 <code>Person</code> 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.service.bean;</span><br><span class="line"></span><br><span class="line"><span class="comment">//还要和声明的实体类在一个包里，同时注意不要新建aidl文件，因为你会发现，新建不了，</span></span><br><span class="line"><span class="comment">//提示你名称唯一，此时你新建一个file,名字为Person.aidl就可以，需要特别注意下</span></span><br><span class="line">parcelable Person;</span><br></pre></td></tr></table></figure>
+<p><code>IMyAidl.aidl</code> 文件提供对外方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// IMyAidl.aidl</span><br><span class="line">package com.example.service.bean;</span><br><span class="line">//特别注意一定要手动导包，不会自动导包</span><br><span class="line">import com.example.service.bean.Person;</span><br><span class="line"></span><br><span class="line">// Declare any non-default types here with import statements</span><br><span class="line">//可以理解为通信媒介</span><br><span class="line">interface IMyAidl &#123;</span><br><span class="line"></span><br><span class="line">     /**</span><br><span class="line">         * 除了基本数据类型，其他类型的参数都需要标上方向类型：in(输入), out(输出), inout(输入输出)</span><br><span class="line">         */</span><br><span class="line">        void addPerson(in Person person);</span><br><span class="line"></span><br><span class="line">        List&lt;Person&gt; getPersonList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后在我们的<code>java文件</code>里，新建一个<code>MyAidlService</code>,<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAidlService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String  TAG = <span class="keyword">this</span>.getClass().getSimpleName();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Person&gt; mPersons;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建生成本地的binder ,实现AIDL的方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> IBinder mIBinder = <span class="keyword">new</span> IMyAidl.Stub()&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPerson</span><span class="params">(Person person)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">            mPersons.add(person);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> List&lt;Person&gt; <span class="title">getPersonList</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> mPersons;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 客户端与服务端绑定时的回调，返回IBinder对象后客户端就可以通过它远程调用服务端的方法，即实现了通讯</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> intent</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">        mPersons = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">return</span> mIBinder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>最后别忘了在清单文件中注册<code>MyAidlService</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;service</span><br><span class="line">            android:name=<span class="string">"com.example.service.MyAidlService"</span></span><br><span class="line">            android:enabled=<span class="string">"true"</span></span><br><span class="line">            android:exported=<span class="string">"true"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>到此，我们完成了<code>service</code>端的工作：</p>
+<h1 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h1><p>将我们刚才创建好的<code>aidl</code>文件夹拷贝到 <code>app</code> <code>module</code>下<code>main</code>文件夹下，在<code>MainActivity</code>中绑定服务，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">        intent.setComponent(<span class="keyword">new</span> ComponentName(<span class="string">"com.example.service"</span>,<span class="string">"com.example.service.MyAidlService"</span>));</span><br><span class="line">        bindService(intent,mConnection,BIND_AUTO_CREATE);</span><br></pre></td></tr></table></figure></p>
+<p>其中这个<code>mConnection</code>可以让我们拿到<code>IMyAidl</code>对象的代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private ServiceConnection mConnection = new ServiceConnection() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceConnected(ComponentName componentName, IBinder iBinder) &#123;</span><br><span class="line"></span><br><span class="line">            mAidl = IMyAidl.Stub.asInterface(iBinder);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceDisconnected(ComponentName componentName) &#123;</span><br><span class="line">            mAidl = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>通过返回的<code>IBinder</code> 拿到这个<code>IMyAidl</code>，此时我们就可以通信了，例如我们调用<code>IMyAidl</code>中的<code>addPerso</code>n方法，再调用<code>getPersonList</code>看看：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Random random = <span class="keyword">new</span> Random();</span><br><span class="line">       Person person = <span class="keyword">new</span> Person(<span class="string">"qian"</span>+random.nextInt(<span class="number">20</span>));</span><br><span class="line"></span><br><span class="line">       <span class="keyword">try</span>&#123;</span><br><span class="line">           mAidl.addPerson(person);</span><br><span class="line">           List&lt;Person&gt; mPersons = mAidl.getPersonList();</span><br><span class="line"></span><br><span class="line">           tvName.setText(mPersons.toString());</span><br><span class="line">       &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印发现list 返回了我们添加的<code>Person</code>，完成了<code>app</code>与<code>service</code>两个进程间的通信。<br><code>demo</code>地址：<a href="https://github.com/QQabby/AIDLDemo">https://github.com/QQabby/AIDLDemo</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> AIDL实例 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[写文件相关]]></title>
+      <url>/2017/12/28/%E5%86%99%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3/</url>
+      <content type="html"><![CDATA[<h1 id="向sd卡根目录中写入文件"><a href="#向sd卡根目录中写入文件" class="headerlink" title="向sd卡根目录中写入文件"></a>向sd卡根目录中写入文件</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先判断是否存在sd卡</span></span><br><span class="line"><span class="keyword">if</span>(Environment.getExternalStorageState().equals(</span><br><span class="line">                Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取外部设备</span></span><br><span class="line">    File file=<span class="keyword">new</span> File(Environment.getExternalStorageDirectory(),<span class="string">"qianqian.txt"</span>);</span><br><span class="line">    FileOutputStream outStream=<span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">     <span class="comment">//写入文件</span></span><br><span class="line">    outStream.write(content.getBytes());</span><br><span class="line">    outStream.close();  </span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="读取assets下的文件路径"><a href="#读取assets下的文件路径" class="headerlink" title="读取assets下的文件路径"></a>读取assets下的文件路径</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//格式如下</span></span><br><span class="line">file:<span class="comment">///android_asset/myVideo.html</span></span><br><span class="line">file:<span class="comment">///android_asset/xx(文件名称)</span></span><br></pre></td></tr></table></figure>
+<h1 id="读取assets下的文件转化为String"><a href="#读取assets下的文件转化为String" class="headerlink" title="读取assets下的文件转化为String"></a>读取assets下的文件转化为String</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getFromAssets</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStreamReader inputReader = <span class="keyword">new</span> InputStreamReader(</span><br><span class="line">                    getResources().getAssets().open(fileName));</span><br><span class="line">            BufferedReader bufReader = <span class="keyword">new</span> BufferedReader(inputReader);</span><br><span class="line">            String line = <span class="string">""</span>;</span><br><span class="line">            String Result = <span class="string">""</span>;</span><br><span class="line">            <span class="keyword">while</span> ((line = bufReader.readLine()) != <span class="keyword">null</span>)</span><br><span class="line">                Result += line;</span><br><span class="line">            <span class="keyword">return</span> Result;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 向sd卡写入文件 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[LRU算法还一知半解？]]></title>
+      <url>/2017/12/19/lru/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>某年某月某日，糖葫芦同学在掘金app上看了几篇文章，偶然看到了一篇熟悉的词LRU算法，脑海里就想这不是经常说的嘛，就那么回事，当天晚上睡觉，LRU算法是啥来着，好像是什么最近最少使用的，白天在地铁上看的文章也不少，但是到晚上想想好像啥也没记住，就记得LRU算法，我发现人大多数是这样的啊，对于自己熟悉的部分呢还能记着点，不熟悉或者不会的可能真的是看过就忘啊~既然这样还不如先把熟悉的弄明白。</p>
+</blockquote>
+<p><strong>第二天来到公司，我觉着还是有必要看一下这个LRU的源码，到底是怎么回事，嗯，糖葫芦同学刷刷得看，下面我们将进入正题，请戴眼镜的同学把眼镜擦一擦，哈哈哈</strong></p>
+<h1 id="First"><a href="#First" class="headerlink" title="First"></a>First</h1><p>先看源码，再用具体的demo加以验证，我们先看一下这个LruCache这个类的大致结构和方法，如下图所示：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-45d318e41e5b213e?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>这又是 get(K)，put(K,V), remove(K) 的方法的 给人的感觉就像是一个Map的集合嘛，又有Key ，又有value 的，再看下具体的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LruCache</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> LinkedHashMap&lt;K, V&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Size of this cache in units. Not necessarily the number of elements. */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> maxSize;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> putCount;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> createCount;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> evictionCount;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> hitCount;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> missCount;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> maxSize for caches that do not override &#123;<span class="doctag">@link</span> #sizeOf&#125;, this is</span></span><br><span class="line"><span class="comment">     *     the maximum number of entries in the cache. For all other caches,</span></span><br><span class="line"><span class="comment">     *     this is the maximum sum of the sizes of the entries in this cache.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LruCache</span><span class="params">(<span class="keyword">int</span> maxSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (maxSize &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"maxSize &lt;= 0"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.maxSize = maxSize;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> LinkedHashMap&lt;K, V&gt;(<span class="number">0</span>, <span class="number">0.75f</span>, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>看到开头，我们就明白了，哦原来这个LruCache类中维护一个LinkedHashMap的一个集合，缓存我们这个对象，而且构造方法里需要我们传入一个<code>maxSize</code>的一个值，根据上面的注释我们就明白了这个就是我们LruCache缓存对象的最大数目。</p>
+<h1 id="有什么用呢？"><a href="#有什么用呢？" class="headerlink" title="有什么用呢？"></a>有什么用呢？</h1><p>根据惯性思维，我们可以认为，在<code>put</code>新的缓存对象的时候，根据我们设定的最大值<code>remove</code>集合里的某些缓存对象，进而添加新的缓存对象。</p>
+<h1 id="Second"><a href="#Second" class="headerlink" title="Second"></a>Second</h1><p>根据我们的分析，我们有必要去看一下这个<code>put</code>方法的源码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Caches &#123;<span class="doctag">@code</span> value&#125; for &#123;<span class="doctag">@code</span> key&#125;. The value is moved to the head of</span></span><br><span class="line"><span class="comment"> * the queue.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the previous value mapped by &#123;<span class="doctag">@code</span> key&#125;.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span> || value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"key == null || value == null"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    V previous;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        putCount++;</span><br><span class="line">        size += safeSizeOf(key, value);</span><br><span class="line">        previous = map.put(key, value);</span><br><span class="line">        <span class="keyword">if</span> (previous != <span class="keyword">null</span>) &#123;</span><br><span class="line">            size -= safeSizeOf(key, previous);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (previous != <span class="keyword">null</span>) &#123;</span><br><span class="line">        entryRemoved(<span class="keyword">false</span>, key, previous, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    trimToSize(maxSize);</span><br><span class="line">    <span class="keyword">return</span> previous;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码量也不是特别多，我们看下这个，在这个<code>synchronized</code>同步代码块里，我们看到这个 <code>size</code>,是对put进来缓存对象个数的累加，然后调用集合的<code>map.put</code>方法，返回一个对象 <code>previous</code> ，就是判断这个集合中是否添加了这个缓存对象，如果不为null,就对<code>size</code>减回去。</p>
+<p>最后又调用一个 <code>trimToSize(maxSize)</code>方法，上面都是对添加一些逻辑的处理，那么不可能无限制添加啊，肯定有移除操作，那么我们推测这个逻辑可能在这个<code>trimToSize(maxSize)</code> 里处理。</p>
+<p>源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Remove the eldest entries until the total of remaining entries is at or</span></span><br><span class="line"><span class="comment">     * below the requested size.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> maxSize the maximum size of the cache before returning. May be -1</span></span><br><span class="line"><span class="comment">     *            to evict even 0-sized elements.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trimToSize</span><span class="params">(<span class="keyword">int</span> maxSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            K key;</span><br><span class="line">            V value;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (size &lt; <span class="number">0</span> || (map.isEmpty() &amp;&amp; size != <span class="number">0</span>)) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(getClass().getName()</span><br><span class="line">                            + <span class="string">".sizeOf() is reporting inconsistent results!"</span>);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//只要当前size&lt;= maxSize 就结束循环</span></span><br><span class="line">                <span class="keyword">if</span> (size &lt;= maxSize || map.isEmpty()) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 获取这个对象，然后从map中移除掉，保证size&lt;=maxSize</span></span><br><span class="line">                Map.Entry&lt;K, V&gt; toEvict = map.entrySet().iterator().next();</span><br><span class="line">                key = toEvict.getKey();</span><br><span class="line">                value = toEvict.getValue();</span><br><span class="line">                map.remove(key);</span><br><span class="line">                size -= safeSizeOf(key, value);</span><br><span class="line">                evictionCount++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            entryRemoved(<span class="keyword">true</span>, key, value, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>注释：<code>Remove the eldest entries until the total of remaining entries is at or below the requested size</code> 大概意思是说：清除时间最久的对象直到剩余缓存对象的大小小于设置的大小。没错是我们想找的。</p>
+<p><strong>这里说明一下：maxSize就是我们在构造方法里传入的，自己设置的</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LruCache</span><span class="params">(<span class="keyword">int</span> maxSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (maxSize &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"maxSize &lt;= 0"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.maxSize = maxSize;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> LinkedHashMap&lt;K, V&gt;(<span class="number">0</span>, <span class="number">0.75f</span>, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样LruCache的核心方法 <code>trimToSize</code>方法我们就说完了，接下来我将通过实例再次验证下：</p>
+<h1 id="设置场景"><a href="#设置场景" class="headerlink" title="设置场景"></a>设置场景</h1><blockquote>
+<p>假设我们设置maxSize 为2，布局里显示3个imageView,分别代表3张我们要显示的图片，我们添加3张图片，看看会不会显示3张？</p>
+</blockquote>
+<p>xml布局显示如下（代码就不贴了，很简单）：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-18f522db17aec271?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>activity代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_SIZE = <span class="number">2</span>;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.layout_lru);</span><br><span class="line"></span><br><span class="line">        ImageView iv1 = (ImageView) findViewById(R.id.iv1);</span><br><span class="line">        ImageView iv2 = (ImageView) findViewById(R.id.iv2);</span><br><span class="line">        ImageView iv3 = (ImageView) findViewById(R.id.iv3);</span><br><span class="line"></span><br><span class="line">        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.bg);</span><br><span class="line">        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.header_img);</span><br><span class="line">        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);</span><br><span class="line"></span><br><span class="line">        LruCache&lt;String,Bitmap&gt; lruCache = <span class="keyword">new</span> LruCache&lt;&gt;(MAX_SIZE);</span><br><span class="line">        lruCache.put(<span class="string">"1"</span>,bitmap1);</span><br><span class="line">        lruCache.put(<span class="string">"2"</span>,bitmap2);</span><br><span class="line">        lruCache.put(<span class="string">"3"</span>,bitmap3);</span><br><span class="line"></span><br><span class="line">        Bitmap bitmap = lruCache.get(<span class="string">"1"</span>);</span><br><span class="line">        iv1.setImageBitmap(bitmap);</span><br><span class="line"></span><br><span class="line">        Bitmap b2 = lruCache.get(<span class="string">"2"</span>);</span><br><span class="line">        iv2.setImageBitmap(b2);</span><br><span class="line"></span><br><span class="line">        Bitmap b3 = lruCache.get(<span class="string">"3"</span>);</span><br><span class="line">        iv3.setImageBitmap(b3);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>图：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-fd26e11dddac2ae8?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="bg.png"><img src="http://upload-images.jianshu.io/upload_images/1948557-2aa9e1e0c1e34387?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="header_img.png"><img src="http://upload-images.jianshu.io/upload_images/1948557-8d33912205bfd6e8?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ic_launcher.png"></p>
+<p>我们可以先尝试分析一下：因为我们设置的MaxSize 是2 ，那么在put第三个Bitmap的时候，在<code>trimToSize</code>方法中，发现这个size是3 ，maxSize 是2，会继续向下执行,不会break,结合下面代码看下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trimToSize</span><span class="params">(<span class="keyword">int</span> maxSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            K key;</span><br><span class="line">            V value;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (size &lt; <span class="number">0</span> || (map.isEmpty() &amp;&amp; size != <span class="number">0</span>)) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(getClass().getName()</span><br><span class="line">                            + <span class="string">".sizeOf() is reporting inconsistent results!"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//第一次循环：此时 size 是3，maxSize 是 2</span></span><br><span class="line">                <span class="comment">//第二次循环，此时 size 是 2 ，maxSize 是 2 ，满足条件，break,结束循环</span></span><br><span class="line">                <span class="keyword">if</span> (size &lt;= maxSize || map.isEmpty()) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">              <span class="comment">//获取最先添加的第一个元素</span></span><br><span class="line">                Map.Entry&lt;K, V&gt; toEvict = map.entrySet().iterator().next();</span><br><span class="line">                key = toEvict.getKey();</span><br><span class="line">                value = toEvict.getValue();</span><br><span class="line">              <span class="comment">//移除掉第一个缓存对象</span></span><br><span class="line">                map.remove(key);</span><br><span class="line">              <span class="comment">// size = 2,减去移除的元素</span></span><br><span class="line">                size -= safeSizeOf(key, value);</span><br><span class="line">                evictionCount++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            entryRemoved(<span class="keyword">true</span>, key, value, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个 <code>safeSizeOf</code> 是调用<code>sizeOf</code>方法。</p>
+<p>那么也就是说，我们在<code>put</code>第三个<code>bitmap</code>的时候，<code>LruCache</code> 会自动帮我们移除掉第一个缓存对象，因为第一个最先添加进去，时间也最长，当然后添加的<code>bitmap</code>就是新的，最近的，那么我们推断这个<code>iv1</code>是显示不出图片的，因为被移除掉了，其它剩余两个可以显示，分析就到这里，看下运行结果是不是跟我们分析的一样：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-abc32df8ceb0fda9?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="result.png"></p>
+<p>哇！真的跟我们想的一样耶，证明我们想的是对的。这里我们思考一下就是为什么<code>LruCache</code>使用了这个<code>LinkedHashMap</code>,为什么<code>LinkedHashMap</code>的创造方法跟我们平时创建的不太一样，源码是这样的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LruCache</span><span class="params">(<span class="keyword">int</span> maxSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (maxSize &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"maxSize &lt;= 0"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.maxSize = maxSize;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> LinkedHashMap&lt;K, V&gt;(<span class="number">0</span>, <span class="number">0.75f</span>, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这里说一下在掘金发布的评论里 <code>藏地情人</code>评论是：<code>new LinkedHashMap&lt;K, V&gt;(0, 0.75f, true)</code>这句代码表示，初始容量为零，<code>0.75</code>是加载因子，表示容量达到最大容量的<code>75%</code>的时候会把内存增加一半。最后这个参数至关重要。表示访问元素的排序方式，<code>true</code>表示按照访问顺序排序，<code>false</code>表示按照插入的顺序排序。这个设置为<code>true</code>的时候，如果对一个元素进行了操作<code>(put、get)</code>，就会把那个元素放到集合的最后。</p>
+</blockquote>
+<p>确实也是这样的，我们看下<code>LinkedHashMap</code>的源码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Constructs an empty &lt;tt&gt;LinkedHashMap&lt;/tt&gt; instance with the</span></span><br><span class="line"><span class="comment">     * specified initial capacity, load factor and ordering mode.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  initialCapacity the initial capacity</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  loadFactor      the load factor</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  accessOrder     the ordering mode - &lt;tt&gt;true&lt;/tt&gt; for</span></span><br><span class="line"><span class="comment">     *         access-order, &lt;tt&gt;false&lt;/tt&gt; for insertion-order</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IllegalArgumentException if the initial capacity is negative</span></span><br><span class="line"><span class="comment">     *         or the load factor is nonpositive</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinkedHashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity,</span></span></span><br><span class="line"><span class="function"><span class="params">                         <span class="keyword">float</span> loadFactor,</span></span></span><br><span class="line"><span class="function"><span class="params">                         <span class="keyword">boolean</span> accessOrder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(initialCapacity, loadFactor);</span><br><span class="line">        <span class="keyword">this</span>.accessOrder = accessOrder;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>里面这个<code>assessOrder</code> 注释里也说的很明白：<code>the ordering mode - &lt;tt&gt;true&lt;/tt&gt; for
+access-order, &lt;tt&gt;false&lt;/tt&gt; for insertion-order</code> -&gt; <code>true</code> 呢就表示会排序，<code>false</code> 就代表按照插入的顺序。<br>默认不传就是 <code>false</code>  ,而且我们每次  <code>get(K) put(K,V)</code> 的时候 会根据这个变量调整元素在集合里的位置。而这么做的目的也只有一个：保留最近使用的缓存对象，举个例子说明一下：</p>
+<p>   我们向这个集合里添加了三种元素</p>
+<pre><code>LruCache&lt;String, Bitmap&gt; lruCache = new LruCache&lt;&gt;(MAX_SIZE);(MAX_SIZE=2)
+lruCache.put(&quot;1&quot;, bitmap1);
+lruCache.put(&quot;2&quot;, bitmap2);
+lruCache.put(&quot;3&quot;, bitmap3);
+</code></pre><p>   此时它们在集合里的顺序是这样的：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-336a0efa4167a370.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300" alt="order.png"></p>
+<p>那比如说我们在<code>put</code> 3 元素之前，使用了1元素，就是调用了<code>get(&quot;1&quot;)</code>方法，我们知道LinkedHashMap就会改变链表里元素的存储顺序，代码是这样的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lruCache.put(<span class="string">"1"</span>, bitmap1);</span><br><span class="line">lruCache.put(<span class="string">"2"</span>, bitmap2);</span><br><span class="line">lruCache.get(<span class="string">"1"</span>);</span><br><span class="line">lruCache.put(<span class="string">"3"</span>, bitmap3);</span><br></pre></td></tr></table></figure></p>
+<pre><code>那么此时对应链表里的顺序就是：
+</code></pre><p><img src="http://upload-images.jianshu.io/upload_images/1948557-dea6180979615101.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300" alt="image.png"></p>
+<p>当我们再调用显示的时候，循环遍历就会优先把第一个位置的<code>key = &quot;2&quot;</code> 的缓存对象移除掉，保证了最近使用的原则，当然了因为把这个<code>max_size = 2</code>所以在我们执行<code>lruCache.put(&quot;3&quot;, bitmap3);</code> 时，集合最终会变成这样：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-334107b8260732f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300" alt="result.png"></p>
+<p>集合里只剩下 <code>1 ,3</code>对应的缓存对象。</p>
+<p>至此，LruCache就说完了，如果看完的你有不明白的地方可以留言，一起讨论下~</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Lru </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Hello World]]></title>
+      <url>/2017/12/11/hello-world/</url>
+      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+      
+        
+    </entry>
+    
+  
+  
 </search>

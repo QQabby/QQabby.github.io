@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="小程序," />
 
 
 
@@ -79,13 +79,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="糖葫芦">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/tags/Activity状态保存与恢复/index.html">
+<meta name="description" content="近期由于项目需要，需要编写小程序，遇到一些问题，记录下来，也是给自己开发的一个总结。  1.关于模板 template在看完 官方文档 里的说明之后，我并没有成功使用，按照它那个设置完成后，一直说找不到，最后在知道，原来除了实例那些之外，还要在当前 wxml 中 import 进来。  1.先建一个 template 的文件夹，新建 wxml,根据具体的路径引入进来，例如：1&amp;lt;import">
+<meta name="keywords" content="小程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Activity启动模式">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/07/05/小程序的爬坑之路/index.html">
 <meta property="og:site_name" content="糖葫芦">
+<meta property="og:description" content="近期由于项目需要，需要编写小程序，遇到一些问题，记录下来，也是给自己开发的一个总结。  1.关于模板 template在看完 官方文档 里的说明之后，我并没有成功使用，按照它那个设置完成后，一直说找不到，最后在知道，原来除了实例那些之外，还要在当前 wxml 中 import 进来。  1.先建一个 template 的文件夹，新建 wxml,根据具体的路径引入进来，例如：1&amp;lt;import">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-35b5b4254918c3fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-07-05T06:58:51.181Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="糖葫芦">
+<meta name="twitter:title" content="Activity启动模式">
+<meta name="twitter:description" content="近期由于项目需要，需要编写小程序，遇到一些问题，记录下来，也是给自己开发的一个总结。  1.关于模板 template在看完 官方文档 里的说明之后，我并没有成功使用，按照它那个设置完成后，一直说找不到，最后在知道，原来除了实例那些之外，还要在当前 wxml 中 import 进来。  1.先建一个 template 的文件夹，新建 wxml,根据具体的路径引入进来，例如：1&amp;lt;import">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-35b5b4254918c3fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -115,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/tags/Activity状态保存与恢复/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/07/05/小程序的爬坑之路/"/>
 
 
 
 
 
-  <title>Tag: Activity状态保存与恢复 | 糖葫芦</title>
+  <title>Activity启动模式 | 糖葫芦</title>
   
 
 
@@ -140,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -258,54 +265,195 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Activity状态保存与恢复<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/07/05/小程序的爬坑之路/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/03/23/Activity状态保存与恢复/" itemprop="url">
-              
-                <span itemprop="name">Activity状态保存与恢复</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Activity启动模式</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-23T17:03:05+08:00"
-              content="2018-03-23" >
-          03-23
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-05T14:58:04+08:00">
+                2018-07-05
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/05/小程序的爬坑之路/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/05/小程序的爬坑之路/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>近期由于项目需要，需要编写小程序，遇到一些问题，记录下来，也是给自己开发的一个总结。</p>
+</blockquote>
+<h1 id="1-关于模板-template"><a href="#1-关于模板-template" class="headerlink" title="1.关于模板 template"></a>1.关于模板 template</h1><p>在看完 <a href="&quot;https://developers.weixin.qq.com/miniprogram/dev/index.html&quot;">官方文档</a> 里的说明之后，我并没有成功使用，按照它那个设置完成后，一直说找不到，最后在知道，原来除了实例那些之外，还要在当前 <code>wxml</code> 中 <code>import</code> 进来。</p>
+<ul>
+<li>1.先建一个 <code>template</code> 的文件夹，新建 <code>wxml</code>,根据具体的路径引入进来，例如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;import src=&quot;../template/line.wxml&quot; /&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>还有一个就是如果有相对应的 <code>wxss</code>文件，可在 <code>app.wxss</code>文件中引用，这样整个项目都不需要引用这个样式文件了。</p>
+<p><strong>注意：模板拥有自己的作用域，只能使用 data 传入的数据以及模版定义文件中定义的 <wxs> 模块。</wxs></strong></p>
+<h1 id="2-关于水平居中，垂直居中"><a href="#2-关于水平居中，垂直居中" class="headerlink" title="2. 关于水平居中，垂直居中"></a>2. 关于水平居中，垂直居中</h1><p>一开始感觉这啥玩意，不听话啊，让居中也不居中，就是不动啊，很是郁闷，后来发现了一些规律。</p>
+<p><strong>2.1 水平居中</strong></p>
+<ul>
+<li>首先如果是行内元素，例如 <text> 这样的，如果想水平居中，使用<code>text-align:center</code> 你会发现不好使啊，纹丝不动，原因是因为行内元素长度随内容变化，所以它不能让你在一行的中间，因为它的长度就是文字长度。</text></li>
+</ul>
+<p><strong>解决方案：</strong>可以换成<code>view</code> 控件，或者使用：<code>display:block</code> + <code>text-align:center</code></p>
+<ul>
+<li>其它元素可以使用<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">======3个一起使用==========</span><br><span class="line">text-align:center;</span><br><span class="line">align-items:center;</span><br><span class="line">justify-content: center;</span><br><span class="line">==================</span><br><span class="line">margin:auto # 子容器在父容器中居中,单独使用</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>2.2 垂直居中</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//可使用如下</span><br><span class="line">display:flex;</span><br><span class="line">align-items:center;</span><br><span class="line">justify-content:center;</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-关于几个控件平分整个屏幕宽度问题"><a href="#3-关于几个控件平分整个屏幕宽度问题" class="headerlink" title="3.关于几个控件平分整个屏幕宽度问题"></a>3.关于几个控件平分整个屏幕宽度问题</h1><blockquote>
+<p>一开始我还想着获取屏幕的宽和高，然后再动态给控件设置具体的值，后来发现有更简单的做法</p>
+</blockquote>
+<p>例如：像这样一行排四个<br><img src="https://upload-images.jianshu.io/upload_images/1948557-35b5b4254918c3fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>解决方案：</strong>设置控件的宽度为 ：25%，这样就自动平分啦。当然还有其它的方式，但是我认为百分比的这种写法感觉很直观。</p>
+<h1 id="4-flex-布局"><a href="#4-flex-布局" class="headerlink" title="4. flex 布局"></a>4. flex 布局</h1><p>熟练掌握 <code>flexbox</code> 布局，可以更轻松的编写任何常见的布局，可以查看相关专业的文章。</p>
+<p>未完待续…..</p>
 
       
     </div>
+    
+    
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+   </div>
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/小程序/" rel="tag"># 小程序</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/27/Kotlin-可观察属性/" rel="next" title="Kotlin-可观察属性">
+                <i class="fa fa-chevron-left"></i> Kotlin-可观察属性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -313,6 +461,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -333,8 +495,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -387,6 +558,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-关于模板-template"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-&#x5173;&#x4E8E;&#x6A21;&#x677F;-template" class="headerlink" title="1.&#x5173;&#x4E8E;&#x6A21;&#x677F; template"></a>1.&#x5173;&#x4E8E;&#x6A21;&#x677F; template</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-关于水平居中，垂直居中"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-&#x5173;&#x4E8E;&#x6C34;&#x5E73;&#x5C45;&#x4E2D;&#xFF0C;&#x5782;&#x76F4;&#x5C45;&#x4E2D;" class="headerlink" title="2. &#x5173;&#x4E8E;&#x6C34;&#x5E73;&#x5C45;&#x4E2D;&#xFF0C;&#x5782;&#x76F4;&#x5C45;&#x4E2D;"></a>2. &#x5173;&#x4E8E;&#x6C34;&#x5E73;&#x5C45;&#x4E2D;&#xFF0C;&#x5782;&#x76F4;&#x5C45;&#x4E2D;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-关于几个控件平分整个屏幕宽度问题"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3-&#x5173;&#x4E8E;&#x51E0;&#x4E2A;&#x63A7;&#x4EF6;&#x5E73;&#x5206;&#x6574;&#x4E2A;&#x5C4F;&#x5E55;&#x5BBD;&#x5EA6;&#x95EE;&#x9898;" class="headerlink" title="3.&#x5173;&#x4E8E;&#x51E0;&#x4E2A;&#x63A7;&#x4EF6;&#x5E73;&#x5206;&#x6574;&#x4E2A;&#x5C4F;&#x5E55;&#x5BBD;&#x5EA6;&#x95EE;&#x9898;"></a>3.&#x5173;&#x4E8E;&#x51E0;&#x4E2A;&#x63A7;&#x4EF6;&#x5E73;&#x5206;&#x6574;&#x4E2A;&#x5C4F;&#x5E55;&#x5BBD;&#x5EA6;&#x95EE;&#x9898;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-flex-布局"><span class="nav-number">4.</span> <span class="nav-text"><a href="#4-flex-&#x5E03;&#x5C40;" class="headerlink" title="4. flex &#x5E03;&#x5C40;"></a>4. flex &#x5E03;&#x5C40;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -534,6 +721,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -551,6 +742,18 @@
       <script id="dsq-count-scr" src="https://disqus.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/07/05/小程序的爬坑之路/';
+          this.page.identifier = '2018/07/05/小程序的爬坑之路/';
+          this.page.title = 'Activity启动模式';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://disqus.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
