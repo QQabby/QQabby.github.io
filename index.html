@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -202,7 +202,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -215,7 +215,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            Suche
+            Search
           </a>
         </li>
       
@@ -273,6 +273,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/16/TransitionDrawable/" itemprop="url">TransitionDrawable</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-16T16:57:07+08:00">
+                2018-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/16/TransitionDrawable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/08/16/TransitionDrawable/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li>1.首先创建一个<code>xml</code> 在 <code>drawable</code> 目录下</li>
+</ul>
+<p><code>transition_image</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;transition xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">"@drawable/first"</span> /&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">"@drawable/two"</span> /&gt;</span><br><span class="line">&lt;/transition&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>2.在xml中引用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:drawable=<span class="string">"@drawable/transition_image"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>3.在<code>Activity</code>中使用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ImageView mImageView = (ImageView) findViewById(R.id.iv); </span><br><span class="line">TransitionDrawable transitionDrawable = (TransitionDrawable) mImageView.getDrawable(); </span><br><span class="line">transitionDrawable.startTransition(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="另外一种写法实现多张图片效果"><a href="#另外一种写法实现多张图片效果" class="headerlink" title="另外一种写法实现多张图片效果"></a>另外一种写法实现多张图片效果</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TransitionDrawable transitionDrawable = <span class="keyword">new</span> TransitionDrawable(<span class="keyword">new</span> Drawable[]&#123;getResources().getDrawable(R.drawable.first),getResources().getDrawable(R.drawable.two)&#125;);</span><br><span class="line">mImageView.setImageDrawable(transitionDrawable);</span><br><span class="line">transitionDrawable.startTransition(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/07/05/小程序的爬坑之路/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -302,7 +449,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-05T14:58:04+08:00">
                 2018-07-05
@@ -464,7 +611,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-27T14:31:48+08:00">
                 2018-06-27
@@ -605,7 +752,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-28T15:24:21+08:00">
                 2018-04-28
@@ -740,7 +887,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-24T15:45:35+08:00">
                 2018-04-24
@@ -887,7 +1034,7 @@ xxxhdpi（超超超高）~640dpi density=4
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T16:30:37+08:00">
                 2018-04-08
@@ -1024,7 +1171,7 @@ xxxhdpi（超超超高）~640dpi density=4
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-23T17:03:05+08:00">
                 2018-03-23
@@ -1158,7 +1305,7 @@ xxxhdpi（超超超高）~640dpi density=4
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-22T10:30:22+08:00">
                 2018-03-22
@@ -1340,7 +1487,7 @@ xxxhdpi（超超超高）~640dpi density=4
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-22T10:20:32+08:00">
                 2018-03-22
@@ -1547,7 +1694,7 @@ xxxhdpi（超超超高）~640dpi density=4
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-14T14:05:50+08:00">
                 2018-03-14
@@ -1645,167 +1792,6 @@ xxxhdpi（超超超高）~640dpi density=4
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/13/阿里巴巴Android开发手册/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/13/阿里巴巴Android开发手册/" itemprop="url">阿里巴巴Android开发手册</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-13T15:28:46+08:00">
-                2018-03-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/13/阿里巴巴Android开发手册/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/13/阿里巴巴Android开发手册/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>摘自阿里巴巴Android开发手册</p>
-</blockquote>
-<h1 id="强制要求的"><a href="#强制要求的" class="headerlink" title="强制要求的"></a>强制要求的</h1><ul>
-<li><strong>1.</strong> Activity 间的数据通信，对于数据量比较大的，避免使用 <code>intent + Parcelable</code> 的方式，可以考虑 <code>EventBus</code>等替代方案，以免造成 <code>TransationTooLargeException</code></li>
-<li><strong>2.</strong> <code>Activity</code> 间通过隐士 <code>Intent</code>的跳转，在发出 <code>Intent</code> 之前必须通过 <code>resolveActivity</code> 检查，避免找不到合适的调用组件，造成 <code>ActivityNotFoundException</code> 的异常。  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">viewUrl</span><span class="params">(String url, String mimeType)</span> </span>&#123;</span><br><span class="line"> Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW);</span><br><span class="line">	intent.setDataAndType(Uri.parse(url), mimeType);</span><br><span class="line">	<span class="keyword">if</span> (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_</span><br><span class="line">ONLY) != <span class="keyword">null</span>) &#123;</span><br><span class="line"> startActivity(intent);</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="comment">// 找不到指定的 Activity</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>而不应该：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">intent.setAction(<span class="string">"com.example.DemoIntent "</span>);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"> startActivity(intent);</span><br><span class="line">&#125; <span class="keyword">catch</span> (ActivityNotFoundException e) &#123;</span><br><span class="line"> e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><p><strong>3.</strong> 避免在<code>Service#onStartCommand/onBind()</code>方法中执行耗时操作，如果确实有需求，应采用<code>IntentService</code> 或采用其他异步机制完成。<br>正例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line"> <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line"> setContentView(R.layout.main);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startIntentService</span><span class="params">(View source)</span> </span>&#123;</span><br><span class="line"> Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, MyIntentService.class);</span><br><span class="line"> startService(intent);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyIntentService</span> <span class="keyword">extends</span> <span class="title">IntentService</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">MyIntentService</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> <span class="keyword">super</span>(<span class="string">"MyIntentService"</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onHandleIntent</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line"> <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line"> <span class="keyword">try</span> &#123;</span><br><span class="line">......</span><br><span class="line"> &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>4.</strong> 避免在 <code>BroadcastReceive#onReceive()</code>中执行耗时操作，如果有耗时工作，应该创建 <code>IntentService</code>完成，而不应该在<code>BroadcastReceiver</code> 内创建子线程去做。    </p>
-</li>
-</ul>
-<p>说明：<br>由于该方法是在主线程执行，如果执行耗时操作会导致 <code>UI</code> 不流畅，可以使用 <code>IntentService</code>,创建 <code>HanlderThread</code> 或者调用 <code>Context#registerReceiver(BroadcastReceiver,IntentFitter,String,Handler)</code> 方法等方式，在其他 <code>Worker</code> 线程执行 <code>onReceive</code>.<code>BroadcastReceiver#onReceive()</code> 方法耗时超过10秒钟，可能会被系统杀死。<br>正例： </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">IntentFilter filter = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">filter.addAction(LOGIN_SUCCESS);</span><br><span class="line"><span class="keyword">this</span>.registerReceiver(mBroadcastReceiver, filter);</span><br><span class="line">mBroadcastReceiver = <span class="keyword">new</span> BroadcastReceiver() &#123;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"> Intent userHomeIntent = <span class="keyword">new</span> Intent();</span><br><span class="line"> userHomeIntent.setClass(<span class="keyword">this</span>, UserHomeService.class);</span><br><span class="line"> <span class="keyword">this</span>.startService(userHomeIntent);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>反例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mBroadcastReceiver = <span class="keyword">new</span> BroadcastReceiver() &#123;</span><br><span class="line"></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"> MyDatabaseHelper myDB = <span class="keyword">new</span> MyDatabaseHelper(context);</span><br><span class="line"> myDB.initData();</span><br><span class="line"> <span class="comment">// have more database operation here</span></span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><strong>5.</strong> 避免使用隐士 <code>Intent</code> 广播敏感信息，信息可能被其他注册了对应 <code>BroadcastReceiver</code> 的App接收。</li>
-</ul>
-<p>说明：<br>通过<code>Context#sendBroadcast()</code>发送的隐士广播会被感兴趣的 <code>receiver</code> 接收，恶意应用注册监听该广播的 <code>receiver</code>可能会获取到 <code>Intent</code> 中传递的敏感信息，并进行其他危险操作。如果发送的广播为使用 <code>Context#sendOrderedBroadcast()</code>方法发送的有序广播，优先级较高的恶意 <code>receiver</code>可能直接丢弃该广播，造成服务不可用，或者向广播结果塞入恶意数据。</p>
-<p>如果广播仅限于应用内，则可以是iyong<code>LocalBroadcastManager#sendBroadcast()</code>实现，避免敏感信息外泄和intent拦截的风险。</p>
-<p>正例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="string">"my-sensitive-event"</span>);</span><br><span class="line">intent.putExtra(<span class="string">"event"</span>, <span class="string">"this is a test event"</span>);</span><br><span class="line">LocalBroadcastManager.getInstance(<span class="keyword">this</span>).sendBroadcast(intent);</span><br></pre></td></tr></table></figure></p>
-<p>反例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">v1.setAction(<span class="string">"com.sample.action.server_running"</span>);</span><br><span class="line">v1.putExtra(<span class="string">"local_ip"</span>, v0.h);</span><br><span class="line">v1.putExtra(<span class="string">"port"</span>, v0.i);</span><br><span class="line">v1.putExtra(<span class="string">"code"</span>, v0.g);</span><br><span class="line">v1.putExtra(<span class="string">"connected"</span>, v0.s);</span><br><span class="line">v1.putExtra(<span class="string">"pwd_predefined"</span>, v0.r);</span><br><span class="line"><span class="keyword">if</span> (!TextUtils.isEmpty(v0.t)) &#123;</span><br><span class="line"> v1.putExtra(<span class="string">"connected_usr"</span>, v0.t);</span><br><span class="line">&#125;</span><br><span class="line">context.sendBroadcast(v1);</span><br></pre></td></tr></table></figure></p>
-<p>以上广播可能被其他应用的如下 <code>receiver</code> 接收导致敏感信息泄露：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"> <span class="keyword">if</span> (intent != <span class="keyword">null</span> &amp;&amp; intent.getAction() != <span class="keyword">null</span>) &#123;</span><br><span class="line"> String s = intent.getAction();</span><br><span class="line"> <span class="keyword">if</span> (s.equals(<span class="string">"com.sample.action.server_running"</span>) &#123;</span><br><span class="line"> String ip = intent.getStringExtra(<span class="string">"local_ip"</span>);</span><br><span class="line"> String pwd = intent.getStringExtra(<span class="string">"code"</span>);</span><br><span class="line"> String port = intent.getIntExtra(<span class="string">"port"</span>, <span class="number">8888</span>);</span><br><span class="line"> <span class="keyword">boolean</span> status = intent.getBooleanExtra(<span class="string">"connected"</span>, <span class="keyword">false</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1856,8 +1842,8 @@ xxxhdpi（超超超高）~640dpi density=4
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -1869,8 +1855,8 @@ xxxhdpi（超超超高）~640dpi density=4
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">20</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">tags</span>
                 </a>
               </div>
             
@@ -1918,7 +1904,7 @@ xxxhdpi（超超超高）~640dpi density=4
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 

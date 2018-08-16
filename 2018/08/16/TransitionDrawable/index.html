@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="dpi," />
+  <meta name="keywords" content="两个Drawable之间淡入淡出," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低）~120dpi density=0.75">
-<meta name="keywords" content="dpi">
+<meta name="description" content="1.首先创建一个xml 在 drawable 目录下  transition_image 12345&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;transition xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&amp;gt;    &amp;lt;item android:drawabl">
+<meta name="keywords" content="两个Drawable之间淡入淡出">
 <meta property="og:type" content="article">
-<meta property="og:title" content="获取手机屏幕的密度">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/04/24/获取手机屏幕的密度/index.html">
+<meta property="og:title" content="TransitionDrawable">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低）~120dpi density=0.75">
+<meta property="og:description" content="1.首先创建一个xml 在 drawable 目录下  transition_image 12345&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;transition xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&amp;gt;    &amp;lt;item android:drawabl">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-24T07:46:08.424Z">
+<meta property="og:updated_time" content="2018-08-16T09:06:46.691Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="获取手机屏幕的密度">
-<meta name="twitter:description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低）~120dpi density=0.75">
+<meta name="twitter:title" content="TransitionDrawable">
+<meta name="twitter:description" content="1.首先创建一个xml 在 drawable 目录下  transition_image 12345&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;transition xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&amp;gt;    &amp;lt;item android:drawabl">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/24/获取手机屏幕的密度/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/"/>
 
 
 
 
 
-  <title>获取手机屏幕的密度 | 糖葫芦</title>
+  <title>TransitionDrawable | 糖葫芦</title>
   
 
 
@@ -277,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/24/获取手机屏幕的密度/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">获取手机屏幕的密度</h1>
+          <h1 class="post-title" itemprop="name headline">TransitionDrawable</h1>
         
 
         <div class="post-meta">
@@ -306,8 +306,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-24T15:45:35+08:00">
-                2018-04-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-16T16:57:07+08:00">
+                2018-08-16
               </time>
             
 
@@ -325,9 +325,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/24/获取手机屏幕的密度/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/16/TransitionDrawable/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/24/获取手机屏幕的密度/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/16/TransitionDrawable/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,20 +355,20 @@
       
 
       
-        <p>目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。</p>
-<h1 id="第一种：根据手机分辨率进行计算-计算得出实际的dpi"><a href="#第一种：根据手机分辨率进行计算-计算得出实际的dpi" class="headerlink" title="第一种：根据手机分辨率进行计算(计算得出实际的dpi)"></a>第一种：根据手机分辨率进行计算(计算得出实际的dpi)</h1><p>比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：<br>(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)<br>dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401</p>
-<p>参照下图：</p>
-<pre><code>ldpi（低）~120dpi density=0.75
-mdpi（中）~160dpi density=1
-hdpi（高）~240dpi density=1.5
-xhdpi（超高）~320dpi density=2
-xxhdpi（超超高）~480dpi density=3
-xxxhdpi（超超超高）~640dpi density=4
-</code></pre><p>对应图片的目录应该是：xxhdpi</p>
-<h1 id="第二种：通过代码方式-系统定义的dpi"><a href="#第二种：通过代码方式-系统定义的dpi" class="headerlink" title="第二种：通过代码方式(系统定义的dpi)"></a>第二种：通过代码方式(系统定义的dpi)</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> xdpi = getResources().getDisplayMetrics().xdpi;</span><br><span class="line"><span class="keyword">float</span> ydpi = getResources().getDisplayMetrics().ydpi;</span><br></pre></td></tr></table></figure>
-<p>不同手机获取的<code>xdpi ydpi</code> 值有的一模一样，有的有些差异，但是相差不会太大，两者获取的值近乎一样。</p>
-<p>两者计算出的结果并不完全相同，因为你们想，实际计算得出的<code>dpi</code> 很容易根据屏幕尺寸的不同，得出不同的<code>dpi</code> ，这样的话得到的值很多，无法适配。我查阅网上相关介绍，就是每个手机初始有一个固定的<code>dpi</code> ，分别是上述的：120，160，240，320，480，640，安卓实际进行缩放的时候按照的是系统定义的这些，而不是实际计算得出的<code>dpi</code>,这一点需要注意。</p>
-
+        <ul>
+<li>1.首先创建一个<code>xml</code> 在 <code>drawable</code> 目录下</li>
+</ul>
+<p><code>transition_image</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;transition xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">"@drawable/first"</span> /&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">"@drawable/two"</span> /&gt;</span><br><span class="line">&lt;/transition&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>2.在xml中引用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:drawable=<span class="string">"@drawable/transition_image"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>3.在<code>Activity</code>中使用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ImageView mImageView = (ImageView) findViewById(R.id.iv); </span><br><span class="line">TransitionDrawable transitionDrawable = (TransitionDrawable) mImageView.getDrawable(); </span><br><span class="line">transitionDrawable.startTransition(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="另外一种写法实现多张图片效果"><a href="#另外一种写法实现多张图片效果" class="headerlink" title="另外一种写法实现多张图片效果"></a>另外一种写法实现多张图片效果</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TransitionDrawable transitionDrawable = <span class="keyword">new</span> TransitionDrawable(<span class="keyword">new</span> Drawable[]&#123;getResources().getDrawable(R.drawable.first),getResources().getDrawable(R.drawable.two)&#125;);</span><br><span class="line">mImageView.setImageDrawable(transitionDrawable);</span><br><span class="line">transitionDrawable.startTransition(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -395,7 +395,7 @@ xxxhdpi（超超超高）~640dpi density=4
       
         <div class="post-tags">
           
-            <a href="/tags/dpi/" rel="tag"># dpi</a>
+            <a href="/tags/两个Drawable之间淡入淡出/" rel="tag"># 两个Drawable之间淡入淡出</a>
           
         </div>
       
@@ -408,8 +408,8 @@ xxxhdpi（超超超高）~640dpi density=4
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/08/EventBus-为什么订阅的方法必须是public？/" rel="next" title="EventBus 为什么订阅的方法必须是public？">
-                <i class="fa fa-chevron-left"></i> EventBus 为什么订阅的方法必须是public？
+              <a href="/2018/07/05/小程序的爬坑之路/" rel="next" title="小程序的爬坑之路">
+                <i class="fa fa-chevron-left"></i> 小程序的爬坑之路
               </a>
             
           </div>
@@ -417,10 +417,6 @@ xxxhdpi（超超超高）~640dpi density=4
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/28/Kotlin-let-with-run-also-apply区分/" rel="prev" title="Kotlin let with run also apply区分">
-                Kotlin let with run also apply区分 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -555,7 +551,7 @@ xxxhdpi（超超超高）~640dpi density=4
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一种：根据手机分辨率进行计算-计算得出实际的dpi"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;-&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi" class="headerlink" title="&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;(&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi)"></a>&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;(&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二种：通过代码方式-系统定义的dpi"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;-&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi" class="headerlink" title="&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;(&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi)"></a>&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;(&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#另外一种写法实现多张图片效果"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x53E6;&#x5916;&#x4E00;&#x79CD;&#x5199;&#x6CD5;&#x5B9E;&#x73B0;&#x591A;&#x5F20;&#x56FE;&#x7247;&#x6548;&#x679C;" class="headerlink" title="&#x53E6;&#x5916;&#x4E00;&#x79CD;&#x5199;&#x6CD5;&#x5B9E;&#x73B0;&#x591A;&#x5F20;&#x56FE;&#x7247;&#x6548;&#x679C;"></a>&#x53E6;&#x5916;&#x4E00;&#x79CD;&#x5199;&#x6CD5;&#x5B9E;&#x73B0;&#x591A;&#x5F20;&#x56FE;&#x7247;&#x6548;&#x679C;</span></a></li></ol></div>
             
 
           </div>
@@ -732,9 +728,9 @@ xxxhdpi（超超超高）~640dpi density=4
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/04/24/获取手机屏幕的密度/';
-          this.page.identifier = '2018/04/24/获取手机屏幕的密度/';
-          this.page.title = '获取手机屏幕的密度';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/';
+          this.page.identifier = '2018/08/16/TransitionDrawable/';
+          this.page.title = 'TransitionDrawable';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
