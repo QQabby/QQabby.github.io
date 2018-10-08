@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Android O," />
+  <meta name="keywords" content="EventBus," />
 
 
 
@@ -79,21 +79,18 @@
 
 
 
-<meta name="description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
-<meta name="keywords" content="Android O">
+<meta name="description" content="上篇  EventBus 源码分析（上篇） 说到注册订阅的前半部分，此篇用来分析发送事件到接收事件这个过程。  1. 发送事件示例：1EventBus.getDefault().post(new RemindBean(&amp;quot;2018-02-12&amp;quot;,&amp;quot;happy&amp;quot;)); post:12345678910111213141516171819202122232425">
+<meta name="keywords" content="EventBus">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android O 新特性 AutoSizing">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/index.html">
+<meta property="og:title" content="EventBus 源码分析（下篇）">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/10/08/EventBus-源码分析（下篇）/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
+<meta property="og:description" content="上篇  EventBus 源码分析（上篇） 说到注册订阅的前半部分，此篇用来分析发送事件到接收事件这个过程。  1. 发送事件示例：1EventBus.getDefault().post(new RemindBean(&amp;quot;2018-02-12&amp;quot;,&amp;quot;happy&amp;quot;)); post:12345678910111213141516171819202122232425">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&h=713&f=gif&s=764107">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe486f97e25be?w=888&h=158&f=png&s=18247">
-<meta property="og:updated_time" content="2018-01-16T09:44:04.318Z">
+<meta property="og:updated_time" content="2018-10-08T03:06:07.190Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android O 新特性 AutoSizing">
-<meta name="twitter:description" content="自动调整TextView的大小的使用autoSizing Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。  在之前看 文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！ 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用">
-<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&h=713&f=gif&s=764107">
+<meta name="twitter:title" content="EventBus 源码分析（下篇）">
+<meta name="twitter:description" content="上篇  EventBus 源码分析（上篇） 说到注册订阅的前半部分，此篇用来分析发送事件到接收事件这个过程。  1. 发送事件示例：1EventBus.getDefault().post(new RemindBean(&amp;quot;2018-02-12&amp;quot;,&amp;quot;happy&amp;quot;)); post:12345678910111213141516171819202122232425">
 
 
 
@@ -123,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/10/08/EventBus-源码分析（下篇）/"/>
 
 
 
 
 
-  <title>Android O 新特性 AutoSizing | 糖葫芦</title>
+  <title>EventBus 源码分析（下篇） | 糖葫芦</title>
   
 
 
@@ -280,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/10/08/EventBus-源码分析（下篇）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -297,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android O 新特性 AutoSizing</h1>
+          <h1 class="post-title" itemprop="name headline">EventBus 源码分析（下篇）</h1>
         
 
         <div class="post-meta">
@@ -309,8 +306,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-16T17:43:30+08:00">
-                2018-01-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-08T11:05:02+08:00">
+                2018-10-08
               </time>
             
 
@@ -328,9 +325,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/16/Android-O-新特性-AutoSizing/#comments" itemprop="discussionUrl">
+                <a href="/2018/10/08/EventBus-源码分析（下篇）/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/16/Android-O-新特性-AutoSizing/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/10/08/EventBus-源码分析（下篇）/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -358,31 +355,17 @@
       
 
       
-        <h1 id="自动调整TextView的大小的使用autoSizing"><a href="#自动调整TextView的大小的使用autoSizing" class="headerlink" title="自动调整TextView的大小的使用autoSizing"></a>自动调整TextView的大小的使用autoSizing</h1><blockquote>
-<p>Android 8.0允许根据TextView的大小自动设置文本展开或收缩的大小,这意味着，在不同屏幕上优化文本大小或者优化包含动态内容的文本大小比以往简单多了。</p>
+        <blockquote>
+<p>上篇  <a href="https://www.jianshu.com/p/bb25f4f56d65" target="_blank" rel="noopener">EventBus 源码分析（上篇）</a> 说到注册订阅的前半部分，此篇用来分析发送事件到接收事件这个过程。</p>
 </blockquote>
-<p>在之前看 <a href="https://juejin.im/post/5a56f70cf265da3e5468fa59" target="_blank" rel="noopener">文字太多？控件太小？试试 TextView 的新特性 Autosizing 吧！</a> 作者写到关于这个属性的所有用法，在这里我就不多说什么了，用法其实挺简单，关键是我在用的时候遇到了一些小问题，导致一直出不来。</p>
-<p><a href="https://developer.android.com/guide/topics/ui/look-and-feel/autosizing-textview.html" target="_blank" rel="noopener">官方文档</a> 点击即可查看，可以看别人讲解的同时也可自行查阅文档，双方对比着看，感觉会好一点。</p>
-<p>如下图可以简单明了的说明该特性：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/16/160fe2fd1fa4e936?w=469&amp;h=713&amp;f=gif&amp;s=764107" alt=""></p>
-<p>具体最简单的使用有两种：</p>
-<h1 id="1-一种就是api-gt-api-26的可以直接在xml里面该属性："><a href="#1-一种就是api-gt-api-26的可以直接在xml里面该属性：" class="headerlink" title="1.一种就是api &gt;= api 26的可以直接在xml里面该属性："></a>1.一种就是api &gt;= api 26的可以直接在xml里面该属性：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;TextView</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;200dp&quot;</span><br><span class="line">    android:autoSizeTextType=&quot;uniform&quot; /&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在此需要注意的是：使用这个<code>autoSizeTextType</code>的时候，控件的<code>layout_width</code> <code>layout_height</code> 不能使用这个<code>wrap_content</code>否则看不出什么效果，要使用具体可衡量的。这个也不难理解，因为它要计算，你设置一个模糊的宽和高，就算不出来了。</p>
-</blockquote>
-<h1 id="2-api-lt-26-的低设备-的兼容写法"><a href="#2-api-lt-26-的低设备-的兼容写法" class="headerlink" title="2. api&lt;26 的低设备 的兼容写法"></a>2. api&lt;26 的低设备 的兼容写法</h1><blockquote>
-<p>官方文档里也明确说明了兼容低版本<code>The library provides support to Android 4.0 (API level 14) and higher.</code> 也就是兼容到4.0以上，写法有些不同，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout</span><br><span class="line">    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;TextView</span><br><span class="line">      android:layout_width=&quot;match_parent&quot;</span><br><span class="line">      android:layout_height=&quot;200dp&quot;</span><br><span class="line">      tools:ignore=&quot;MissingPrefix&quot;</span><br><span class="line">      app:autoSizeTextType=&quot;uniform&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>这个<code>app</code>是这个<code>xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</code> 我们在自定义控件的时候经常遇到它，<code>tools</code>是这个<code>xmlns:tools=&quot;http://schemas.android.com/tools&quot;</code> 当然以上写法都支持动态编码，具体可查阅文档</p>
-<h1 id="敲黑板重点"><a href="#敲黑板重点" class="headerlink" title="敲黑板重点"></a>敲黑板重点</h1><p>你会发现你写完之后编译是报错的，错误类似是这样的：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/1/16/160fe486f97e25be?w=888&amp;h=158&amp;f=png&amp;s=18247" alt=""></p>
-<p>找不到！！！</p>
-<p>在写那篇文章作者的帮助下，发现首先要兼容低版本，<code>module</code> 的 <code>build.gradle</code> 文件添加依赖时候 就是这个<code>com.android.support:appcompat-v7:xx</code> 后面的版本号要26以上，你看看你自己项目里有哪个版本你就写上哪个，还要在<code>project</code> 的 <code>build.gradle</code> 文件里添加：<br><code>maven{
-            url &#39;https://maven.google.com&#39;
-        }</code>添加到对应的位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        //添加如下内容</span><br><span class="line">        maven&#123;</span><br><span class="line">            url &apos;https://maven.google.com&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>至此我发现我的项目终于不报错了，可以运行起来并进行下一步的实践操作了，大家如果在项目中也遇到这样的问题，按我那样改应该没啥问题了，顺便把我写的代码上传到<code>github</code> 上了，又需要的可以下载看看：<br><a href="&quot;https://github.com/QQabby/AutoSizingDemo&quot;">demo</a></p>
-<p>另外在查看 <code>Android O</code>新特性中发现一个比较好玩的东西：现在，<code>findViewById()</code> 函数的全部实例均返回 <t extends="" view=""> T，而不是 View。以后就可以这么写啦：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EditText et =  findViewById(R.id.et);</span><br></pre></td></tr></table></figure></t></p>
-<p>就是那样，无需强转了，当然了使用了<code>Kotlin</code>的话就忽略吧，因为<code>Kotlin</code>连<code>findViewById</code>也不用写，哈哈。更多好玩特性可查看 <a href="https://developer.android.com/about/versions/oreo/android-8.0.html#fvbi-signature" target="_blank" rel="noopener">文档</a>。</p>
+<h1 id="1-发送事件"><a href="#1-发送事件" class="headerlink" title="1. 发送事件"></a>1. 发送事件</h1><p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventBus.getDefault().post(new RemindBean(&quot;2018-02-12&quot;,&quot;happy&quot;));</span><br></pre></td></tr></table></figure></p>
+<p><code>post</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/** Posts the given event to the event bus. */</span><br><span class="line">    public void post(Object event) &#123;</span><br><span class="line">      - 1.获取当前线程的postingThreadState 对象</span><br><span class="line">        PostingThreadState postingState = currentPostingThreadState.get();</span><br><span class="line">      - 2. 获取里面那个事件队列</span><br><span class="line">        List&lt;Object&gt; eventQueue = postingState.eventQueue;</span><br><span class="line">        - 3. 将事件添加到队列中去</span><br><span class="line">        eventQueue.add(event);</span><br><span class="line"></span><br><span class="line">      - 4. 判断当前的event 是否在 posting</span><br><span class="line">        if (!postingState.isPosting) &#123;</span><br><span class="line">            - 5. 是否是主线程</span><br><span class="line">            postingState.isMainThread = Looper.getMainLooper() == Looper.myLooper();</span><br><span class="line">            postingState.isPosting = true;</span><br><span class="line">            - 6. 判断是否取消</span><br><span class="line">            if (postingState.canceled) &#123;</span><br><span class="line">                throw new EventBusException(&quot;Internal error. Abort state was not reset&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            try &#123;</span><br><span class="line">                while (!eventQueue.isEmpty()) &#123;//不为空，进入循环</span><br><span class="line">                    - 7.按照顺序，post一个 remove一个</span><br><span class="line">                    postSingleEvent(eventQueue.remove(0), postingState);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                postingState.isPosting = false;</span><br><span class="line">                postingState.isMainThread = false;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>PostingThreadState</code> 大概看一眼<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">final static class PostingThreadState &#123;</span><br><span class="line">        final List&lt;Object&gt; eventQueue = new ArrayList&lt;Object&gt;();</span><br><span class="line">        boolean isPosting;</span><br><span class="line">        boolean isMainThread;</span><br><span class="line">        Subscription subscription;</span><br><span class="line">        Object event;</span><br><span class="line">        boolean canceled;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>再就是 <code>postSingleEvent(eventQueue.remove(0), postingState);</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">private void postSingleEvent(Object event, PostingThreadState postingState) throws Error &#123;</span><br><span class="line">         - 1. 获取event的字节码（例如就是：RemindBean.class）</span><br><span class="line">        Class&lt;?&gt; eventClass = event.getClass();</span><br><span class="line">        boolean subscriptionFound = false;</span><br><span class="line">      </span><br><span class="line">        if (eventInheritance) &#123;//默认为true</span><br><span class="line">          - 2. 根据eventClass 的字节码查找</span><br><span class="line">            List&lt;Class&lt;?&gt;&gt; eventTypes = lookupAllEventTypes(eventClass);</span><br><span class="line">            int countTypes = eventTypes.size();</span><br><span class="line">            - 3.循环遍历</span><br><span class="line">            for (int h = 0; h &lt; countTypes; h++) &#123;</span><br><span class="line">                Class&lt;?&gt; clazz = eventTypes.get(h);</span><br><span class="line">                - 4.根据事件，字节码查找订阅者</span><br><span class="line">                subscriptionFound |= postSingleEventForEventType(event, postingState, clazz);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            subscriptionFound = postSingleEventForEventType(event, postingState, eventClass);</span><br><span class="line">        &#125;</span><br><span class="line">        if (!subscriptionFound) &#123;</span><br><span class="line">            if (logNoSubscriberMessages) &#123;</span><br><span class="line">                Log.d(TAG, &quot;No subscribers registered for event &quot; + eventClass);</span><br><span class="line">            &#125;</span><br><span class="line">            if (sendNoSubscriberEvent &amp;&amp; eventClass != NoSubscriberEvent.class &amp;&amp;</span><br><span class="line">                    eventClass != SubscriberExceptionEvent.class) &#123;</span><br><span class="line">                post(new NoSubscriberEvent(this, event));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>postSingleEventForEventType</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">private boolean postSingleEventForEventType(Object event, PostingThreadState postingState, Class&lt;?&gt; eventClass) &#123;</span><br><span class="line">        CopyOnWriteArrayList&lt;Subscription&gt; subscriptions;</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">          - 1.根据字节码取出subscriptions,还记得我们之前在subscribe这个方法的时候，</span><br><span class="line">把subscrber,subscriberMethod 封装成一个subscription 对象。</span><br><span class="line"></span><br><span class="line">            subscriptions = subscriptionsByEventType.get(eventClass);</span><br><span class="line">        &#125;</span><br><span class="line">        if (subscriptions != null &amp;&amp; !subscriptions.isEmpty()) &#123;</span><br><span class="line">            for (Subscription subscription : subscriptions) &#123;</span><br><span class="line">                - 2. 取出每一个subscription 对象</span><br><span class="line">                postingState.event = event;</span><br><span class="line">                postingState.subscription = subscription;</span><br><span class="line">                boolean aborted = false;</span><br><span class="line">                try &#123;</span><br><span class="line">                  - 3. post到相应的线程中回调</span><br><span class="line">                    postToSubscription(subscription, event, postingState.isMainThread);</span><br><span class="line">                    aborted = postingState.canceled;</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    postingState.event = null;</span><br><span class="line">                    postingState.subscription = null;</span><br><span class="line">                    postingState.canceled = false;</span><br><span class="line">                &#125;</span><br><span class="line">                if (aborted) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>postToSubscription</code>: 根据定义的不同线程，调用相应的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) &#123;</span><br><span class="line">        switch (subscription.subscriberMethod.threadMode) &#123;</span><br><span class="line">            case POSTING://一般没定义的，这个就是post在哪个线程，响应就在哪个线程执行</span><br><span class="line">                invokeSubscriber(subscription, event);</span><br><span class="line">                break;</span><br><span class="line">            case MAIN:</span><br><span class="line">                if (isMainThread) &#123;</span><br><span class="line">                    invokeSubscriber(subscription, event);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    mainThreadPoster.enqueue(subscription, event);</span><br><span class="line">                &#125;</span><br><span class="line">                break;</span><br><span class="line">            case BACKGROUND:</span><br><span class="line">                if (isMainThread) &#123;</span><br><span class="line">                    backgroundPoster.enqueue(subscription, event);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    invokeSubscriber(subscription, event);</span><br><span class="line">                &#125;</span><br><span class="line">                break;</span><br><span class="line">            case ASYNC:</span><br><span class="line">                asyncPoster.enqueue(subscription, event);</span><br><span class="line">                break;</span><br><span class="line">            default:</span><br><span class="line">                throw new IllegalStateException(&quot;Unknown thread mode: &quot; + subscription.subscriberMethod.threadMode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>invokeSubscriber</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void invokeSubscriber(Subscription subscription, Object event) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">          - 反射拿到字节码clazz 反射调用方法，就收到消息了</span><br><span class="line">            subscription.subscriberMethod.method.invoke(subscription.subscriber, event);</span><br><span class="line">        &#125; catch (InvocationTargetException e) &#123;</span><br><span class="line">            handleSubscriberException(subscription, event, e.getCause());</span><br><span class="line">        &#125; catch (IllegalAccessException e) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;Unexpected exception&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>end.</p>
 
       
     </div>
@@ -410,7 +393,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android-O/" rel="tag"># Android O</a>
+            <a href="/tags/EventBus/" rel="tag"># EventBus</a>
           
         </div>
       
@@ -423,8 +406,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/11/修改自动生成get-set方法模板代码/" rel="next" title="修改自动生成get/set方法模板代码">
-                <i class="fa fa-chevron-left"></i> 修改自动生成get/set方法模板代码
+              <a href="/2018/10/08/Eventbus-源码分析（上篇）/" rel="next" title="Eventbus 源码分析（上篇）">
+                <i class="fa fa-chevron-left"></i> Eventbus 源码分析（上篇）
               </a>
             
           </div>
@@ -432,10 +415,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" rel="prev" title="如何给TextView上的drawable上的图片添加动画？">
-                如何给TextView上的drawable上的图片添加动画？ <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -570,7 +549,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#自动调整TextView的大小的使用autoSizing"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing" class="headerlink" title="&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing"></a>&#x81EA;&#x52A8;&#x8C03;&#x6574;TextView&#x7684;&#x5927;&#x5C0F;&#x7684;&#x4F7F;&#x7528;autoSizing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-一种就是api-gt-api-26的可以直接在xml里面该属性："><span class="nav-number">2.</span> <span class="nav-text"><a href="#1-&#x4E00;&#x79CD;&#x5C31;&#x662F;api-gt-api-26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;" class="headerlink" title="1.&#x4E00;&#x79CD;&#x5C31;&#x662F;api &gt;= api 26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;"></a>1.&#x4E00;&#x79CD;&#x5C31;&#x662F;api &gt;= api 26&#x7684;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;xml&#x91CC;&#x9762;&#x8BE5;&#x5C5E;&#x6027;&#xFF1A;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-api-lt-26-的低设备-的兼容写法"><span class="nav-number">3.</span> <span class="nav-text"><a href="#2-api-lt-26-&#x7684;&#x4F4E;&#x8BBE;&#x5907;-&#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;" class="headerlink" title="2. api&lt;26 &#x7684;&#x4F4E;&#x8BBE;&#x5907; &#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;"></a>2. api&lt;26 &#x7684;&#x4F4E;&#x8BBE;&#x5907; &#x7684;&#x517C;&#x5BB9;&#x5199;&#x6CD5;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#敲黑板重点"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;" class="headerlink" title="&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;"></a>&#x6572;&#x9ED1;&#x677F;&#x91CD;&#x70B9;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-发送事件"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-&#x53D1;&#x9001;&#x4E8B;&#x4EF6;" class="headerlink" title="1. &#x53D1;&#x9001;&#x4E8B;&#x4EF6;"></a>1. &#x53D1;&#x9001;&#x4E8B;&#x4EF6;</span></a></li></ol></div>
             
 
           </div>
@@ -747,9 +726,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/';
-          this.page.identifier = '2018/01/16/Android-O-新特性-AutoSizing/';
-          this.page.title = 'Android O 新特性 AutoSizing';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/10/08/EventBus-源码分析（下篇）/';
+          this.page.identifier = '2018/10/08/EventBus-源码分析（下篇）/';
+          this.page.title = 'EventBus 源码分析（下篇）';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
