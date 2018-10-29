@@ -79,16 +79,20 @@
 
 
 
+<meta name="description" content="1.apply它与其它特殊之处在于，它返回本省对象： 1public inline fun &amp;lt;T&amp;gt; T.apply(block: T.() -&amp;gt; Unit): T &amp;#123;&amp;#125; 例如： 123456ArrayList&amp;lt;String&amp;gt;().apply &amp;#123;            add(&quot;qq&quot;)            add(&quot;mi&quot;)">
 <meta name="keywords" content="let">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kotlin let with run also apply区分">
 <meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/04/28/Kotlin-let-with-run-also-apply区分/index.html">
 <meta property="og:site_name" content="糖葫芦">
+<meta property="og:description" content="1.apply它与其它特殊之处在于，它返回本省对象： 1public inline fun &amp;lt;T&amp;gt; T.apply(block: T.() -&amp;gt; Unit): T &amp;#123;&amp;#125; 例如： 123456ArrayList&amp;lt;String&amp;gt;().apply &amp;#123;            add(&quot;qq&quot;)            add(&quot;mi&quot;)">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-04-28T07:25:39.944Z">
+<meta property="og:image" content="c:/Users/xuqianqian/AppData/Roaming/Typora/typora-user-images/1540798437731.png">
+<meta property="og:updated_time" content="2018-10-29T07:58:50.193Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin let with run also apply区分">
+<meta name="twitter:description" content="1.apply它与其它特殊之处在于，它返回本省对象： 1public inline fun &amp;lt;T&amp;gt; T.apply(block: T.() -&amp;gt; Unit): T &amp;#123;&amp;#125; 例如： 123456ArrayList&amp;lt;String&amp;gt;().apply &amp;#123;            add(&quot;qq&quot;)            add(&quot;mi&quot;)">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -355,6 +359,36 @@
 
       
         <p><img src="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h1 id="1-apply"><a href="#1-apply" class="headerlink" title="1.apply"></a>1.apply</h1><p>它与其它特殊之处在于，它返回本省对象：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> T.<span class="title">apply</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; <span class="built_in">Unit</span>): T &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt;().apply &#123;</span><br><span class="line">            add(<span class="string">"qq"</span>)</span><br><span class="line">            add(<span class="string">"mi"</span>)</span><br><span class="line">        &#125;.let &#123;<span class="comment">//this-&gt;ArrayList本身</span></span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"list==="</span>+it)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list===[qq, mi]</span><br></pre></td></tr></table></figure>
+<p>这里<code>T</code> 就是 <code>ArrayList&lt;String&gt;()</code> 返回对象本身，也就是<code>ArrayList</code></p>
+<ul>
+<li><p>内部是 <code>this</code> 还是 <code>it</code> 这个倒没什么，编辑器一般都会有提示，如图：</p>
+<p><img src="C:\Users\xuqianqian\AppData\Roaming\Typora\typora-user-images\1540798437731.png" alt="1540798437731"></p>
+</li>
+</ul>
+<p><code>apply</code> 是 <code>this</code> , <code>also</code> 是 <code>it</code> </p>
+<h1 id="2-run"><a href="#2-run" class="headerlink" title="2.  run"></a>2.  run</h1><ul>
+<li><p><code>run</code>:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">run</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>返回最后一行，传入<code>block</code> 返回 最后一行，例如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt;().run &#123;</span><br><span class="line">            add(<span class="string">"lala"</span>)</span><br><span class="line">            add(<span class="string">"kaka"</span>)</span><br><span class="line">            <span class="keyword">this</span>.<span class="keyword">get</span>(<span class="number">1</span>)</span><br><span class="line">        &#125;.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"返回：："</span>+it)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>打印：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">返回：：kaka</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="3-let"><a href="#3-let" class="headerlink" title="3. let"></a>3. let</h1><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">let</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>也是返回最后一行，但是它内部不能调用对象的方法：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">letGo</span><span class="params">()</span></span>: <span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="string">"qianqian"</span>.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,it)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>调用<code>letGO</code> 返回 <code>1</code> </p>
+<h1 id="4-with"><a href="#4-with" class="headerlink" title="4. with"></a>4. with</h1><p>类似于：<code>apply</code> + <code>let</code> 的结合</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> <span class="title">with</span><span class="params">(receiver: <span class="type">T</span>, block: <span class="type">T</span>.()</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">with(ArrayList&lt;String&gt;())&#123;</span><br><span class="line">            add(<span class="string">"haha"</span>)</span><br><span class="line">            add(<span class="string">"heihei"</span>)</span><br><span class="line">            <span class="keyword">this</span><span class="comment">//最后返回ArrayList对象</span></span><br><span class="line">        &#125;.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"list==="</span>+it)<span class="comment">//打印：[haha,heihei]</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -469,8 +503,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -523,6 +566,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-apply"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-apply" class="headerlink" title="1.apply"></a>1.apply</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-run"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-run" class="headerlink" title="2.  run"></a>2.  run</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-let"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3-let" class="headerlink" title="3. let"></a>3. let</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-with"><span class="nav-number">4.</span> <span class="nav-text"><a href="#4-with" class="headerlink" title="4. with"></a>4. with</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
