@@ -356,7 +356,7 @@
         
           
             <blockquote>
-<p>title: 小试牛刀-leakcannary<br>date: 2018-11-07 16:39:40<br>tags: leakcannary</p>
+<p>title: LeakCannary 原理分析<br>date: 2018-11-07 16:45:30<br>tags: leakcannary</p>
 </blockquote>
 <p>上篇写到  <a href="https://github.com/square/leakcanary">leakcanary</a> 的使用,这篇主要是了解<code>LeakCannary</code> 大概是如何工作的。</p>
 <h1 id="1-首先它是如何监听Activity-销毁的？"><a href="#1-首先它是如何监听Activity-销毁的？" class="headerlink" title="1.首先它是如何监听Activity 销毁的？"></a>1.首先它是如何监听<code>Activity</code> 销毁的？</h1><p>因为我们知道只有当<code>activity</code> 销毁（<code>onDestroy()</code>）的时候，我们才能对这个<code>activity</code> 进行分析查看哪些对象可能存在内存泄漏。</p>
