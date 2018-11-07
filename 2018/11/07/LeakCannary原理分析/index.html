@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="leakcannary," />
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="糖葫芦">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/archives/2018/page/2/index.html">
+<meta name="description" content="上篇写到  leakcanary 的使用,这篇主要是了解LeakCannary 大概是如何工作的。  1.首先它是如何监听Activity 销毁的？因为我们知道只有当activity 销毁（onDestroy()）的时候，我们才能对这个activity 进行分析查看哪些对象可能存在内存泄漏。 发现了如下代码：12345public static RefWatcher install(Applic">
+<meta name="keywords" content="leakcannary">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeakCannary原理分析">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/11/07/LeakCannary原理分析/index.html">
 <meta property="og:site_name" content="糖葫芦">
+<meta property="og:description" content="上篇写到  leakcanary 的使用,这篇主要是了解LeakCannary 大概是如何工作的。  1.首先它是如何监听Activity 销毁的？因为我们知道只有当activity 销毁（onDestroy()）的时候，我们才能对这个activity 进行分析查看哪些对象可能存在内存泄漏。 发现了如下代码：12345public static RefWatcher install(Applic">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-07T08:51:30.401Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="糖葫芦">
+<meta name="twitter:title" content="LeakCannary原理分析">
+<meta name="twitter:description" content="上篇写到  leakcanary 的使用,这篇主要是了解LeakCannary 大概是如何工作的。  1.首先它是如何监听Activity 销毁的？因为我们知道只有当activity 销毁（onDestroy()）的时候，我们才能对这个activity 进行分析查看哪些对象可能存在内存泄漏。 发现了如下代码：12345public static RefWatcher install(Applic">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/archives/2018/page/2/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/07/LeakCannary原理分析/"/>
 
 
 
 
 
-  <title>Archiv | 糖葫芦</title>
+  <title>LeakCannary原理分析 | 糖葫芦</title>
   
 
 
@@ -140,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -258,411 +263,178 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/07/LeakCannary原理分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">LeakCannary原理分析</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T16:48:40+08:00">
+                2018-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Öhm..! Insgesamt 29 Artikel. Bleib dran.
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/07/LeakCannary原理分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/07/LeakCannary原理分析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/24/获取手机屏幕的密度/" itemprop="url">
-              
-                <span itemprop="name">获取手机屏幕的密度</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-24T15:45:35+08:00"
-              content="2018-04-24" >
-          04-24
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/08/EventBus-为什么订阅的方法必须是public？/" itemprop="url">
-              
-                <span itemprop="name">EventBus 为什么订阅的方法必须是public？</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-08T16:30:37+08:00"
-              content="2018-04-08" >
-          04-08
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/23/Activity状态保存与恢复/" itemprop="url">
-              
-                <span itemprop="name">Activity状态保存与恢复</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-23T17:03:05+08:00"
-              content="2018-03-23" >
-          03-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <blockquote>
+<p>上篇写到  <a href="https://github.com/square/leakcanary">leakcanary</a> 的使用,这篇主要是了解<code>LeakCannary</code> 大概是如何工作的。</p>
+</blockquote>
+<h1 id="1-首先它是如何监听Activity-销毁的？"><a href="#1-首先它是如何监听Activity-销毁的？" class="headerlink" title="1.首先它是如何监听Activity 销毁的？"></a>1.首先它是如何监听<code>Activity</code> 销毁的？</h1><p>因为我们知道只有当<code>activity</code> 销毁（<code>onDestroy()</code>）的时候，我们才能对这个<code>activity</code> 进行分析查看哪些对象可能存在内存泄漏。</p>
+<p>发现了如下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RefWatcher <span class="title">install</span><span class="params">(Application application)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> refWatcher(application).listenerServiceClass(DisplayLeakService.class)</span><br><span class="line">        .excludedRefs(AndroidExcludedRefs.createAppDefaults().build())</span><br><span class="line">        .buildAndInstall();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>buildAndInstall()</code> 中：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RefWatcher <span class="title">buildAndInstall</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      ....</span><br><span class="line">   <span class="keyword">if</span> (refWatcher != DISABLED) &#123;</span><br><span class="line">     <span class="keyword">if</span> (watchActivities) &#123;</span><br><span class="line">     <span class="comment">//这是观察activity的</span></span><br><span class="line">       ActivityRefWatcher.install(context, refWatcher);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> (watchFragments) &#123;</span><br><span class="line">       FragmentRefWatcher.Helper.install(context, refWatcher);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   LeakCanaryInternals.installedRefWatcher = refWatcher;</span><br><span class="line">   <span class="keyword">return</span> refWatcher;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityRefWatcher</span> </span>&#123;</span><br><span class="line">   ....</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">install</span><span class="params">(Context context, RefWatcher refWatcher)</span> </span>&#123;</span><br><span class="line">    Application application = (Application) context.getApplicationContext();</span><br><span class="line">    ActivityRefWatcher activityRefWatcher = <span class="keyword">new</span> ActivityRefWatcher(application, refWatcher);</span><br><span class="line">    <span class="comment">//拿到application，注册activity的生命周期回调</span></span><br><span class="line">    application.registerActivityLifecycleCallbacks(activityRefWatcher.lifecycleCallbacks);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>其中这个：<code>lifecycleCallbacks</code> 就是回调监听<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Application.ActivityLifecycleCallbacks lifecycleCallbacks =</span><br><span class="line">      <span class="keyword">new</span> ActivityLifecycleCallbacksAdapter() &#123;<span class="comment">//监听activity销毁</span></span><br><span class="line">        <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityDestroyed</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">          refWatcher.watch(activity);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>那么我们也可以通过<code>application</code> 注册获取<code>activity</code> 的生命周期监听回调，如下是我写的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LifeCircleActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.life_layout);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Application application = (Application) getApplicationContext();</span><br><span class="line">        application.registerActivityLifecycleCallbacks(<span class="keyword">new</span> Application.ActivityLifecycleCallbacks() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityCreated</span><span class="params">(Activity activity, Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityCreated..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityStarted</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityStarted..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityResumed</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityResumed..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityPaused</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityPaused..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityStopped</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityStopped..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivitySaveInstanceState</span><span class="params">(Activity activity, Bundle outState)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivitySaveInstanceState..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityDestroyed</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                application.unregisterActivityLifecycleCallbacks(<span class="keyword">this</span>);</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onDestroy..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样我们就可以监听我们当前这个类的生命周期了，可以运行打印日志就知道了。</p>
+<h1 id="2-内存泄漏的对象的引用路径"><a href="#2-内存泄漏的对象的引用路径" class="headerlink" title="2.内存泄漏的对象的引用路径"></a>2.内存泄漏的对象的引用路径</h1><p>这块使用到了 <code>square</code> 的另一个开源库 <a href="https://github.com/square/haha">haha</a> ,获取当前内存中的<code>heap</code>堆信息的<code>snapshot</code></p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）/" itemprop="url">
-              
-                <span itemprop="name">四大组件是什么与它们的生命周期（及Fragment）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-22T10:30:22+08:00"
-              content="2018-03-22" >
-          03-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/22/Android知识点总结/" itemprop="url">
-              
-                <span itemprop="name">Android知识点总结</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-22T10:20:32+08:00"
-              content="2018-03-22" >
-          03-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/14/Kotlin-传递数据/" itemprop="url">
-              
-                <span itemprop="name">Kotlin 传递数据</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-14T14:05:50+08:00"
-              content="2018-03-14" >
-          03-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/13/阿里巴巴Android开发手册/" itemprop="url">
-              
-                <span itemprop="name">阿里巴巴Android开发手册</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-13T15:28:46+08:00"
-              content="2018-03-13" >
-          03-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/03/08/监听键盘显示与隐藏/" itemprop="url">
-              
-                <span itemprop="name">监听键盘显示与隐藏</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-08T14:58:19+08:00"
-              content="2018-03-08" >
-          03-08
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/28/Fragment-懒加载/" itemprop="url">
-              
-                <span itemprop="name">Fragment 懒加载</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-02-28T17:47:41+08:00"
-              content="2018-02-28" >
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/28/Dialog/" itemprop="url">
-              
-                <span itemprop="name">Dialog</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-02-28T14:47:16+08:00"
-              content="2018-02-28" >
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/leakcannary/" rel="tag"># leakcannary</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/07/小试牛刀-leakcannary/" rel="next" title="小试牛刀-leakcannary">
+                <i class="fa fa-chevron-left"></i> 小试牛刀-leakcannary
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2018/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2018/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2018/page/3/">3</a><a class="extend next" rel="next" href="/archives/2018/page/3/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -670,6 +442,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -690,8 +476,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -744,6 +539,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-首先它是如何监听Activity-销毁的？"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-&#x9996;&#x5148;&#x5B83;&#x662F;&#x5982;&#x4F55;&#x76D1;&#x542C;Activity-&#x9500;&#x6BC1;&#x7684;&#xFF1F;" class="headerlink" title="1.&#x9996;&#x5148;&#x5B83;&#x662F;&#x5982;&#x4F55;&#x76D1;&#x542C;Activity &#x9500;&#x6BC1;&#x7684;&#xFF1F;"></a>1.&#x9996;&#x5148;&#x5B83;&#x662F;&#x5982;&#x4F55;&#x76D1;&#x542C;<code>Activity</code> &#x9500;&#x6BC1;&#x7684;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-内存泄漏的对象的引用路径"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-&#x5185;&#x5B58;&#x6CC4;&#x6F0F;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x8DEF;&#x5F84;" class="headerlink" title="2.&#x5185;&#x5B58;&#x6CC4;&#x6F0F;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x8DEF;&#x5F84;"></a>2.&#x5185;&#x5B58;&#x6CC4;&#x6F0F;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x8DEF;&#x5F84;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -891,6 +702,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -908,6 +723,18 @@
       <script id="dsq-count-scr" src="https://disqus.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/11/07/LeakCannary原理分析/';
+          this.page.identifier = '2018/11/07/LeakCannary原理分析/';
+          this.page.title = 'LeakCannary原理分析';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://disqus.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
