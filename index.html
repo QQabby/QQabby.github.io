@@ -273,6 +273,410 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/13/随笔记录Android/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/13/随笔记录Android/" itemprop="url">随笔记录Android</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-13T15:21:08+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/13/随笔记录Android/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/13/随笔记录Android/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-Android中数据存储的方式"><a href="#1-Android中数据存储的方式" class="headerlink" title="1. Android中数据存储的方式"></a>1. Android中数据存储的方式</h1><ul>
+<li><code>FIle</code></li>
+<li><code>SharedPreference</code></li>
+<li><code>Sqlite</code></li>
+<li>网络</li>
+<li><code>ContentProvider</code></li>
+<li><code>FileProvider</code> : 继承于 <code>ContentProvider</code> 的子类，可以用于解决Android7.0中禁止我们的应用对外部公开file://的问题。</li>
+</ul>
+<h1 id="2-SharedPreference-是进程同步的吗"><a href="#2-SharedPreference-是进程同步的吗" class="headerlink" title="2. SharedPreference 是进程同步的吗"></a>2. SharedPreference 是进程同步的吗</h1><blockquote>
+<p>sharedPreference 默认不是线程同步的，可以设置模式为：<code>MODE_MULTI_PROCESS</code> 做到进程同步，系统默认也是有缓存的，有很多问题，在Android N（7.0）以上废弃不能使用了，会抛出异常。推荐使用 <code>ContentProvider</code> </p>
+<p><code>sharedPreference</code> 四种模式：</p>
+<ul>
+<li>MODE_PRIVATE</li>
+<li>MODE_MULTI_PROCESS</li>
+<li>MODE_WORLD_READABLE</li>
+<li>MODE_WORLD_WRITEABLE</li>
+</ul>
+</blockquote>
+<h1 id="3-Shareferences-commit-和-apply-的区别"><a href="#3-Shareferences-commit-和-apply-的区别" class="headerlink" title="3.Shareferences commit 和 apply 的区别"></a>3.Shareferences commit 和 apply 的区别</h1><blockquote>
+<p>在很早的sdk当中，一般都使用 <code>commit</code> 方法，同步，直接写入磁盘，并且有返回结果 <code>boolean</code> 类型，而 <code>apply</code> 是异步, 先写入内存，然后异步写入磁盘。 如果操作频繁的话，<code>apply</code> 的性能优于 <code>commit</code>.</p>
+</blockquote>
+<p>在阿里巴巴开发手册中也记录到：</p>
+<blockquote>
+<p>SharedPreference 提 交 数 据 时 ， 尽 量 使 用 Editor#apply()<br>，而非Editor#commit()。一般来讲，仅当需要确定提交结果，并据此有后续操作时，才使用 Editor#commit()。</p>
+</blockquote>
+<h1 id="4-View-的-measureSpec-由谁决定的"><a href="#4-View-的-measureSpec-由谁决定的" class="headerlink" title="4. View 的 measureSpec 由谁决定的"></a>4. View 的 measureSpec 由谁决定的</h1><blockquote>
+<ul>
+<li>View的<code>MeasureSpec</code> 由这个父控件的<code>MeasureSpec</code> 和自身的 <code>LayoutParams</code> 决定</li>
+<li>顶级 <code>DecorView</code> 由窗口尺寸和自身的 <code>LayoutParams</code> 共同确定</li>
+</ul>
+</blockquote>
+<h1 id="5-ACTION-CANCEL-事件"><a href="#5-ACTION-CANCEL-事件" class="headerlink" title="5.ACTION_CANCEL 事件"></a>5.ACTION_CANCEL 事件</h1><blockquote>
+<p>一般来说，如果一个子视图接受了父视图分发给它的 <code>ACTION_DOWN</code> 事件，那么与<code>ACTION_DOWN</code> 事件相关的事件都要分发给这个子视图，但是如果父视图希望拦截其中的一些事件，不再继续转发事件给这个子视图的话，那么就需要给子视图一个<code>ACTION_CANCEL</code> 事件。</p>
+</blockquote>
+<h1 id="6-View的invalidate-postInvalidate-requestLayout区别"><a href="#6-View的invalidate-postInvalidate-requestLayout区别" class="headerlink" title="6. View的invalidate postInvalidate requestLayout区别"></a>6. View的invalidate postInvalidate requestLayout区别</h1><ul>
+<li><code>invalidate</code> 会调用 <code>onDraw</code> 进行重绘，只能在主线程</li>
+<li><code>postIncalidate</code> 可以在其它线程，如子线程</li>
+<li><code>requestLayout</code> 会调用 <code>onLayout</code> 和 <code>onMeasure</code> ,不一定会调用 <code>onDraw</code> </li>
+</ul>
+<h1 id="7-View-的生命周期"><a href="#7-View-的生命周期" class="headerlink" title="7. View 的生命周期"></a>7. View 的生命周期</h1><ul>
+<li><ol>
+<li><p><code>Creation</code> 创建（从xml中加载或者<code>layout</code> 文件中定义加载）</p>
+<ol>
+<li><code>onFinishInflate()</code> 从xml中加载完成</li>
+</ol>
+</li>
+<li><p><code>Layout</code>  布局</p>
+<ol>
+<li><code>onMeasure()</code></li>
+<li><code>onLayout()</code></li>
+</ol>
+</li>
+<li><p><code>Drawing</code> 绘制</p>
+<ol>
+<li><code>onDraw()</code></li>
+</ol>
+</li>
+<li><p><code>Event processing</code>  事件处理</p>
+</li>
+<li><p><code>Focus</code> 聚焦</p>
+<ol>
+<li><code>onFocusChanged()</code></li>
+<li><code>onWindowFocusChanged()</code></li>
+</ol>
+</li>
+<li><p><code>Attaching</code> 附上</p>
+<ol>
+<li><code>onAttachingToWindow()</code></li>
+<li><code>onDetachedFromWindow()</code></li>
+<li><code>onVisibiltyChanged()</code></li>
+<li><code>onWindowVisibiltyChanged()</code></li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/13/java基础二/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/13/java基础二/" itemprop="url">java基础二</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-13T09:47:55+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/13/java基础二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/13/java基础二/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-HashMap"><a href="#1-HashMap" class="headerlink" title="1. HashMap"></a>1. HashMap</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Cloneable</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>未完待续….仍需要查阅大量资料学习….</p>
+<h1 id="2-Java-内存分配"><a href="#2-Java-内存分配" class="headerlink" title="2.Java 内存分配"></a>2.Java 内存分配</h1><ul>
+<li>栈区：方法区内的局部变量，对象的引用等 优点：速度快，缺点：大小和生命周期必须是确定的。</li>
+<li>堆区：new出来的对象，垃圾回收器回收的是堆区的内存</li>
+<li>方法区（静态区）：静态变量，常量，保存类信息</li>
+</ul>
+<h1 id="3-垃圾"><a href="#3-垃圾" class="headerlink" title="3.垃圾"></a>3.垃圾</h1><blockquote>
+<p>什么是垃圾？要通过科学的方法才能判断是否是为垃圾，有两种方法</p>
+<ul>
+<li>引用计数法：可能会导致内部循环</li>
+<li>可达性分析：是否可达</li>
+</ul>
+</blockquote>
+<p>借助一个图快速理解  <strong>引用计数法</strong>：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-856824d0d0e05a67.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**循环问题*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Demo instance;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Demo a=<span class="keyword">new</span> Demo();</span><br><span class="line">        Demo b=<span class="keyword">new</span> Demo();</span><br><span class="line">        a.instance=b;</span><br><span class="line">        b.instance=a;</span><br><span class="line">        a=<span class="keyword">null</span>;</span><br><span class="line">        b=<span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再看下这个 <strong>可达性分析</strong> ：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-5edf039e8f4eb629.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>ObjD</code> 和 <code>ObjE</code> 虽然内部存在引用，但是定点不可达，所以也是垃圾回收的对象。</p>
+<h1 id="4-垃圾回收的方法"><a href="#4-垃圾回收的方法" class="headerlink" title="4.垃圾回收的方法"></a>4.垃圾回收的方法</h1><ul>
+<li><p>标记-清除：减少停顿时间，但会造成内存碎片</p>
+</li>
+<li><p>标记-整理：可以解决内存碎片，但是会增加停顿时间</p>
+</li>
+<li><p>复制清除：从一个地方拷贝到另一个地方，适合有大量回收的场景，比如：新生代回收</p>
+<ul>
+<li>优点：效率高于标记清除，活着的对象是整齐排列的，没有内存碎片</li>
+<li>缺点： 浪费空间，毕竟如果按照1：1比例划分空间的话，那么将会有50%的空间被浪费。不过在jvm中，新生代空间并不是按照1：1来划分的，而是按照8：1：1的比例分为一个<code>eden</code> 区 和两个<code>survivor(survivor0,survivor1)</code> 区，然后一个<code>eden</code> 区，两个<code>survivor</code> 区。大部分对象在<code>Eden</code> 区中生成。回收时先将<code>eden</code> 区存活对象复制到一个<code>survicor0</code> 区，然后清空<code>eden</code> 区，当这个<code>survivor0</code>区也存放满了时，则将<code>eden</code>区和<code>survivor0</code>区存活对象复制到另一个<code>survivor1</code> 区，然后清空<code>eden</code> 区和<code>survivor0</code> 区，此时<code>survivor0</code>区是空的，然后将<code>survivor0</code>区和<code>survivor1</code>区交换，即保持<code>survivor1</code>区为空，这样的过程也叫做<code>Minor GC</code>,每进行<code>Minor GC</code> 一次，存活着的对象的年龄就会+1，当存活着的对象的年龄到达15岁时，就会被送进年老代。 当然，当整个<code>survivor1</code>区不足以存放<code>Eden</code>和<code>survivor0</code>的存活对象时，也会将存活对象直接放到年老代。若是年老代也满了就会触发一次<code>Full GC</code>，也就是新生代，老年代都进行回收。</li>
+</ul>
+</li>
+<li><p>分代收集：把内存区域分成不同代，根据年代不同采取不同的策略；</p>
+<ul>
+<li>新生代：存放新创建的对象，采用复制回收方法</li>
+<li>年老代：这些对象垃圾回收的频率较低，采取标记整理法</li>
+<li>永久代：存放Java本身的一些数据，当类不再使用时，也会被回收</li>
+</ul>
+<p>手稿：</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-ecdfdaa2192d6319.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/400" alt="image.png"></p>
+<h1 id="5-Full-GC-触发的条件"><a href="#5-Full-GC-触发的条件" class="headerlink" title="5. Full GC 触发的条件"></a>5. Full GC 触发的条件</h1><ul>
+<li>调用 <code>System.gc</code> 时，系统建议执行<code>Full GC</code> 但是不必然执行</li>
+<li>年老代或者永久代空间不足</li>
+</ul>
+<h1 id="6-线程调度"><a href="#6-线程调度" class="headerlink" title="6. 线程调度"></a>6. 线程调度</h1><ul>
+<li><code>wait()</code> :  object 方法，必须在同步代码块中使用，使当前线程处于等待状态，释放锁</li>
+<li><code>notify()</code> ： 和 <code>wait</code> 联合使用，通知一个线程，具体通知哪个由jvm 决定，使用不当可能发生死锁</li>
+<li><code>notifyAll()</code> ： 和<code>wait</code>  方法联合使用，通知所有线程，具体哪个线程获得运行权 <code>jvm</code> 决定</li>
+<li><code>sleep()</code> ： 睡眠状态</li>
+</ul>
+<h1 id="7-线程同步"><a href="#7-线程同步" class="headerlink" title="7.线程同步"></a>7.线程同步</h1><ul>
+<li><code>Synchronzied</code> 修饰</li>
+<li><code>ThreadLocal</code> : 每个线程都有一个局部变量的副本，互不干扰。一种以空间换时间的方式。</li>
+<li>线程安全的容器和方法，可以实现线程同步，如： <code>Collections.SynchronizedList()</code> 将 <code>List</code> 转为线程同步；用<code>ConurrentHashMap</code> 实现<code>hashmap</code> 线程同步。</li>
+</ul>
+<blockquote>
+<p><code>volatile</code> 修饰的变量不会缓存在寄存器中，每次使用都会从主存器中读取；保证可见性，不保证原子性</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/12/Java基础知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1568,314 +1972,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/07/05/小程序的爬坑之路/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/05/小程序的爬坑之路/" itemprop="url">小程序的爬坑之路</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-05T14:58:04+08:00">
-                2018-07-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/05/小程序的爬坑之路/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/05/小程序的爬坑之路/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>近期由于项目需要，需要编写小程序，遇到一些问题，记录下来，也是给自己开发的一个总结。</p>
-</blockquote>
-<h1 id="1-关于模板-template"><a href="#1-关于模板-template" class="headerlink" title="1.关于模板 template"></a>1.关于模板 template</h1><p>在看完 <a href="&quot;https://developers.weixin.qq.com/miniprogram/dev/index.html&quot;">官方文档</a> 里的说明之后，我并没有成功使用，按照它那个设置完成后，一直说找不到，最后在知道，原来除了实例那些之外，还要在当前 <code>wxml</code> 中 <code>import</code> 进来。</p>
-<ul>
-<li>1.先建一个 <code>template</code> 的文件夹，新建 <code>wxml</code>,根据具体的路径引入进来，例如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;import src=&quot;../template/line.wxml&quot; /&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>还有一个就是如果有相对应的 <code>wxss</code>文件，可在 <code>app.wxss</code>文件中引用，这样整个项目都不需要引用这个样式文件了。</p>
-<p><strong>注意：模板拥有自己的作用域，只能使用 data 传入的数据以及模版定义文件中定义的 <wxs> 模块。</wxs></strong></p>
-<h1 id="2-关于水平居中，垂直居中"><a href="#2-关于水平居中，垂直居中" class="headerlink" title="2. 关于水平居中，垂直居中"></a>2. 关于水平居中，垂直居中</h1><p>一开始感觉这啥玩意，不听话啊，让居中也不居中，就是不动啊，很是郁闷，后来发现了一些规律。</p>
-<p><strong>2.1 水平居中</strong></p>
-<ul>
-<li>首先如果是行内元素，例如 <text> 这样的，如果想水平居中，使用<code>text-align:center</code> 你会发现不好使啊，纹丝不动，原因是因为行内元素长度随内容变化，所以它不能让你在一行的中间，因为它的长度就是文字长度。</text></li>
-</ul>
-<p><strong>解决方案：</strong>可以换成<code>view</code> 控件，或者使用：<code>display:block</code> + <code>text-align:center</code></p>
-<ul>
-<li>其它元素可以使用<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">======3个一起使用==========</span><br><span class="line">text-align:center;</span><br><span class="line">align-items:center;</span><br><span class="line">justify-content: center;</span><br><span class="line">==================</span><br><span class="line">margin:auto # 子容器在父容器中居中,单独使用</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><strong>2.2 垂直居中</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//可使用如下</span><br><span class="line">display:flex;</span><br><span class="line">align-items:center;</span><br><span class="line">justify-content:center;</span><br></pre></td></tr></table></figure></p>
-<h1 id="3-关于几个控件平分整个屏幕宽度问题"><a href="#3-关于几个控件平分整个屏幕宽度问题" class="headerlink" title="3.关于几个控件平分整个屏幕宽度问题"></a>3.关于几个控件平分整个屏幕宽度问题</h1><blockquote>
-<p>一开始我还想着获取屏幕的宽和高，然后再动态给控件设置具体的值，后来发现有更简单的做法</p>
-</blockquote>
-<p>例如：像这样一行排四个<br><img src="https://upload-images.jianshu.io/upload_images/1948557-35b5b4254918c3fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><strong>解决方案：</strong>设置控件的宽度为 ：25%，这样就自动平分啦。当然还有其它的方式，但是我认为百分比的这种写法感觉很直观。</p>
-<h1 id="4-flex-布局"><a href="#4-flex-布局" class="headerlink" title="4. flex 布局"></a>4. flex 布局</h1><p>熟练掌握 <code>flexbox</code> 布局，可以更轻松的编写任何常见的布局，可以查看相关专业的文章。</p>
-<p>未完待续…..</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/06/27/Kotlin-可观察属性/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/27/Kotlin-可观察属性/" itemprop="url">Kotlin-可观察属性</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-27T14:31:48+08:00">
-                2018-06-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/06/27/Kotlin-可观察属性/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/27/Kotlin-可观察属性/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>类似于观察者模式，当所监测的对象发生改变时，能够收到回调通知。</p>
-</blockquote>
-<p>例如：我们监测一个变量：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var str: String by Delegates.observable(<span class="string">"qianqian"</span>,&#123;</span><br><span class="line">        property: KProperty&lt;*&gt;, oldValue: String, newValue: String -&gt;</span><br><span class="line">        Log.i(<span class="string">"xx"</span>,<span class="string">"改变的属性名称：$&#123;property.name&#125; --- $&#123;oldValue&#125; -- $&#123;newValue&#125;"</span> )</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//点击一个按钮，改变str的值</span></span><br><span class="line">     <span class="function">fun <span class="title">foo</span><span class="params">(view : View)</span></span>&#123;</span><br><span class="line">        str = <span class="string">"haha"</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>这时候我们会发现，当改变<code>str</code> 的值的时候，会打印信息，也就是收到回调：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">改变的属性名称：str --- qianqian -- haha</span><br></pre></td></tr></table></figure></p>
-<p>再比如：检测对象里的其中一个属性：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> kotlin.properties.Delegates</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    var name: String by Delegates.observable(<span class="string">"&lt;no name&gt;"</span>) &#123;</span><br><span class="line">        prop, old, <span class="keyword">new</span> -&gt;</span><br><span class="line">        println(<span class="string">"$old -&gt; $new"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">fun <span class="title">main</span><span class="params">(args: Array&lt;String&gt;)</span> </span>&#123;</span><br><span class="line">    val user = User()</span><br><span class="line">    user.name = <span class="string">"first"</span></span><br><span class="line">    user.name = <span class="string">"second"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>打印信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;no name&gt; -&gt; first</span><br><span class="line">first -&gt; second</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1921,7 +2022,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1934,7 +2035,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

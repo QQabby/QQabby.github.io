@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="向sd卡写入文件," />
+  <meta name="keywords" content="Android," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="向sd卡根目录中写入文件123456789101112//首先判断是否存在sd卡if(Environment.getExternalStorageState().equals(                Environment.MEDIA_MOUNTED))&amp;#123;    //获取外部设备    File file=new File(Environment.getExternalStora">
-<meta name="keywords" content="向sd卡写入文件">
+<meta name="description" content="1. Android中数据存储的方式 FIle SharedPreference Sqlite 网络 ContentProvider FileProvider : 继承于 ContentProvider 的子类，可以用于解决Android7.0中禁止我们的应用对外部公开file://的问题。  2. SharedPreference 是进程同步的吗 sharedPreference 默认不是线程同">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="写文件相关">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2017/12/28/写文件相关/index.html">
+<meta property="og:title" content="随笔记录Android">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/11/13/随笔记录Android/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="向sd卡根目录中写入文件123456789101112//首先判断是否存在sd卡if(Environment.getExternalStorageState().equals(                Environment.MEDIA_MOUNTED))&amp;#123;    //获取外部设备    File file=new File(Environment.getExternalStora">
+<meta property="og:description" content="1. Android中数据存储的方式 FIle SharedPreference Sqlite 网络 ContentProvider FileProvider : 继承于 ContentProvider 的子类，可以用于解决Android7.0中禁止我们的应用对外部公开file://的问题。  2. SharedPreference 是进程同步的吗 sharedPreference 默认不是线程同">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-28T06:04:21.038Z">
+<meta property="og:updated_time" content="2018-11-13T09:23:28.397Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="写文件相关">
-<meta name="twitter:description" content="向sd卡根目录中写入文件123456789101112//首先判断是否存在sd卡if(Environment.getExternalStorageState().equals(                Environment.MEDIA_MOUNTED))&amp;#123;    //获取外部设备    File file=new File(Environment.getExternalStora">
+<meta name="twitter:title" content="随笔记录Android">
+<meta name="twitter:description" content="1. Android中数据存储的方式 FIle SharedPreference Sqlite 网络 ContentProvider FileProvider : 继承于 ContentProvider 的子类，可以用于解决Android7.0中禁止我们的应用对外部公开file://的问题。  2. SharedPreference 是进程同步的吗 sharedPreference 默认不是线程同">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2017/12/28/写文件相关/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/13/随笔记录Android/"/>
 
 
 
 
 
-  <title>写文件相关 | 糖葫芦</title>
+  <title>随笔记录Android | 糖葫芦</title>
   
 
 
@@ -277,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2017/12/28/写文件相关/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/13/随笔记录Android/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">写文件相关</h1>
+          <h1 class="post-title" itemprop="name headline">随笔记录Android</h1>
         
 
         <div class="post-meta">
@@ -306,8 +306,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-28T13:53:13+08:00">
-                2017-12-28
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-13T15:21:08+08:00">
+                2018-11-13
               </time>
             
 
@@ -325,9 +325,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/28/写文件相关/#comments" itemprop="discussionUrl">
+                <a href="/2018/11/13/随笔记录Android/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/28/写文件相关/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/11/13/随笔记录Android/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,9 +355,82 @@
       
 
       
-        <h1 id="向sd卡根目录中写入文件"><a href="#向sd卡根目录中写入文件" class="headerlink" title="向sd卡根目录中写入文件"></a>向sd卡根目录中写入文件</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先判断是否存在sd卡</span></span><br><span class="line"><span class="keyword">if</span>(Environment.getExternalStorageState().equals(</span><br><span class="line">                Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取外部设备</span></span><br><span class="line">    File file=<span class="keyword">new</span> File(Environment.getExternalStorageDirectory(),<span class="string">"qianqian.txt"</span>);</span><br><span class="line">    FileOutputStream outStream=<span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">     <span class="comment">//写入文件</span></span><br><span class="line">    outStream.write(content.getBytes());</span><br><span class="line">    outStream.close();  </span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="读取assets下的文件路径"><a href="#读取assets下的文件路径" class="headerlink" title="读取assets下的文件路径"></a>读取assets下的文件路径</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//格式如下</span></span><br><span class="line">file:<span class="comment">///android_asset/myVideo.html</span></span><br><span class="line">file:<span class="comment">///android_asset/xx(文件名称)</span></span><br></pre></td></tr></table></figure>
-<h1 id="读取assets下的文件转化为String"><a href="#读取assets下的文件转化为String" class="headerlink" title="读取assets下的文件转化为String"></a>读取assets下的文件转化为String</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getFromAssets</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStreamReader inputReader = <span class="keyword">new</span> InputStreamReader(</span><br><span class="line">                    getResources().getAssets().open(fileName));</span><br><span class="line">            BufferedReader bufReader = <span class="keyword">new</span> BufferedReader(inputReader);</span><br><span class="line">            String line = <span class="string">""</span>;</span><br><span class="line">            String Result = <span class="string">""</span>;</span><br><span class="line">            <span class="keyword">while</span> ((line = bufReader.readLine()) != <span class="keyword">null</span>)</span><br><span class="line">                Result += line;</span><br><span class="line">            <span class="keyword">return</span> Result;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+        <h1 id="1-Android中数据存储的方式"><a href="#1-Android中数据存储的方式" class="headerlink" title="1. Android中数据存储的方式"></a>1. Android中数据存储的方式</h1><ul>
+<li><code>FIle</code></li>
+<li><code>SharedPreference</code></li>
+<li><code>Sqlite</code></li>
+<li>网络</li>
+<li><code>ContentProvider</code></li>
+<li><code>FileProvider</code> : 继承于 <code>ContentProvider</code> 的子类，可以用于解决Android7.0中禁止我们的应用对外部公开file://的问题。</li>
+</ul>
+<h1 id="2-SharedPreference-是进程同步的吗"><a href="#2-SharedPreference-是进程同步的吗" class="headerlink" title="2. SharedPreference 是进程同步的吗"></a>2. SharedPreference 是进程同步的吗</h1><blockquote>
+<p>sharedPreference 默认不是线程同步的，可以设置模式为：<code>MODE_MULTI_PROCESS</code> 做到进程同步，系统默认也是有缓存的，有很多问题，在Android N（7.0）以上废弃不能使用了，会抛出异常。推荐使用 <code>ContentProvider</code> </p>
+<p><code>sharedPreference</code> 四种模式：</p>
+<ul>
+<li>MODE_PRIVATE</li>
+<li>MODE_MULTI_PROCESS</li>
+<li>MODE_WORLD_READABLE</li>
+<li>MODE_WORLD_WRITEABLE</li>
+</ul>
+</blockquote>
+<h1 id="3-Shareferences-commit-和-apply-的区别"><a href="#3-Shareferences-commit-和-apply-的区别" class="headerlink" title="3.Shareferences commit 和 apply 的区别"></a>3.Shareferences commit 和 apply 的区别</h1><blockquote>
+<p>在很早的sdk当中，一般都使用 <code>commit</code> 方法，同步，直接写入磁盘，并且有返回结果 <code>boolean</code> 类型，而 <code>apply</code> 是异步, 先写入内存，然后异步写入磁盘。 如果操作频繁的话，<code>apply</code> 的性能优于 <code>commit</code>.</p>
+</blockquote>
+<p>在阿里巴巴开发手册中也记录到：</p>
+<blockquote>
+<p>SharedPreference 提 交 数 据 时 ， 尽 量 使 用 Editor#apply()<br>，而非Editor#commit()。一般来讲，仅当需要确定提交结果，并据此有后续操作时，才使用 Editor#commit()。</p>
+</blockquote>
+<h1 id="4-View-的-measureSpec-由谁决定的"><a href="#4-View-的-measureSpec-由谁决定的" class="headerlink" title="4. View 的 measureSpec 由谁决定的"></a>4. View 的 measureSpec 由谁决定的</h1><blockquote>
+<ul>
+<li>View的<code>MeasureSpec</code> 由这个父控件的<code>MeasureSpec</code> 和自身的 <code>LayoutParams</code> 决定</li>
+<li>顶级 <code>DecorView</code> 由窗口尺寸和自身的 <code>LayoutParams</code> 共同确定</li>
+</ul>
+</blockquote>
+<h1 id="5-ACTION-CANCEL-事件"><a href="#5-ACTION-CANCEL-事件" class="headerlink" title="5.ACTION_CANCEL 事件"></a>5.ACTION_CANCEL 事件</h1><blockquote>
+<p>一般来说，如果一个子视图接受了父视图分发给它的 <code>ACTION_DOWN</code> 事件，那么与<code>ACTION_DOWN</code> 事件相关的事件都要分发给这个子视图，但是如果父视图希望拦截其中的一些事件，不再继续转发事件给这个子视图的话，那么就需要给子视图一个<code>ACTION_CANCEL</code> 事件。</p>
+</blockquote>
+<h1 id="6-View的invalidate-postInvalidate-requestLayout区别"><a href="#6-View的invalidate-postInvalidate-requestLayout区别" class="headerlink" title="6. View的invalidate postInvalidate requestLayout区别"></a>6. View的invalidate postInvalidate requestLayout区别</h1><ul>
+<li><code>invalidate</code> 会调用 <code>onDraw</code> 进行重绘，只能在主线程</li>
+<li><code>postIncalidate</code> 可以在其它线程，如子线程</li>
+<li><code>requestLayout</code> 会调用 <code>onLayout</code> 和 <code>onMeasure</code> ,不一定会调用 <code>onDraw</code> </li>
+</ul>
+<h1 id="7-View-的生命周期"><a href="#7-View-的生命周期" class="headerlink" title="7. View 的生命周期"></a>7. View 的生命周期</h1><ul>
+<li><ol>
+<li><p><code>Creation</code> 创建（从xml中加载或者<code>layout</code> 文件中定义加载）</p>
+<ol>
+<li><code>onFinishInflate()</code> 从xml中加载完成</li>
+</ol>
+</li>
+<li><p><code>Layout</code>  布局</p>
+<ol>
+<li><code>onMeasure()</code></li>
+<li><code>onLayout()</code></li>
+</ol>
+</li>
+<li><p><code>Drawing</code> 绘制</p>
+<ol>
+<li><code>onDraw()</code></li>
+</ol>
+</li>
+<li><p><code>Event processing</code>  事件处理</p>
+</li>
+<li><p><code>Focus</code> 聚焦</p>
+<ol>
+<li><code>onFocusChanged()</code></li>
+<li><code>onWindowFocusChanged()</code></li>
+</ol>
+</li>
+<li><p><code>Attaching</code> 附上</p>
+<ol>
+<li><code>onAttachingToWindow()</code></li>
+<li><code>onDetachedFromWindow()</code></li>
+<li><code>onVisibiltyChanged()</code></li>
+<li><code>onWindowVisibiltyChanged()</code></li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
 
       
     </div>
@@ -385,7 +458,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/向sd卡写入文件/" rel="tag"># 向sd卡写入文件</a>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
         </div>
       
@@ -398,8 +471,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/19/lru/" rel="next" title="LRU算法还一知半解？">
-                <i class="fa fa-chevron-left"></i> LRU算法还一知半解？
+              <a href="/2018/11/13/java基础二/" rel="next" title="java基础二">
+                <i class="fa fa-chevron-left"></i> java基础二
               </a>
             
           </div>
@@ -407,10 +480,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/08/AIDL实例/" rel="prev" title="AIDL实例">
-                AIDL实例 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -545,7 +614,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#向sd卡根目录中写入文件"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5411;sd&#x5361;&#x6839;&#x76EE;&#x5F55;&#x4E2D;&#x5199;&#x5165;&#x6587;&#x4EF6;" class="headerlink" title="&#x5411;sd&#x5361;&#x6839;&#x76EE;&#x5F55;&#x4E2D;&#x5199;&#x5165;&#x6587;&#x4EF6;"></a>&#x5411;sd&#x5361;&#x6839;&#x76EE;&#x5F55;&#x4E2D;&#x5199;&#x5165;&#x6587;&#x4EF6;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#读取assets下的文件路径"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x8BFB;&#x53D6;assets&#x4E0B;&#x7684;&#x6587;&#x4EF6;&#x8DEF;&#x5F84;" class="headerlink" title="&#x8BFB;&#x53D6;assets&#x4E0B;&#x7684;&#x6587;&#x4EF6;&#x8DEF;&#x5F84;"></a>&#x8BFB;&#x53D6;assets&#x4E0B;&#x7684;&#x6587;&#x4EF6;&#x8DEF;&#x5F84;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#读取assets下的文件转化为String"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x8BFB;&#x53D6;assets&#x4E0B;&#x7684;&#x6587;&#x4EF6;&#x8F6C;&#x5316;&#x4E3A;String" class="headerlink" title="&#x8BFB;&#x53D6;assets&#x4E0B;&#x7684;&#x6587;&#x4EF6;&#x8F6C;&#x5316;&#x4E3A;String"></a>&#x8BFB;&#x53D6;assets&#x4E0B;&#x7684;&#x6587;&#x4EF6;&#x8F6C;&#x5316;&#x4E3A;String</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Android中数据存储的方式"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-Android&#x4E2D;&#x6570;&#x636E;&#x5B58;&#x50A8;&#x7684;&#x65B9;&#x5F0F;" class="headerlink" title="1. Android&#x4E2D;&#x6570;&#x636E;&#x5B58;&#x50A8;&#x7684;&#x65B9;&#x5F0F;"></a>1. Android&#x4E2D;&#x6570;&#x636E;&#x5B58;&#x50A8;&#x7684;&#x65B9;&#x5F0F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-SharedPreference-是进程同步的吗"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-SharedPreference-&#x662F;&#x8FDB;&#x7A0B;&#x540C;&#x6B65;&#x7684;&#x5417;" class="headerlink" title="2. SharedPreference &#x662F;&#x8FDB;&#x7A0B;&#x540C;&#x6B65;&#x7684;&#x5417;"></a>2. SharedPreference &#x662F;&#x8FDB;&#x7A0B;&#x540C;&#x6B65;&#x7684;&#x5417;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Shareferences-commit-和-apply-的区别"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3-Shareferences-commit-&#x548C;-apply-&#x7684;&#x533A;&#x522B;" class="headerlink" title="3.Shareferences commit &#x548C; apply &#x7684;&#x533A;&#x522B;"></a>3.Shareferences commit &#x548C; apply &#x7684;&#x533A;&#x522B;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-View-的-measureSpec-由谁决定的"><span class="nav-number">4.</span> <span class="nav-text"><a href="#4-View-&#x7684;-measureSpec-&#x7531;&#x8C01;&#x51B3;&#x5B9A;&#x7684;" class="headerlink" title="4. View &#x7684; measureSpec &#x7531;&#x8C01;&#x51B3;&#x5B9A;&#x7684;"></a>4. View &#x7684; measureSpec &#x7531;&#x8C01;&#x51B3;&#x5B9A;&#x7684;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-ACTION-CANCEL-事件"><span class="nav-number">5.</span> <span class="nav-text"><a href="#5-ACTION-CANCEL-&#x4E8B;&#x4EF6;" class="headerlink" title="5.ACTION_CANCEL &#x4E8B;&#x4EF6;"></a>5.ACTION_CANCEL &#x4E8B;&#x4EF6;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-View的invalidate-postInvalidate-requestLayout区别"><span class="nav-number">6.</span> <span class="nav-text"><a href="#6-View&#x7684;invalidate-postInvalidate-requestLayout&#x533A;&#x522B;" class="headerlink" title="6. View&#x7684;invalidate postInvalidate requestLayout&#x533A;&#x522B;"></a>6. View&#x7684;invalidate postInvalidate requestLayout&#x533A;&#x522B;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-View-的生命周期"><span class="nav-number">7.</span> <span class="nav-text"><a href="#7-View-&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;" class="headerlink" title="7. View &#x7684;&#x751F;&#x547D;&#x5468;&#x671F;"></a>7. View &#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</span></a></li></ol></div>
             
 
           </div>
@@ -722,9 +791,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2017/12/28/写文件相关/';
-          this.page.identifier = '2017/12/28/写文件相关/';
-          this.page.title = '写文件相关';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/11/13/随笔记录Android/';
+          this.page.identifier = '2018/11/13/随笔记录Android/';
+          this.page.title = '随笔记录Android';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
