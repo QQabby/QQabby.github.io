@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Android知识点三]]></title>
+    <url>%2F2018%2F11%2F15%2FAndroid%E7%9F%A5%E8%AF%86%E7%82%B9%E4%B8%89%2F</url>
+    <content type="text"><![CDATA[1. RecycleView 如何设置分割线的？ 它是读取系统自带的属性 R.attr.listDivider 属性，来设置分割线的，支持横向和纵向。 2. RecycleView 分割线的样式如何修改？ 第一种办法：因为 R.attr.listDivider 定义在系统样式中，那么我们可以重写这个属性修改，如下： 在styles.xml 中添加该属性： 12345&lt;style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar"&gt; &lt;!-- Customize your theme here. --&gt; .... &lt;item name="android:listDivider"&gt;@drawable/drawable_bg&lt;/item&gt; &lt;/style&gt; 其中 drawable_bg 为自定义分割线的drawable. 第二种办法：可以通过自带的 setDrawable() 改变，如下： 1234DividerItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL); Drawable drawable = getResources().getDrawable(R.drawable.drawable_bg); itemDecoration.setDrawable(drawable); recyclerView.addItemDecoration(itemDecoration); 3. RecycleView 缓存 缓存涉及三个类，分别是： Recycler RecycledViewPool ViewCachedExtension Recycler : 用于管理已经废弃或者与 RecyclerView 分离的 ViewHolder mChangedScrap : 与 RecyclerView 分离的 ViewHolder 列表 mAttachedScrap : 未与 RecyclerView 分离的 ViewHolder 列表 mCachedViews : ViewHolder 缓存列表 RecycledViewPool : ViewHolder 缓存池 ViewCachedExtension : 开发者可以控制的 ViewHolder 缓存的帮助类 4. RecycleView 刷新闪屏一般刷新： 1adapter.notifyItemChanged(0); 参数：position 实际上会全部刷新，局部刷新应使用： 1adapter.notifyItemChanged(0,"q"); 参数： position,payload 并且在 adapter 中重写方法： `onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads)方法` payloads 的 size 始终为1. 123456789@Overridepublic void onBindViewHolder(ViewHolder holder, int position, List&lt;Object&gt; payloads) &#123; if(payloads.isEmpty())&#123; onBindViewHolder(holder,position); &#125;else&#123; String type = payloads.get(0);//获取为 q holder.name.setText(list.get(position)); &#125; &#125;]]></content>
+      <tags>
+        <tag>Android</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Android知识点总结二]]></title>
     <url>%2F2018%2F11%2F14%2FAndroid%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93%E4%BA%8C%2F</url>
-    <content type="text"><![CDATA[1. Canvas.save() 跟 Canvas.restore()的调用时机 save: 用来保存 Canvas 的状态。save 之后，可以调用Canvas 的平移，放缩，旋转等操作。 restore: 用来恢复canvas 之前保存的状态。防止save 后对Canvas 执行的操作对后续的绘制有影响。 2. Android P 的新特性 支持WiFi室内定位 适配刘海屏 通知栏改进：可以显示对话，附加照片和表情等 多摄像头api Android N 的新特性 私有文件外部将不能访问，通过FileProvider 可解决 3. APK 内容 assets 存放需要打包到 APK 中的静态文件 lib 目录 native库 res 目录 存放应用程序的资源 META-INF 存放应用程序签名和证书的目录 AndroidManifest.xml classes.dex resources.arsc 资源配置文件 4. Binder 机制的优点 Linux 中使用的 IPC 通信机制有：pipe(管道)，signal(信号量)，Socket socket:是一个通用接口，传输效率低，开销比较大； 管道和消息队列：采用存储转发方式，所以至少需要拷贝2次数据，效率低，共享内存虽然在传输时没有拷贝数据，但其控制机制复杂，而 Binder 更好传输性能。 安全性更高，可以建立私有通道，有身份标识（UID/PID） 另外一个优点就是，通过binder 可以很方便的调用server 端的方法，犹如调用本地方法一样。]]></content>
+    <content type="text"><![CDATA[1. Canvas.save() 跟 Canvas.restore()的调用时机 save: 用来保存 Canvas 的状态。save 之后，可以调用Canvas 的平移，放缩，旋转等操作。 restore: 用来恢复canvas 之前保存的状态。防止save 后对Canvas 执行的操作对后续的绘制有影响。 2. Android P(9.0) 的新特性 支持WiFi室内定位 适配刘海屏 通知栏改进：可以显示对话，附加照片和表情等 多摄像头api Android N(7.0) 的新特性 私有文件外部将不能访问，通过FileProvider 可解决 Android 6.0 运行时权限的申请 3. APK 内容 assets 存放需要打包到 APK 中的静态文件 lib 目录 native库 res 目录 存放应用程序的资源 META-INF 存放应用程序签名和证书的目录 AndroidManifest.xml classes.dex resources.arsc 资源配置文件 4. Binder 机制的优点 Linux 中使用的 IPC 通信机制有：pipe(管道)，signal(信号量)，Socket socket:是一个通用接口，传输效率低，开销比较大； 管道和消息队列：采用存储转发方式，所以至少需要拷贝2次数据，效率低，共享内存虽然在传输时没有拷贝数据，但其控制机制复杂，而 Binder 更好传输性能。 安全性更高，可以建立私有通道，有身份标识（UID/PID） 另外一个优点就是，通过binder 可以很方便的调用server 端的方法，犹如调用本地方法一样。]]></content>
       <tags>
         <tag>Android</tag>
       </tags>
