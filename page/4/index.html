@@ -273,6 +273,143 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2017/12/28/写文件相关/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/28/写文件相关/" itemprop="url">写文件相关</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-28T13:53:13+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/28/写文件相关/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/28/写文件相关/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="向sd卡根目录中写入文件"><a href="#向sd卡根目录中写入文件" class="headerlink" title="向sd卡根目录中写入文件"></a>向sd卡根目录中写入文件</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先判断是否存在sd卡</span></span><br><span class="line"><span class="keyword">if</span>(Environment.getExternalStorageState().equals(</span><br><span class="line">                Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取外部设备</span></span><br><span class="line">    File file=<span class="keyword">new</span> File(Environment.getExternalStorageDirectory(),<span class="string">"qianqian.txt"</span>);</span><br><span class="line">    FileOutputStream outStream=<span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">     <span class="comment">//写入文件</span></span><br><span class="line">    outStream.write(content.getBytes());</span><br><span class="line">    outStream.close();  </span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="读取assets下的文件路径"><a href="#读取assets下的文件路径" class="headerlink" title="读取assets下的文件路径"></a>读取assets下的文件路径</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//格式如下</span></span><br><span class="line">file:<span class="comment">///android_asset/myVideo.html</span></span><br><span class="line">file:<span class="comment">///android_asset/xx(文件名称)</span></span><br></pre></td></tr></table></figure>
+<h1 id="读取assets下的文件转化为String"><a href="#读取assets下的文件转化为String" class="headerlink" title="读取assets下的文件转化为String"></a>读取assets下的文件转化为String</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getFromAssets</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStreamReader inputReader = <span class="keyword">new</span> InputStreamReader(</span><br><span class="line">                    getResources().getAssets().open(fileName));</span><br><span class="line">            BufferedReader bufReader = <span class="keyword">new</span> BufferedReader(inputReader);</span><br><span class="line">            String line = <span class="string">""</span>;</span><br><span class="line">            String Result = <span class="string">""</span>;</span><br><span class="line">            <span class="keyword">while</span> ((line = bufReader.readLine()) != <span class="keyword">null</span>)</span><br><span class="line">                Result += line;</span><br><span class="line">            <span class="keyword">return</span> Result;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2017/12/19/lru/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -632,7 +769,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
