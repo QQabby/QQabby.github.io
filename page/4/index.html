@@ -273,6 +273,300 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/11/修改自动生成get-set方法模板代码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/11/修改自动生成get-set方法模板代码/" itemprop="url">修改自动生成get/set方法模板代码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-11T14:00:14+08:00">
+                2018-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/11/修改自动生成get-set方法模板代码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/11/修改自动生成get-set方法模板代码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天看到<br><a href="https://juejin.im/post/5a55c8896fb9a01caf374e93" target="_blank">面对接口脏数据你还在V层if str==null else setText?</a><br> 一文，觉着写得挺好，开发过程中多思考多动手，会带来意想不到的效果。底下评论大家也都说了各自的方法和见解，文中有一些问题作者后来也解决了，看到评论里有人说：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b35580365?w=658&amp;h=389&amp;f=png&amp;s=25367" alt="image.png"></p>
+<p>说到配置as,就可以实现在创建bean时自动生成<code>return xx==null?&quot;&quot;:xx;</code> 觉着很好，因为我觉着这是一种挺简单的方法，但是就如同底下人问了怎么配置呀，我也不知道，于是我就在自己<code>as</code>工具里新建了一个bean对象，按住<code>alt+insert</code>添加<code>get/set</code>方法，发现了解决办法。如下图：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3568a2be?w=389&amp;h=636&amp;f=png&amp;s=16071" alt="image.png"></p>
+<p>平时手快也没注意，今天仔细看了看，那上面的意思不就是，<code>get</code> 方法模块，<code>set</code>方法模板吗，后面跟着 <code>IntelliJ Default</code>大概就是默认的生成模板吧，点击后面的三个点<br>按钮进去看看，如下：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b531389d1?w=787&amp;h=609&amp;f=png&amp;s=47221" alt="image.png"></p>
+<p>这是<code>set</code>的，<code>get</code>方法也类似是这样的，大概也能看懂，想着是不是可以直接模板就好了，发现无法修改，后来又发现左上角的<code>+</code>号，原来是自己可以新建一个模板，然后再生成的时候选择自己的模板就好了，如我们在<code>get</code>模板中新建一个自己的模板：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b3c7e8344?w=431&amp;h=149&amp;f=png&amp;s=7606" alt="image.png"></p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b357e2825?w=262&amp;h=269&amp;f=png&amp;s=4331" alt="image.png"></p>
+<p>我们知道我们只需要改一下最后<code>get</code>方法<code>return</code>那个地方的代码，也就是这儿：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b38fb2a31?w=1240&amp;h=679&amp;f=png&amp;s=129573" alt="image.png"></p>
+<p>不确定是不是，我们可以在后面跟着一个“#”号试试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">  return $field.name+&quot;#&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在生成的时候选择我们自定义的模板：<br><img src="https://user-gold-cdn.xitu.io/2018/1/11/160e3c7b56ef9685?w=394&amp;h=643&amp;f=png&amp;s=17595" alt="image.png"></p>
+<p>发现最后生成的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public String getAge() &#123;</span><br><span class="line">    return age + &quot;#&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setAge(String age) &#123;</span><br><span class="line">    this.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样证明确定是这样的，那么我么可以继续进行真正的判断了：<br>我们先把这个默认里的<code>get</code>方法代码拷贝到 <code>MyGetter</code>中，我们再根据我们自己的需要修改模板代码,其它地方不变，就修改需要修改的地方：<br>我们想要实现这样的：<code>return xx==null?&quot;&quot;:xx</code>,Ok ，那么我认为大概是这么写的，首先判断是否是字符串：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">	#if(field.String)&#123;</span><br><span class="line">		return $field.name == null ? &quot;&quot; : $field.name;</span><br><span class="line">	&#125;</span><br><span class="line">	#else</span><br><span class="line">		return $field.name;</span><br><span class="line">	#end </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们对比一个<code>default</code>的写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$&#123;name&#125;() &#123;</span><br><span class="line">  return $field.name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>好的，我们再继续生成一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public String getAge() &#123;</span><br><span class="line">        return age == null ? &quot;&quot; : age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(String age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>好的，达成效果，耶，居然还可以这么玩，以后可根据自己需求自行修改，谢谢大家。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/09/Activity启动模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/09/Activity启动模式/" itemprop="url">Activity启动模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-09T11:31:06+08:00">
+                2018-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/09/Activity启动模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/09/Activity启动模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>  ● standard 标准模式<br>​    简述：对于使用standard模式的活动，系统不会在乎这个活动是否已经在返回栈中存在，每次启动都会创建该活动的一个新的实例。<br>例如：A启动A，A再接着启动A,A再接着启动A,，然后再分别出栈，如图所示：<br>​<br><img src="http://upload-images.jianshu.io/upload_images/1948557-bf56470a07ad09ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>  ● singleTop<br>简述：当活动的启动模式指定为 singleTop ,在启动活动时如果发现返回栈的栈顶已经<br>是该活动，则认为可以直接使用它，不会再创建新的活动实例。<br>例如：如果快速点击一个按钮，进入Activity，要保证启动的Activity不为多个，可以使用<br>将Activity的启动模式改为 singleTop，就不会启动多个了。如图所示：<br>​<br><img src="http://upload-images.jianshu.io/upload_images/1948557-d5f43b4894e1a4f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>  ● singleTask<br>简述：当活动的启动模式指定为singleTask，每次启动该活动时候，它会先在系统中查找属性值taskaffinity等于它的属性值taskAffinity的任务存在；如果存在这样的任务，他就会这个任务中启动，否则就会在新任务中启动。因此，如果我们想要设置了“singleTask”启动模式的Activity在新的任务中启动，就要为它设置一个独立的taskAffinity属性值。</p>
+<p>如果设置了“singleTask”启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已经存在在相应的Activity实例，如果存在，就会把位于这个Activity实例上面的Activity全部结束掉，即最终这个Activity实例会位于任务的堆栈顶端中。</p>
+<p>每次启动该活动时系统首先会在返回栈中检查是否存在该活动的实例，如果发现已经存在则直接使用该实例，并把在这个活动之上的所有活动统统出栈，如果没有发现就会创建一个新的活动实例。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-9133171e9085b6cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">                             </p>
+<blockquote>
+<p>当栈底部的 <code>A</code> 重新被启动打开时，会执行<code>onNewIntent()</code>  <code>onStart()</code> 方法。</p>
+</blockquote>
+<p>使用场景：应用主页面一般是 <code>singleTask</code> </p>
+<p>  ● singleInstance（单独任务栈）<br>简述：使用singleInstance 模式就可以解决这个问题，在这种模式下会有一个单独的返回栈来管理这个活动，不管是哪个应用程序来访问这个活动，都会共用同一个返回栈，也就解决了共享活动实例的问题。<br>​<br><img src="http://upload-images.jianshu.io/upload_images/1948557-358424952cd1bed5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>返回的页面顺序是：C-B-A</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/08/AIDL实例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -920,7 +1214,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
