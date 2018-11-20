@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[高效使用RxJava]]></title>
+    <url>%2F2018%2F11%2F20%2F%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8RxJava%2F</url>
+    <content type="text"><![CDATA[Question 场景一：在页面保存时，需要对页面所填写的一些列信息进行判断，确定正确无误后方可保存。 例如：页面上中需要填写：姓名，性别，职业，年薪，住址等信息。 按照常规做法,我们有可能会这么写： 12345678910if(Util.checkempty(mUserName))&#123;//判断用户名是否为空 return;&#125;if(Util.checkempty(mSex))&#123;//判断性别是否为空 return;&#125;.....if(Util.checkempty(mAddress))&#123;//判断住址是否为空 return;&#125; 而用 Rxjava.combineLatest 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263//构建被观察者Observable userNameObservable = Observable.create(new Observable.OnSubscribe&lt;String&gt;() &#123; @Override public void call(final Subscriber&lt;? super String&gt; subscriber) &#123; tv.addTextChangedListener(new TextWatcher() &#123; @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) &#123; &#125; @Override public void onTextChanged(CharSequence s, int start, int before, int count) &#123; subscriber.onNext(s.toString()); &#125; @Override public void afterTextChanged(Editable s) &#123; &#125; &#125;); &#125; &#125;); Observable sexObservable = Observable.create(new Observable.OnSubscribe&lt;String&gt;() &#123; @Override public void call(final Subscriber&lt;? super String&gt; subscriber) &#123; sex.addTextChangedListener(new TextWatcher() &#123; @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) &#123; &#125; @Override public void onTextChanged(CharSequence s, int start, int before, int count) &#123; subscriber.onNext(s.toString()); &#125; @Override public void afterTextChanged(Editable s) &#123; &#125; &#125;); &#125; &#125;); Observable.combineLatest(userNameObservable, sexObservable, new Func2&lt;String,String,Boolean&gt;() &#123; @Override public Boolean call(String userName, String sex) &#123; //判断用户名 boolean isUserInvalid = !TextUtils.isEmpty(userName); //判断性别 boolean isSexInvalid = !TextUtils.isEmpty(sex); return isUserInvalid &amp;&amp; isSexInvalid; &#125; &#125;).subscribe(new Action1() &#123; @Override public void call(Object o) &#123;//只有都满足条件后才会执行到这里 Log.i("xx","信息："+o);//可以保存信息了 &#125; &#125;); 场景二：搜索输入，避免多次调用搜索接口，搜索优化 12345678910111213141516171819202122232425262728293031323334353637383940414243Observable.create(new Observable.OnSubscribe&lt;String&gt;() &#123; @Override public void call(final Subscriber&lt;? super String&gt; subscriber) &#123; tv.addTextChangedListener(new TextWatcher() &#123; @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) &#123; &#125; @Override public void onTextChanged(CharSequence s, int start, int before, int count) &#123; subscriber.onNext(s.toString()); &#125; @Override public void afterTextChanged(Editable s) &#123; &#125; &#125;); &#125; &#125;).filter(new Func1&lt;String, Boolean&gt;() &#123; @Override public Boolean call(String s) &#123; return !TextUtils.isEmpty(s);//过滤为空的 &#125; &#125;).debounce(1,TimeUnit.SECONDS) .subscribe(new Subscriber&lt;String&gt;() &#123; @Override public void onCompleted() &#123; &#125; @Override public void onError(Throwable e) &#123; &#125; @Override public void onNext(String s) &#123; Log.i("xx","搜索字符串：："+s); &#125; &#125;);]]></content>
+      <tags>
+        <tag>rxjava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[RxJava]]></title>
+    <url>%2F2018%2F11%2F19%2FRxJava%2F</url>
+    <content type="text"><![CDATA[1. 变换 map() 它是一对一的 123456789101112Observable.just("image/logo.png")//输入类型String,图片地址 .map(new Func1&lt;String, Bitmap&gt;() &#123; @Override public Bitmap call(String filePath) &#123; return getBitmap(filePath);//转换为bitmap &#125; &#125;).subscribe(new Action1&lt;Bitmap&gt;() &#123; @Override public void call(Bitmap bitmap) &#123; showBitmap(bitmap);//显示bitmap &#125; &#125;); flatMap() 多对多转换 假如有这样一个场景，我们需要打印每个学生所修的课程，学生是一个集合，课程也是一个集合，如果按照map() 的做法如下： 这里我选用我项目里随意一个bean 对象，意思不变 12345678910111213141516UserInfo[] userInfos = new UserInfo[3];Observable.from(userInfos) .map(new Func1&lt;UserInfo, List&lt;AppInfo&gt;&gt;() &#123; @Override public List&lt;AppInfo&gt; call(UserInfo userInfo) &#123; return userInfo.getAppInfos(); &#125; &#125;).subscribe(new Action1&lt;List&lt;AppInfo&gt;&gt;() &#123; @Override public void call(List&lt;AppInfo&gt; appInfos) &#123; for(AppInfo info : appInfos)&#123; Log.i("xx",info.getAppName()); &#125; &#125; &#125;); 有种情况就是假如我不想要循环遍历呢，而是直接拿到 AppInfo 对象，显然 map() 是无法实现的，map() 我们前面也说过是 一对一的转换，而现在是一对多，那此时就应该用 flatMap(). 使用flatMap() 的话，如下： 12345678910111213141516171819202122Observable.from(userInfos) .flatMap(new Func1&lt;UserInfo, Observable&lt;AppInfo&gt;&gt;() &#123; @Override public Observable&lt;AppInfo&gt; call(UserInfo userInfo) &#123; return Observable.from(userInfo.getAppInfos()); &#125; &#125;).subscribe(new Subscriber&lt;AppInfo&gt;() &#123; @Override public void onCompleted() &#123; &#125; @Override public void onError(Throwable e) &#123; &#125; @Override public void onNext(AppInfo appInfo) &#123; Log.i("xx","appInfo.name::"+appInfo.getAppName()); &#125; &#125;); 上述是用 flatMap() 编写的，去除了 for 循环，flatMap() 和 map() 有一个相同点：它们都是把传入的参数转化之后返回另一个对象。但需要注意的是，和map() 不同的是，flatMap() 中返回的是 Observable 对象。 flatMap() 原理如下： 使用传入的事件对象创建一个 Observable 对象； 并不发送这个 Observable 对象，而是将它激活，于是它开始发送事件； 每一个创建出来的 Observable 发送的事件，都被汇入同一个 Observable,而这个 Observale 负责将这些事件统一交给 Subscriber 的回调方法。]]></content>
+      <tags>
+        <tag>Rxjava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[时间复杂度]]></title>
+    <url>%2F2018%2F11%2F19%2F%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%2F</url>
+    <content type="text"><![CDATA[衡量代码的好坏，包括两个非常重要的指标： 运行时间 占用空间 由于运行环境和输入规模的影响，代码的绝对执行时间是无法估计的，但是我们却可以预估代码的基本执行次数。 常见的时间复杂度有如下： T(n) = O(n) T(n) = O(logn) T(n) = O(1) T(n) = O(n²) 这四种时间复杂度谁用时更长，更节省时间呢？ O(1) &lt; O(logn) &lt; O(n) &lt; O(n²)]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title></title>
     <url>%2F2018%2F11%2F19%2FUntitled%2F</url>
     <content type="text"></content>
