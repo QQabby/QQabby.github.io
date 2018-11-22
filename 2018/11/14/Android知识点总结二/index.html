@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="糖葫芦">
 <meta property="og:description" content="1. Canvas.save()  跟 Canvas.restore()的调用时机 save: 用来保存 Canvas 的状态。save 之后，可以调用Canvas 的平移，放缩，旋转等操作。 restore: 用来恢复canvas 之前保存的状态。防止save 后对Canvas 执行的操作对后续的绘制有影响。  2. Android P(9.0) 的新特性 支持WiFi室内定位 适配刘海屏 通知">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-15T07:34:11.781Z">
+<meta property="og:updated_time" content="2018-11-22T03:38:50.949Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android知识点总结二">
 <meta name="twitter:description" content="1. Canvas.save()  跟 Canvas.restore()的调用时机 save: 用来保存 Canvas 的状态。save 之后，可以调用Canvas 的平移，放缩，旋转等操作。 restore: 用来恢复canvas 之前保存的状态。防止save 后对Canvas 执行的操作对后续的绘制有影响。  2. Android P(9.0) 的新特性 支持WiFi室内定位 适配刘海屏 通知">
@@ -364,12 +364,41 @@
 <li>适配刘海屏</li>
 <li>通知栏改进：可以显示对话，附加照片和表情等</li>
 <li>多摄像头api</li>
+<li>对于非 <code>http</code> 连接，将直接拦截，推荐使用<code>https</code></li>
 </ul>
 <h1 id="Android-N-7-0-的新特性"><a href="#Android-N-7-0-的新特性" class="headerlink" title="Android N(7.0) 的新特性"></a>Android N(7.0) 的新特性</h1><ul>
 <li>私有文件外部将不能访问，通过<code>FileProvider</code> 可解决</li>
+<li><code>SharedPreferences</code> 进程间通信模式闪退，<code>SecurityException</code></li>
 </ul>
 <h1 id="Android-6-0"><a href="#Android-6-0" class="headerlink" title="Android 6.0"></a>Android 6.0</h1><ul>
-<li>运行时权限的申请</li>
+<li><p>运行时权限的申请</p>
+</li>
+<li><p><code>https</code> 的推荐</p>
+</li>
+</ul>
+<h1 id="Android-8-0"><a href="#Android-8-0" class="headerlink" title="Android 8.0"></a>Android 8.0</h1><blockquote>
+<p>PHONE 权限组新增加两个权限</p>
+<ul>
+<li>ANSWER_PHONE_CALLS:允许您的应用通过编程方式接听呼入电话。要在您的应用中处理呼入电话，您可以使用 assceptRingingCall() 函数</li>
+<li>READ_PHONE_NUMBERS: 权限允许您的应用读取设备中存储的电话号码</li>
+</ul>
+</blockquote>
+<ul>
+<li><p>通知适配</p>
+<blockquote>
+<p>为了更好的管理通知的提醒，不想一些不重要的通知打扰用户，新增加用户渠道，用户可根据渠道屏蔽一些不重要的通知</p>
+</blockquote>
+</li>
+<li><p>安装apk</p>
+<blockquote>
+<p>在 AndroidManifest 文件中添加未知来源应用的权限：</p>
+<p><code>&lt;uses-permission android:name=&quot;android.permission.REQUEST_INSTALL_PACKAGES&quot;/&gt;</code> 这样系统会自动询问用户完成授权。</p>
+<p>也可以通过 <code>canRequestPackageInstalls</code> 查询是否有此权限，如果没有的话就使用 <code>Settings.ACTION_MANAGE_UNKNOW_APP_SOURCE</code> 引导用户安装未知应用权限去授权。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(Build,VERSION&gt;SDK_INT &gt;= <span class="number">26</span>)&#123;</span><br><span class="line">     Boolean isInstall = getPackageManager().canRequestPackageInstalls();<span class="comment">//26以上</span></span><br><span class="line">    <span class="keyword">if</span>(isInstall)&#123;</span><br><span class="line">        <span class="comment">//有此权限，安装应用</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//跳转到 安装未知应用 权限界面，引导用户开启权限</span></span><br><span class="line">        Uri selfPackageUri = Uri.parse(<span class="string">"package:"</span> + <span class="keyword">this</span>.getPackageName());</span><br><span class="line">                Intent intent = <span class="keyword">new</span> Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, selfPackageUri);</span><br><span class="line">                startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP)</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);</span><br><span class="line">        <span class="keyword">if</span> (requestCode == REQUEST_CODE_UNKNOWN_APP) &#123;</span><br><span class="line">            <span class="comment">//如果权限开启，则开始安装应用</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>静态广播无法正常接受</p>
+</li>
 </ul>
 <h1 id="3-APK-内容"><a href="#3-APK-内容" class="headerlink" title="3. APK 内容"></a>3. APK 内容</h1><ul>
 <li><code>assets</code> 存放需要打包到 <code>APK</code> 中的静态文件</li>
@@ -389,6 +418,23 @@
 <li>另外一个优点就是，通过<code>binder</code> 可以很方便的调用<code>server</code> 端的方法，犹如调用本地方法一样。</li>
 </ul>
 </blockquote>
+<h1 id="5-Gradle-的生命周期"><a href="#5-Gradle-的生命周期" class="headerlink" title="5. Gradle 的生命周期"></a>5. Gradle 的生命周期</h1><ul>
+<li><p>1.初始化</p>
+<blockquote>
+<p>初始化主要是读取 <code>settings.gragle</code> 文件，用于确定哪些项目参与构建，并创建<code>Project</code> 实例</p>
+</blockquote>
+</li>
+<li><p>2.配置</p>
+<blockquote>
+<p>配置阶段主要是为每个 <code>build.gradle</code> 文件配置 <code>project</code> 对象</p>
+</blockquote>
+</li>
+<li><p>3.执行</p>
+<blockquote>
+<p>主要根据 <code>gradle</code> 命令和传入参数创建并执行任务</p>
+</blockquote>
+</li>
+</ul>
 
       
     </div>
@@ -528,7 +574,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -541,7 +587,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
@@ -576,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Canvas-save-跟-Canvas-restore-的调用时机"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-Canvas-save-&#x8DDF;-Canvas-restore-&#x7684;&#x8C03;&#x7528;&#x65F6;&#x673A;" class="headerlink" title="1. Canvas.save()  &#x8DDF; Canvas.restore()&#x7684;&#x8C03;&#x7528;&#x65F6;&#x673A;"></a>1. Canvas.save()  &#x8DDF; Canvas.restore()&#x7684;&#x8C03;&#x7528;&#x65F6;&#x673A;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Android-P-9-0-的新特性"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-Android-P-9-0-&#x7684;&#x65B0;&#x7279;&#x6027;" class="headerlink" title="2. Android P(9.0) &#x7684;&#x65B0;&#x7279;&#x6027;"></a>2. Android P(9.0) &#x7684;&#x65B0;&#x7279;&#x6027;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-N-7-0-的新特性"><span class="nav-number">3.</span> <span class="nav-text"><a href="#Android-N-7-0-&#x7684;&#x65B0;&#x7279;&#x6027;" class="headerlink" title="Android N(7.0) &#x7684;&#x65B0;&#x7279;&#x6027;"></a>Android N(7.0) &#x7684;&#x65B0;&#x7279;&#x6027;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-6-0"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Android-6-0" class="headerlink" title="Android 6.0"></a>Android 6.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-APK-内容"><span class="nav-number">5.</span> <span class="nav-text"><a href="#3-APK-&#x5185;&#x5BB9;" class="headerlink" title="3. APK &#x5185;&#x5BB9;"></a>3. APK &#x5185;&#x5BB9;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Binder-机制的优点"><span class="nav-number">6.</span> <span class="nav-text"><a href="#4-Binder-&#x673A;&#x5236;&#x7684;&#x4F18;&#x70B9;" class="headerlink" title="4. Binder &#x673A;&#x5236;&#x7684;&#x4F18;&#x70B9;"></a>4. Binder &#x673A;&#x5236;&#x7684;&#x4F18;&#x70B9;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Canvas-save-跟-Canvas-restore-的调用时机"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-Canvas-save-&#x8DDF;-Canvas-restore-&#x7684;&#x8C03;&#x7528;&#x65F6;&#x673A;" class="headerlink" title="1. Canvas.save()  &#x8DDF; Canvas.restore()&#x7684;&#x8C03;&#x7528;&#x65F6;&#x673A;"></a>1. Canvas.save()  &#x8DDF; Canvas.restore()&#x7684;&#x8C03;&#x7528;&#x65F6;&#x673A;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Android-P-9-0-的新特性"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-Android-P-9-0-&#x7684;&#x65B0;&#x7279;&#x6027;" class="headerlink" title="2. Android P(9.0) &#x7684;&#x65B0;&#x7279;&#x6027;"></a>2. Android P(9.0) &#x7684;&#x65B0;&#x7279;&#x6027;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-N-7-0-的新特性"><span class="nav-number">3.</span> <span class="nav-text"><a href="#Android-N-7-0-&#x7684;&#x65B0;&#x7279;&#x6027;" class="headerlink" title="Android N(7.0) &#x7684;&#x65B0;&#x7279;&#x6027;"></a>Android N(7.0) &#x7684;&#x65B0;&#x7279;&#x6027;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-6-0"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Android-6-0" class="headerlink" title="Android 6.0"></a>Android 6.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-8-0"><span class="nav-number">5.</span> <span class="nav-text"><a href="#Android-8-0" class="headerlink" title="Android 8.0"></a>Android 8.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-APK-内容"><span class="nav-number">6.</span> <span class="nav-text"><a href="#3-APK-&#x5185;&#x5BB9;" class="headerlink" title="3. APK &#x5185;&#x5BB9;"></a>3. APK &#x5185;&#x5BB9;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Binder-机制的优点"><span class="nav-number">7.</span> <span class="nav-text"><a href="#4-Binder-&#x673A;&#x5236;&#x7684;&#x4F18;&#x70B9;" class="headerlink" title="4. Binder &#x673A;&#x5236;&#x7684;&#x4F18;&#x70B9;"></a>4. Binder &#x673A;&#x5236;&#x7684;&#x4F18;&#x70B9;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Gradle-的生命周期"><span class="nav-number">8.</span> <span class="nav-text"><a href="#5-Gradle-&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;" class="headerlink" title="5. Gradle &#x7684;&#x751F;&#x547D;&#x5468;&#x671F;"></a>5. Gradle &#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</span></a></li></ol></div>
             
 
           </div>

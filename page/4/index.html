@@ -273,6 +273,449 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Fragment-懒加载/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/28/Fragment-懒加载/" itemprop="url">Fragment 懒加载</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T17:47:41+08:00">
+                2018-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/28/Fragment-懒加载/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/28/Fragment-懒加载/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用</p>
+</blockquote>
+<h1 id="1-首先新建一个BaseLazyFragment"><a href="#1-首先新建一个BaseLazyFragment" class="headerlink" title="1.首先新建一个BaseLazyFragment"></a>1.首先新建一个<code>BaseLazyFragment</code></h1><pre><code>/**
+ * Created by xuqianqian on 2018/2/28.
+ */
+public  abstract class BaseLazyFragment extends Fragment {
+
+    protected View mRootView;
+    public Context mContext;
+    protected boolean isVisible;
+    private boolean isPrepared;
+    private boolean isLoad = false;
+
+    //最先执行
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getUserVisibleHint()) {//当前显示
+            isVisible = true;
+            if(!isLoad){
+                lazyLoad();
+            }
+        } else {
+            isVisible = false;
+            //onInvisible();
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getActivity();
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        if (mRootView == null) {
+            mRootView = getLayout();
+        }
+        return mRootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        isPrepared = true;
+        //如果已经加载过了，就无需再重新加载
+        if(!isLoad){
+            lazyLoad();
+        }
+    }
+
+    /**
+     * 懒加载
+     */
+    protected void lazyLoad() {
+        if (!isPrepared || !isVisible) {
+            return;
+        }
+        isLoad = true;
+        initData();
+    }
+
+//    protected void onInvisible() {
+//
+//    }
+    //初始化布局View
+    public abstract View getLayout();
+
+    public abstract void initData();
+}
+</code></pre><h1 id="2-让你的fragment-extend-BaseLazyFragment"><a href="#2-让你的fragment-extend-BaseLazyFragment" class="headerlink" title="2.让你的fragment extend BaseLazyFragment"></a>2.让你的<code>fragment extend BaseLazyFragment</code></h1><pre><code>public class GankFragment extends BaseLazyFragment {
+
+String type;
+public static GankFragment newInstance(String type) {
+    GankFragment gankFragment = new GankFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString(&quot;type&quot;, type);
+    gankFragment.setArguments(bundle);
+    return gankFragment;
+}
+//加载布局
+@Override
+public View getLayout() {
+
+    type = getArguments().getString(&quot;type&quot;);
+    TextView tv = new TextView(getActivity());
+    tv.setText(type);
+    tv.setGravity(Gravity.CENTER);
+    return tv;
+}
+
+@Override
+public void initData() {
+
+    //初始化一些控件，加载网络数据
+}
+
+}
+</code></pre><h1 id="3-剩下的就是FragmentPagerAdapter了"><a href="#3-剩下的就是FragmentPagerAdapter了" class="headerlink" title="3.剩下的就是FragmentPagerAdapter了"></a>3.剩下的就是FragmentPagerAdapter了</h1><pre><code>public class TitleAdapter extends FragmentPagerAdapter {
+
+private List&lt;Fragment&gt; fragments;
+
+private List&lt;String&gt; types;
+
+public TitleAdapter(FragmentManager fm, List&lt;Fragment&gt; fragments, List&lt;String&gt; types) {
+    super(fm);
+    this.fragments = fragments;
+    this.types = types;
+}
+
+@Override
+public Fragment getItem(int position) {
+    return fragments.get(position);
+}
+
+@Override
+public int getCount() {
+    return fragments.size();
+}
+
+@Override
+public CharSequence getPageTitle(int position) {
+    return types.get(position);
+}
+}
+</code></pre><p><code>MainActivity.java</code></p>
+<pre><code>private List&lt;String&gt; titles = new ArrayList&lt;&gt;();
+
+private List&lt;Fragment&gt; fragments = new ArrayList&lt;&gt;();
+TitleAdapter titleAdapter;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    TabLayout tablayout = findViewById(R.id.tablayout);
+    ViewPager viewpager = findViewById(R.id.viewpager);
+
+    titles.add(&quot;android&quot;);
+    titles.add(&quot;ios&quot;);
+    titles.add(&quot;web&quot;);
+    titles.add(&quot;java&quot;);
+
+    fragments.add(GankFragment.newInstance(&quot;android&quot;));
+    fragments.add(GankFragment.newInstance(&quot;ios&quot;));
+    fragments.add(GankFragment.newInstance(&quot;web&quot;));
+    fragments.add(GankFragment.newInstance(&quot;java&quot;));
+
+    titleAdapter = new TitleAdapter(getSupportFragmentManager(), fragments, titles);
+    viewpager.setAdapter(titleAdapter);
+    tablayout.setTabMode(TabLayout.MODE_FIXED);
+    tablayout.setupWithViewPager(viewpager);
+}
+</code></pre><p><a href="https://github.com/QQabby/LazyFragmentApplication" title="源码地址">https://github.com/QQabby/LazyFragmentApplication</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Dialog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/28/Dialog/" itemprop="url">Dialog</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T14:47:16+08:00">
+                2018-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/28/Dialog/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/28/Dialog/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="快速初始化materialDialog"><a href="#快速初始化materialDialog" class="headerlink" title="快速初始化materialDialog"></a>快速初始化materialDialog</h1><pre><code>new MaterialDialog.Builder(mContext)
+                    .title(&quot;title&quot;)
+                    .content(&quot;I&apos;m a content&quot;)
+                    .negativeText(&quot;cancel&quot;)
+                    .negativeColorRes(R.color.colorNegative)
+                    .positiveText(&quot;ok&quot;)
+                    .positiveColorRes(R.color.colorPositive)
+                    .onPositive(new     MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog     dialog, @NonNull DialogAction which) {
+                            showMsg(&quot;click dialog ok&quot;);
+                            ...
+                    }
+                })
+                .show();
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/30/微信小程序速查笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1577,154 +2020,11 @@ lruCache.put(&quot;3&quot;, bitmap3);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2017/12/11/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/11/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-11T15:18:57+08:00">
-                2017-12-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/11/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/11/hello-world/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1770,7 +2070,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1783,7 +2083,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[集合随笔]]></title>
+    <url>%2F2018%2F11%2F21%2F%E9%9B%86%E5%90%88%E9%9A%8F%E7%AC%94%2F</url>
+    <content type="text"><![CDATA[1. ArrayList 和 HashMap 是否线程安全？ Collection ArrayList HashMap HashSet 都是非同步的，线程是不安全的 集合中：Vector 和 HashTable 是线程安全的 Collection —-&gt; 线程安全：Collections.synchronizedCollection() ArrayList —–&gt; Collections.synchronizedList() HashMap ——&gt; Collections.synchronizedMap() HashSet ——-&gt; Collections.synchronizedSet()]]></content>
+      <tags>
+        <tag>集合</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Handler 相关总结]]></title>
+    <url>%2F2018%2F11%2F21%2FHandler-%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[首先一个线程中是可以创建多个 Handler 的，互不影响，默认在 ActivityThread 当中也创建了一个 Handler H ,我们还是可以在 MainActivity 中创建我们自己的 Handler, 互不影响； 一个线程 对应一个 Looper ,一个 Looper 对应一个 MessageQueue ;]]></content>
+      <tags>
+        <tag>handler</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[性能优化]]></title>
     <url>%2F2018%2F11%2F21%2F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%2F</url>
     <content type="text"><![CDATA[布局优化 减少布局层次，单一可以用LinearLayout 解决的页面不用 RelativeLayout,如果布局复杂，则用RelativeLayout 更好，毕竟比起布局嵌套，这种会好些 &lt;include&gt; 标签使用，主要用于布局重用 需要注意的是：此标签内，如果外面指定了 id 里面跟布局也定义id 以外部定义为准。同时如果里面定义了 类似于 android:layout_width=&quot;wrap_content&quot; 的属性，需配套 android:layout_height=&quot;wrap_content&quot; 同时使用。 &lt;merge&gt; 标签一般和 &lt;include&gt; 标签配合使用。一般如果当前根布局例如是：LinearLayout ,include 的布局也是 LinearLayout ,那么 include 的根布局就可以使用 &lt;merge&gt; 标签代替LinearLayout. &lt;ViewStub&gt; 标签，意义为按需加载，轻量级，宽和高都是0，在实际开发中，有很多布局在正常情况下不会显示，比如网络异常的布局，这个时候没有必要在布局加载时就加载进来，通过&lt;ViewStub&gt; 就可以在需要用到的时候再加载，提高程序初始化的性能。 绘制优化 在 onDraw() 中不要创建新的局部对象，这是因为 onDraw() 可能会频繁的调用，这样就会在一瞬间产生大量的临时对象，这不仅占用过多的内存而且会导致系统频繁的gc, 降低程序的执行效率; 另外也不能做一些耗时的任务。 内存泄漏优化 静态变量导致的内存泄漏 例如： 123456789private static Context mContext; @Override protected void onCreate(@Nullable Bundle savedInstanceState) &#123; super.onCreate(savedInstanceState); setContentView(R.layout.layout_combine); mContext = this; &#125; 单例模式导致的内存泄漏 属性动画导致的内存泄漏 Android 3.0 之后，提供了属性动画，如果开启无限循环动画，隐藏后，未调用 animator,cancel() 来停止动画，也会发生内存泄漏，因为这个时候 Activity 的 View 被动画所持有，而 View 又持有 Activity, 最终Activity 无法释放。0- 响应速度优化和ANR日志 响应速度优化的核心是避免在主线程做耗时操作， Activity 5s 未做出响应， Service 10s未做出响应，就会出现 ANR ,查看 \data\anr 目录下的 trace,txt 文件分析产生 ANR 的原因 线程优化 线程优化一般都是采用线程池，避免程序中存在大量的 Thread, 线程池可重用内部的线程，从而避免线程的创建和销毁所带来的性能开销。]]></content>
@@ -51,7 +67,7 @@
   <entry>
     <title><![CDATA[Android知识点总结二]]></title>
     <url>%2F2018%2F11%2F14%2FAndroid%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93%E4%BA%8C%2F</url>
-    <content type="text"><![CDATA[1. Canvas.save() 跟 Canvas.restore()的调用时机 save: 用来保存 Canvas 的状态。save 之后，可以调用Canvas 的平移，放缩，旋转等操作。 restore: 用来恢复canvas 之前保存的状态。防止save 后对Canvas 执行的操作对后续的绘制有影响。 2. Android P(9.0) 的新特性 支持WiFi室内定位 适配刘海屏 通知栏改进：可以显示对话，附加照片和表情等 多摄像头api Android N(7.0) 的新特性 私有文件外部将不能访问，通过FileProvider 可解决 Android 6.0 运行时权限的申请 3. APK 内容 assets 存放需要打包到 APK 中的静态文件 lib 目录 native库 res 目录 存放应用程序的资源 META-INF 存放应用程序签名和证书的目录 AndroidManifest.xml classes.dex resources.arsc 资源配置文件 4. Binder 机制的优点 Linux 中使用的 IPC 通信机制有：pipe(管道)，signal(信号量)，Socket socket:是一个通用接口，传输效率低，开销比较大； 管道和消息队列：采用存储转发方式，所以至少需要拷贝2次数据，效率低，共享内存虽然在传输时没有拷贝数据，但其控制机制复杂，而 Binder 更好传输性能。 安全性更高，可以建立私有通道，有身份标识（UID/PID） 另外一个优点就是，通过binder 可以很方便的调用server 端的方法，犹如调用本地方法一样。]]></content>
+    <content type="text"><![CDATA[1. Canvas.save() 跟 Canvas.restore()的调用时机 save: 用来保存 Canvas 的状态。save 之后，可以调用Canvas 的平移，放缩，旋转等操作。 restore: 用来恢复canvas 之前保存的状态。防止save 后对Canvas 执行的操作对后续的绘制有影响。 2. Android P(9.0) 的新特性 支持WiFi室内定位 适配刘海屏 通知栏改进：可以显示对话，附加照片和表情等 多摄像头api 对于非 http 连接，将直接拦截，推荐使用https Android N(7.0) 的新特性 私有文件外部将不能访问，通过FileProvider 可解决 SharedPreferences 进程间通信模式闪退，SecurityException Android 6.0 运行时权限的申请 https 的推荐 Android 8.0 PHONE 权限组新增加两个权限 ANSWER_PHONE_CALLS:允许您的应用通过编程方式接听呼入电话。要在您的应用中处理呼入电话，您可以使用 assceptRingingCall() 函数 READ_PHONE_NUMBERS: 权限允许您的应用读取设备中存储的电话号码 通知适配 为了更好的管理通知的提醒，不想一些不重要的通知打扰用户，新增加用户渠道，用户可根据渠道屏蔽一些不重要的通知 安装apk 在 AndroidManifest 文件中添加未知来源应用的权限： &lt;uses-permission android:name=&quot;android.permission.REQUEST_INSTALL_PACKAGES&quot;/&gt; 这样系统会自动询问用户完成授权。 也可以通过 canRequestPackageInstalls 查询是否有此权限，如果没有的话就使用 Settings.ACTION_MANAGE_UNKNOW_APP_SOURCE 引导用户安装未知应用权限去授权。 123456789101112131415161718if(Build,VERSION&gt;SDK_INT &gt;= 26)&#123; Boolean isInstall = getPackageManager().canRequestPackageInstalls();//26以上 if(isInstall)&#123; //有此权限，安装应用 &#125;else&#123; //跳转到 安装未知应用 权限界面，引导用户开启权限 Uri selfPackageUri = Uri.parse("package:" + this.getPackageName()); Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, selfPackageUri); startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP)&#125; @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) &#123; super.onActivityResult(requestCode, resultCode, data); if (requestCode == REQUEST_CODE_UNKNOWN_APP) &#123; //如果权限开启，则开始安装应用 &#125; &#125; 静态广播无法正常接受 3. APK 内容 assets 存放需要打包到 APK 中的静态文件 lib 目录 native库 res 目录 存放应用程序的资源 META-INF 存放应用程序签名和证书的目录 AndroidManifest.xml classes.dex resources.arsc 资源配置文件 4. Binder 机制的优点 Linux 中使用的 IPC 通信机制有：pipe(管道)，signal(信号量)，Socket socket:是一个通用接口，传输效率低，开销比较大； 管道和消息队列：采用存储转发方式，所以至少需要拷贝2次数据，效率低，共享内存虽然在传输时没有拷贝数据，但其控制机制复杂，而 Binder 更好传输性能。 安全性更高，可以建立私有通道，有身份标识（UID/PID） 另外一个优点就是，通过binder 可以很方便的调用server 端的方法，犹如调用本地方法一样。 5. Gradle 的生命周期 1.初始化 初始化主要是读取 settings.gragle 文件，用于确定哪些项目参与构建，并创建Project 实例 2.配置 配置阶段主要是为每个 build.gradle 文件配置 project 对象 3.执行 主要根据 gradle 命令和传入参数创建并执行任务]]></content>
       <tags>
         <tag>Android</tag>
       </tags>
