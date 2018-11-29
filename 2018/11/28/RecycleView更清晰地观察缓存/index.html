@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="recycleView," />
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="糖葫芦">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/tags/keyboard/index.html">
+<meta name="description" content="为了更清晰的观察 recycleView 缓存复用，在看到有一篇文章是打印缓存相关信息后，觉着确实是一种办法，比打断点更合适查看缓存的变化情况，就尝试自己写了写。  这里我主要利用反射观察的是：mCachedViews 和 recycleViewPool  里面的变化情况。代码如下： 12345678910111213141516171819202122232425262728293031323">
+<meta name="keywords" content="recycleView">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RecycleView更清晰地观察缓存">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/11/28/RecycleView更清晰地观察缓存/index.html">
 <meta property="og:site_name" content="糖葫芦">
+<meta property="og:description" content="为了更清晰的观察 recycleView 缓存复用，在看到有一篇文章是打印缓存相关信息后，觉着确实是一种办法，比打断点更合适查看缓存的变化情况，就尝试自己写了写。  这里我主要利用反射观察的是：mCachedViews 和 recycleViewPool  里面的变化情况。代码如下： 12345678910111213141516171819202122232425262728293031323">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-29T01:41:00.077Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="糖葫芦">
+<meta name="twitter:title" content="RecycleView更清晰地观察缓存">
+<meta name="twitter:description" content="为了更清晰的观察 recycleView 缓存复用，在看到有一篇文章是打印缓存相关信息后，觉着确实是一种办法，比打断点更合适查看缓存的变化情况，就尝试自己写了写。  这里我主要利用反射观察的是：mCachedViews 和 recycleViewPool  里面的变化情况。代码如下： 12345678910111213141516171819202122232425262728293031323">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/tags/keyboard/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/28/RecycleView更清晰地观察缓存/"/>
 
 
 
 
 
-  <title>Tag: keyboard | 糖葫芦</title>
+  <title>RecycleView更清晰地观察缓存 | 糖葫芦</title>
   
 
 
@@ -140,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -258,54 +263,175 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>keyboard<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/28/RecycleView更清晰地观察缓存/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/03/08/监听键盘显示与隐藏/" itemprop="url">
-              
-                <span itemprop="name">监听键盘显示与隐藏</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">RecycleView更清晰地观察缓存</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-08T14:58:19+08:00"
-              content="2018-03-08" >
-          03-08
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-28T15:05:09+08:00">
+                2018-11-28
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/28/RecycleView更清晰地观察缓存/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/28/RecycleView更清晰地观察缓存/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>为了更清晰的观察 <code>recycleView</code> 缓存复用，在看到有一篇文章是打印缓存相关信息后，觉着确实是一种办法，比打断点更合适查看缓存的变化情况，就尝试自己写了写。</p>
+</blockquote>
+<p>这里我主要利用反射观察的是：<code>mCachedViews</code> 和 <code>recycleViewPool</code>  里面的变化情况。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Class&lt;?&gt; class1 = Class.forName(<span class="string">"android.support.v7.widget.RecyclerView"</span>);</span><br><span class="line">            Field field = class1.getDeclaredField(<span class="string">"mRecycler"</span>);</span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            RecyclerView.Recycler recycler = (RecyclerView.Recycler) field.get(recyclerView);</span><br><span class="line">            Field field1 = recycler.getClass().getDeclaredField(<span class="string">"mCachedViews"</span>);</span><br><span class="line">            field1.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            ArrayList&lt;RecyclerView.ViewHolder&gt; mCachedViews = (ArrayList&lt;RecyclerView.ViewHolder&gt;) field1.get(recycler);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;mCachedViews.size();i++)&#123;</span><br><span class="line"></span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"mCachedViews::"</span>+mCachedViews.get(i));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            RecyclerView.RecycledViewPool viewPool = recyclerView.getRecycledViewPool();</span><br><span class="line">            <span class="comment">//这里之所以能获取到 RecycledViewPool中的mScrpa，需要新建一个android.support.v7.widget包，将该类放入该包下即可访问到。</span></span><br><span class="line">            SparseArray&lt;RecyclerView.RecycledViewPool.ScrapData&gt; list = viewPool.mScrap;</span><br><span class="line">            <span class="comment">//这里传入的类型type 是我在adapter中定义的，如下：</span></span><br><span class="line">            <span class="comment">//@Override</span></span><br><span class="line">            <span class="comment">//public int getItemViewType(int position) &#123;</span></span><br><span class="line">                <span class="comment">//return 666;</span></span><br><span class="line">            <span class="comment">//&#125;</span></span><br><span class="line">            RecyclerView.RecycledViewPool.ScrapData spra = list.get(<span class="number">666</span>);</span><br><span class="line"></span><br><span class="line">            Field field2 = spra.getClass().getDeclaredField(<span class="string">"mScrapHeap"</span>);</span><br><span class="line">            ArrayList&lt;RecyclerView.ViewHolder&gt; mScrapHeap= (ArrayList&lt;RecyclerView.ViewHolder&gt;) field2.get(spra);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;mScrapHeap.size();i++)&#123;</span><br><span class="line">                    Log.i(<span class="string">"xx"</span>,<span class="string">"mScrapHeapInfo::"</span>+mScrapHeap.get(i));</span><br><span class="line">            &#125;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"================================================="</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>, <span class="string">"error"</span>);</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是：反射获取</p>
+<p>然后在 <code>recycleView</code> 滚动的时候，显示信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">recyclerView.addOnScrollListener(<span class="keyword">new</span> RecyclerView.OnScrollListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScrolled</span><span class="params">(RecyclerView recyclerView, <span class="keyword">int</span> dx, <span class="keyword">int</span> dy)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">super</span>.onScrolled(recyclerView, dx, dy);</span><br><span class="line"><span class="comment">//                int recycleCount = recyclerView.getRecycledViewPool().getRecycledViewCount(666);</span></span><br><span class="line"><span class="comment">//                Log.i("xx","recyclePoolCount::"+recycleCount);</span></span><br><span class="line"></span><br><span class="line">                getInfo();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
 
       
     </div>
+    
+    
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+   </div>
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/recycleView/" rel="tag"># recycleView</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/22/ConcurrentHashMap-原理/" rel="next" title="ConcurrentHashMap 原理">
+                <i class="fa fa-chevron-left"></i> ConcurrentHashMap 原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -313,6 +439,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -534,6 +674,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -551,6 +695,18 @@
       <script id="dsq-count-scr" src="https://disqus.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/11/28/RecycleView更清晰地观察缓存/';
+          this.page.identifier = '2018/11/28/RecycleView更清晰地观察缓存/';
+          this.page.title = 'RecycleView更清晰地观察缓存';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://disqus.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   

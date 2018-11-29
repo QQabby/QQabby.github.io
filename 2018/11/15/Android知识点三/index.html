@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="糖葫芦">
 <meta property="og:description" content="1. RecycleView 如何设置分割线的？ 它是读取系统自带的属性 R.attr.listDivider  属性，来设置分割线的，支持横向和纵向。  2. RecycleView 分割线的样式如何修改？ 第一种办法：因为 R.attr.listDivider 定义在系统样式中，那么我们可以重写这个属性修改，如下： 在styles.xml 中添加该属性： 12345&amp;lt;style name">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-16T09:45:30.079Z">
+<meta property="og:updated_time" content="2018-11-26T05:41:08.451Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android知识点三">
 <meta name="twitter:description" content="1. RecycleView 如何设置分割线的？ 它是读取系统自带的属性 R.attr.listDivider  属性，来设置分割线的，支持横向和纵向。  2. RecycleView 分割线的样式如何修改？ 第一种办法：因为 R.attr.listDivider 定义在系统样式中，那么我们可以重写这个属性修改，如下： 在styles.xml 中添加该属性： 12345&amp;lt;style name">
@@ -407,7 +407,11 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(ViewHolder holder, <span class="keyword">int</span> position, List&lt;Object&gt; payloads)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(payloads.isEmpty())&#123;</span><br><span class="line">            onBindViewHolder(holder,position);</span><br><span class="line">     &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        String type = payloads.get(<span class="number">0</span>);<span class="comment">//获取为 q</span></span><br><span class="line">            holder.name.setText(list.get(position));</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <h1 id="5-RecycleView-和-listView"><a href="#5-RecycleView-和-listView" class="headerlink" title="5. RecycleView 和 listView"></a>5. RecycleView 和 listView</h1><p>//<a href="https://zhuanlan.zhihu.com/p/23339185" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/23339185</a></p>
 <ul>
-<li>缓存层级不同</li>
+<li><p>缓存层级不同</p>
+<blockquote>
+<p>recycleView 比 listView 多两级缓存，支持开发者自定义缓存处理，支持多个recycleView共用同一个 recycleViewPool(缓存池)</p>
+</blockquote>
+</li>
 </ul>
 <p><code>listView</code> 缓存（两级缓存）：</p>
 <table>
@@ -417,7 +421,7 @@
 <th>是否需要回调createView</th>
 <th>是否需要回调bindVIew</th>
 <th>生命周期</th>
-<th></th>
+<th>备注</th>
 </tr>
 </thead>
 <tbody>
@@ -426,7 +430,7 @@
 <td>否</td>
 <td>否</td>
 <td>onLayout函数周期内</td>
-<td></td>
+<td>用于屏幕内itemView快速重用</td>
 </tr>
 <tr>
 <td>mScrapViews</td>
@@ -436,7 +440,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>RecycrleView</code> 缓存：</p>
+<p><code>RecycrleView</code> 缓存( 四级缓存)：</p>
 <table>
 <thead>
 <tr>
@@ -444,7 +448,7 @@
 <th>是否回调createView</th>
 <th>回调bindVIew</th>
 <th>生命周期</th>
-<th></th>
+<th>备注</th>
 </tr>
 </thead>
 <tbody>
@@ -453,28 +457,28 @@
 <td>否</td>
 <td>否</td>
 <td>onLayout</td>
-<td></td>
+<td>用于屏幕内itemView快速重用</td>
 </tr>
 <tr>
 <td>mCacheViews</td>
 <td>否</td>
 <td>否</td>
 <td>与mAdapter一致，当Adapter被更换时,mCacheVIews被缓存到mRecyclerPool</td>
-<td></td>
+<td>默认缓存大小是2</td>
 </tr>
 <tr>
 <td>mViewCacheExtension</td>
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>用户自定义实现</td>
 </tr>
 <tr>
 <td>mRecyclerPool</td>
 <td>否</td>
 <td>是</td>
 <td>与自身生命周期一致，不再引用时被释放</td>
-<td>``</td>
+<td>默认大小是5</td>
 </tr>
 </tbody>
 </table>
@@ -484,6 +488,28 @@
 <li><code>mScrapView</code> 和 <code>mCachedViews</code> + <code>mRecyclerViewPool</code> 功能相似，意义在于缓存离开屏幕的<code>itemView</code>,目的是让即将进入屏幕的 <code>itemView</code> 重用</li>
 <li><code>RecycleView</code> 的优势在于 <code>mCacheVIews</code> 的使用，可以做到屏幕外的列表项<code>itemView</code> 进入屏幕内时也无须<code>bindView</code> 快速重用； <code>mRecycleViewPool</code> 可以供多个<code>recycleView</code> 共同使用，在特定场景下，如<code>viewpager</code> 加多个列表页有优势。</li>
 </ul>
+<h1 id="6-RecycleView-的回收复用机制的内部实现都是哪个类完成的？"><a href="#6-RecycleView-的回收复用机制的内部实现都是哪个类完成的？" class="headerlink" title="6. RecycleView 的回收复用机制的内部实现都是哪个类完成的？"></a>6. RecycleView 的回收复用机制的内部实现都是哪个类完成的？</h1><blockquote>
+<p>RecycleView 的回收复用机制都是由内部类 <code>Recycler</code>  类，核心方法：<code>tryGetViewHolderForPositionByDeadline()</code> 方法中完成的。</p>
+</blockquote>
+<p>随笔源码记录：</p>
+<h1 id="复用机制"><a href="#复用机制" class="headerlink" title="复用机制"></a>复用机制</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> View <span class="title">getViewForPosition</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> getViewForPosition(position, <span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"><span class="function">View <span class="title">getViewForPosition</span><span class="params">(<span class="keyword">int</span> position, <span class="keyword">boolean</span> dryRun)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> tryGetViewHolderForPositionByDeadline(position, dryRun, 		               FOREVER_NS).itemView;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function">ViewHolder <span class="title">tryGetViewHolderForPositionByDeadline</span><span class="params">(<span class="keyword">int</span> position,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                 <span class="keyword">boolean</span> dryRun, <span class="keyword">long</span> deadlineNs)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//复用机制的原理</span></span><br><span class="line">    - <span class="number">1</span>.mCacheView</span><br><span class="line">    - <span class="number">2</span>.recyclerViewPool</span><br><span class="line">    - <span class="number">3</span>.扩展</span><br><span class="line">    - <span class="number">4</span>.都没有，重新创建一个ViewHolder(createViewHolder)   </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="回收机制"><a href="#回收机制" class="headerlink" title="回收机制"></a>回收机制</h1><blockquote>
+<p>也是 Recycler 类中的，核心方法：<code>recycleViewHolderInternal(holder)</code></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recycleView</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// This public recycle method tries to make view recycle-able since layout manager</span></span><br><span class="line">            <span class="comment">// intended to recycle this view (e.g. even if it is in scrap or change cache)</span></span><br><span class="line">            ViewHolder holder = getChildViewHolderInt(view);</span><br><span class="line">            <span class="keyword">if</span> (holder.isTmpDetached()) &#123;</span><br><span class="line">                removeDetachedView(view, <span class="keyword">false</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (holder.isScrap()) &#123;</span><br><span class="line">                holder.unScrap();</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (holder.wasReturnedFromScrap()) &#123;</span><br><span class="line">                holder.clearReturnedFromScrapFlag();</span><br><span class="line">            &#125;</span><br><span class="line">    		<span class="comment">//回收的内部实现</span></span><br><span class="line">            recycleViewHolderInternal(holder);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>回收的逻辑：由 <code>LayoutManager</code> 来遍历移出屏幕的卡位，然后对每个卡位进行回收操作，回收时，都是把 <code>viewHolder</code> 放在 <code>mCachedViews</code> 里面，如果<code>mCachedViews</code> 满了，那就在<code>mCachedViews</code> 里拿一个<code>ViewHolder</code> 扔到 <code>ViewPool</code> 缓存里，然后<code>mCachedViews</code> 就可以空出位置来放新回收的<code>ViewHolder</code> 了。</p>
+<blockquote>
+<p><code>mCachedViews</code> 里存放的 <code>ViewHolder</code> 只有原本位置的卡位才能复用</p>
+<p>参考链接：<a href="https://blog.csdn.net/xJ032w2j4cCjhOW8s8/article/details/79946425" target="_blank" rel="noopener">https://blog.csdn.net/xJ032w2j4cCjhOW8s8/article/details/79946425</a></p>
+</blockquote>
+<p>===================================================================================</p>
+<ul>
+<li><code>updateViewCacheSize()</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">updateViewCacheSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> extraCache = mLayout != <span class="keyword">null</span> ? mLayout.mPrefetchMaxCountObserved : <span class="number">0</span>;</span><br><span class="line">            mViewCacheMax = mRequestedCacheMax + extraCache;</span><br><span class="line">            ....</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在第一次向上滑动</p>
+</blockquote>
 
       
     </div>
@@ -623,7 +649,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -636,7 +662,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
@@ -671,7 +697,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-RecycleView-如何设置分割线的？"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-RecycleView-&#x5982;&#x4F55;&#x8BBE;&#x7F6E;&#x5206;&#x5272;&#x7EBF;&#x7684;&#xFF1F;" class="headerlink" title="1. RecycleView &#x5982;&#x4F55;&#x8BBE;&#x7F6E;&#x5206;&#x5272;&#x7EBF;&#x7684;&#xFF1F;"></a>1. RecycleView &#x5982;&#x4F55;&#x8BBE;&#x7F6E;&#x5206;&#x5272;&#x7EBF;&#x7684;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RecycleView-分割线的样式如何修改？"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-RecycleView-&#x5206;&#x5272;&#x7EBF;&#x7684;&#x6837;&#x5F0F;&#x5982;&#x4F55;&#x4FEE;&#x6539;&#xFF1F;" class="headerlink" title="2. RecycleView &#x5206;&#x5272;&#x7EBF;&#x7684;&#x6837;&#x5F0F;&#x5982;&#x4F55;&#x4FEE;&#x6539;&#xFF1F;"></a>2. RecycleView &#x5206;&#x5272;&#x7EBF;&#x7684;&#x6837;&#x5F0F;&#x5982;&#x4F55;&#x4FEE;&#x6539;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-RecycleView-缓存"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3-RecycleView-&#x7F13;&#x5B58;" class="headerlink" title="3. RecycleView &#x7F13;&#x5B58;"></a>3. RecycleView &#x7F13;&#x5B58;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-RecycleView-刷新闪屏"><span class="nav-number">4.</span> <span class="nav-text"><a href="#4-RecycleView-&#x5237;&#x65B0;&#x95EA;&#x5C4F;" class="headerlink" title="4. RecycleView &#x5237;&#x65B0;&#x95EA;&#x5C4F;"></a>4. RecycleView &#x5237;&#x65B0;&#x95EA;&#x5C4F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-RecycleView-和-listView"><span class="nav-number">5.</span> <span class="nav-text"><a href="#5-RecycleView-&#x548C;-listView" class="headerlink" title="5. RecycleView &#x548C; listView"></a>5. RecycleView &#x548C; listView</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-RecycleView-如何设置分割线的？"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-RecycleView-&#x5982;&#x4F55;&#x8BBE;&#x7F6E;&#x5206;&#x5272;&#x7EBF;&#x7684;&#xFF1F;" class="headerlink" title="1. RecycleView &#x5982;&#x4F55;&#x8BBE;&#x7F6E;&#x5206;&#x5272;&#x7EBF;&#x7684;&#xFF1F;"></a>1. RecycleView &#x5982;&#x4F55;&#x8BBE;&#x7F6E;&#x5206;&#x5272;&#x7EBF;&#x7684;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RecycleView-分割线的样式如何修改？"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-RecycleView-&#x5206;&#x5272;&#x7EBF;&#x7684;&#x6837;&#x5F0F;&#x5982;&#x4F55;&#x4FEE;&#x6539;&#xFF1F;" class="headerlink" title="2. RecycleView &#x5206;&#x5272;&#x7EBF;&#x7684;&#x6837;&#x5F0F;&#x5982;&#x4F55;&#x4FEE;&#x6539;&#xFF1F;"></a>2. RecycleView &#x5206;&#x5272;&#x7EBF;&#x7684;&#x6837;&#x5F0F;&#x5982;&#x4F55;&#x4FEE;&#x6539;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-RecycleView-缓存"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3-RecycleView-&#x7F13;&#x5B58;" class="headerlink" title="3. RecycleView &#x7F13;&#x5B58;"></a>3. RecycleView &#x7F13;&#x5B58;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-RecycleView-刷新闪屏"><span class="nav-number">4.</span> <span class="nav-text"><a href="#4-RecycleView-&#x5237;&#x65B0;&#x95EA;&#x5C4F;" class="headerlink" title="4. RecycleView &#x5237;&#x65B0;&#x95EA;&#x5C4F;"></a>4. RecycleView &#x5237;&#x65B0;&#x95EA;&#x5C4F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-RecycleView-和-listView"><span class="nav-number">5.</span> <span class="nav-text"><a href="#5-RecycleView-&#x548C;-listView" class="headerlink" title="5. RecycleView &#x548C; listView"></a>5. RecycleView &#x548C; listView</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-RecycleView-的回收复用机制的内部实现都是哪个类完成的？"><span class="nav-number">6.</span> <span class="nav-text"><a href="#6-RecycleView-&#x7684;&#x56DE;&#x6536;&#x590D;&#x7528;&#x673A;&#x5236;&#x7684;&#x5185;&#x90E8;&#x5B9E;&#x73B0;&#x90FD;&#x662F;&#x54EA;&#x4E2A;&#x7C7B;&#x5B8C;&#x6210;&#x7684;&#xFF1F;" class="headerlink" title="6. RecycleView &#x7684;&#x56DE;&#x6536;&#x590D;&#x7528;&#x673A;&#x5236;&#x7684;&#x5185;&#x90E8;&#x5B9E;&#x73B0;&#x90FD;&#x662F;&#x54EA;&#x4E2A;&#x7C7B;&#x5B8C;&#x6210;&#x7684;&#xFF1F;"></a>6. RecycleView &#x7684;&#x56DE;&#x6536;&#x590D;&#x7528;&#x673A;&#x5236;&#x7684;&#x5185;&#x90E8;&#x5B9E;&#x73B0;&#x90FD;&#x662F;&#x54EA;&#x4E2A;&#x7C7B;&#x5B8C;&#x6210;&#x7684;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复用机制"><span class="nav-number">7.</span> <span class="nav-text"><a href="#&#x590D;&#x7528;&#x673A;&#x5236;" class="headerlink" title="&#x590D;&#x7528;&#x673A;&#x5236;"></a>&#x590D;&#x7528;&#x673A;&#x5236;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#回收机制"><span class="nav-number">8.</span> <span class="nav-text"><a href="#&#x56DE;&#x6536;&#x673A;&#x5236;" class="headerlink" title="&#x56DE;&#x6536;&#x673A;&#x5236;"></a>&#x56DE;&#x6536;&#x673A;&#x5236;</span></a></li></ol></div>
             
 
           </div>
