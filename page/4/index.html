@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -202,7 +202,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -215,7 +215,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            Search
+            Suche
           </a>
         </li>
       
@@ -273,6 +273,146 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/14/Kotlin-传递数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/14/Kotlin-传递数据/" itemprop="url">Kotlin 传递数据</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-14T14:05:50+08:00">
+                2018-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/14/Kotlin-传递数据/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/14/Kotlin-传递数据/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>今天在掘金看到使用 <code>Kotlin</code> 高阶函数传递<code>Intent</code> 数据很简洁，觉着可以试试，并应用到项目中去，自己再加以理解，记录笔记，方便查阅。掘金原文章地址：<a href="https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw</a></p>
+</blockquote>
+<p>传统的<code>Intent</code> 数据传递我就不介绍了，只介绍<code>Kotlin</code>实现方式：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//目标 假设叫`KTestActivity4`  定义   </span></span><br><span class="line">object IntentOptions&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_KEY = <span class="string">"key for message"</span></span><br><span class="line"></span><br><span class="line">        var Intent.message: String?</span><br><span class="line">            get() = getStringExtra(MSG_KEY)</span><br><span class="line">            set(message) &#123;</span><br><span class="line">                putExtra(MSG_KEY,message)</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//跳转时 </span></span><br><span class="line">with(KTestActivity4.IntentOptions)&#123;</span><br><span class="line">            intent = Intent(<span class="keyword">this</span><span class="meta">@KTestActivity</span>5,KTestActivity4::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class">            <span class="title">intent</span>.<span class="title">message</span> </span>= <span class="string">"I am KTestActivity5"</span></span><br><span class="line">             startActivity(intent)</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line">with(IntentOptions)&#123;</span><br><span class="line">            var message= intent.message</span><br><span class="line">            Toast.makeText(<span class="keyword">this</span><span class="meta">@KTestActivity</span>4,<span class="string">"显示信息："</span>+message,Toast.LENGTH_SHORT).show()</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>假设有多个数据传递：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">object IntentOptions&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_KEY = <span class="string">"key for message"</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_ID = <span class="string">"ID for message"</span></span><br><span class="line"></span><br><span class="line">        var Intent.message: String?</span><br><span class="line">            get() = getStringExtra(MSG_KEY)</span><br><span class="line">            set(message) &#123;</span><br><span class="line">                putExtra(MSG_KEY,message)</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="comment">// 再多增加一条即可</span></span><br><span class="line">          var Intent.id: String?</span><br><span class="line">              get() = getStringExtra(MSG_ID)</span><br><span class="line">              set(id) &#123;</span><br><span class="line">                putExtra(MSG_ID,id)</span><br><span class="line">              &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// 传递时</span></span><br><span class="line">with(KTestActivity4.IntentOptions)&#123;</span><br><span class="line">            intent = Intent(<span class="keyword">this</span><span class="meta">@KTestActivity</span>5,KTestActivity4::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class">            <span class="title">intent</span>.<span class="title">message</span> </span>= <span class="string">"I am KTestActivity5"</span></span><br><span class="line">             intent.id = <span class="string">"I am id"</span></span><br><span class="line">             startActivity(intent)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有另外一种传递方式：委托机制，不是特别明白。国外大神封装的<code>github</code>地址：<a href="https://github.com/Takhion/android-extras-delegates">https://github.com/Takhion/android-extras-delegates</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/13/阿里巴巴Android开发手册/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -302,7 +442,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-13T15:28:46+08:00">
                 2018-03-13
@@ -463,7 +603,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-08T14:58:19+08:00">
                 2018-03-08
@@ -601,7 +741,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T17:47:41+08:00">
                 2018-02-28
@@ -895,7 +1035,7 @@ protected void onCreate(Bundle savedInstanceState) {
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T14:47:16+08:00">
                 2018-02-28
@@ -1044,7 +1184,7 @@ protected void onCreate(Bundle savedInstanceState) {
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-30T16:46:46+08:00">
                 2018-01-30
@@ -1296,7 +1436,7 @@ fail : function(s){
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-24T16:29:52+08:00">
                 2018-01-24
@@ -1441,7 +1581,7 @@ fail : function(s){
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-16T17:43:30+08:00">
                 2018-01-16
@@ -1600,7 +1740,7 @@ fail : function(s){
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-11T14:00:14+08:00">
                 2018-01-11
@@ -1748,7 +1888,7 @@ fail : function(s){
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-09T11:31:06+08:00">
                 2018-01-09
@@ -1852,157 +1992,6 @@ fail : function(s){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/08/AIDL实例/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/08/AIDL实例/" itemprop="url">AIDL实例</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-08T13:51:43+08:00">
-                2018-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/08/AIDL实例/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/08/AIDL实例/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>说到进程间通信，一般首先就会想到<code>AIDL</code>，也看了很多文章，做下笔记，记录一下，方便以后查阅。</p>
-</blockquote>
-<p>对于  <code>AIDL</code> 我是这样理解的，首先进程间是无法通信的，那要通信就得有一个媒介或者说两个进程有统一对外的接口可以相互识别，从这个 <code>AIDL</code>全程的名字<code>Android Interface Definition Language</code> (android 接口定义语言) 来看不难看出它就是我们进程间通信的媒介，它可以实现我们想要的通信。</p>
-<p>在翻阅网上各类文章的讲解后，我认为一个比较好的实例可以更好理解这个东西，具体如下：</p>
-<h1 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h1><p>我们新创建两个<code>module</code>，代表我们两个进程，进程名称默认就是我们程序的包名：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-2622b4af0ef4f45a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300" alt="image.png"></p>
-<h1 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h1><p>我们先编写<code>service</code>这个<code>module</code>里的代码，先定义一个  <code>Person</code>的一个<code>bean</code>对象，记住一定要<code>implements Parcelable</code> 接口，大致如下：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-2be1461f1e8c1cb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300" alt="image.png"><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String mName;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        mName = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">Person</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">        mName = in.readString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;Person&gt; CREATOR = <span class="keyword">new</span> Creator&lt;Person&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Person <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Person(in);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Person[] newArray(<span class="keyword">int</span> size) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Person[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel dest, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">        dest.writeString(mName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"\nPerson&#123;"</span> +</span><br><span class="line">                <span class="string">"mName='"</span> + mName + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后我们再新建一个文件夹：<code>aidl</code>,新建一个包名和<code>Person</code>类一模一样的包名和与之对应的<code>aidl</code>,还有一个我们对外提供获取<code>person</code>集合的一个<code>aidl</code>:<br><img src="http://upload-images.jianshu.io/upload_images/1948557-44cd8f26c62f570f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br> 在<code>Person.aidl</code>里，我们序列化我们<code>java</code>里的 <code>Person</code> 类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.service.bean;</span><br><span class="line"></span><br><span class="line"><span class="comment">//还要和声明的实体类在一个包里，同时注意不要新建aidl文件，因为你会发现，新建不了，</span></span><br><span class="line"><span class="comment">//提示你名称唯一，此时你新建一个file,名字为Person.aidl就可以，需要特别注意下</span></span><br><span class="line">parcelable Person;</span><br></pre></td></tr></table></figure>
-<p><code>IMyAidl.aidl</code> 文件提供对外方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// IMyAidl.aidl</span><br><span class="line">package com.example.service.bean;</span><br><span class="line">//特别注意一定要手动导包，不会自动导包</span><br><span class="line">import com.example.service.bean.Person;</span><br><span class="line"></span><br><span class="line">// Declare any non-default types here with import statements</span><br><span class="line">//可以理解为通信媒介</span><br><span class="line">interface IMyAidl &#123;</span><br><span class="line"></span><br><span class="line">     /**</span><br><span class="line">         * 除了基本数据类型，其他类型的参数都需要标上方向类型：in(输入), out(输出), inout(输入输出)</span><br><span class="line">         */</span><br><span class="line">        void addPerson(in Person person);</span><br><span class="line"></span><br><span class="line">        List&lt;Person&gt; getPersonList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后在我们的<code>java文件</code>里，新建一个<code>MyAidlService</code>,<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAidlService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String  TAG = <span class="keyword">this</span>.getClass().getSimpleName();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Person&gt; mPersons;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建生成本地的binder ,实现AIDL的方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> IBinder mIBinder = <span class="keyword">new</span> IMyAidl.Stub()&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPerson</span><span class="params">(Person person)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">            mPersons.add(person);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> List&lt;Person&gt; <span class="title">getPersonList</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> mPersons;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 客户端与服务端绑定时的回调，返回IBinder对象后客户端就可以通过它远程调用服务端的方法，即实现了通讯</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> intent</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">        mPersons = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">return</span> mIBinder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>最后别忘了在清单文件中注册<code>MyAidlService</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;service</span><br><span class="line">            android:name=<span class="string">"com.example.service.MyAidlService"</span></span><br><span class="line">            android:enabled=<span class="string">"true"</span></span><br><span class="line">            android:exported=<span class="string">"true"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
-<p>到此，我们完成了<code>service</code>端的工作：</p>
-<h1 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h1><p>将我们刚才创建好的<code>aidl</code>文件夹拷贝到 <code>app</code> <code>module</code>下<code>main</code>文件夹下，在<code>MainActivity</code>中绑定服务，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">        intent.setComponent(<span class="keyword">new</span> ComponentName(<span class="string">"com.example.service"</span>,<span class="string">"com.example.service.MyAidlService"</span>));</span><br><span class="line">        bindService(intent,mConnection,BIND_AUTO_CREATE);</span><br></pre></td></tr></table></figure></p>
-<p>其中这个<code>mConnection</code>可以让我们拿到<code>IMyAidl</code>对象的代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private ServiceConnection mConnection = new ServiceConnection() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceConnected(ComponentName componentName, IBinder iBinder) &#123;</span><br><span class="line"></span><br><span class="line">            mAidl = IMyAidl.Stub.asInterface(iBinder);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceDisconnected(ComponentName componentName) &#123;</span><br><span class="line">            mAidl = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure></p>
-<p>通过返回的<code>IBinder</code> 拿到这个<code>IMyAidl</code>，此时我们就可以通信了，例如我们调用<code>IMyAidl</code>中的<code>addPerso</code>n方法，再调用<code>getPersonList</code>看看：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Random random = <span class="keyword">new</span> Random();</span><br><span class="line">       Person person = <span class="keyword">new</span> Person(<span class="string">"qian"</span>+random.nextInt(<span class="number">20</span>));</span><br><span class="line"></span><br><span class="line">       <span class="keyword">try</span>&#123;</span><br><span class="line">           mAidl.addPerson(person);</span><br><span class="line">           List&lt;Person&gt; mPersons = mAidl.getPersonList();</span><br><span class="line"></span><br><span class="line">           tvName.setText(mPersons.toString());</span><br><span class="line">       &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure></p>
-<p>打印发现list 返回了我们添加的<code>Person</code>，完成了<code>app</code>与<code>service</code>两个进程间的通信。<br><code>demo</code>地址：<a href="https://github.com/QQabby/AIDLDemo">https://github.com/QQabby/AIDLDemo</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2053,8 +2042,8 @@ fail : function(s){
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">43</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -2067,7 +2056,7 @@ fail : function(s){
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
                   <span class="site-state-item-count">31</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
             
@@ -2115,7 +2104,7 @@ fail : function(s){
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 

@@ -87,10 +87,17 @@
 <meta property="og:site_name" content="糖葫芦">
 <meta property="og:description" content="为了更清晰的观察 recycleView 缓存复用，在看到有一篇文章是打印缓存相关信息后，觉着确实是一种办法，比打断点更合适查看缓存的变化情况，就尝试自己写了写。  这里我主要利用反射观察的是：mCachedViews 和 recycleViewPool  里面的变化情况。代码如下： 12345678910111213141516171819202122232425262728293031323">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-29T01:41:00.077Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-27492586f55e0863.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/600">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-c2458832f3c67cb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-0c788729353d624f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-838bccbb3e3a5030.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-9937ef01f3e9ab4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-8fa55d658c125d56.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-12-06T02:37:24.222Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RecycleView更清晰地观察缓存">
 <meta name="twitter:description" content="为了更清晰的观察 recycleView 缓存复用，在看到有一篇文章是打印缓存相关信息后，觉着确实是一种办法，比打断点更合适查看缓存的变化情况，就尝试自己写了写。  这里我主要利用反射观察的是：mCachedViews 和 recycleViewPool  里面的变化情况。代码如下： 12345678910111213141516171819202122232425262728293031323">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-27492586f55e0863.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/600">
 
 
 
@@ -186,7 +193,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -206,7 +213,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -219,7 +226,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            Search
+            Suche
           </a>
         </li>
       
@@ -304,7 +311,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-28T15:05:09+08:00">
                 2018-11-28
@@ -363,6 +370,31 @@
 <p>需要注意的是：反射获取</p>
 <p>然后在 <code>recycleView</code> 滚动的时候，显示信息：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">recyclerView.addOnScrollListener(<span class="keyword">new</span> RecyclerView.OnScrollListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScrolled</span><span class="params">(RecyclerView recyclerView, <span class="keyword">int</span> dx, <span class="keyword">int</span> dy)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">super</span>.onScrolled(recyclerView, dx, dy);</span><br><span class="line"><span class="comment">//                int recycleCount = recyclerView.getRecycledViewPool().getRecycledViewCount(666);</span></span><br><span class="line"><span class="comment">//                Log.i("xx","recyclePoolCount::"+recycleCount);</span></span><br><span class="line"></span><br><span class="line">                getInfo();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<p>还有可以在 <code>adapter</code> 重写方法： <code>onViewRecycled(ViewHOlder holder)</code> 方法，可以查看最新被回收的位置<code>ViewHolder</code> ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewRecycled</span><span class="params">(ViewHolder holder)</span> </span>&#123;</span><br><span class="line">      Log.i(<span class="string">"xx"</span>,<span class="string">"holder被回收了"</span>+holder);<span class="comment">//可以拿到被回收holder的相关信息</span></span><br><span class="line">      <span class="keyword">super</span>.onViewRecycled(holder);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这样我们就可以通过日志的方式来近距离查看 <code>recyclerView</code> 复用回收。</p>
+</blockquote>
+<p>我们假设这样一个场景：总共假设有20个<code>item</code> ,使用 <code>GrideLayoutManager</code> 每行显示5个，一个屏幕差不多显示两行，如下图所示：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-27492586f55e0863.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt="image.png"></p>
+<p>我们在 <code>adapter</code> 的 <code>onCreateViewHolder</code> 和 <code>onBindViewHolder</code> 方法的地方都打印日志，并且重写 <code>onViewRecycled</code> 方法，查看 <code>View</code> 的回收情况。</p>
+<p>当我们向下滑动，将第一行的数据滑出屏幕后，我们发现打印日志如下：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-c2458832f3c67cb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>我们发现 2，3，4卡位的 <code>ViewHolder</code> 被回收了。这里的被回收是指添加到 <code>RecycleViewPool</code> 当中了。<br>此时 <code>mCachedViews</code> 中的缓存信息如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-0c788729353d624f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>从日志上来看，它缓存了：1，0，15，16，17，18，19共7个卡位的数据。</p>
+<blockquote>
+<p>这里补充一下：<code>mCachedViews</code> 的大小在源码定义中默认是:<br><code>static final int DEFAULT_CACHE_SIZE = 2;</code>（当然也可以自己设置，通过 <code>RecyclerView #setItemViewCacheSize</code>，一般不设置）经过我的多次实验观察，当每行设置为5列时，<code>mCachedViews.size == 2+ 5 = 7</code>,当每行是4时，<code>mCachedViews.size == 2+ 4 = 6</code>，所以此时就是<code>mCachedView.size 是7</code>。</p>
+</blockquote>
+<p>问题1：为什么<code>mCachedViews</code> 缓存的卡位是1，0，15，16，17，18，19？<br>要回答这个问题，首先应该明白当我们在滑动第三行展示的时候，此时 <code>RecyclerView</code> 创建了第四行的 <code>ViewHolder</code>,即 15，16，17，18，19因为它们未曾展示到屏幕上，所以被 <code>mCachedViews</code> 缓存，继续滑动，第一行数据移出屏幕之外，也要回收了，0，1，2，3，4，5 这5个是将要被缓存，但是<code>mCachedVIews</code> 已经缓存了5个，势必只能再添加两个，两外三个卡位的 <code>ViewHolder</code> 将要被回收，<code>GrideLayoutManager</code> 默认从右往左回收：</p>
+<p>第一次回收4，3卡位如图：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-838bccbb3e3a5030.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>第二次回收2卡位如图：</p>
+<blockquote>
+<p>因为此时缓存数量已到最大值7了，所以再次添加时，会移除第一个。代码如下：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int cachedViewSize = mCachedViews.size();</span><br><span class="line">                    if (cachedViewSize &gt;= mViewCacheMax &amp;&amp; cachedViewSize &gt; 0) &#123;</span><br><span class="line">                        recycleCachedViewAt(0);</span><br><span class="line">                        cachedViewSize--;</span><br><span class="line">                    &#125;</span><br></pre></td></tr></table></figure>
+<p>日志：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-9937ef01f3e9ab4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>新缓存的2卡位被插入<code>index = 1</code> 的位置。<br>如此，我们就可以知道当1卡位会回收时，<code>mCachedViews</code> 中缓存的信息应该是，先移除第0个，也就是<code>position= 3</code> 的 <code>ViewHolder</code>,插入到 <code>index = 1</code> 的位置，顺序应该是：2，1，15，16，17，18，19，好我们看下日志：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-8fa55d658c125d56.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>是的，不出我们所料，至此到最后我们就知道了，当0卡位被回收时，<code>mCachedViews</code> 的缓存信息就是：1，0，15，16，17，18，19. 被移除的<code>ViewHolder</code> 被添加到了 <code>RecycleViewPool</code> 当中了，从 <code>RecycleViewPool</code> 当中取出的 <code>ViewHolder</code> 类似于全新的，但是不会重新调用 <code>onCreateViewHolder</code>,会重新调用 <code>onBindViewHolder</code> 重新绑定数据。</p>
 
       
     </div>
@@ -412,6 +444,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/04/彻底弄懂RecycleView的复用机制/" rel="prev" title="彻底弄懂RecycleView的复用机制">
+                彻底弄懂RecycleView的复用机制 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -489,8 +525,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">43</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -503,7 +539,7 @@
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
                   <span class="site-state-item-count">31</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
             
@@ -551,7 +587,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
