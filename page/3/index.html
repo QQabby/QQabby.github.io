@@ -273,6 +273,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/09/11/Service启动过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Service启动过程/" itemprop="url">Service 启动过程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-11T09:38:47+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/11/Service启动过程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/11/Service启动过程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>看完 <code>Activity</code> 的启动过程，发现 <code>Service</code> 的启动过程相对来说就比较简单了。</p>
+</blockquote>
+<p>要说起启动过程，就得从 <code>startService</code> 开始：</p>
+<h1 id="1-startService"><a href="#1-startService" class="headerlink" title="1.startService"></a>1.startService</h1><p>根据源码的跳转，发现跳转到 <code>ContextWrapper</code> 这个类中，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public ComponentName startService(Intent service) &#123;</span><br><span class="line">        return mBase.startService(service);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中 <code>mBase</code> 是类型是：<code>Context</code> 类型，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class ContextWrapper extends Context &#123;</span><br><span class="line">    Context mBase;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>而我们又知道 <code>Context</code> 是一个抽象类 ，实现者是 <code>ContextImpl</code> ,所以我们应该是查看<code>ContextImpl</code> 这个类中的 <code>startService(service)</code> 方法。</p>
+<p><code>ContextImpl</code> 中的方法定义如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public ComponentName startService(Intent service) &#123;</span><br><span class="line">        warnIfCallingFromSystemProcess();</span><br><span class="line">        return startServiceCommon(service, false, mUser);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 <code>startService</code> 中又调用了 <code>startServiceCommon(service,(requirForeground:false),mUser)</code> 这个方法，继续跟进：</p>
+<h1 id="2-startServiceCommon"><a href="#2-startServiceCommon" class="headerlink" title="2.startServiceCommon"></a>2.startServiceCommon</h1><p><code>startServiceCommon</code> 方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">private ComponentName startServiceCommon(Intent service, boolean requireForeground,</span><br><span class="line">            UserHandle user) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">          //校验要启动的service</span><br><span class="line">            validateServiceIntent(service);</span><br><span class="line">            service.prepareToLeaveProcess(this);</span><br><span class="line">            ComponentName cn = ActivityManager.getService().startService(</span><br><span class="line">                mMainThread.getApplicationThread(), service, service.resolveTypeIfNeeded(</span><br><span class="line">                            getContentResolver()), requireForeground,</span><br><span class="line">                            getOpPackageName(), user.getIdentifier());</span><br><span class="line">            if (cn != null) &#123;</span><br><span class="line">                if (cn.getPackageName().equals(&quot;!&quot;)) &#123;</span><br><span class="line">                    throw new SecurityException(</span><br><span class="line">                            &quot;Not allowed to start service &quot; + service</span><br><span class="line">                            + &quot; without permission &quot; + cn.getClassName());</span><br><span class="line">                &#125; else if (cn.getPackageName().equals(&quot;!!&quot;)) &#123;</span><br><span class="line">                    throw new SecurityException(</span><br><span class="line">                            &quot;Unable to start service &quot; + service</span><br><span class="line">                            + &quot;: &quot; + cn.getClassName());</span><br><span class="line">                &#125; else if (cn.getPackageName().equals(&quot;?&quot;)) &#123;</span><br><span class="line">                    throw new IllegalStateException(</span><br><span class="line">                            &quot;Not allowed to start service &quot; + service + &quot;: &quot; + cn.getClassName());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return cn;</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            throw e.rethrowFromSystemServer();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里面有几个需要说明一下：</p>
+<ul>
+<li><code>ActivityManager.getService()</code>  点进去查看<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * @hide</span><br><span class="line">     */</span><br><span class="line">    public static IActivityManager getService() &#123;</span><br><span class="line">        return IActivityManagerSingleton.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static final Singleton&lt;IActivityManager&gt; IActivityManagerSingleton =</span><br><span class="line">            new Singleton&lt;IActivityManager&gt;() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                protected IActivityManager create() &#123;</span><br><span class="line">                    final IBinder b = ServiceManager.getService(Context.ACTIVITY_SERVICE);</span><br><span class="line">                    final IActivityManager am = IActivityManager.Stub.asInterface(b);</span><br><span class="line">                    return am;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>首先是返回的类型是 <code>IActivityManager</code> 类型，其中在<code>create</code> 方法中，拿到远程服务的<code>Binder</code> 对象，其中<code>IActivityManager.Stub.asInterface(b)</code> 不知道大家有没有想起<code>AIDL</code> 这就很熟悉了，就是拿到远程服务的代理对象：<code>IActivityManager</code>,通过代理对象调用远程的方法，是应用进程与服务进程通信的媒介，如果没猜错的话就是在<code>ActivityManagerService</code> 中实现了，查看<code>ActivityManagerService</code> 类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class ActivityManagerService extends IActivityManager.Stub</span><br><span class="line">        implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback &#123;</span><br><span class="line">.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>果然不出所料，<code>AMS extend  IActivityManager.Stub</code>  .</p>
+<ul>
+<li><code>mMainThread.getApplicationThread()</code> 首先明白 <code>mMainThread</code> 是 <code>ActivityThread</code> 类的实例变量，通过<code>getApplicationThread()</code> 方法拿到一个 <code>ApplicationThread</code> 类的实例：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public ApplicationThread getApplicationThread()</span><br><span class="line">    &#123;</span><br><span class="line">        return mAppThread;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>而<code>ApplicationThread</code> 类定义如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private class ApplicationThread extends IApplicationThread.Stub &#123;</span><br><span class="line">.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>发现 <code>ApplicationThread</code> 是 <code>ActivityThread</code> 的一个内部类.并且实现了 <code>IApplicationThread.Stub</code> ,而我们又把这个类型传入给了<code>AMS</code>,相当于远程服务拿到了一个访问应用进程的代理，类型为：<code>IApplicationThread</code></p>
+<blockquote>
+<p>总结：到目前为止，客户端拿到了远程服务的代理<code>（IActivityManager）</code>, 服务端拿到了客户端的代理<code>（IApplicationThread）</code>,它们互相拿到各自进程的代理类，是它们进行进程间通信的基础。</p>
+</blockquote>
+<p>ok ,我们回到最初那个地方：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ComponentName cn = ActivityManager.getService().startService(</span><br><span class="line">                mMainThread.getApplicationThread(), service, service.resolveTypeIfNeeded(</span><br><span class="line">                            getContentResolver()), requireForeground,</span><br><span class="line">                            getOpPackageName(), user.getIdentifier());</span><br></pre></td></tr></table></figure></p>
+<p>通过前面的分析我们知道：<code>ActivityManager.getService().</code> 实际就是 <code>AMS</code> 远程代理，最终在<code>AMS</code> 中完成，我们去 <code>AMS</code> 代码中查看下 <code>startService</code> 代码：</p>
+<h1 id="3-ActivityManagerService-startService"><a href="#3-ActivityManagerService-startService" class="headerlink" title="3.ActivityManagerService.  startService"></a>3.ActivityManagerService.  startService</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public ComponentName startService(IApplicationThread caller, Intent service,</span><br><span class="line">            String resolvedType, boolean requireForeground, String callingPackage, int userId)</span><br><span class="line">            throws TransactionTooLargeException &#123;</span><br><span class="line">        enforceNotIsolatedCaller(&quot;startService&quot;);</span><br><span class="line">        // Refuse possible leaked file descriptors</span><br><span class="line">        if (service != null &amp;&amp; service.hasFileDescriptors() == true) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;File descriptors passed in Intent&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (callingPackage == null) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;callingPackage cannot be null&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (DEBUG_SERVICE) Slog.v(TAG_SERVICE,</span><br><span class="line">                &quot;*** startService: &quot; + service + &quot; type=&quot; + resolvedType + &quot; fg=&quot; + requireForeground);</span><br><span class="line">        synchronized(this) &#123;</span><br><span class="line">            final int callingPid = Binder.getCallingPid();</span><br><span class="line">            final int callingUid = Binder.getCallingUid();</span><br><span class="line">            final long origId = Binder.clearCallingIdentity();</span><br><span class="line">            ComponentName res;</span><br><span class="line">            try &#123;</span><br><span class="line">                // 又调用了startServiceLocked 方法</span><br><span class="line">                res = mServices.startServiceLocked(caller, service,</span><br><span class="line">                        resolvedType, callingPid, callingUid,</span><br><span class="line">                        requireForeground, callingPackage, userId);</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                Binder.restoreCallingIdentity(origId);</span><br><span class="line">            &#125;</span><br><span class="line">            return res;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><code>startServiceLocked</code> 方法很复杂，大概如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ComponentName startServiceLocked(IApplicationThread caller, Intent service, String resolvedType,</span><br><span class="line">            int callingPid, int callingUid, boolean fgRequired, String callingPackage, final int userId)</span><br><span class="line">            throws TransactionTooLargeException &#123;</span><br><span class="line"></span><br><span class="line">.....</span><br><span class="line">ServiceRecord r = res.record;//启动service的信息保存在 serviceRecord 中</span><br><span class="line">....</span><br><span class="line">   ComponentName cmp = startServiceInnerLocked(smap, service, r, callerFg, addToStarting);</span><br><span class="line">        return cmp;</span><br><span class="line">.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>内部又调用了：<code>startServiceInnerLocked</code> 方法</p>
+<h1 id="4-startServiceInnerLocked"><a href="#4-startServiceInnerLocked" class="headerlink" title="4.startServiceInnerLocked"></a>4.startServiceInnerLocked</h1><p>如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ComponentName startServiceInnerLocked(ServiceMap smap, Intent service, ServiceRecord r,</span><br><span class="line">            boolean callerFg, boolean addToStarting) throws TransactionTooLargeException &#123;</span><br><span class="line">...</span><br><span class="line">  String error = bringUpServiceLocked(r, service.getFlags(), callerFg, false, false);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>又调用： <code>bringUpServiceLocked</code></p>
+<h1 id="5-bringUpServiceLocked"><a href="#5-bringUpServiceLocked" class="headerlink" title="5.bringUpServiceLocked"></a>5.bringUpServiceLocked</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> private String bringUpServiceLocked(ServiceRecord r, int intentFlags, boolean execInFg,</span><br><span class="line">            boolean whileRestarting, boolean permissionsReviewRequired)</span><br><span class="line">            throws TransactionTooLargeException &#123;</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">realStartServiceLocked(r, app, execInFg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而后又调用了 <code>realStartServiceLocked(r, app, execInFg);</code> </p>
+<h1 id="6-realStartServiceLocked"><a href="#6-realStartServiceLocked" class="headerlink" title="6.realStartServiceLocked"></a>6.realStartServiceLocked</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private final void realStartServiceLocked(ServiceRecord r,</span><br><span class="line">            ProcessRecord app, boolean execInFg) throws RemoteException &#123;</span><br><span class="line">      ....</span><br><span class="line">          app.thread.scheduleCreateService(r, r.serviceInfo,</span><br><span class="line">                    mAm.compatibilityInfoForPackageLocked(r.serviceInfo.applicationInfo),</span><br><span class="line">                    app.repProcState);</span><br><span class="line">      ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>app.thread</code>  是 <code>IApplicationThread</code> 类型，就是远程调用客户端进程里的方法，<code>scheduleCreateService</code> ,而我们又知道 <code>ApplicationThread</code> 实现了 <code>IApplicationThread</code>，所以就查看 <code>ApplicationThread</code> 类中的 <code>scheduleCreateService</code>方法，前面我们说过<code>ApplicationThread</code> 是 <code>ActivityThread</code> 的一个内部类，查看：</p>
+<h1 id="7-ApplicationThread-scheduleCreateService"><a href="#7-ApplicationThread-scheduleCreateService" class="headerlink" title="7.ApplicationThread.scheduleCreateService"></a>7.ApplicationThread.scheduleCreateService</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public final void scheduleCreateService(IBinder token,</span><br><span class="line">                ServiceInfo info, CompatibilityInfo compatInfo, int processState) &#123;</span><br><span class="line">            updateProcessState(processState, false);</span><br><span class="line">            CreateServiceData s = new CreateServiceData();</span><br><span class="line">            s.token = token;</span><br><span class="line">            s.info = info;</span><br><span class="line">            s.compatInfo = compatInfo;</span><br><span class="line"></span><br><span class="line">            sendMessage(H.CREATE_SERVICE, s);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>发现内部通过发送一个 <code>CREATE_SERVICE</code> 的消息，<code>H</code> 是 <code>Handle</code>,继续查看：<br><code>handleMessage</code> 方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">case CREATE_SERVICE:</span><br><span class="line">                    Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, (&quot;serviceCreate: &quot; + String.valueOf(msg.obj)));</span><br><span class="line">                    handleCreateService((CreateServiceData)msg.obj);</span><br><span class="line">                    Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);</span><br><span class="line">                    break;</span><br></pre></td></tr></table></figure>
+<p>到 <code>handleCreateService</code> 中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">private void handleCreateService(CreateServiceData data) &#123;</span><br><span class="line">        // If we are getting ready to gc after going to the background, well</span><br><span class="line">        // we are back active so skip it.</span><br><span class="line">        unscheduleGcIdler();</span><br><span class="line"></span><br><span class="line">        LoadedApk packageInfo = getPackageInfoNoCheck(</span><br><span class="line">                data.info.applicationInfo, data.compatInfo);</span><br><span class="line">        Service service = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            java.lang.ClassLoader cl = packageInfo.getClassLoader();</span><br><span class="line">            service = (Service) cl.loadClass(data.info.name).newInstance();</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            if (!mInstrumentation.onException(service, e)) &#123;</span><br><span class="line">                throw new RuntimeException(</span><br><span class="line">                    &quot;Unable to instantiate service &quot; + data.info.name</span><br><span class="line">                    + &quot;: &quot; + e.toString(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            if (localLOGV) Slog.v(TAG, &quot;Creating service &quot; + data.info.name);</span><br><span class="line">          //创建context</span><br><span class="line">            ContextImpl context = ContextImpl.createAppContext(this, packageInfo);</span><br><span class="line">            context.setOuterContext(service);</span><br><span class="line">          //创建Application</span><br><span class="line">            Application app = packageInfo.makeApplication(false, mInstrumentation);</span><br><span class="line">  //通过attach 方法，将context application ，service 连接起来</span><br><span class="line">            service.attach(context, this, data.info.name, data.token, app,</span><br><span class="line">                    ActivityManager.getService());</span><br><span class="line">          //调用service oncreate方法</span><br><span class="line">            service.onCreate();</span><br><span class="line">            mServices.put(data.token, service);</span><br><span class="line">            try &#123;</span><br><span class="line">                ActivityManager.getService().serviceDoneExecuting(</span><br><span class="line">                        data.token, SERVICE_DONE_EXECUTING_ANON, 0, 0);</span><br><span class="line">            &#125; catch (RemoteException e) &#123;</span><br><span class="line">                throw e.rethrowFromSystemServer();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            if (!mInstrumentation.onException(service, e)) &#123;</span><br><span class="line">                throw new RuntimeException(</span><br><span class="line">                    &quot;Unable to create service &quot; + data.info.name</span><br><span class="line">                    + &quot;: &quot; + e.toString(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>service.onCreate();</code> ok ，调用了 <code>onCreate</code> 方法，至此，<code>service</code>的启动过程的就完成了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1682,146 +1858,6 @@ xxxhdpi（超超超高）~640dpi density=4
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/14/Kotlin-传递数据/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/14/Kotlin-传递数据/" itemprop="url">Kotlin 传递数据</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-14T14:05:50+08:00">
-                2018-03-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/14/Kotlin-传递数据/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/14/Kotlin-传递数据/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>今天在掘金看到使用 <code>Kotlin</code> 高阶函数传递<code>Intent</code> 数据很简洁，觉着可以试试，并应用到项目中去，自己再加以理解，记录笔记，方便查阅。掘金原文章地址：<a href="https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw</a></p>
-</blockquote>
-<p>传统的<code>Intent</code> 数据传递我就不介绍了，只介绍<code>Kotlin</code>实现方式：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//目标 假设叫`KTestActivity4`  定义   </span></span><br><span class="line">object IntentOptions&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_KEY = <span class="string">"key for message"</span></span><br><span class="line"></span><br><span class="line">        var Intent.message: String?</span><br><span class="line">            get() = getStringExtra(MSG_KEY)</span><br><span class="line">            set(message) &#123;</span><br><span class="line">                putExtra(MSG_KEY,message)</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//跳转时 </span></span><br><span class="line">with(KTestActivity4.IntentOptions)&#123;</span><br><span class="line">            intent = Intent(<span class="keyword">this</span><span class="meta">@KTestActivity</span>5,KTestActivity4::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class">            <span class="title">intent</span>.<span class="title">message</span> </span>= <span class="string">"I am KTestActivity5"</span></span><br><span class="line">             startActivity(intent)</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line">with(IntentOptions)&#123;</span><br><span class="line">            var message= intent.message</span><br><span class="line">            Toast.makeText(<span class="keyword">this</span><span class="meta">@KTestActivity</span>4,<span class="string">"显示信息："</span>+message,Toast.LENGTH_SHORT).show()</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
-<p>假设有多个数据传递：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">object IntentOptions&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_KEY = <span class="string">"key for message"</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_ID = <span class="string">"ID for message"</span></span><br><span class="line"></span><br><span class="line">        var Intent.message: String?</span><br><span class="line">            get() = getStringExtra(MSG_KEY)</span><br><span class="line">            set(message) &#123;</span><br><span class="line">                putExtra(MSG_KEY,message)</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="comment">// 再多增加一条即可</span></span><br><span class="line">          var Intent.id: String?</span><br><span class="line">              get() = getStringExtra(MSG_ID)</span><br><span class="line">              set(id) &#123;</span><br><span class="line">                putExtra(MSG_ID,id)</span><br><span class="line">              &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// 传递时</span></span><br><span class="line">with(KTestActivity4.IntentOptions)&#123;</span><br><span class="line">            intent = Intent(<span class="keyword">this</span><span class="meta">@KTestActivity</span>5,KTestActivity4::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class">            <span class="title">intent</span>.<span class="title">message</span> </span>= <span class="string">"I am KTestActivity5"</span></span><br><span class="line">             intent.id = <span class="string">"I am id"</span></span><br><span class="line">             startActivity(intent)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
-<p>还有另外一种传递方式：委托机制，不是特别明白。国外大神封装的<code>github</code>地址：<a href="https://github.com/Takhion/android-extras-delegates">https://github.com/Takhion/android-extras-delegates</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1872,7 +1908,7 @@ xxxhdpi（超超超高）~640dpi density=4
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1885,7 +1921,7 @@ xxxhdpi（超超超高）~640dpi density=4
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

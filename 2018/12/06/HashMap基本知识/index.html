@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="HashMap," />
 
 
 
@@ -79,13 +79,26 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="糖葫芦">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/tags/java/index.html">
+<meta name="description" content="自我总结  什么是 HashMap?首先看下类继承关系：   HashMap 是存储键值对的集合，一个 key–value , 这样的键值对也称为 Entry ，这些键值对分散存储于数组当中，组成 HashMap 的主干。   特点 其中 key 可为 null ；非线程安全；   其中 put 方法 和 get 方法比较重要。  put 方法 12345678910111213public V">
+<meta name="keywords" content="HashMap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashMap基本知识">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/12/06/HashMap基本知识/index.html">
 <meta property="og:site_name" content="糖葫芦">
+<meta property="og:description" content="自我总结  什么是 HashMap?首先看下类继承关系：   HashMap 是存储键值对的集合，一个 key–value , 这样的键值对也称为 Entry ，这些键值对分散存储于数组当中，组成 HashMap 的主干。   特点 其中 key 可为 null ；非线程安全；   其中 put 方法 和 get 方法比较重要。  put 方法 12345678910111213public V">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-efe988cf10bdbe95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-d546b4a3817d44ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-02db6c08604d274a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-3aafe8299c498f3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-7c14459101e253f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-db971df4f539f899.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-0109aae2931ed6ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-12-06T08:35:52.014Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="糖葫芦">
+<meta name="twitter:title" content="HashMap基本知识">
+<meta name="twitter:description" content="自我总结  什么是 HashMap?首先看下类继承关系：   HashMap 是存储键值对的集合，一个 key–value , 这样的键值对也称为 Entry ，这些键值对分散存储于数组当中，组成 HashMap 的主干。   特点 其中 key 可为 null ；非线程安全；   其中 put 方法 和 get 方法比较重要。  put 方法 12345678910111213public V">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-efe988cf10bdbe95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -115,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/tags/java/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/06/HashMap基本知识/"/>
 
 
 
 
 
-  <title>Tag: java | 糖葫芦</title>
+  <title>HashMap基本知识 | 糖葫芦</title>
   
 
 
@@ -140,7 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -258,138 +271,227 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>java<small>Tag</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/06/HashMap基本知识/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/11/19/时间复杂度/" itemprop="url">
-              
-                <span itemprop="name">时间复杂度</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">HashMap基本知识</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-19T15:17:21+08:00"
-              content="2018-11-19" >
-          11-19
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-06T14:49:49+08:00">
+                2018-12-06
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/06/HashMap基本知识/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/06/HashMap基本知识/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/19/java生产者消费者模式/" itemprop="url">
-              
-                <span itemprop="name">java生产者消费者模式</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-19T11:01:34+08:00"
-              content="2018-11-19" >
-          11-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/13/java基础二/" itemprop="url">
-              
-                <span itemprop="name">java基础二</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-13T09:47:55+08:00"
-              content="2018-11-13" >
-          11-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/12/Java基础知识/" itemprop="url">
-              
-                <span itemprop="name">Java基础知识</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-12T17:41:25+08:00"
-              content="2018-11-12" >
-          11-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <blockquote>
+<p>自我总结</p>
+</blockquote>
+<h1 id="什么是-HashMap"><a href="#什么是-HashMap" class="headerlink" title="什么是 HashMap?"></a>什么是 HashMap?</h1><p>首先看下类继承关系：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-efe988cf10bdbe95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<blockquote>
+<p><code>HashMap</code> 是存储键值对的集合，一个 <code>key</code>–<code>value</code> , 这样的键值对也称为 <code>Entry</code> ，这些键值对分散存储于数组当中，组成 <code>HashMap</code> 的主干。</p>
+</blockquote>
+<ul>
+<li><p>特点</p>
+<p>其中 <code>key</code> 可为 <code>null</code> ；非线程安全；</p>
+</li>
+</ul>
+<p>其中 <code>put</code> 方法 和 <code>get</code> 方法比较重要。</p>
+<ul>
+<li><p><code>put</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> putVal(hash(key), key, value, <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">       Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">       <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">           n = (tab = resize()).length;</span><br><span class="line">       <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">           tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">           .....</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>首先根据 <code>key</code> 计算 <code>hash</code> 值 , 如何算出在 <code>Node</code> 数组中具体的下标呢？从上面代码我们可以大概看出：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i = (n-<span class="number">1</span>) &amp; hash</span><br></pre></td></tr></table></figure>
+<p>就是数组的长度 -1 &amp; <code>key</code> 的<code>hash</code> 值。</p>
+<p>得到数组下标后，再把这个键值对放入进去，完成了 <code>put</code> 操作。</p>
+<p>假设我们：  put(“qq”,”糖葫芦”) <code>hash(&quot;qq&quot;)</code>  = 2, 下标为2，那么结果如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-d546b4a3817d44ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>Entry1====&gt; [key = &quot;qq&quot;, value= &quot;糖葫芦&quot;]</code></p>
+<p>但是总会有那么一种情况，就是不同 <code>key</code> 计算的 <code>hash</code> 之后是相同的，假如我们新 <code>put(&quot;mi&quot;,value=&quot;milo&quot;)</code> <code>index = hash(&quot;mi&quot;) = 2</code> 也是数组下标为2，那么此时在下标为2的位置就会通过 <strong>链表</strong> 的形式存储相应的键值对。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-02db6c08604d274a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>HashMap</code> 数组的每一个元素不止是一个<code>Entry</code> 对象，也是一个链表的头节点。每一个<code>Entry</code>对象通过 <code>Next</code> 指针指向它的下个 <code>Entry</code> 节点。当再有新的 <code>Entry</code> 映射到这个冲突位置时，也就是计算出 <code>hash</code> 值也是2，只需要插入到对应的链表当中去即可，注意：新插入的会在之前的前面，称为 <strong>头插入</strong>， 被新 <code>put</code> 进入的新元素可能被用到的概率大一些。</p>
+<ul>
+<li><p><code>get</code> 方法</p>
+<p>了解了 <code>put</code> 方法，<code>get</code> 好理解些</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">        Node&lt;K,V&gt; e;</span><br><span class="line">        <span class="keyword">return</span> (e = getNode(hash(key), key)) == <span class="keyword">null</span> ? <span class="keyword">null</span> : e.value;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>第一步：同样 根据 <code>key</code> 算出 <code>hash</code> 值；</p>
+<p>第二步：根据 <code>hash</code>值和数组的长度 计算数组的下标 <code>index</code></p>
+<p>第三步：假设我们取出我们 <code>get(&quot;qq&quot;)</code> 对应的值，我们知道下标是2，且是一个链表，我们需要循环遍历整个链表，找到 <code>key = &quot;qq&quot;</code> 的<code>Entry</code>。 </p>
+</li>
+<li><p>HashMap的默认长度是多少？为什么要那么定义？</p>
+</li>
+</ul>
+<blockquote>
+<p><code>HashMap</code> 默认长度是16，也可以自定义长度必须是2幂次方。之所以选择16，是为了方便于 <code>key</code> 映射 <code>index</code> 的算法。</p>
+</blockquote>
+<p>为了实现一个均匀的 <code>HashMap</code> ,数组的长度必须是 2 的幂次方，将 <code>index = hash(key) &amp; (length-1)</code> 这样做的效率也更高，通过位运算的方式。</p>
+<p>举例：<code>book</code> 的 <code>hashcode</code>,结果为十进制的 3029737，二进制：1011100011101011101001；假定 <code>HashMap</code> 长度是默认的16， <code>length-1 = 15</code>,二进制： 1111；</p>
+<p><code>index = hash(key) &amp; (length-1)</code></p>
+<p>计算结果如下图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-3aafe8299c498f3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>二进制：1001；十进制：就是index= 9。</p>
+<p>那么假设我们自定义长度设置为：10. 那<code>length-1=9, 二进制就是：1001，我们重新计算下</code>index`, 如下图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-7c14459101e253f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>二进制为：1001 ；十进制就是： <code>index</code> = 9</p>
+<p>然后我们再尝试一个新的 <code>HashCode</code>:</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-db971df4f539f899.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>结果还是：1001；</p>
+<p>然后我们继续来一个新的 <code>HashCode</code>:</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-0109aae2931ed6ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>结果还是：1001，<code>index= 9</code>.</p>
+<p>也就是说，当 <code>HashMap</code> 长度为 10 的时候，多个 不同的<code>key</code>生成的 <code>index</code> 可能是相同的，相同的概率比较大，这样，显然不符合 <code>Hash</code> 算法均匀分布的原则。</p>
+<p>反观长度为16或者2的幂次方，<code>length-1</code> 的值是所有二进制全为1，这种情况下，<code>index</code> 的结果等同于<code>HashCode</code> 的后几位值，只有输入的 <code>HashCode</code> 本身分布均匀，<code>Hash</code> 算法的结果也是均匀的。        </p>
 
       
     </div>
+    
+    
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+   </div>
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HashMap/" rel="tag"># HashMap</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/28/RecycleView更清晰地观察缓存/" rel="next" title="RecycleView更清晰地观察缓存">
+                <i class="fa fa-chevron-left"></i> RecycleView更清晰地观察缓存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -397,6 +499,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -417,8 +533,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -471,6 +596,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是-HashMap"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;-HashMap" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F; HashMap?"></a>&#x4EC0;&#x4E48;&#x662F; HashMap?</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -618,6 +759,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -635,6 +780,18 @@
       <script id="dsq-count-scr" src="https://disqus.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/12/06/HashMap基本知识/';
+          this.page.identifier = '2018/12/06/HashMap基本知识/';
+          this.page.title = 'HashMap基本知识';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://disqus.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
