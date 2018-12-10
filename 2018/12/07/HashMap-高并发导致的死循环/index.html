@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="两个Drawable之间淡入淡出," />
+  <meta name="keywords" content="HashMap," />
 
 
 
@@ -79,18 +79,24 @@
 
 
 
-<meta name="description" content="1.首先创建一个xml 在 drawable 目录下  transition_image 12345&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;transition xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&amp;gt;    &amp;lt;item android:drawabl">
-<meta name="keywords" content="两个Drawable之间淡入淡出">
+<meta name="description" content="1234567891011121314151617for (int j = 0; j &amp;lt; src.length; ++j) &amp;#123;         Entry&amp;lt;K,V&amp;gt; e = src[j];//src 表示原table        while(null != e) &amp;#123;        //此处表示取出下一个位置的Entry(键值对)        Entry&amp;l">
+<meta name="keywords" content="HashMap">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TransitionDrawable">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/index.html">
+<meta property="og:title" content="HashMap 高并发导致的死循环">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/12/07/HashMap-高并发导致的死循环/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="1.首先创建一个xml 在 drawable 目录下  transition_image 12345&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;transition xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&amp;gt;    &amp;lt;item android:drawabl">
+<meta property="og:description" content="1234567891011121314151617for (int j = 0; j &amp;lt; src.length; ++j) &amp;#123;         Entry&amp;lt;K,V&amp;gt; e = src[j];//src 表示原table        while(null != e) &amp;#123;        //此处表示取出下一个位置的Entry(键值对)        Entry&amp;l">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-16T09:06:46.692Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-23de68a7bfa7c35e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-0311750fe51fc624.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-5a88832ba483e707.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-4c55a39a57b101ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-7f234b18992d6432.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-12-10T09:02:26.036Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TransitionDrawable">
-<meta name="twitter:description" content="1.首先创建一个xml 在 drawable 目录下  transition_image 12345&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&amp;lt;transition xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&amp;gt;    &amp;lt;item android:drawabl">
+<meta name="twitter:title" content="HashMap 高并发导致的死循环">
+<meta name="twitter:description" content="1234567891011121314151617for (int j = 0; j &amp;lt; src.length; ++j) &amp;#123;         Entry&amp;lt;K,V&amp;gt; e = src[j];//src 表示原table        while(null != e) &amp;#123;        //此处表示取出下一个位置的Entry(键值对)        Entry&amp;l">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-23de68a7bfa7c35e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/07/HashMap-高并发导致的死循环/"/>
 
 
 
 
 
-  <title>TransitionDrawable | 糖葫芦</title>
+  <title>HashMap 高并发导致的死循环 | 糖葫芦</title>
   
 
 
@@ -277,7 +283,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/07/HashMap-高并发导致的死循环/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +300,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">TransitionDrawable</h1>
+          <h1 class="post-title" itemprop="name headline">HashMap 高并发导致的死循环</h1>
         
 
         <div class="post-meta">
@@ -306,8 +312,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-16T16:57:07+08:00">
-                2018-08-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-07T13:50:16+08:00">
+                2018-12-07
               </time>
             
 
@@ -325,9 +331,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/16/TransitionDrawable/#comments" itemprop="discussionUrl">
+                <a href="/2018/12/07/HashMap-高并发导致的死循环/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/16/TransitionDrawable/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/12/07/HashMap-高并发导致的死循环/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,20 +361,47 @@
       
 
       
-        <ul>
-<li>1.首先创建一个<code>xml</code> 在 <code>drawable</code> 目录下</li>
-</ul>
-<p><code>transition_image</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;transition xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">"@drawable/first"</span> /&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">"@drawable/two"</span> /&gt;</span><br><span class="line">&lt;/transition&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>2.在xml中引用</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:drawable=<span class="string">"@drawable/transition_image"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>3.在<code>Activity</code>中使用</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ImageView mImageView = (ImageView) findViewById(R.id.iv); </span><br><span class="line">TransitionDrawable transitionDrawable = (TransitionDrawable) mImageView.getDrawable(); </span><br><span class="line">transitionDrawable.startTransition(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
-<h1 id="另外一种写法实现多张图片效果"><a href="#另外一种写法实现多张图片效果" class="headerlink" title="另外一种写法实现多张图片效果"></a>另外一种写法实现多张图片效果</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TransitionDrawable transitionDrawable = <span class="keyword">new</span> TransitionDrawable(<span class="keyword">new</span> Drawable[]&#123;getResources().getDrawable(R.drawable.first),getResources().getDrawable(R.drawable.two)&#125;);</span><br><span class="line">mImageView.setImageDrawable(transitionDrawable);</span><br><span class="line">transitionDrawable.startTransition(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; ++j) &#123;</span><br><span class="line">    </span><br><span class="line">     Entry&lt;K,V&gt; e = src[j];<span class="comment">//src 表示原table</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;</span><br><span class="line">        <span class="comment">//此处表示取出下一个位置的Entry(键值对)</span></span><br><span class="line">        Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">        <span class="comment">//计算得出在扩容后新数组table中的下标，因为扩容后要重新计算下标</span></span><br><span class="line">        <span class="comment">//未扩容前下标:index = hash(key) &amp; (length-1)</span></span><br><span class="line">        <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">        <span class="comment">//根据下标取出在新表newTable中的Entry&lt;K,V&gt;</span></span><br><span class="line">        e.next = newTable[i];</span><br><span class="line">        <span class="comment">//将当前e 赋值给newTable[i](Entry&lt;K,V&gt;)</span></span><br><span class="line">        newTable[i] = e;</span><br><span class="line">		<span class="comment">//将下一个next.Entry 赋值给当前的e	</span></span><br><span class="line">        e = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>举例说明下：</p>
+<p>原</p>
+<p><code>table</code>的信息排列是：<img src="https://upload-images.jianshu.io/upload_images/1948557-23de68a7bfa7c35e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>再次添加新元素的时候就需要扩容了，此时我们来类比下上述的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; ++j) &#123;</span><br><span class="line">    </span><br><span class="line">     Entry&lt;K,V&gt; e = src[j];<span class="comment">//src 表示原table</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;</span><br><span class="line">        <span class="comment">//next = Entry2</span></span><br><span class="line">        Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">        <span class="comment">//假设计算结果为3；循环第二次：假设Entry2计算的位置也是3</span></span><br><span class="line">        <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">       <span class="comment">//第一次Entry1.next = newTable[3]，此时newTable[3]还为null；所以是Entry1.next地址指向null</span></span><br><span class="line">       <span class="comment">//循环第二次：Entry2.next = Entry1</span></span><br><span class="line">        e.next = newTable[i];</span><br><span class="line">       <span class="comment">//newTable[3] = Entry1, 此时e是 Entry1;</span></span><br><span class="line">       <span class="comment">//循环第二次： newTable[3] = Entry2</span></span><br><span class="line">        newTable[i] = e;</span><br><span class="line">		<span class="comment">//Entry1 = Entry2,e 指向了Entry2,好再次循环;</span></span><br><span class="line">        <span class="comment">//循环第二次：e = null,跳出循环</span></span><br><span class="line">        e = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>变成如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-0311750fe51fc624.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>上述是属于正常情况的那种，假设我们现在有两个线程同时去 <code>put</code> 元素，二者均发现需要做扩容处理，那么又会出现什么情况呢？</p>
+<blockquote>
+<p>参考阅读网上的博客+自己理解记录</p>
+</blockquote>
+<p>当线程一 和 线程二 同时进行插入的时候刚好达到扩容的条件，然后同时开始进行 <code>Resize</code> 操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; ++j) &#123;</span><br><span class="line">    <span class="comment">//src 表示原table</span></span><br><span class="line">     Entry&lt;K,V&gt; e = src[j];</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;</span><br><span class="line">            Entry&lt;K&lt;V&gt; next = e.next;<span class="comment">//假设线程一执行到这里就被调度挂起了</span></span><br><span class="line">            <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">            newTable[i] = e;</span><br><span class="line">            e = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>线程一挂起，线程二继续操作，变成如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-5a88832ba483e707.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>线程二是 <code>rehash</code> 之后的样子，如上图：</p>
+<p>当前线程一来说：</p>
+<p> <code>e</code> 是: <code>key(3)</code></p>
+<p>  <code>next</code> 是： <code>key(7)</code></p>
+<p>线程一来了，被调度回来了，该人家执行了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;<span class="comment">//再次循环，e:key(7) next:key(3)</span></span><br><span class="line">    		<span class="comment">//假设线程一执行到这里就被调度挂起了,开始继续执行</span></span><br><span class="line">    		<span class="comment">//第二次循环：next = key(3),next 指向key(3)</span></span><br><span class="line">    		<span class="comment">//e:key(3) next:null</span></span><br><span class="line">           Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">           <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);<span class="comment">//根据线程二的计算不难推出线程一计算的i = 3</span></span><br><span class="line">           <span class="comment">//key(7).next 指向 key(3)</span></span><br><span class="line">    		<span class="comment">//key(3).next 指向 key(7)</span></span><br><span class="line">           e.next = newTable[i];</span><br><span class="line">    		<span class="comment">//first :   newTable[3] = key(3)</span></span><br><span class="line">    		<span class="comment">//second ： newTable[3] = key(7)</span></span><br><span class="line">    		<span class="comment">//third :   newTable[3] = key(3)</span></span><br><span class="line">           newTable[i] = e;</span><br><span class="line">    		<span class="comment">//e 指向key(7)</span></span><br><span class="line">    		<span class="comment">//e = key(3)</span></span><br><span class="line">    		<span class="comment">//e = null//退出循环</span></span><br><span class="line">           e = next</span><br></pre></td></tr></table></figure>
+<p>这样就产生死循环了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">key(<span class="number">7</span>).next 指向 key(<span class="number">3</span>)</span><br><span class="line">key(<span class="number">3</span>).next 指向 key(<span class="number">7</span>)</span><br></pre></td></tr></table></figure>
+<p>当我们取出一个key(5) 的一个值时，恰巧也是 <code>int i = 3</code> , 这样去取，就陷入<code>key(3),key(7)</code> 的死循环中去了。</p>
+<p>为了更清晰的展示每一次循环，我决定分开来展示：</p>
+<p>第一次：要从这个线程一恢复运行开始说起吧： <code>e: key(3) ;  next: key(7)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;</span><br><span class="line">            Entry&lt;K&lt;V&gt; next = e.next;<span class="comment">//第一次的时候，线程一被卡住在这里，当时状态是：e:key(3),next:key(7)  这应该都没什么问题</span></span><br><span class="line">    </span><br><span class="line">    		<span class="comment">//根据线程二的计算，这个值也应该是int i = 3</span></span><br><span class="line">            <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">    		<span class="comment">//key(3).next = newTable[3], 此时newTable[3]为null, key(3).next指向null</span></span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">    		<span class="comment">//newTable[3] = key(3)</span></span><br><span class="line">            newTable[i] = e;</span><br><span class="line">    		<span class="comment">//e = key(7),e指向key(7)</span></span><br><span class="line">            e = next</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>OK, 由于<code>e = key(7)</code> 不为<code>null</code> ,循环继续：</p>
+<p>第二次循环：经过上述循环，此时 <code>e: key(7),next: key(3)</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-4c55a39a57b101ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>由于线程二已经改变了这个整体<code>table</code> 的结构，当遍历到<code>key(7)</code> 时， <code>next: key(3)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;<span class="comment">//e:key(7) </span></span><br><span class="line">    		<span class="comment">//next = key(3)</span></span><br><span class="line">            Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">    		<span class="comment">//int i = 3</span></span><br><span class="line">            <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">    		<span class="comment">//key(7).next = key(3) , key(7).next指向key(3)</span></span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">    		<span class="comment">//newTable[3] = key(7)</span></span><br><span class="line">            newTable[i] = e;</span><br><span class="line">    		<span class="comment">//e = key(3) e指向key(3),不为null,循环继续</span></span><br><span class="line">            e = next</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三次循环：<code>e : key(3) next:null</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;<span class="comment">//e:key(3) </span></span><br><span class="line">    		<span class="comment">//next = null next指向null</span></span><br><span class="line">            Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">    		<span class="comment">//int i = 3</span></span><br><span class="line">            <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">    		<span class="comment">//key(3).next = key(7) key(3).next指向key(7)</span></span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">    		<span class="comment">//newTable[3] = key(3)</span></span><br><span class="line">            newTable[i] = e;</span><br><span class="line">    		<span class="comment">//e = null, 循环结束</span></span><br><span class="line">            e = next</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时 <code>e : null, next:null</code>.  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//key(7).next指向key(3)</span></span><br><span class="line"><span class="comment">//key(3).next指向key(7)    这里产生死循环</span></span><br></pre></td></tr></table></figure>
+<p>图就是这样的：最后<code>newTable[3] = key(3)</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-7f234b18992d6432.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">         </p>
+<p>over.</p>
+
       
     </div>
     
@@ -395,7 +428,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/两个Drawable之间淡入淡出/" rel="tag"># 两个Drawable之间淡入淡出</a>
+            <a href="/tags/HashMap/" rel="tag"># HashMap</a>
           
         </div>
       
@@ -408,8 +441,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/05/小程序的爬坑之路/" rel="next" title="小程序的爬坑之路">
-                <i class="fa fa-chevron-left"></i> 小程序的爬坑之路
+              <a href="/2018/12/06/HashMap基本知识/" rel="next" title="HashMap基本知识">
+                <i class="fa fa-chevron-left"></i> HashMap基本知识
               </a>
             
           </div>
@@ -417,10 +450,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/11/Service启动过程/" rel="prev" title="Service 启动过程">
-                Service 启动过程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -482,17 +511,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -545,22 +565,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#另外一种写法实现多张图片效果"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x53E6;&#x5916;&#x4E00;&#x79CD;&#x5199;&#x6CD5;&#x5B9E;&#x73B0;&#x591A;&#x5F20;&#x56FE;&#x7247;&#x6548;&#x679C;" class="headerlink" title="&#x53E6;&#x5916;&#x4E00;&#x79CD;&#x5199;&#x6CD5;&#x5B9E;&#x73B0;&#x591A;&#x5F20;&#x56FE;&#x7247;&#x6548;&#x679C;"></a>&#x53E6;&#x5916;&#x4E00;&#x79CD;&#x5199;&#x6CD5;&#x5B9E;&#x73B0;&#x591A;&#x5F20;&#x56FE;&#x7247;&#x6548;&#x679C;</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -732,9 +736,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/';
-          this.page.identifier = '2018/08/16/TransitionDrawable/';
-          this.page.title = 'TransitionDrawable';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/12/07/HashMap-高并发导致的死循环/';
+          this.page.identifier = '2018/12/07/HashMap-高并发导致的死循环/';
+          this.page.title = 'HashMap 高并发导致的死循环';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
