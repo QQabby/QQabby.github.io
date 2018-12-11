@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="性能优化," />
+  <meta name="keywords" content="CAS," />
 
 
 
@@ -79,18 +79,29 @@
 
 
 
-<meta name="description" content="布局优化  减少布局层次，单一可以用LinearLayout 解决的页面不用 RelativeLayout,如果布局复杂，则用RelativeLayout 更好，毕竟比起布局嵌套，这种会好些  &amp;lt;include&amp;gt; 标签使用，主要用于布局重用  需要注意的是：此标签内，如果外面指定了 id 里面跟布局也定义id 以外部定义为准。同时如果里面定义了 类似于 android:layout_">
-<meta name="keywords" content="性能优化">
+<meta name="description" content="背景介绍：CAS 完整名称为 ： “Compare and Swap” 比较并替换。 里面涉及三个基本操作数，内存地址值：V；旧的预期值：A；新的预期值：B。 规则：当更新变量时，只有当内存地址里的值V = 旧的预期值A，才能被成功的更新为B。  举个例子:  在内存地址V中，存在一个变量值为10的值：   此时线程一，线程二 ，同时去操作这个变量，例如都想+1；  对于线程一来说： A：10；">
+<meta name="keywords" content="CAS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="性能优化">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/11/21/性能优化/index.html">
+<meta property="og:title" content="CAS机制">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/12/11/CAS机制/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="布局优化  减少布局层次，单一可以用LinearLayout 解决的页面不用 RelativeLayout,如果布局复杂，则用RelativeLayout 更好，毕竟比起布局嵌套，这种会好些  &amp;lt;include&amp;gt; 标签使用，主要用于布局重用  需要注意的是：此标签内，如果外面指定了 id 里面跟布局也定义id 以外部定义为准。同时如果里面定义了 类似于 android:layout_">
+<meta property="og:description" content="背景介绍：CAS 完整名称为 ： “Compare and Swap” 比较并替换。 里面涉及三个基本操作数，内存地址值：V；旧的预期值：A；新的预期值：B。 规则：当更新变量时，只有当内存地址里的值V = 旧的预期值A，才能被成功的更新为B。  举个例子:  在内存地址V中，存在一个变量值为10的值：   此时线程一，线程二 ，同时去操作这个变量，例如都想+1；  对于线程一来说： A：10；">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-21T07:20:03.539Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-47b1c8227b762c43.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-f3270a1b18e0640c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-079d6e98119d08b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-60314392b088122f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-67f24f8970d8bf77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-910dc6244e7f8607.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-6c8c948395b44f41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-12-11T09:55:54.563Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="性能优化">
-<meta name="twitter:description" content="布局优化  减少布局层次，单一可以用LinearLayout 解决的页面不用 RelativeLayout,如果布局复杂，则用RelativeLayout 更好，毕竟比起布局嵌套，这种会好些  &amp;lt;include&amp;gt; 标签使用，主要用于布局重用  需要注意的是：此标签内，如果外面指定了 id 里面跟布局也定义id 以外部定义为准。同时如果里面定义了 类似于 android:layout_">
+<meta name="twitter:title" content="CAS机制">
+<meta name="twitter:description" content="背景介绍：CAS 完整名称为 ： “Compare and Swap” 比较并替换。 里面涉及三个基本操作数，内存地址值：V；旧的预期值：A；新的预期值：B。 规则：当更新变量时，只有当内存地址里的值V = 旧的预期值A，才能被成功的更新为B。  举个例子:  在内存地址V中，存在一个变量值为10的值：   此时线程一，线程二 ，同时去操作这个变量，例如都想+1；  对于线程一来说： A：10；">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-47b1c8227b762c43.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/21/性能优化/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/11/CAS机制/"/>
 
 
 
 
 
-  <title>性能优化 | 糖葫芦</title>
+  <title>CAS机制 | 糖葫芦</title>
   
 
 
@@ -277,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/21/性能优化/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/11/CAS机制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">性能优化</h1>
+          <h1 class="post-title" itemprop="name headline">CAS机制</h1>
         
 
         <div class="post-meta">
@@ -306,8 +317,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T10:36:04+08:00">
-                2018-11-21
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-11T15:43:18+08:00">
+                2018-12-11
               </time>
             
 
@@ -325,9 +336,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/11/21/性能优化/#comments" itemprop="discussionUrl">
+                <a href="/2018/12/11/CAS机制/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/21/性能优化/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/12/11/CAS机制/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,53 +366,79 @@
       
 
       
-        <ul>
-<li><p>布局优化</p>
+        <blockquote>
+<p>背景介绍：CAS 完整名称为 ： “Compare and Swap” 比较并替换。</p>
+<p>里面涉及三个基本操作数，内存地址值：V；旧的预期值：A；新的预期值：B。</p>
+<p>规则：当更新变量时，只有当内存地址里的值V = 旧的预期值A，才能被成功的更新为B。</p>
+</blockquote>
+<p>举个例子:</p>
 <ul>
-<li><p>减少布局层次，单一可以用<code>LinearLayout</code> 解决的页面不用 <code>RelativeLayout</code>,如果布局复杂，则用<code>RelativeLayout</code> 更好，毕竟比起布局嵌套，这种会好些</p>
+<li><p>在内存地址V中，存在一个变量值为10的值：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-47b1c8227b762c43.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 </li>
-<li><p><code>&lt;include&gt;</code> 标签使用，主要用于布局重用</p>
-<blockquote>
-<p>需要注意的是：此标签内，如果外面指定了 <code>id</code> 里面跟布局也定义<code>id</code> 以外部定义为准。同时如果里面定义了 类似于 <code>android:layout_width=&quot;wrap_content&quot;</code> 的属性，需配套 <code>android:layout_height=&quot;wrap_content&quot;</code> 同时使用。</p>
-</blockquote>
-</li>
-<li><p><code>&lt;merge&gt;</code> 标签一般和 <code>&lt;include&gt;</code> 标签配合使用。一般如果当前根布局例如是：<code>LinearLayout</code> ,<code>include</code> 的布局也是 <code>LinearLayout</code> ,那么 <code>include</code> 的根布局就可以使用 <code>&lt;merge&gt;</code> 标签代替<code>LinearLayout</code>.</p>
-</li>
-<li><p><code>&lt;ViewStub&gt;</code> 标签，意义为按需加载，轻量级，宽和高都是0，在实际开发中，有很多布局在正常情况下不会显示，比如网络异常的布局，这个时候没有必要在布局加载时就加载进来，通过<code>&lt;ViewStub&gt;</code> 就可以在需要用到的时候再加载，提高程序初始化的性能。</p>
+<li><p>此时线程一，线程二 ，同时去操作这个变量，例如都想+1；</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-f3270a1b18e0640c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>对于线程一来说： A：10； B: 11； V: 10</p>
+<p>但是由于线程二比线程一执行的更快，此时线程二已经把内存地址V中的10更新为11.</p>
 </li>
 </ul>
-</li>
-<li><p>绘制优化</p>
+<p>​    那么当线程一再次执行更新操作，发现 V = 11,A = 10,  V≠A，更新失败。</p>
+<p>​    此时线程一需要重新读取内存中的值，并重新计算要更新的新值，计算后得出：</p>
+<p>​    A= 11，B= 12. 重新提交请求，这个过程称为自旋。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-079d6e98119d08b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>​    首先<code>Compare</code> V== A， 然后进行<code>swap</code> , V = 12，被更新为12.</p>
+<p>从思想上来说，<code>syncronized</code> 属于悲观锁，认为并发情况非常严重，<code>CAS</code> 机制属于乐观锁，认为并发情况并不是一种特别严重的情况，发生问题，不断尝试更新即可。</p>
 <blockquote>
-<p>在 <code>onDraw()</code> 中不要创建新的局部对象，这是因为 <code>onDraw()</code> 可能会频繁的调用，这样就会在一瞬间产生大量的临时对象，这不仅占用过多的内存而且会导致系统频繁的gc, 降低程序的执行效率; 另外也不能做一些耗时的任务。</p>
+<p>使用场景：Atomic系列类，以及Lock系列类的底层实现；不适合高并发的场景，高并发还是 <code>syncronized</code> </p>
+</blockquote>
+<h1 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h1><ul>
+<li><p>CPU消耗大</p>
+<blockquote>
+<p>如果在多个线程并发去更新一个变量，多个线程同时去重复尝试更新某一个变量，却又一直不成功，循环往复就会给CPU造成很大的压力。</p>
 </blockquote>
 </li>
-<li><p>内存泄漏优化</p>
-<ul>
-<li><p>静态变量导致的内存泄漏</p>
-<p>例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Context mContext;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.layout_combine);</span><br><span class="line"></span><br><span class="line">        mContext = <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>单例模式导致的内存泄漏</p>
-</li>
-<li><p>属性动画导致的内存泄漏</p>
+<li><p>不能保证代码块的原子性</p>
 <blockquote>
-<p>Android 3.0 之后，提供了属性动画，如果开启无限循环动画，隐藏后，未调用 <code>animator,cancel()</code> 来停止动画，也会发生内存泄漏，因为这个时候 <code>Activity</code> 的 <code>View</code> 被动画所持有，而 <code>View</code> 又持有 <code>Activity</code>, 最终<code>Activity</code> 无法释放。0- </p>
+<p>CAS 可以保证一个变量的原子性，却无法保证整个代码块的原子性。</p>
 </blockquote>
+</li>
+<li><p>ABA问题—–最大的问题</p>
 </li>
 </ul>
-</li>
-<li><p>响应速度优化和ANR日志</p>
-<blockquote>
-<p>响应速度优化的核心是避免在主线程做耗时操作， <code>Activity</code> 5s 未做出响应， <code>Service</code> 10s未做出响应，就会出现 ANR ,查看 <code>\data\anr</code> 目录下的 <code>trace,txt</code> 文件分析产生 ANR 的原因</p>
-</blockquote>
-</li>
-<li><p>线程优化</p>
-<blockquote>
-<p>线程优化一般都是采用线程池，避免程序中存在大量的 Thread, 线程池可重用内部的线程，从而避免线程的创建和销毁所带来的性能开销。</p>
-</blockquote>
-</li>
-</ul>
+<h1 id="ABA-问题"><a href="#ABA-问题" class="headerlink" title="ABA 问题"></a>ABA 问题</h1><p>举例说明：</p>
+<p>假设有三个线程都要对内存地址V 中的 A 进行操作，</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-60314392b088122f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>线程一：旧的预期值：A；新的预期值：B</p>
+<p>线程二：旧的预期值：A；新的预期值：B</p>
+<p>线程三：还未开始工作</p>
+<ol>
+<li>线程一首先进行了操作，顺利将A更新为B：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
+</ol>
+<p>此时线程三上来了，它是：旧的预期值：B；新的预期值：A，此时发现：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>​                        V(B) == B(B)，更新成功，变为图下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-67f24f8970d8bf77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>此时线程二开始工作，线程二的目标是：旧的预期值：A；新的预期值：B，同样一比对，相同，于是也更新成功，变为如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>虽然从结果上来看，A 成功的变为 B，然后在实际涉及钱的时候，问题就大了。</p>
+<p>再次举例：</p>
+<p>小明银行卡里有200块钱，想取出100块钱，但是由于设备故障，提交了两次扣款申请。</p>
+<p>扣款申请1：旧的预估值：200，新的预估值：100</p>
+<p>扣款申请2：旧的预估值：200，新的预估值：100</p>
+<p>此时，扣款申请1提前进行了操作，扣款成功，小明银行卡里为100块钱；</p>
+<p>扣款申请2假设还在等待。//block</p>
+<p>此时小明的妈妈给小明存储100元，ok, 现在小明银行卡里就是200块钱。</p>
+<p>扣款申请2恢复正常，开始必对，旧的预估值：200，卡里余额200，成功，替换更新为100.  更新成功，那么此时小明银行卡里剩余金额：100块。</p>
+<p>哈哈！！！这显然是不对的，虽然值相同，但是中间操作改变了最终的结果。那如何解决这个问题呢？可以利用版本号，每修改成功一次V，都要设置一个版本号。每次更新的时候，不但要比对值还要比对版本号，就可以避免这种错误。</p>
+<p>好，就上面的例子说明下：</p>
+<p>当扣款申请1完成更新操作时，我们设置内存地址V中的值的版本号为：：01</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-910dc6244e7f8607.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>第二次操作：妈妈成功向卡里存入了100块</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-6c8c948395b44f41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>扣款申请2开始工作：</p>
+<p>旧的预估值：200，新的预估值：100；版本号为00</p>
+<p>而此时：V（200）= 旧的预估值（200）成立</p>
+<p>​        版本号（00） ≠ version（02） 不成立</p>
 
       
     </div>
@@ -429,7 +466,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+            <a href="/tags/CAS/" rel="tag"># CAS</a>
           
         </div>
       
@@ -442,8 +479,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/20/高效使用RxJava/" rel="next" title="高效使用RxJava">
-                <i class="fa fa-chevron-left"></i> 高效使用RxJava
+              <a href="/2018/12/07/HashMap-高并发导致的死循环/" rel="next" title="HashMap 高并发导致的死循环">
+                <i class="fa fa-chevron-left"></i> HashMap 高并发导致的死循环
               </a>
             
           </div>
@@ -451,10 +488,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/21/Handler-相关总结/" rel="prev" title="Handler 相关总结">
-                Handler 相关总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -516,8 +549,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -570,6 +612,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#缺点"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7F3A;&#x70B9;" class="headerlink" title="&#x7F3A;&#x70B9;"></a>&#x7F3A;&#x70B9;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ABA-问题"><span class="nav-number">2.</span> <span class="nav-text"><a href="#ABA-&#x95EE;&#x9898;" class="headerlink" title="ABA &#x95EE;&#x9898;"></a>ABA &#x95EE;&#x9898;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -741,9 +799,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/11/21/性能优化/';
-          this.page.identifier = '2018/11/21/性能优化/';
-          this.page.title = '性能优化';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/12/11/CAS机制/';
+          this.page.identifier = '2018/12/11/CAS机制/';
+          this.page.title = 'CAS机制';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
