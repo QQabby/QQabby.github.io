@@ -894,11 +894,61 @@
 <p>背景知识：我们知道 <code>HashMap</code> 是线程不安全的，多线程情况下，进行<code>put</code> 操作会引起死循环，导致<code>CPU</code> 利用率比较高，所以在并发情况下不能使用 <code>HashMap</code> ;</p>
 <p>而 <code>Hashtable</code> 是线程安全的，其实就是在 <code>put</code> 操作的时候加了 <code>syncronized</code>, 但是当一个线程在进行<code>put</code> 操作时，其它的线程连 <code>get</code> 操作也不能进行，导致阻塞或者轮询状态，所以竞争越来越激烈，效率低下。</p>
 </blockquote>
+<p>目录结构：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcurrentHashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">ConcurrentMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    .....</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>锁分段技术</p>
 <blockquote>
 <p><code>Hashtable</code> 在多并发的情况下效率低下，是因为很多线程争夺同一把锁，而假如容器内有多把锁，每一把锁用于锁容器内的一部分数据，当多线程访问容器内不同段的数据时，线程间就不会存在锁竞争，从而有效的提高并发访问效率。</p>
 </blockquote>
+</li>
+</ul>
+<h1 id="Segment"><a href="#Segment" class="headerlink" title="Segment"></a>Segment</h1><blockquote>
+<p>英文翻译：” 段“ </p>
+</blockquote>
+<p>内部结构是：二级的哈希表，如下图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-10a2659ddd348113.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>多个<code>Segment</code> 保存在一个名为<code>segments</code> 数组当中，每个 <code>Segment</code> 高度自治，各个 <code>Segment</code> 之前读写互不影响。</p>
+<h1 id="读写操作"><a href="#读写操作" class="headerlink" title="读写操作"></a>读写操作</h1><ul>
+<li><p><code>get</code>  </p>
+<blockquote>
+<p>想要获取里面的元素，按照结构，我们大概也能猜测出如何获取。</p>
+</blockquote>
+<ul>
+<li><ol>
+<li>首先根据 <code>key</code> 计算的 <code>hash</code> 值；</li>
+<li>计算得出 在 <code>segments</code> 数组中的下标，根据下标得出相对应的 <code>Segment</code>；</li>
+<li>再根据<code>key</code> 的 <code>hash</code> 值，找到<code>Segment</code> 数组中的位置</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><code>put</code> </p>
+<blockquote>
+<p>put 元素</p>
+</blockquote>
+<ul>
+<li>1.首先根据 <code>key</code> 计算<code>hash</code> 值</li>
+<li>2.通过 <code>hash</code> 值，定位到具体的 <code>Segment</code> 对象</li>
+<li>3.获取可重入锁</li>
+<li>4.再次通过 <code>hash</code> 值，定位到 <code>Segment</code> 数组中的具体位置</li>
+<li>5.插入或覆盖原 <code>HashEntry</code> 对象</li>
+<li>6.释放锁</li>
+</ul>
+</li>
+</ul>
+<h1 id="统计Size大小"><a href="#统计Size大小" class="headerlink" title="统计Size大小"></a>统计Size大小</h1><p><code>jdk 1.7</code>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Try a few times to get accurate count. On failure due to</span></span><br><span class="line">   <span class="comment">// continuous async changes in table, resort to locking.</span></span><br><span class="line">   <span class="keyword">final</span> Segment&lt;K,V&gt;[] segments = <span class="keyword">this</span>.segments;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">boolean</span> overflow; <span class="comment">// true if size overflows 32 bits</span></span><br><span class="line">    <span class="keyword">long</span> sum;         <span class="comment">// sum of modCounts</span></span><br><span class="line">    <span class="keyword">long</span> last = <span class="number">0L</span>;   <span class="comment">// previous sum</span></span><br><span class="line">    <span class="keyword">int</span> retries = -<span class="number">1</span>; <span class="comment">// first iteration isn't retry</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">if</span> (retries++ == RETRIES_BEFORE_LOCK) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j)</span><br><span class="line">                    ensureSegment(j).lock(); <span class="comment">// force creation</span></span><br><span class="line">            &#125;</span><br><span class="line">            sum = <span class="number">0L</span>;</span><br><span class="line">            size = <span class="number">0</span>;</span><br><span class="line">            overflow = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j) &#123;</span><br><span class="line">                Segment&lt;K,V&gt; seg = segmentAt(segments, j);</span><br><span class="line">                <span class="keyword">if</span> (seg != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    sum += seg.modCount;</span><br><span class="line">                    <span class="keyword">int</span> c = seg.count;</span><br><span class="line">                    <span class="keyword">if</span> (c &lt; <span class="number">0</span> || (size += c) &lt; <span class="number">0</span>)</span><br><span class="line">                        overflow = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (sum == last)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            last = sum;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (retries &gt; RETRIES_BEFORE_LOCK) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j)</span><br><span class="line">                segmentAt(segments, j).unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> overflow ? Integer.MAX_VALUE : size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><ol>
+<li>遍历所有的 <code>Segment</code></li>
+<li>把 <code>Segment</code> 元素数量累加起来</li>
+<li>把 <code>Segment</code> 修改次数累加起来</li>
+<li>判断所有的<code>Segment</code> 的总修改次数是否大于上一次的总修改次数。如果大于，说明统计过程有修改，尝试统计，统计次数+1；反之，统计结束。</li>
+<li>如果统计次数超过阀值，则对每个 <code>Segment</code> 加锁，重新统计</li>
+<li>再次判断总修改次数是否大于上一次的总修改次数，</li>
+<li>释放锁，统计结束。</li>
+</ol>
 </li>
 </ul>
 
