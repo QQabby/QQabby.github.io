@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[INSTALL_FAILED_TEST_ONLY]]></title>
+    <url>%2F2018%2F12%2F17%2FINSTALL-FAILED-TEST-ONLY%2F</url>
+    <content type="text"><![CDATA[莫名其妙更新了 studio的配置，然后打包签名，利用adb install xx.apk 安装就出现了 INSTALL_FAILED_TEST_ONLY,安装失败。心想也没干什么啊，查阅相关资料后，原因是：Android Studio 3.0会在debug apk的manifest文件application标签里自动添加 android:testOnly=&quot;true&quot;属性 网上有说：将这个android:testOnly=&quot;false&quot; 添加到 Application 标签中，但是还是没有成功。 解决办法一： 1adb install -t xx.apk 需要加上-t. 问题是解决了，可以安装成功了，但是对于以前qq 发送文件还是不能安装成功。 解决办法二：还是点击普通的绿色按钮安装，此时生成一个apk,我们再点击 Build---&gt; Build Apk 此时拿出 output--&gt;apk--&gt;xx.apk 可以正常安装了。]]></content>
+      <tags>
+        <tag>studio</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Moved Permanently]]></title>
     <url>%2F2018%2F12%2F14%2FMoved-Permanently%2F</url>
     <content type="text"><![CDATA[关于下载文件中包含重定向问题的解决方案。之前下载文件没问题，但是今天遇到一个下载文件里包含重定向，还是用之前的下载文件的方法就不行了，默认浏览器打开下载，是自动重定向的。 这是我以前的下载文件的代码：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061class DownloadTask extends AsyncTask&lt;String, Integer, String&gt; &#123; @Override protected String doInBackground(String... params) &#123; String result = ""; OutputStream output = null; try &#123; URL url = new URL(params[0]); // 创建一个HttpURLConnection连接 URLConnection urlConn = (URLConnection ) url .openConnection(); InputStream input = urlConn.getInputStream(); // 文件夹 File dir = new File(Constant.K0_VOICE_DIR); if (!dir.exists()) &#123; dir.mkdirs(); &#125; // 本地文件 File file = new File(Constant.K0_VOICE_DIR + params[1]); if (!file.exists()) &#123; file.createNewFile(); // 写入本地 output = new FileOutputStream(file); result = file.getAbsolutePath(); byte buffer[] = new byte[4*1024]; int inputSize = -1; while ((inputSize = input.read(buffer)) != -1) &#123; output.write(buffer, 0, inputSize); &#125; output.flush(); &#125; &#125; catch (MalformedURLException e) &#123; e.printStackTrace(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; finally &#123; try &#123; output.close(); &#125; catch (Exception e) &#123; e.printStackTrace(); &#125; &#125; return result; &#125; @Override protected void onPreExecute() &#123; super.onPreExecute(); &#125; @Override protected void onPostExecute(String result) &#123; //下载完成..... super.onPostExecute(result); &#125; &#125; 按照这个下载，你会发现下载的例如mp3 会无法播放，点开查看：1&lt; a href=&quot;https:xxxx&quot;&gt;Moved Permanently&lt;/ a&gt;. href 里包含一个新的链接。需要添加如下代码，获取新的链接地址下载：1234567 URLConnection urlConn = (URLConnection ) url .openConnection();//下载的文件中含有重定向链接 String redirect = urlConn.getHeaderField(&quot;Location&quot;); if (redirect != null)&#123; urlConn = new URL(redirect).openConnection(); &#125; 奉上我在 stackoverflow 上找到的答案：]]></content>

@@ -273,6 +273,187 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/21/性能优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/21/性能优化/" itemprop="url">性能优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T10:36:04+08:00">
+                2018-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/21/性能优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/21/性能优化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li><p>布局优化</p>
+<ul>
+<li><p>减少布局层次，单一可以用<code>LinearLayout</code> 解决的页面不用 <code>RelativeLayout</code>,如果布局复杂，则用<code>RelativeLayout</code> 更好，毕竟比起布局嵌套，这种会好些</p>
+</li>
+<li><p><code>&lt;include&gt;</code> 标签使用，主要用于布局重用</p>
+<blockquote>
+<p>需要注意的是：此标签内，如果外面指定了 <code>id</code> 里面跟布局也定义<code>id</code> 以外部定义为准。同时如果里面定义了 类似于 <code>android:layout_width=&quot;wrap_content&quot;</code> 的属性，需配套 <code>android:layout_height=&quot;wrap_content&quot;</code> 同时使用。</p>
+</blockquote>
+</li>
+<li><p><code>&lt;merge&gt;</code> 标签一般和 <code>&lt;include&gt;</code> 标签配合使用。一般如果当前根布局例如是：<code>LinearLayout</code> ,<code>include</code> 的布局也是 <code>LinearLayout</code> ,那么 <code>include</code> 的根布局就可以使用 <code>&lt;merge&gt;</code> 标签代替<code>LinearLayout</code>.</p>
+</li>
+<li><p><code>&lt;ViewStub&gt;</code> 标签，意义为按需加载，轻量级，宽和高都是0，在实际开发中，有很多布局在正常情况下不会显示，比如网络异常的布局，这个时候没有必要在布局加载时就加载进来，通过<code>&lt;ViewStub&gt;</code> 就可以在需要用到的时候再加载，提高程序初始化的性能。</p>
+</li>
+</ul>
+</li>
+<li><p>绘制优化</p>
+<blockquote>
+<p>在 <code>onDraw()</code> 中不要创建新的局部对象，这是因为 <code>onDraw()</code> 可能会频繁的调用，这样就会在一瞬间产生大量的临时对象，这不仅占用过多的内存而且会导致系统频繁的gc, 降低程序的执行效率; 另外也不能做一些耗时的任务。</p>
+</blockquote>
+</li>
+<li><p>内存泄漏优化</p>
+<ul>
+<li><p>静态变量导致的内存泄漏</p>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Context mContext;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.layout_combine);</span><br><span class="line"></span><br><span class="line">        mContext = <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>单例模式导致的内存泄漏</p>
+</li>
+<li><p>属性动画导致的内存泄漏</p>
+<blockquote>
+<p>Android 3.0 之后，提供了属性动画，如果开启无限循环动画，隐藏后，未调用 <code>animator,cancel()</code> 来停止动画，也会发生内存泄漏，因为这个时候 <code>Activity</code> 的 <code>View</code> 被动画所持有，而 <code>View</code> 又持有 <code>Activity</code>, 最终<code>Activity</code> 无法释放。0- </p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>响应速度优化和ANR日志</p>
+<blockquote>
+<p>响应速度优化的核心是避免在主线程做耗时操作， <code>Activity</code> 5s 未做出响应， <code>Service</code> 10s未做出响应，就会出现 ANR ,查看 <code>\data\anr</code> 目录下的 <code>trace,txt</code> 文件分析产生 ANR 的原因</p>
+</blockquote>
+</li>
+<li><p>线程优化</p>
+<blockquote>
+<p>线程优化一般都是采用线程池，避免程序中存在大量的 Thread, 线程池可重用内部的线程，从而避免线程的创建和销毁所带来的性能开销。</p>
+</blockquote>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/20/高效使用RxJava/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1951,151 +2132,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/07/LeakCannary原理分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/07/LeakCannary原理分析/" itemprop="url">LeakCannary原理分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T16:48:40+08:00">
-                2018-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/07/LeakCannary原理分析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/07/LeakCannary原理分析/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>上篇写到  <a href="https://github.com/square/leakcanary">leakcanary</a> 的使用,这篇主要是了解<code>LeakCannary</code> 大概是如何工作的。</p>
-</blockquote>
-<h1 id="1-首先它是如何监听Activity-销毁的？"><a href="#1-首先它是如何监听Activity-销毁的？" class="headerlink" title="1.首先它是如何监听Activity 销毁的？"></a>1.首先它是如何监听<code>Activity</code> 销毁的？</h1><p>因为我们知道只有当<code>activity</code> 销毁（<code>onDestroy()</code>）的时候，我们才能对这个<code>activity</code> 进行分析查看哪些对象可能存在内存泄漏。</p>
-<p>发现了如下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RefWatcher <span class="title">install</span><span class="params">(Application application)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> refWatcher(application).listenerServiceClass(DisplayLeakService.class)</span><br><span class="line">        .excludedRefs(AndroidExcludedRefs.createAppDefaults().build())</span><br><span class="line">        .buildAndInstall();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>在<code>buildAndInstall()</code> 中：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RefWatcher <span class="title">buildAndInstall</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      ....</span><br><span class="line">   <span class="keyword">if</span> (refWatcher != DISABLED) &#123;</span><br><span class="line">     <span class="keyword">if</span> (watchActivities) &#123;</span><br><span class="line">     <span class="comment">//这是观察activity的</span></span><br><span class="line">       ActivityRefWatcher.install(context, refWatcher);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> (watchFragments) &#123;</span><br><span class="line">       FragmentRefWatcher.Helper.install(context, refWatcher);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   LeakCanaryInternals.installedRefWatcher = refWatcher;</span><br><span class="line">   <span class="keyword">return</span> refWatcher;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityRefWatcher</span> </span>&#123;</span><br><span class="line">   ....</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">install</span><span class="params">(Context context, RefWatcher refWatcher)</span> </span>&#123;</span><br><span class="line">    Application application = (Application) context.getApplicationContext();</span><br><span class="line">    ActivityRefWatcher activityRefWatcher = <span class="keyword">new</span> ActivityRefWatcher(application, refWatcher);</span><br><span class="line">    <span class="comment">//拿到application，注册activity的生命周期回调</span></span><br><span class="line">    application.registerActivityLifecycleCallbacks(activityRefWatcher.lifecycleCallbacks);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>其中这个：<code>lifecycleCallbacks</code> 就是回调监听<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Application.ActivityLifecycleCallbacks lifecycleCallbacks =</span><br><span class="line">      <span class="keyword">new</span> ActivityLifecycleCallbacksAdapter() &#123;<span class="comment">//监听activity销毁</span></span><br><span class="line">        <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityDestroyed</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">          refWatcher.watch(activity);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br></pre></td></tr></table></figure></p>
-<p>那么我们也可以通过<code>application</code> 注册获取<code>activity</code> 的生命周期监听回调，如下是我写的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LifeCircleActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.life_layout);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Application application = (Application) getApplicationContext();</span><br><span class="line">        application.registerActivityLifecycleCallbacks(<span class="keyword">new</span> Application.ActivityLifecycleCallbacks() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityCreated</span><span class="params">(Activity activity, Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityCreated..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityStarted</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityStarted..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityResumed</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityResumed..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityPaused</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityPaused..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityStopped</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivityStopped..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivitySaveInstanceState</span><span class="params">(Activity activity, Bundle outState)</span> </span>&#123;</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onActivitySaveInstanceState..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityDestroyed</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                application.unregisterActivityLifecycleCallbacks(<span class="keyword">this</span>);</span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"activity is onDestroy..."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样我们就可以监听我们当前这个类的生命周期了，可以运行打印日志就知道了。</p>
-<h1 id="2-内存泄漏的对象的引用路径"><a href="#2-内存泄漏的对象的引用路径" class="headerlink" title="2.内存泄漏的对象的引用路径"></a>2.内存泄漏的对象的引用路径</h1><p>这块使用到了 <code>square</code> 的另一个开源库 <a href="https://github.com/square/haha">haha</a> ,获取当前内存中的<code>heap</code>堆信息的<code>snapshot</code></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2146,7 +2182,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -2159,7 +2195,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
