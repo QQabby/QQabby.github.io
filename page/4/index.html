@@ -273,6 +273,312 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/06/27/Kotlin-可观察属性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/27/Kotlin-可观察属性/" itemprop="url">Kotlin-可观察属性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-27T14:31:48+08:00">
+                2018-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/27/Kotlin-可观察属性/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/27/Kotlin-可观察属性/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>类似于观察者模式，当所监测的对象发生改变时，能够收到回调通知。</p>
+</blockquote>
+<p>例如：我们监测一个变量：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var str: String by Delegates.observable(<span class="string">"qianqian"</span>,&#123;</span><br><span class="line">        property: KProperty&lt;*&gt;, oldValue: String, newValue: String -&gt;</span><br><span class="line">        Log.i(<span class="string">"xx"</span>,<span class="string">"改变的属性名称：$&#123;property.name&#125; --- $&#123;oldValue&#125; -- $&#123;newValue&#125;"</span> )</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//点击一个按钮，改变str的值</span></span><br><span class="line">     <span class="function">fun <span class="title">foo</span><span class="params">(view : View)</span></span>&#123;</span><br><span class="line">        str = <span class="string">"haha"</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这时候我们会发现，当改变<code>str</code> 的值的时候，会打印信息，也就是收到回调：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">改变的属性名称：str --- qianqian -- haha</span><br></pre></td></tr></table></figure></p>
+<p>再比如：检测对象里的其中一个属性：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> kotlin.properties.Delegates</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    var name: String by Delegates.observable(<span class="string">"&lt;no name&gt;"</span>) &#123;</span><br><span class="line">        prop, old, <span class="keyword">new</span> -&gt;</span><br><span class="line">        println(<span class="string">"$old -&gt; $new"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">fun <span class="title">main</span><span class="params">(args: Array&lt;String&gt;)</span> </span>&#123;</span><br><span class="line">    val user = User()</span><br><span class="line">    user.name = <span class="string">"first"</span></span><br><span class="line">    user.name = <span class="string">"second"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;no name&gt; -&gt; first</span><br><span class="line">first -&gt; second</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/28/Kotlin-let-with-run-also-apply区分/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/28/Kotlin-let-with-run-also-apply区分/" itemprop="url">Kotlin let with run also apply区分</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-28T15:24:21+08:00">
+                2018-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/28/Kotlin-let-with-run-also-apply区分/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/28/Kotlin-let-with-run-also-apply区分/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h1 id="apply"><a href="#apply" class="headerlink" title="apply"></a>apply</h1><p>它与其它特殊之处在于，它返回本省对象：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> T.<span class="title">apply</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; <span class="built_in">Unit</span>): T &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt;().apply &#123;</span><br><span class="line">            add(<span class="string">"qq"</span>)</span><br><span class="line">            add(<span class="string">"mi"</span>)</span><br><span class="line">        &#125;.let &#123;<span class="comment">//this-&gt;ArrayList本身</span></span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"list==="</span>+it)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list===[qq, mi]</span><br></pre></td></tr></table></figure>
+<p>这里<code>T</code> 就是 <code>ArrayList&lt;String&gt;()</code> 返回对象本身，也就是<code>ArrayList</code></p>
+<ul>
+<li><p>内部是 <code>this</code> 还是 <code>it</code> 这个倒没什么，编辑器一般都会有提示，如图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-f6a5a83174af7964.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1540798437731.png"></p>
+</li>
+</ul>
+<p><code>apply</code> 是 <code>this</code> , <code>also</code> 是 <code>it</code> </p>
+<h1 id="run"><a href="#run" class="headerlink" title="run"></a>run</h1><ul>
+<li><p><code>run</code>:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">run</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>返回最后一行，传入<code>block</code> 返回 最后一行，例如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt;().run &#123;</span><br><span class="line">            add(<span class="string">"lala"</span>)</span><br><span class="line">            add(<span class="string">"kaka"</span>)</span><br><span class="line">            <span class="keyword">this</span>.<span class="keyword">get</span>(<span class="number">1</span>)</span><br><span class="line">        &#125;.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"返回：："</span>+it)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>打印：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">返回：：kaka</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="let"><a href="#let" class="headerlink" title="let"></a>let</h1><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">let</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>也是返回最后一行，但是它内部不能调用对象的方法：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">letGo</span><span class="params">()</span></span>: <span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="string">"qianqian"</span>.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,it)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>调用<code>letGO</code> 返回 <code>1</code> </p>
+<h1 id="with"><a href="#with" class="headerlink" title="with"></a>with</h1><p>类似于：<code>apply</code> + <code>let</code> 的结合</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> <span class="title">with</span><span class="params">(receiver: <span class="type">T</span>, block: <span class="type">T</span>.()</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">with(ArrayList&lt;String&gt;())&#123;</span><br><span class="line">            add(<span class="string">"haha"</span>)</span><br><span class="line">            add(<span class="string">"heihei"</span>)</span><br><span class="line">            <span class="keyword">this</span><span class="comment">//最后返回ArrayList对象</span></span><br><span class="line">        &#125;.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"list==="</span>+it)<span class="comment">//打印：[haha,heihei]</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/24/获取手机屏幕的密度/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1506,454 +1812,11 @@ xxxhdpi（超超超高）~640dpi density=4
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Fragment-懒加载/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/28/Fragment-懒加载/" itemprop="url">Fragment 懒加载</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T17:47:41+08:00">
-                2018-02-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/28/Fragment-懒加载/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/28/Fragment-懒加载/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用</p>
-</blockquote>
-<h1 id="1-首先新建一个BaseLazyFragment"><a href="#1-首先新建一个BaseLazyFragment" class="headerlink" title="1.首先新建一个BaseLazyFragment"></a>1.首先新建一个<code>BaseLazyFragment</code></h1><pre><code>/**
- * Created by xuqianqian on 2018/2/28.
- */
-public  abstract class BaseLazyFragment extends Fragment {
-
-    protected View mRootView;
-    public Context mContext;
-    protected boolean isVisible;
-    private boolean isPrepared;
-    private boolean isLoad = false;
-
-    //最先执行
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getUserVisibleHint()) {//当前显示
-            isVisible = true;
-            if(!isLoad){
-                lazyLoad();
-            }
-        } else {
-            isVisible = false;
-            //onInvisible();
-        }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = getActivity();
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        if (mRootView == null) {
-            mRootView = getLayout();
-        }
-        return mRootView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        isPrepared = true;
-        //如果已经加载过了，就无需再重新加载
-        if(!isLoad){
-            lazyLoad();
-        }
-    }
-
-    /**
-     * 懒加载
-     */
-    protected void lazyLoad() {
-        if (!isPrepared || !isVisible) {
-            return;
-        }
-        isLoad = true;
-        initData();
-    }
-
-//    protected void onInvisible() {
-//
-//    }
-    //初始化布局View
-    public abstract View getLayout();
-
-    public abstract void initData();
-}
-</code></pre><h1 id="2-让你的fragment-extend-BaseLazyFragment"><a href="#2-让你的fragment-extend-BaseLazyFragment" class="headerlink" title="2.让你的fragment extend BaseLazyFragment"></a>2.让你的<code>fragment extend BaseLazyFragment</code></h1><pre><code>public class GankFragment extends BaseLazyFragment {
-
-String type;
-public static GankFragment newInstance(String type) {
-    GankFragment gankFragment = new GankFragment();
-    Bundle bundle = new Bundle();
-    bundle.putString(&quot;type&quot;, type);
-    gankFragment.setArguments(bundle);
-    return gankFragment;
-}
-//加载布局
-@Override
-public View getLayout() {
-
-    type = getArguments().getString(&quot;type&quot;);
-    TextView tv = new TextView(getActivity());
-    tv.setText(type);
-    tv.setGravity(Gravity.CENTER);
-    return tv;
-}
-
-@Override
-public void initData() {
-
-    //初始化一些控件，加载网络数据
-}
-
-}
-</code></pre><h1 id="3-剩下的就是FragmentPagerAdapter了"><a href="#3-剩下的就是FragmentPagerAdapter了" class="headerlink" title="3.剩下的就是FragmentPagerAdapter了"></a>3.剩下的就是FragmentPagerAdapter了</h1><pre><code>public class TitleAdapter extends FragmentPagerAdapter {
-
-private List&lt;Fragment&gt; fragments;
-
-private List&lt;String&gt; types;
-
-public TitleAdapter(FragmentManager fm, List&lt;Fragment&gt; fragments, List&lt;String&gt; types) {
-    super(fm);
-    this.fragments = fragments;
-    this.types = types;
-}
-
-@Override
-public Fragment getItem(int position) {
-    return fragments.get(position);
-}
-
-@Override
-public int getCount() {
-    return fragments.size();
-}
-
-@Override
-public CharSequence getPageTitle(int position) {
-    return types.get(position);
-}
-}
-</code></pre><p><code>MainActivity.java</code></p>
-<pre><code>private List&lt;String&gt; titles = new ArrayList&lt;&gt;();
-
-private List&lt;Fragment&gt; fragments = new ArrayList&lt;&gt;();
-TitleAdapter titleAdapter;
-
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-
-    TabLayout tablayout = findViewById(R.id.tablayout);
-    ViewPager viewpager = findViewById(R.id.viewpager);
-
-    titles.add(&quot;android&quot;);
-    titles.add(&quot;ios&quot;);
-    titles.add(&quot;web&quot;);
-    titles.add(&quot;java&quot;);
-
-    fragments.add(GankFragment.newInstance(&quot;android&quot;));
-    fragments.add(GankFragment.newInstance(&quot;ios&quot;));
-    fragments.add(GankFragment.newInstance(&quot;web&quot;));
-    fragments.add(GankFragment.newInstance(&quot;java&quot;));
-
-    titleAdapter = new TitleAdapter(getSupportFragmentManager(), fragments, titles);
-    viewpager.setAdapter(titleAdapter);
-    tablayout.setTabMode(TabLayout.MODE_FIXED);
-    tablayout.setupWithViewPager(viewpager);
-}
-</code></pre><p><a href="https://github.com/QQabby/LazyFragmentApplication" title="源码地址">https://github.com/QQabby/LazyFragmentApplication</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Dialog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/28/Dialog/" itemprop="url">Dialog</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T14:47:16+08:00">
-                2018-02-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/28/Dialog/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/28/Dialog/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="快速初始化materialDialog"><a href="#快速初始化materialDialog" class="headerlink" title="快速初始化materialDialog"></a>快速初始化materialDialog</h1><pre><code>new MaterialDialog.Builder(mContext)
-                    .title(&quot;title&quot;)
-                    .content(&quot;I&apos;m a content&quot;)
-                    .negativeText(&quot;cancel&quot;)
-                    .negativeColorRes(R.color.colorNegative)
-                    .positiveText(&quot;ok&quot;)
-                    .positiveColorRes(R.color.colorPositive)
-                    .onPositive(new     MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog     dialog, @NonNull DialogAction which) {
-                            showMsg(&quot;click dialog ok&quot;);
-                            ...
-                    }
-                })
-                .show();
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1999,7 +1862,7 @@ protected void onCreate(Bundle savedInstanceState) {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -2012,7 +1875,7 @@ protected void onCreate(Bundle savedInstanceState) {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
