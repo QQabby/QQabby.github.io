@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Serializable," />
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="糖葫芦">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/tags/Lru/index.html">
+<meta name="description" content="序列化的两种方式，一种是 java 提供的 Serilizable 和 Android 自身提供的 Parcelable.  基本使用12345678910111213141516171819202122232425262728293031323334 public class Person implements Serializable &amp;#123;  	//默认方式最好设置为1L,因为 ja">
+<meta name="keywords" content="Serializable">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Serializable与 Parcelable 的区别">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/index.html">
 <meta property="og:site_name" content="糖葫芦">
+<meta property="og:description" content="序列化的两种方式，一种是 java 提供的 Serilizable 和 Android 自身提供的 Parcelable.  基本使用12345678910111213141516171819202122232425262728293031323334 public class Person implements Serializable &amp;#123;  	//默认方式最好设置为1L,因为 ja">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-10T05:53:36.176Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="糖葫芦">
+<meta name="twitter:title" content="Serializable与 Parcelable 的区别">
+<meta name="twitter:description" content="序列化的两种方式，一种是 java 提供的 Serilizable 和 Android 自身提供的 Parcelable.  基本使用12345678910111213141516171819202122232425262728293031323334 public class Person implements Serializable &amp;#123;  	//默认方式最好设置为1L,因为 ja">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/tags/Lru/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/"/>
 
 
 
 
 
-  <title>Tag: Lru | 糖葫芦</title>
+  <title>Serializable与 Parcelable 的区别 | 糖葫芦</title>
   
 
 
@@ -140,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -258,54 +263,196 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Lru<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/12/19/lru/" itemprop="url">
-              
-                <span itemprop="name">LRU算法还一知半解？</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Serializable与 Parcelable 的区别</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-19T17:46:29+08:00"
-              content="2017-12-19" >
-          12-19
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T10:12:21+08:00">
+                2019-01-10
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/10/Serializable与Parcable的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/10/Serializable与Parcable的区别/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>序列化的两种方式，一种是 <code>java</code> 提供的 <code>Serilizable</code> 和 <code>Android</code> 自身提供的 <code>Parcelable</code>.</p>
+</blockquote>
+<h1 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">  	<span class="comment">//默认方式最好设置为1L,因为 java sdk 会自动进行hash计算，并生成唯一的</span></span><br><span class="line">     <span class="comment">//UID值。手动设置serialVersionUID的好处是当前class如果改变了成员变量，</span></span><br><span class="line">     <span class="comment">//比如增加或删除之后，这个UID是不改变的，反序列化不会失效。</span></span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">     ....</span><br><span class="line"> &#125;</span><br><span class="line"><span class="comment">//Parcable 类似</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">     <span class="keyword">private</span> String name;</span><br><span class="line">     <span class="keyword">private</span> String lastName;</span><br><span class="line">	...</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;UserInfo&gt; CREATOR = <span class="keyword">new</span> Creator&lt;UserInfo&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> UserInfo <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> UserInfo(in);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> UserInfo[] newArray(<span class="keyword">int</span> size) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> UserInfo[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel dest, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">        dest.writeString(name);</span><br><span class="line">        dest.writeString(lastName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><ul>
+<li>存储媒介的不同</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>存储媒介</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serializable</td>
+<td>使用的IO读写存储在硬盘上，序列化过程使用了反射技术，并且期间产生临时对象（？）,从而引起频繁的GC。</td>
+<td>代码少</td>
+</tr>
+<tr>
+<td>Parcelable</td>
+<td>使用的IO读写在内存中，内存的读写速度肯定优于硬盘读写速度，所以Parcelable的性能上优于Serializable.</td>
+<td>代码写起来比较多</td>
+</tr>
+</tbody>
+</table>
+<p>具体到开发中用哪个，个人觉着要考虑要传递对象的大小，如果对象比较大，手机内存比较小，可能会报出 <code>TransactionTooLargeException: The Binder transaction failed because it was too large .</code> 此时就要考虑使用 <code>Parcelable</code> 了，如果对象不是特别大，使用 <code>Serializable</code> 还是挺合适的，毕竟实现比较简单。</p>
 
       
     </div>
+    
+    
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+   </div>
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Serializable/" rel="tag"># Serializable</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/09/IntentService理解总结/" rel="next" title="IntentService理解总结">
+                <i class="fa fa-chevron-left"></i> IntentService理解总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -313,6 +460,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -333,8 +494,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -387,6 +557,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本使用"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x57FA;&#x672C;&#x4F7F;&#x7528;" class="headerlink" title="&#x57FA;&#x672C;&#x4F7F;&#x7528;"></a>&#x57FA;&#x672C;&#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#区别"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x533A;&#x522B;" class="headerlink" title="&#x533A;&#x522B;"></a>&#x533A;&#x522B;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -534,6 +720,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -551,6 +741,18 @@
       <script id="dsq-count-scr" src="https://disqus.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/';
+          this.page.identifier = '2019/01/10/Serializable与Parcable的区别/';
+          this.page.title = 'Serializable与 Parcelable 的区别';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://disqus.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   

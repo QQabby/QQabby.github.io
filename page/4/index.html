@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -202,7 +202,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -215,7 +215,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            Suche
+            Search
           </a>
         </li>
       
@@ -273,6 +273,151 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/10/08/EventBus-源码分析（下篇）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/08/EventBus-源码分析（下篇）/" itemprop="url">EventBus 源码分析（下篇）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-08T11:05:02+08:00">
+                2018-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/08/EventBus-源码分析（下篇）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/10/08/EventBus-源码分析（下篇）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>上篇  <a href="https://www.jianshu.com/p/bb25f4f56d65" target="_blank" rel="noopener">EventBus 源码分析（上篇）</a> 说到注册订阅的前半部分，此篇用来分析发送事件到接收事件这个过程。</p>
+</blockquote>
+<h1 id="1-发送事件"><a href="#1-发送事件" class="headerlink" title="1. 发送事件"></a>1. 发送事件</h1><p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventBus.getDefault().post(new RemindBean(&quot;2018-02-12&quot;,&quot;happy&quot;));</span><br></pre></td></tr></table></figure></p>
+<p><code>post</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/** Posts the given event to the event bus. */</span><br><span class="line">    public void post(Object event) &#123;</span><br><span class="line">      - 1.获取当前线程的postingThreadState 对象</span><br><span class="line">        PostingThreadState postingState = currentPostingThreadState.get();</span><br><span class="line">      - 2. 获取里面那个事件队列</span><br><span class="line">        List&lt;Object&gt; eventQueue = postingState.eventQueue;</span><br><span class="line">        - 3. 将事件添加到队列中去</span><br><span class="line">        eventQueue.add(event);</span><br><span class="line"></span><br><span class="line">      - 4. 判断当前的event 是否在 posting</span><br><span class="line">        if (!postingState.isPosting) &#123;</span><br><span class="line">            - 5. 是否是主线程</span><br><span class="line">            postingState.isMainThread = Looper.getMainLooper() == Looper.myLooper();</span><br><span class="line">            postingState.isPosting = true;</span><br><span class="line">            - 6. 判断是否取消</span><br><span class="line">            if (postingState.canceled) &#123;</span><br><span class="line">                throw new EventBusException(&quot;Internal error. Abort state was not reset&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            try &#123;</span><br><span class="line">                while (!eventQueue.isEmpty()) &#123;//不为空，进入循环</span><br><span class="line">                    - 7.按照顺序，post一个 remove一个</span><br><span class="line">                    postSingleEvent(eventQueue.remove(0), postingState);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                postingState.isPosting = false;</span><br><span class="line">                postingState.isMainThread = false;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>PostingThreadState</code> 大概看一眼<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">final static class PostingThreadState &#123;</span><br><span class="line">        final List&lt;Object&gt; eventQueue = new ArrayList&lt;Object&gt;();</span><br><span class="line">        boolean isPosting;</span><br><span class="line">        boolean isMainThread;</span><br><span class="line">        Subscription subscription;</span><br><span class="line">        Object event;</span><br><span class="line">        boolean canceled;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>再就是 <code>postSingleEvent(eventQueue.remove(0), postingState);</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">private void postSingleEvent(Object event, PostingThreadState postingState) throws Error &#123;</span><br><span class="line">         - 1. 获取event的字节码（例如就是：RemindBean.class）</span><br><span class="line">        Class&lt;?&gt; eventClass = event.getClass();</span><br><span class="line">        boolean subscriptionFound = false;</span><br><span class="line">      </span><br><span class="line">        if (eventInheritance) &#123;//默认为true</span><br><span class="line">          - 2. 根据eventClass 的字节码查找</span><br><span class="line">            List&lt;Class&lt;?&gt;&gt; eventTypes = lookupAllEventTypes(eventClass);</span><br><span class="line">            int countTypes = eventTypes.size();</span><br><span class="line">            - 3.循环遍历</span><br><span class="line">            for (int h = 0; h &lt; countTypes; h++) &#123;</span><br><span class="line">                Class&lt;?&gt; clazz = eventTypes.get(h);</span><br><span class="line">                - 4.根据事件，字节码查找订阅者</span><br><span class="line">                subscriptionFound |= postSingleEventForEventType(event, postingState, clazz);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            subscriptionFound = postSingleEventForEventType(event, postingState, eventClass);</span><br><span class="line">        &#125;</span><br><span class="line">        if (!subscriptionFound) &#123;</span><br><span class="line">            if (logNoSubscriberMessages) &#123;</span><br><span class="line">                Log.d(TAG, &quot;No subscribers registered for event &quot; + eventClass);</span><br><span class="line">            &#125;</span><br><span class="line">            if (sendNoSubscriberEvent &amp;&amp; eventClass != NoSubscriberEvent.class &amp;&amp;</span><br><span class="line">                    eventClass != SubscriberExceptionEvent.class) &#123;</span><br><span class="line">                post(new NoSubscriberEvent(this, event));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>postSingleEventForEventType</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">private boolean postSingleEventForEventType(Object event, PostingThreadState postingState, Class&lt;?&gt; eventClass) &#123;</span><br><span class="line">        CopyOnWriteArrayList&lt;Subscription&gt; subscriptions;</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">          - 1.根据字节码取出subscriptions,还记得我们之前在subscribe这个方法的时候，</span><br><span class="line">把subscrber,subscriberMethod 封装成一个subscription 对象。</span><br><span class="line"></span><br><span class="line">            subscriptions = subscriptionsByEventType.get(eventClass);</span><br><span class="line">        &#125;</span><br><span class="line">        if (subscriptions != null &amp;&amp; !subscriptions.isEmpty()) &#123;</span><br><span class="line">            for (Subscription subscription : subscriptions) &#123;</span><br><span class="line">                - 2. 取出每一个subscription 对象</span><br><span class="line">                postingState.event = event;</span><br><span class="line">                postingState.subscription = subscription;</span><br><span class="line">                boolean aborted = false;</span><br><span class="line">                try &#123;</span><br><span class="line">                  - 3. post到相应的线程中回调</span><br><span class="line">                    postToSubscription(subscription, event, postingState.isMainThread);</span><br><span class="line">                    aborted = postingState.canceled;</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    postingState.event = null;</span><br><span class="line">                    postingState.subscription = null;</span><br><span class="line">                    postingState.canceled = false;</span><br><span class="line">                &#125;</span><br><span class="line">                if (aborted) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>postToSubscription</code>: 根据定义的不同线程，调用相应的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) &#123;</span><br><span class="line">        switch (subscription.subscriberMethod.threadMode) &#123;</span><br><span class="line">            case POSTING://一般没定义的，这个就是post在哪个线程，响应就在哪个线程执行</span><br><span class="line">                invokeSubscriber(subscription, event);</span><br><span class="line">                break;</span><br><span class="line">            case MAIN:</span><br><span class="line">                if (isMainThread) &#123;</span><br><span class="line">                    invokeSubscriber(subscription, event);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    mainThreadPoster.enqueue(subscription, event);</span><br><span class="line">                &#125;</span><br><span class="line">                break;</span><br><span class="line">            case BACKGROUND:</span><br><span class="line">                if (isMainThread) &#123;</span><br><span class="line">                    backgroundPoster.enqueue(subscription, event);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    invokeSubscriber(subscription, event);</span><br><span class="line">                &#125;</span><br><span class="line">                break;</span><br><span class="line">            case ASYNC:</span><br><span class="line">                asyncPoster.enqueue(subscription, event);</span><br><span class="line">                break;</span><br><span class="line">            default:</span><br><span class="line">                throw new IllegalStateException(&quot;Unknown thread mode: &quot; + subscription.subscriberMethod.threadMode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>invokeSubscriber</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void invokeSubscriber(Subscription subscription, Object event) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">          - 反射拿到字节码clazz 反射调用方法，就收到消息了</span><br><span class="line">            subscription.subscriberMethod.method.invoke(subscription.subscriber, event);</span><br><span class="line">        &#125; catch (InvocationTargetException e) &#123;</span><br><span class="line">            handleSubscriberException(subscription, event, e.getCause());</span><br><span class="line">        &#125; catch (IllegalAccessException e) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;Unexpected exception&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>end.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/10/08/Eventbus-源码分析（上篇）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -302,7 +447,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-08T09:59:19+08:00">
                 2018-10-08
@@ -463,7 +608,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-19T18:03:42+08:00">
                 2018-09-19
@@ -662,7 +807,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-11T09:38:47+08:00">
                 2018-09-11
@@ -838,7 +983,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-16T16:57:07+08:00">
                 2018-08-16
@@ -985,7 +1130,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-05T14:58:04+08:00">
                 2018-07-05
@@ -1147,7 +1292,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-27T14:31:48+08:00">
                 2018-06-27
@@ -1288,7 +1433,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-28T15:24:21+08:00">
                 2018-04-28
@@ -1453,7 +1598,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-24T15:45:35+08:00">
                 2018-04-24
@@ -1600,7 +1745,7 @@ xxxhdpi（超超超高）~640dpi density=4
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T16:30:37+08:00">
                 2018-04-08
@@ -1695,140 +1840,6 @@ xxxhdpi（超超超高）~640dpi density=4
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/23/Activity状态保存与恢复/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/23/Activity状态保存与恢复/" itemprop="url">Activity状态保存与恢复</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-23T17:03:05+08:00">
-                2018-03-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/23/Activity状态保存与恢复/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/23/Activity状态保存与恢复/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1879,8 +1890,8 @@ xxxhdpi（超超超高）~640dpi density=4
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -1892,8 +1903,8 @@ xxxhdpi（超超超高）~640dpi density=4
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">43</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">tags</span>
                 </a>
               </div>
             
@@ -1941,7 +1952,7 @@ xxxhdpi（超超超高）~640dpi density=4
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
