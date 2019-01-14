@@ -273,6 +273,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/14/断点续传了解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/14/断点续传了解/" itemprop="url">断点续传了解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-14T10:11:16+08:00">
+                2019-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/14/断点续传了解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/14/断点续传了解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>所谓断点续传，也就是要从文件已经下载的地方开始继续下载。所以在客户端浏览器传给 <code>wen</code> 服务器的时候要多加一条信息即：从哪里开始的问题。</p>
+</blockquote>
+<p>假设：我们从服务器下载一个文件，需要从 <code>2000070</code> 这个字节后开始下载，之前已经下载过了，注意查看以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">get /down.zip http/<span class="number">1.0</span></span><br><span class="line"></span><br><span class="line">user-agent: netfox</span><br><span class="line"></span><br><span class="line">range: bytes=<span class="number">2000070</span>-<span class="comment">//新增加字段，range,这一行的意思就是告诉服务器我这个文件从2000070字节开始传输，前面的字节就不用传了。</span></span><br><span class="line"></span><br><span class="line">accept: text/html, image/gif, image/jpeg, *; q=.<span class="number">2</span>, *<span class="comment">/*; q=.2</span></span><br></pre></td></tr></table></figure>
+<p>服务器收到这条信息，就开始返回信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">206</span> <span class="comment">//注意此时服务器的返回码不再是200而是206</span></span><br><span class="line"></span><br><span class="line">content-length=<span class="number">106786028</span></span><br><span class="line"></span><br><span class="line">content-range=bytes <span class="number">2000070</span>-<span class="number">106786027</span>/<span class="number">106786028</span> <span class="comment">//这行也是服务器新增加字段，返回的字节是从2000070-106786027 之间的字节，之前的字节就不传了。</span></span><br><span class="line"></span><br><span class="line">date=mon, <span class="number">30</span> apr <span class="number">2001</span> <span class="number">12</span>:<span class="number">55</span>:<span class="number">20</span> gmt</span><br><span class="line"></span><br><span class="line">etag=w/<span class="string">"02ca57e173c11:95b"</span></span><br><span class="line"></span><br><span class="line">content-type=application/octet-stream</span><br><span class="line"></span><br><span class="line">server=microsoft-iis/<span class="number">5.0</span></span><br><span class="line"></span><br><span class="line">last-modified=mon, <span class="number">30</span> apr <span class="number">2001</span> <span class="number">12</span>:<span class="number">55</span>:<span class="number">20</span> gmt</span><br></pre></td></tr></table></figure>
+<p>以上差不多就是断点续传需要知道的知识和大致的原理。</p>
+<ul>
+<li><p>问题</p>
+<p> 用什么方法实现提交 <code>range:bytes=2000070-</code>  ？</p>
+</li>
+</ul>
+<blockquote>
+<p>使用最原始的 <code>socket</code> 肯定可以完成，不过很费事，用java的net包中提供了设置的方法，如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">           URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.baidu.com"</span>);</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">			<span class="comment">//通过设置requestProperty</span></span><br><span class="line">               httpURLConnection.setRequestProperty(<span class="string">"rande"</span>,<span class="string">"bytes=2000070"</span>);</span><br><span class="line">			<span class="comment">//这样获取的输入流就是从2000070这个字节后开始的	</span></span><br><span class="line">               InputStream input = httpURLConnection.getInputStream();</span><br><span class="line"></span><br><span class="line">           &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>接下来：获取到流了，那么如何从流保存到文件中去呢？</p>
+<p>保存文件的方法，采用的是 <code>io</code> 包中的 <code>randomacessfile</code> 类。如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上面文件已经获取到 inputStream--input</span></span><br><span class="line">RandomAccessFile saveFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"down.zip"</span>,<span class="string">"rw"</span>);<span class="comment">//down.zip下载文件名称</span></span><br><span class="line">saveFile.seek(<span class="number">2000070</span>);<span class="comment">//定位文件指针到这个 2000070 位置</span></span><br><span class="line"><span class="keyword">byte</span>[] b= <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="keyword">int</span> read;</span><br><span class="line"><span class="keyword">while</span>((read = input.read(b,<span class="number">0</span>,<span class="number">1024</span>))&gt;<span class="number">0</span>)&#123;</span><br><span class="line">saveFile.write(b,<span class="number">0</span>,read);</span><br></pre></td></tr></table></figure>
+<p>基本大概就是这样。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/11/Animation动画相关知识点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1722,152 +1877,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/17/INSTALL-FAILED-TEST-ONLY/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/17/INSTALL-FAILED-TEST-ONLY/" itemprop="url">INSTALL_FAILED_TEST_ONLY</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-17T13:42:08+08:00">
-                2018-12-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/17/INSTALL-FAILED-TEST-ONLY/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/17/INSTALL-FAILED-TEST-ONLY/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>莫名其妙更新了 studio的配置，然后打包签名，利用<code>adb install xx.apk</code> 安装就出现了 <code>INSTALL_FAILED_TEST_ONLY</code>,安装失败。心想也没干什么啊，查阅相关资料后，<br>原因是：<code>Android Studio 3.0</code>会在<code>debug apk</code>的<code>manifest</code>文件<code>application</code>标签里自动添加 <code>android:testOnly=&quot;true&quot;</code>属性</p>
-</blockquote>
-<p>网上有说：将这个<code>android:testOnly=&quot;false&quot;</code> 添加到 <code>Application</code> 标签中，但是还是没有成功。</p>
-<ul>
-<li>解决办法一：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install -t xx.apk</span><br></pre></td></tr></table></figure>
-<p>需要加上<code>-t</code>. 问题是解决了，可以安装成功了，但是对于以前qq 发送文件还是不能安装成功。</p>
-<ul>
-<li>解决办法二：<br>还是点击普通的绿色按钮安装，此时生成一个apk,我们再点击 <code>Build---&gt; Build Apk</code> 此时拿出 <code>output--&gt;apk--&gt;xx.apk</code> 可以正常安装了。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1918,7 +1927,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1931,7 +1940,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
