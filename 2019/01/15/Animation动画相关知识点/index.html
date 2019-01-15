@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Serializable," />
+  <meta name="keywords" content="animation," />
 
 
 
@@ -79,18 +79,23 @@
 
 
 
-<meta name="description" content="序列化的两种方式，一种是 java 提供的 Serilizable 和 Android 自身提供的 Parcelable.  基本使用12345678910111213141516171819202122232425262728293031323334 public class Person implements Serializable &amp;#123;  	//默认方式最好设置为1L,因为 ja">
-<meta name="keywords" content="Serializable">
+<meta name="description" content="关于 Animation 的一些回顾和总结  关于Animation 和 Animator Animation 是我们经常用到的一些动画，包括帧动画和补间动画，而 Animator 是Android 3.0 的时候推出的动画框架，也称为属性动画      版本兼容 实现效率 适用性 是否产生内存泄漏 使用效果     Animation 可兼容Android3.0以下的版本 直接通过代码对矩阵进">
+<meta name="keywords" content="animation">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Serializable与 Parcelable 的区别">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/index.html">
+<meta property="og:title" content="Animation动画相关知识点">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2019/01/15/Animation动画相关知识点/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="序列化的两种方式，一种是 java 提供的 Serilizable 和 Android 自身提供的 Parcelable.  基本使用12345678910111213141516171819202122232425262728293031323334 public class Person implements Serializable &amp;#123;  	//默认方式最好设置为1L,因为 ja">
+<meta property="og:description" content="关于 Animation 的一些回顾和总结  关于Animation 和 Animator Animation 是我们经常用到的一些动画，包括帧动画和补间动画，而 Animator 是Android 3.0 的时候推出的动画框架，也称为属性动画      版本兼容 实现效率 适用性 是否产生内存泄漏 使用效果     Animation 可兼容Android3.0以下的版本 直接通过代码对矩阵进">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-10T06:52:07.202Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-70b61445cb4184f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-25a93ab5dac3f562.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-17842c6ce993f25e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-d068e8aa57ec96d0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-01-15T07:47:48.207Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serializable与 Parcelable 的区别">
-<meta name="twitter:description" content="序列化的两种方式，一种是 java 提供的 Serilizable 和 Android 自身提供的 Parcelable.  基本使用12345678910111213141516171819202122232425262728293031323334 public class Person implements Serializable &amp;#123;  	//默认方式最好设置为1L,因为 ja">
+<meta name="twitter:title" content="Animation动画相关知识点">
+<meta name="twitter:description" content="关于 Animation 的一些回顾和总结  关于Animation 和 Animator Animation 是我们经常用到的一些动画，包括帧动画和补间动画，而 Animator 是Android 3.0 的时候推出的动画框架，也称为属性动画      版本兼容 实现效率 适用性 是否产生内存泄漏 使用效果     Animation 可兼容Android3.0以下的版本 直接通过代码对矩阵进">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-70b61445cb4184f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/15/Animation动画相关知识点/"/>
 
 
 
 
 
-  <title>Serializable与 Parcelable 的区别 | 糖葫芦</title>
+  <title>Animation动画相关知识点 | 糖葫芦</title>
   
 
 
@@ -277,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/15/Animation动画相关知识点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +299,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Serializable与 Parcelable 的区别</h1>
+          <h1 class="post-title" itemprop="name headline">Animation动画相关知识点</h1>
         
 
         <div class="post-meta">
@@ -306,8 +311,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T10:12:21+08:00">
-                2019-01-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-15T09:47:10+08:00">
+                2019-01-15
               </time>
             
 
@@ -325,9 +330,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/10/Serializable与Parcable的区别/#comments" itemprop="discussionUrl">
+                <a href="/2019/01/15/Animation动画相关知识点/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/10/Serializable与Parcable的区别/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/01/15/Animation动画相关知识点/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -356,34 +361,88 @@
 
       
         <blockquote>
-<p>序列化的两种方式，一种是 <code>java</code> 提供的 <code>Serilizable</code> 和 <code>Android</code> 自身提供的 <code>Parcelable</code>.</p>
+<p>关于 <code>Animation</code> 的一些回顾和总结</p>
 </blockquote>
-<h1 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">  	<span class="comment">//默认方式最好设置为1L,因为 java sdk 会自动进行hash计算，并生成唯一的</span></span><br><span class="line">     <span class="comment">//UID值。手动设置serialVersionUID的好处是当前class如果改变了成员变量，</span></span><br><span class="line">     <span class="comment">//比如增加或删除之后，这个UID是不改变的，反序列化不会失效。</span></span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">     ....</span><br><span class="line"> &#125;</span><br><span class="line"><span class="comment">//Parcable 类似</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">     <span class="keyword">private</span> String name;</span><br><span class="line">     <span class="keyword">private</span> String lastName;</span><br><span class="line">	...</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;UserInfo&gt; CREATOR = <span class="keyword">new</span> Creator&lt;UserInfo&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> UserInfo <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> UserInfo(in);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> UserInfo[] newArray(<span class="keyword">int</span> size) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> UserInfo[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel dest, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">        dest.writeString(name);</span><br><span class="line">        dest.writeString(lastName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><ul>
-<li>存储媒介的不同</li>
-</ul>
+<h1 id="关于Animation-和-Animator"><a href="#关于Animation-和-Animator" class="headerlink" title="关于Animation 和 Animator"></a>关于Animation 和 Animator</h1><blockquote>
+<p><code>Animation</code> 是我们经常用到的一些动画，包括帧动画和补间动画，而 <code>Animator</code> 是<code>Android 3.0</code> 的时候推出的动画框架，也称为属性动画</p>
+</blockquote>
 <table>
 <thead>
 <tr>
 <th></th>
-<th>存储媒介</th>
-<th>特点</th>
+<th>版本兼容</th>
+<th>实现效率</th>
+<th>适用性</th>
+<th>是否产生内存泄漏</th>
+<th>使用效果</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Serializable</td>
-<td>使用的IO读写存储在硬盘上，序列化过程使用了反射技术，并且期间产生临时对象（？）,从而引起频繁的GC。</td>
-<td>代码少</td>
+<td>Animation</td>
+<td>可兼容Android3.0以下的版本</td>
+<td>直接通过代码对矩阵进行处理</td>
+<td>仅对View对象有用</td>
+<td>不会</td>
+<td>假的移动</td>
 </tr>
 <tr>
-<td>Parcelable</td>
-<td>使用的IO读写在内存中，内存的读写速度肯定优于硬盘读写速度，所以Parcelable的性能上优于Serializable.</td>
-<td>代码写起来比较多</td>
+<td>Animator</td>
+<td>无法兼容，也没有向下兼容的support包</td>
+<td>通过设置对象的setter,getter方法，来达到动画目的，使用了java反射机制，可用于任意对象，效率低于Animation</td>
+<td>任意对象(但是需要有get/set方法)</td>
+<td>可能会，当设置为无限循环时，如果在Activity退出时没有及时将动画停止，属性动画会导致Activity无法释放而导致内存泄漏。</td>
+<td>真的位置变换</td>
 </tr>
 </tbody>
 </table>
-<p>具体到开发中用哪个，个人觉着要考虑要传递对象的大小，如果对象比较大，手机内存比较小，可能会报出 <code>TransactionTooLargeException: The Binder transaction failed because it was too large .</code> 此时就要考虑使用 <code>Parcelable</code> 了，如果对象不是特别大，使用 <code>Serializable</code> 还是挺合适的，毕竟实现比较简单。</p>
+<h1 id="关于动画的基本使用"><a href="#关于动画的基本使用" class="headerlink" title="关于动画的基本使用"></a>关于动画的基本使用</h1><ul>
+<li><p><code>Animation</code> 相关动画的使用</p>
+<p><strong>帧动画</strong></p>
+<blockquote>
+<p>一般我们使用帧动画都是采取xml定义的方式</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// yun_anim.xml</span></span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;animation-list xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:oneshot=<span class="string">"false"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;item</span><br><span class="line">        android:drawable=<span class="string">"@mipmap/app_loading0"</span></span><br><span class="line">        android:duration=<span class="string">"150"</span> /&gt;</span><br><span class="line">    &lt;item</span><br><span class="line">        android:drawable=<span class="string">"@mipmap/app_loading1"</span></span><br><span class="line">        android:duration=<span class="string">"150"</span> /&gt;</span><br><span class="line">    &lt;item</span><br><span class="line">        android:drawable=<span class="string">"@mipmap/app_loading2"</span></span><br><span class="line">        android:duration=<span class="string">"150"</span> /&gt;</span><br><span class="line">    &lt;item</span><br><span class="line">        android:drawable=<span class="string">"@mipmap/app_loading3"</span></span><br><span class="line">        android:duration=<span class="string">"150"</span> /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/animation-list&gt;  </span><br><span class="line"><span class="comment">//将它定义成一个drawable,这样引用</span></span><br><span class="line">&lt;ImageView</span><br><span class="line">        android:id=<span class="string">"@+id/img_progress"</span></span><br><span class="line">        android:layout_width=<span class="string">"wrap_content"</span></span><br><span class="line">        android:layout_height=<span class="string">"wrap_content"</span></span><br><span class="line">        android:src=<span class="string">"@drawable/yun_anim"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>补间动画</strong></p>
+<blockquote>
+<p>包括一些平移(<code>Translate</code>)，旋转(<code>Rotate</code>)，透明度(<code>Alpha</code>)，缩放动画(<code>Scale</code>)，使用都差不多,可以在xml中创建使用也可以动态创建使用。</p>
+</blockquote>
+<p><code>xml</code> 中类似于这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这是一个动画集合</span></span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;set xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span> &gt;</span><br><span class="line"></span><br><span class="line">    &lt;translate</span><br><span class="line">        android:duration=<span class="string">"200"</span></span><br><span class="line">        android:fromYDelta=<span class="string">"100%p"</span></span><br><span class="line">        android:toYDelta=<span class="string">"0"</span> /&gt;</span><br><span class="line">&lt;/set&gt;</span><br><span class="line"><span class="comment">//使用xx布局文件的名称</span></span><br><span class="line">Animation translateAnimation = AnimationUtils.loadAnimation(<span class="keyword">this</span>, R.anim.xx);</span><br><span class="line">iv.startAnimation(translateAnimation);</span><br></pre></td></tr></table></figure>
+<p><code>java</code> 代码设置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//位移动画，相应还有旋转其它类似</span></span><br><span class="line">Animation animation = <span class="keyword">new</span> TranslateAnimation(<span class="number">0</span>,<span class="number">100</span>,<span class="number">0</span>,<span class="number">100</span>)</span><br><span class="line">translateAnimation.setDuration(<span class="number">3000</span>);</span><br><span class="line">iv.startAnimation(translateAnimation);</span><br></pre></td></tr></table></figure>
+<p><strong>属性动画</strong></p>
+<blockquote>
+<p><code>ValueAnimator</code> 是属性动画的一个核心类</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ValueAnimator anim = ValueAnimator.ofFloat(<span class="number">0f</span>, <span class="number">1f</span>);  </span><br><span class="line">anim.setDuration(<span class="number">300</span>);  </span><br><span class="line">anim.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;  </span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">float</span> currentValue = (<span class="keyword">float</span>) animation.getAnimatedValue();  </span><br><span class="line">        Log.d(<span class="string">"TAG"</span>, <span class="string">"cuurent value is "</span> + currentValue);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;);  </span><br><span class="line">anim.start()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>ObjectAnimator</code></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//透明度的变化，还可以位移啥的</span></span><br><span class="line">ObjectAnimator animator = ObjectAnimator.ofFloat(iv, <span class="string">"alpha"</span>, <span class="number">1f</span>, <span class="number">0f</span>, <span class="number">1f</span>);  </span><br><span class="line">animator.setDuration(<span class="number">5000</span>);  </span><br><span class="line">animator.start();  </span><br><span class="line">------------------------------</span><br><span class="line">ObjectAnimator animator = ObjectAnimator.ofFloat(iv, <span class="string">"rotation"</span>, <span class="number">0f</span>, <span class="number">180f</span>);  </span><br><span class="line">animator.setDuration(<span class="number">5000</span>);  </span><br><span class="line">animator.start();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>官方一张图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-70b61445cb4184f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>ValueAnimator</code> 是属性动画很重要的一个类，其中 <code>ObjectAnimator</code> 继承于 <code>ValueAnimator</code> ..</p>
+<h1 id="问题：那-ValueAnimator-到底是怎样实现初始值平滑过渡到结束值的呢？"><a href="#问题：那-ValueAnimator-到底是怎样实现初始值平滑过渡到结束值的呢？" class="headerlink" title="问题：那 ValueAnimator  到底是怎样实现初始值平滑过渡到结束值的呢？"></a>问题：那 <code>ValueAnimator</code>  到底是怎样实现初始值平滑过渡到结束值的呢？</h1><blockquote>
+<p>这个是由 <code>TypeEvaluator</code> 和 <code>TimeInterpolator</code> 共同决定的。</p>
+</blockquote>
+<p><strong>具体来说：<code>TypeEvaluator</code> 决定了从初始值过度到结束值过度的方式。<code>TimeInterpolator</code> 决定了动画从初始值过渡到结束值的节奏。</strong></p>
+<p>有个例子很恰当：你每天上班去公司，是选择地铁出行还是公交，还是骑行，选择从出发地到目的地的一种抵达方式，这个是 <code>TypeEvaluator</code>, 假如你选择骑行，是均速骑行到目的地还是先加速后减速，还是一开始慢后来快，这个就是 <code>TimeInterpolator</code> 决定的。</p>
+<p><strong>用<code>TypeEvaluator</code> 确定运动轨迹</strong></p>
+<p>一般来说，要定义运动轨迹，需要实现 <code>TypeEvaluator</code> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PointEvaluator</span> <span class="keyword">implements</span> <span class="title">TypeEvaluator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * This function returns the result of linearly interpolating the start and end values, with</span></span><br><span class="line"><span class="comment">     * &lt;code&gt;fraction&lt;/code&gt; representing the proportion between the start and end values. The</span></span><br><span class="line"><span class="comment">     * calculation is a simple parametric calculation: &lt;code&gt;result = x0 + t * (x1 - x0)&lt;/code&gt;,</span></span><br><span class="line"><span class="comment">     * where &lt;code&gt;x0&lt;/code&gt; is &lt;code&gt;startValue&lt;/code&gt;, &lt;code&gt;x1&lt;/code&gt; is &lt;code&gt;endValue&lt;/code&gt;,</span></span><br><span class="line"><span class="comment">     * and &lt;code&gt;t&lt;/code&gt; is &lt;code&gt;fraction&lt;/code&gt;.</span></span><br><span class="line"><span class="comment">     *			</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> fraction   The fraction from the starting to the ending values 动画当前进行的进度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> startValue The start value.开始值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> endValue   The end value.结束值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> A linear interpolation between the start and end values, given the</span></span><br><span class="line"><span class="comment">     *         &lt;code&gt;fraction&lt;/code&gt; parameter.线性</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Point <span class="title">evaluate</span><span class="params">(<span class="keyword">float</span> fraction, Point startValue, Point endValue)</span> </span>&#123;</span><br><span class="line">      	<span class="comment">//自定义轨迹路线，假如我们做一个线性运动</span></span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">new</span> Point((<span class="keyword">int</span>)(startValue.getX()+endValue.getX()*fraction),</span><br><span class="line">                (<span class="keyword">int</span>)(startValue.getY()+endValue.getY()*fraction));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用的时候：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Point startP = <span class="keyword">new</span> Point(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">      Point endP = <span class="keyword">new</span> Point(<span class="number">500</span>,<span class="number">500</span>);</span><br><span class="line">      ValueAnimator valueAnimator = ValueAnimator.ofObject(<span class="keyword">new</span> PointEvaluator(), startP, endP);</span><br><span class="line">      valueAnimator.setDuration(<span class="number">5000</span>);</span><br><span class="line">      valueAnimator.setRepeatCount(<span class="number">10</span>);</span><br><span class="line">      valueAnimator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</span><br><span class="line">          <span class="meta">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</span><br><span class="line">              Point currentPoint = (Point) animation.getAnimatedValue();</span><br><span class="line">              iv.setX(currentPoint.getX());</span><br><span class="line">              iv.setY(currentPoint.getY());</span><br><span class="line">              current.setX(<span class="number">130</span>+currentPoint.getX());</span><br><span class="line">              current.setY(currentPoint.getY());</span><br><span class="line"></span><br><span class="line">              current.setText(<span class="string">""</span>);</span><br><span class="line">              current.setText(<span class="string">"x="</span>+currentPoint.getX()+<span class="string">"   y="</span>+currentPoint.getY());</span><br><span class="line"></span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      valueAnimator.start();</span><br></pre></td></tr></table></figure>
+<p>这样我们就完成了动画轨迹的定义。</p>
+<p>例如我们来一个最简单的线性运动：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-25a93ab5dac3f562.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="one.jpg"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-17842c6ce993f25e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="two.jpg"></p>
+<h1 id="TimeInterpolator"><a href="#TimeInterpolator" class="headerlink" title="TimeInterpolator"></a>TimeInterpolator</h1><blockquote>
+<p>前面说过，这个是用来控制动画从开始到结束的节奏的。Android 自己提供了几个自带的 <code>Interpolator</code>,当然同时也可以自定义实现。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-d068e8aa57ec96d0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 
       
     </div>
@@ -411,7 +470,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Serializable/" rel="tag"># Serializable</a>
+            <a href="/tags/animation/" rel="tag"># animation</a>
           
         </div>
       
@@ -424,8 +483,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/09/IntentService理解总结/" rel="next" title="IntentService理解总结">
-                <i class="fa fa-chevron-left"></i> IntentService理解总结
+              <a href="/2019/01/14/断点续传了解/" rel="next" title="断点续传了解">
+                <i class="fa fa-chevron-left"></i> 断点续传了解
               </a>
             
           </div>
@@ -433,10 +492,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/14/断点续传了解/" rel="prev" title="断点续传了解">
-                断点续传了解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -571,7 +626,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本使用"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x57FA;&#x672C;&#x4F7F;&#x7528;" class="headerlink" title="&#x57FA;&#x672C;&#x4F7F;&#x7528;"></a>&#x57FA;&#x672C;&#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#区别"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x533A;&#x522B;" class="headerlink" title="&#x533A;&#x522B;"></a>&#x533A;&#x522B;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于Animation-和-Animator"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5173;&#x4E8E;Animation-&#x548C;-Animator" class="headerlink" title="&#x5173;&#x4E8E;Animation &#x548C; Animator"></a>&#x5173;&#x4E8E;Animation &#x548C; Animator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于动画的基本使用"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5173;&#x4E8E;&#x52A8;&#x753B;&#x7684;&#x57FA;&#x672C;&#x4F7F;&#x7528;" class="headerlink" title="&#x5173;&#x4E8E;&#x52A8;&#x753B;&#x7684;&#x57FA;&#x672C;&#x4F7F;&#x7528;"></a>&#x5173;&#x4E8E;&#x52A8;&#x753B;&#x7684;&#x57FA;&#x672C;&#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题：那-ValueAnimator-到底是怎样实现初始值平滑过渡到结束值的呢？"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x95EE;&#x9898;&#xFF1A;&#x90A3;-ValueAnimator-&#x5230;&#x5E95;&#x662F;&#x600E;&#x6837;&#x5B9E;&#x73B0;&#x521D;&#x59CB;&#x503C;&#x5E73;&#x6ED1;&#x8FC7;&#x6E21;&#x5230;&#x7ED3;&#x675F;&#x503C;&#x7684;&#x5462;&#xFF1F;" class="headerlink" title="&#x95EE;&#x9898;&#xFF1A;&#x90A3; ValueAnimator  &#x5230;&#x5E95;&#x662F;&#x600E;&#x6837;&#x5B9E;&#x73B0;&#x521D;&#x59CB;&#x503C;&#x5E73;&#x6ED1;&#x8FC7;&#x6E21;&#x5230;&#x7ED3;&#x675F;&#x503C;&#x7684;&#x5462;&#xFF1F;"></a>&#x95EE;&#x9898;&#xFF1A;&#x90A3; <code>ValueAnimator</code>  &#x5230;&#x5E95;&#x662F;&#x600E;&#x6837;&#x5B9E;&#x73B0;&#x521D;&#x59CB;&#x503C;&#x5E73;&#x6ED1;&#x8FC7;&#x6E21;&#x5230;&#x7ED3;&#x675F;&#x503C;&#x7684;&#x5462;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TimeInterpolator"><span class="nav-number">4.</span> <span class="nav-text"><a href="#TimeInterpolator" class="headerlink" title="TimeInterpolator"></a>TimeInterpolator</span></a></li></ol></div>
             
 
           </div>
@@ -748,9 +803,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/';
-          this.page.identifier = '2019/01/10/Serializable与Parcable的区别/';
-          this.page.title = 'Serializable与 Parcelable 的区别';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2019/01/15/Animation动画相关知识点/';
+          this.page.identifier = '2019/01/15/Animation动画相关知识点/';
+          this.page.title = 'Animation动画相关知识点';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
