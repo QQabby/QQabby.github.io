@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="concurrentHashMap," />
+  <meta name="keywords" content="fragment 相关," />
 
 
 
@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="背景知识：我们知道 HashMap 是线程不安全的，多线程情况下，进行put 操作会引起死循环，导致CPU 利用率比较高，所以在并发情况下不能使用 HashMap ; 而 Hashtable 是线程安全的，其实就是在 put 操作的时候加了 syncronized, 但是当一个线程在进行put 操作时，其它的线程连 get 操作也不能进行，导致阻塞或者轮询状态，所以竞争越来越激烈，效率低下。">
-<meta name="keywords" content="concurrentHashMap">
+<meta name="description" content="Fragment 的概念 关于 Fragment 如何用浅显的语言来描述它呢，我认为就是：Activity 就像是一个大屋子，大屋子里有很多房间，而这里的每个房间就是 fragment ,称为模块化的 Activity. 并且 fragment 不能单独存在，必须依附于 Activity; fragment 的生命周期受到外部 Activity 的影响； fragment 有自己的生命周期；  F">
+<meta name="keywords" content="fragment 相关">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ConcurrentHashMap 原理">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/11/22/ConcurrentHashMap-原理/index.html">
+<meta property="og:title" content="Fragment相关">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2019/01/16/Fragment相关/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="背景知识：我们知道 HashMap 是线程不安全的，多线程情况下，进行put 操作会引起死循环，导致CPU 利用率比较高，所以在并发情况下不能使用 HashMap ; 而 Hashtable 是线程安全的，其实就是在 put 操作的时候加了 syncronized, 但是当一个线程在进行put 操作时，其它的线程连 get 操作也不能进行，导致阻塞或者轮询状态，所以竞争越来越激烈，效率低下。">
+<meta property="og:description" content="Fragment 的概念 关于 Fragment 如何用浅显的语言来描述它呢，我认为就是：Activity 就像是一个大屋子，大屋子里有很多房间，而这里的每个房间就是 fragment ,称为模块化的 Activity. 并且 fragment 不能单独存在，必须依附于 Activity; fragment 的生命周期受到外部 Activity 的影响； fragment 有自己的生命周期；  F">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-10a2659ddd348113.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-12-24T05:42:31.725Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-3138ae3693fe7bb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-01-16T06:39:30.799Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ConcurrentHashMap 原理">
-<meta name="twitter:description" content="背景知识：我们知道 HashMap 是线程不安全的，多线程情况下，进行put 操作会引起死循环，导致CPU 利用率比较高，所以在并发情况下不能使用 HashMap ; 而 Hashtable 是线程安全的，其实就是在 put 操作的时候加了 syncronized, 但是当一个线程在进行put 操作时，其它的线程连 get 操作也不能进行，导致阻塞或者轮询状态，所以竞争越来越激烈，效率低下。">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-10a2659ddd348113.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="Fragment相关">
+<meta name="twitter:description" content="Fragment 的概念 关于 Fragment 如何用浅显的语言来描述它呢，我认为就是：Activity 就像是一个大屋子，大屋子里有很多房间，而这里的每个房间就是 fragment ,称为模块化的 Activity. 并且 fragment 不能单独存在，必须依附于 Activity; fragment 的生命周期受到外部 Activity 的影响； fragment 有自己的生命周期；  F">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-3138ae3693fe7bb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/22/ConcurrentHashMap-原理/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/16/Fragment相关/"/>
 
 
 
 
 
-  <title>ConcurrentHashMap 原理 | 糖葫芦</title>
+  <title>Fragment相关 | 糖葫芦</title>
   
 
 
@@ -279,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/22/ConcurrentHashMap-原理/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/16/Fragment相关/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ConcurrentHashMap 原理</h1>
+          <h1 class="post-title" itemprop="name headline">Fragment相关</h1>
         
 
         <div class="post-meta">
@@ -308,8 +308,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-22T14:12:28+08:00">
-                2018-11-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-16T09:47:30+08:00">
+                2019-01-16
               </time>
             
 
@@ -327,9 +327,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/11/22/ConcurrentHashMap-原理/#comments" itemprop="discussionUrl">
+                <a href="/2019/01/16/Fragment相关/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/22/ConcurrentHashMap-原理/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/01/16/Fragment相关/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -357,67 +357,58 @@
       
 
       
-        <blockquote>
-<p>背景知识：我们知道 <code>HashMap</code> 是线程不安全的，多线程情况下，进行<code>put</code> 操作会引起死循环，导致<code>CPU</code> 利用率比较高，所以在并发情况下不能使用 <code>HashMap</code> ;</p>
-<p>而 <code>Hashtable</code> 是线程安全的，其实就是在 <code>put</code> 操作的时候加了 <code>syncronized</code>, 但是当一个线程在进行<code>put</code> 操作时，其它的线程连 <code>get</code> 操作也不能进行，导致阻塞或者轮询状态，所以竞争越来越激烈，效率低下。</p>
+        <h1 id="Fragment-的概念"><a href="#Fragment-的概念" class="headerlink" title="Fragment 的概念"></a>Fragment 的概念</h1><blockquote>
+<p>关于 <code>Fragment</code> 如何用浅显的语言来描述它呢，我认为就是：<code>Activity</code> 就像是一个大屋子，大屋子里有很多房间，而这里的每个房间就是 <code>fragment</code> ,称为模块化的 <code>Activity</code>.</p>
+<p>并且 <code>fragment</code> 不能单独存在，必须依附于 <code>Activity</code>;</p>
+<p><code>fragment</code> 的生命周期受到外部 <code>Activity</code> 的影响；</p>
+<p><code>fragment</code> 有自己的生命周期；</p>
 </blockquote>
-<p>目录结构：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcurrentHashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">ConcurrentMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    .....</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Fragment-优点"><a href="#Fragment-优点" class="headerlink" title="Fragment 优点"></a>Fragment 优点</h1><ul>
+<li><code>Fragment</code> 可以将 <code>Activity</code> 分离成多个可重用的组件，每个都有各自的生命周期和UI</li>
+<li>灵活的UI设计，可以适用于不同的屏幕尺寸，手机，平板</li>
+<li><code>Fragment</code> 做为一个独立的模块可以轻松被 <code>Activity</code> 控制，添加，移除和替换</li>
+<li><code>Fragment</code> 切换流畅，比<code>Activity</code> 之间切换要好</li>
+</ul>
+<h1 id="Fragment与Activity的通信方式"><a href="#Fragment与Activity的通信方式" class="headerlink" title="Fragment与Activity的通信方式"></a>Fragment与Activity的通信方式</h1><ul>
+<li>可以选择第三方的 <code>EventBus</code> 等</li>
+<li><code>setArugments</code> 方法（<code>Activity</code> 向 <code>Fragment</code> 传递参数）</li>
+<li>自定义接口回调</li>
+<li>当然也可以强制类型转化，例如：<code>((MainActivity)getActivity()).text; fragment</code> 中获取宿主 <code>MainActivity</code> 里的一个 <code>public</code> 字段。 </li>
+<li>在SDK26 的API 引入了 <code>Activity.onAttachFragment(Fragment fragment)</code>, 可以将 <code>Activity</code> 的数据传递给 <code>Fragment</code>.</li>
+</ul>
+<h1 id="Fragment-生命周期"><a href="#Fragment-生命周期" class="headerlink" title="Fragment 生命周期"></a>Fragment 生命周期</h1><p>放上一张官网 <code>Fragment</code> 的生命周期图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-3138ae3693fe7bb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>挺清晰的，感觉和 <code>Activity</code> 的生命周期很像；</p>
 <ul>
-<li><p>锁分段技术</p>
+<li><p>程序启动： <code>onAttach()---&gt; onCreate()----&gt;onCreateView()----onActivityCreate()---&gt;onStart()----&gt; onResume()</code> 上图显示 <code>Fragment</code> 已经处于运行 <code>Active</code> 状态</p>
+</li>
+<li><p>后台状态： <code>onPause()---onStop()</code></p>
+</li>
+<li>切换到其他<code>Fragment</code>  :<code>onPause() ---&gt; onStop() ---&gt; onDestroyView()</code>,  当再次切换回来的时候就不执行 <code>onCreate()</code> 了，直接从 <code>onCreateView()</code> 开始执行</li>
+<li>锁屏： <code>onPause() ---&gt; onStop()</code></li>
+<li>点亮屏幕： <code>onStart() ---&gt; onResume()</code></li>
+<li>退出应用： <code>onPause() ---&gt; onStop() ----&gt; onDestroyView() -- &gt; onDestroy() ----onDetach()</code></li>
+<li>Home 键： <code>onPause() ---&gt; onStop()</code></li>
+</ul>
+<h1 id="Fragment的add与replace的区别"><a href="#Fragment的add与replace的区别" class="headerlink" title="Fragment的add与replace的区别"></a>Fragment的add与replace的区别</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">getSupportFragmentManager().beginTransaction()</span><br><span class="line">                .add(R.id.fragment_container, mainSpaceFragment)<span class="comment">//这是add</span></span><br><span class="line">                .show(mFragment).commit();</span><br><span class="line"><span class="comment">//replace</span></span><br></pre></td></tr></table></figure>
+<p><code>add</code> 方式添加的 <code>Fragment</code> ,在切换 <code>Fragment</code> 的时候不会刷新 <code>Fragment</code>,但是 <code>replace</code> 方式在切换 <code>Fragment</code> 的时候会重新创建，它会销毁之前的那个，add  方式只是隐藏了而不是销毁了, 一般开发使用的是 <code>add</code> 方式。</p>
+<h1 id="用Fragment可能会遇到的问题"><a href="#用Fragment可能会遇到的问题" class="headerlink" title="用Fragment可能会遇到的问题"></a>用Fragment可能会遇到的问题</h1><ul>
+<li><p><code>getActivity()</code> 为空</p>
 <blockquote>
-<p><code>Hashtable</code> 在多并发的情况下效率低下，是因为很多线程争夺同一把锁，而假如容器内有多把锁，每一把锁用于锁容器内的一部分数据，当多线程访问容器内不同段的数据时，线程间就不会存在锁竞争，从而有效的提高并发访问效率。</p>
+<p>我碰见这个问题的几率还挺大的，网上说是因为内存重启，重启的时候调用 <code>getActivity()</code> 的地方返回null.</p>
 </blockquote>
 </li>
 </ul>
-<h1 id="Segment"><a href="#Segment" class="headerlink" title="Segment"></a>Segment</h1><blockquote>
-<p>英文翻译：” 段“ </p>
-</blockquote>
-<p>内部结构是：二级的哈希表，如下图：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-10a2659ddd348113.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>多个<code>Segment</code> 保存在一个名为<code>segments</code> 数组当中，每个 <code>Segment</code> 高度自治，各个 <code>Segment</code> 之前读写互不影响。</p>
-<h1 id="读写操作"><a href="#读写操作" class="headerlink" title="读写操作"></a>读写操作</h1><ul>
-<li><p><code>get</code>  </p>
+<p>产生的原因：当调用了 <code>getActivity()</code> 时，当前 <code>Fragment</code> 已经 <code>onDetach()</code> 脱离了宿主 <code>Activity</code>. </p>
+<p>解决的办法：当时在 <code>stackoverflow</code> 上看到过就是在使用之前先判断下 <code>isAdd()</code> 类似的方法</p>
+<ul>
+<li><p><code>Fragment</code> 重叠异常</p>
 <blockquote>
-<p>想要获取里面的元素，按照结构，我们大概也能猜测出如何获取。</p>
+<p>正确使用 hide,  show 的姿势。在类 <code>onCreate()</code> 的方法加载 <code>Fragment</code>, 并没有判断 <code>saveInstanceState == null</code> , 导致重复加载了同一个 <code>Fragment</code> 导致重叠。</p>
 </blockquote>
-<ul>
-<li><ol>
-<li>首先根据 <code>key</code> 计算的 <code>hash</code> 值；</li>
-<li>计算得出 在 <code>segments</code> 数组中的下标，根据下标得出相对应的 <code>Segment</code>；</li>
-<li>再根据<code>key</code> 的 <code>hash</code> 值，找到<code>Segment</code> 数组中的位置</li>
-</ol>
 </li>
 </ul>
-</li>
-<li><p><code>put</code> </p>
-<blockquote>
-<p>put 元素</p>
-</blockquote>
-<ul>
-<li>1.首先根据 <code>key</code> 计算<code>hash</code> 值</li>
-<li>2.通过 <code>hash</code> 值，定位到具体的 <code>Segment</code> 对象</li>
-<li>3.获取可重入锁</li>
-<li>4.再次通过 <code>hash</code> 值，定位到 <code>Segment</code> 数组中的具体位置</li>
-<li>5.插入或覆盖原 <code>HashEntry</code> 对象</li>
-<li>6.释放锁</li>
-</ul>
-</li>
-</ul>
-<h1 id="统计Size大小"><a href="#统计Size大小" class="headerlink" title="统计Size大小"></a>统计Size大小</h1><p><code>jdk 1.7</code>:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Try a few times to get accurate count. On failure due to</span></span><br><span class="line">   <span class="comment">// continuous async changes in table, resort to locking.</span></span><br><span class="line">   <span class="keyword">final</span> Segment&lt;K,V&gt;[] segments = <span class="keyword">this</span>.segments;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">boolean</span> overflow; <span class="comment">// true if size overflows 32 bits</span></span><br><span class="line">    <span class="keyword">long</span> sum;         <span class="comment">// sum of modCounts</span></span><br><span class="line">    <span class="keyword">long</span> last = <span class="number">0L</span>;   <span class="comment">// previous sum</span></span><br><span class="line">    <span class="keyword">int</span> retries = -<span class="number">1</span>; <span class="comment">// first iteration isn't retry</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">if</span> (retries++ == RETRIES_BEFORE_LOCK) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j)</span><br><span class="line">                    ensureSegment(j).lock(); <span class="comment">// force creation</span></span><br><span class="line">            &#125;</span><br><span class="line">            sum = <span class="number">0L</span>;</span><br><span class="line">            size = <span class="number">0</span>;</span><br><span class="line">            overflow = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j) &#123;</span><br><span class="line">                Segment&lt;K,V&gt; seg = segmentAt(segments, j);</span><br><span class="line">                <span class="keyword">if</span> (seg != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    sum += seg.modCount;</span><br><span class="line">                    <span class="keyword">int</span> c = seg.count;</span><br><span class="line">                    <span class="keyword">if</span> (c &lt; <span class="number">0</span> || (size += c) &lt; <span class="number">0</span>)</span><br><span class="line">                        overflow = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (sum == last)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            last = sum;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (retries &gt; RETRIES_BEFORE_LOCK) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; segments.length; ++j)</span><br><span class="line">                segmentAt(segments, j).unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> overflow ? Integer.MAX_VALUE : size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><ol>
-<li>遍历所有的 <code>Segment</code></li>
-<li>把 <code>Segment</code> 元素数量累加起来</li>
-<li>把 <code>Segment</code> 修改次数累加起来</li>
-<li>判断所有的<code>Segment</code> 的总修改次数是否大于上一次的总修改次数。如果大于，说明统计过程有修改，尝试统计，统计次数+1；反之，统计结束。</li>
-<li>如果统计次数超过阀值，则对每个 <code>Segment</code> 加锁，重新统计</li>
-<li>再次判断总修改次数是否大于上一次的总修改次数，</li>
-<li>释放锁，统计结束。</li>
-</ol>
-</li>
-</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> </span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line"><span class="comment">// 在页面重启时，Fragment会被保存恢复，而此时再加载Fragment会重复加载，导致重叠 ;</span></span><br><span class="line">    <span class="keyword">if</span>(saveInstanceState == <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">// 或者 if(findFragmentByTag(mFragmentTag) == null)</span></span><br><span class="line">       <span class="comment">// 正常情况下去 加载根Fragment </span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -445,7 +436,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/concurrentHashMap/" rel="tag"># concurrentHashMap</a>
+            <a href="/tags/fragment-相关/" rel="tag"># fragment 相关</a>
           
         </div>
       
@@ -458,8 +449,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/21/集合随笔/" rel="next" title="集合随笔">
-                <i class="fa fa-chevron-left"></i> 集合随笔
+              <a href="/2019/01/15/Animation动画相关知识点/" rel="next" title="Animation动画相关知识点">
+                <i class="fa fa-chevron-left"></i> Animation动画相关知识点
               </a>
             
           </div>
@@ -467,10 +458,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/28/RecycleView更清晰地观察缓存/" rel="prev" title="RecycleView更清晰地观察缓存">
-                RecycleView更清晰地观察缓存 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -605,7 +592,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Segment"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Segment" class="headerlink" title="Segment"></a>Segment</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#读写操作"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x8BFB;&#x5199;&#x64CD;&#x4F5C;" class="headerlink" title="&#x8BFB;&#x5199;&#x64CD;&#x4F5C;"></a>&#x8BFB;&#x5199;&#x64CD;&#x4F5C;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#统计Size大小"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x7EDF;&#x8BA1;Size&#x5927;&#x5C0F;" class="headerlink" title="&#x7EDF;&#x8BA1;Size&#x5927;&#x5C0F;"></a>&#x7EDF;&#x8BA1;Size&#x5927;&#x5C0F;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Fragment-的概念"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Fragment-&#x7684;&#x6982;&#x5FF5;" class="headerlink" title="Fragment &#x7684;&#x6982;&#x5FF5;"></a>Fragment &#x7684;&#x6982;&#x5FF5;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fragment-优点"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Fragment-&#x4F18;&#x70B9;" class="headerlink" title="Fragment &#x4F18;&#x70B9;"></a>Fragment &#x4F18;&#x70B9;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fragment与Activity的通信方式"><span class="nav-number">3.</span> <span class="nav-text"><a href="#Fragment&#x4E0E;Activity&#x7684;&#x901A;&#x4FE1;&#x65B9;&#x5F0F;" class="headerlink" title="Fragment&#x4E0E;Activity&#x7684;&#x901A;&#x4FE1;&#x65B9;&#x5F0F;"></a>Fragment&#x4E0E;Activity&#x7684;&#x901A;&#x4FE1;&#x65B9;&#x5F0F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fragment-生命周期"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Fragment-&#x751F;&#x547D;&#x5468;&#x671F;" class="headerlink" title="Fragment &#x751F;&#x547D;&#x5468;&#x671F;"></a>Fragment &#x751F;&#x547D;&#x5468;&#x671F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fragment的add与replace的区别"><span class="nav-number">5.</span> <span class="nav-text"><a href="#Fragment&#x7684;add&#x4E0E;replace&#x7684;&#x533A;&#x522B;" class="headerlink" title="Fragment&#x7684;add&#x4E0E;replace&#x7684;&#x533A;&#x522B;"></a>Fragment&#x7684;add&#x4E0E;replace&#x7684;&#x533A;&#x522B;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用Fragment可能会遇到的问题"><span class="nav-number">6.</span> <span class="nav-text"><a href="#&#x7528;Fragment&#x53EF;&#x80FD;&#x4F1A;&#x9047;&#x5230;&#x7684;&#x95EE;&#x9898;" class="headerlink" title="&#x7528;Fragment&#x53EF;&#x80FD;&#x4F1A;&#x9047;&#x5230;&#x7684;&#x95EE;&#x9898;"></a>&#x7528;Fragment&#x53EF;&#x80FD;&#x4F1A;&#x9047;&#x5230;&#x7684;&#x95EE;&#x9898;</span></a></li></ol></div>
             
 
           </div>
@@ -782,9 +769,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/11/22/ConcurrentHashMap-原理/';
-          this.page.identifier = '2018/11/22/ConcurrentHashMap-原理/';
-          this.page.title = 'ConcurrentHashMap 原理';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2019/01/16/Fragment相关/';
+          this.page.identifier = '2019/01/16/Fragment相关/';
+          this.page.title = 'Fragment相关';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';

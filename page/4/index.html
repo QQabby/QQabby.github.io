@@ -273,6 +273,188 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/12/Java基础知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/12/Java基础知识/" itemprop="url">Java基础知识</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-12T17:41:25+08:00">
+                2018-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/12/Java基础知识/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/12/Java基础知识/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-如何实现对象克隆？"><a href="#1-如何实现对象克隆？" class="headerlink" title="1. 如何实现对象克隆？"></a>1. 如何实现对象克隆？</h1><p>有两种方式：</p>
+<ul>
+<li><p>实现<code>Cloneable</code> 接口并重写 <code>clone</code> 方法（浅拷贝）；</p>
+</li>
+<li><p>实现<code>Serializable</code> ，通过对象的序列化和反序列化实现真正的深度克隆（深拷贝），代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">MyUtil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> AssertionError();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">clone</span><span class="params">(T obj)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        ByteArrayOutputStream bout = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line"></span><br><span class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(bout);</span><br><span class="line"></span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        ByteArrayInputStream bin = <span class="keyword">new</span> ByteArrayInputStream(bout.toByteArray());</span><br><span class="line"></span><br><span class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(bin);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (T) ois.readObject();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 说明：调用ByteArrayInputStream或ByteArrayOutputStream对象的close方法没有任何意义</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 这两个基于内存的流只要垃圾回收器清理对象就能够释放资源，这一点不同于对外部资源（如文件流）的释放</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：基于序列化和反序列化实现的克隆不仅仅是深度克隆，更重要的是通过泛型界定，可以检查出要克隆对象是否支持序列化，这项检查是编译器完成的，不是运行时抛出异常，这种方案明显优于使用object类的clone方法克隆对象。让问题在编译的时候暴漏出来总是优于把问题留在运行时。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="2-内部类访问局部变量的时候，为什么加final"><a href="#2-内部类访问局部变量的时候，为什么加final" class="headerlink" title="2. 内部类访问局部变量的时候，为什么加final?"></a>2. 内部类访问局部变量的时候，为什么加final?</h1><ul>
+<li><p>内部类和局部变量的生命周期不同，方法结束后局部变量的生命周期就结束了，而内部类只要有引用就不结束，内部类生命周期&gt;=局部变量</p>
+</li>
+<li><p>Java会在编译时在内部类的构造方法里边，将局部变量以参数形式传递给内部类</p>
+</li>
+<li><p>而如果局部变量发生改变，内部类不知情的场景，所以要加<code>fianl</code> ，保证引用不可改变</p>
+<blockquote>
+<p>注意：在Java8中，可以不适用final关键字，但是如果我们修改了局部变量还是会发生错误，从而保证局部变量的引用不变。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="3-transient-关键字"><a href="#3-transient-关键字" class="headerlink" title="3. transient 关键字"></a>3. transient 关键字</h1><blockquote>
+<p>如果使用<code>transient</code> 修饰变量，当对象存储时，它的值不需要维持。换句话来说就是用<code>transient</code> 修饰的变量不参与序列化的过程。</p>
+</blockquote>
+<h1 id="4-String-和-StringBuild-StringBuffer的区别"><a href="#4-String-和-StringBuild-StringBuffer的区别" class="headerlink" title="4. String 和 StringBuild,StringBuffer的区别"></a>4. String 和 StringBuild,StringBuffer的区别</h1><blockquote>
+<p><code>String</code> 是只读字符串,创建完成之后是不能修改，如果修改也是创建一个新对象，回收旧对象的过程，所以执行效率比较低，<code>StringBuild</code> 和 <code>StringBuffer</code> 可以改变，<code>StringBuild</code> 线程不安全，但是效率比较高，<code>StringBuffter</code> 线程安全</p>
+<p>效率快慢：<code>Stringbuilder</code>&gt; <code>StringBuffer</code>&gt; <code>String</code></p>
+</blockquote>
+<h1 id="5-String-为什么设计成不可变"><a href="#5-String-为什么设计成不可变" class="headerlink" title="5. String 为什么设计成不可变"></a>5. String 为什么设计成不可变</h1><ul>
+<li>安全性<ul>
+<li>本身是<code>final</code> 类不可修改，不可变极为安全</li>
+<li>String 常被用来作为 <code>HashMap</code> 的<code>key</code>  如果可变会引来安全问题，例如两个<code>key</code> 相同</li>
+<li></li>
+</ul>
+</li>
+<li>效率高<ul>
+<li>通过字符串池可以节省很多空间</li>
+<li>每一个<code>String</code> 对应一个 <code>hashcode</code> ,再次使用不用重新计算</li>
+</ul>
+</li>
+</ul>
+<h1 id="6-java-中的四种引用及应用场景"><a href="#6-java-中的四种引用及应用场景" class="headerlink" title="6. java 中的四种引用及应用场景"></a>6. java 中的四种引用及应用场景</h1><ul>
+<li>强引用</li>
+<li>弱引用—-引用到达，不可达就会被回收，即便是内存充足，可用于图片<code>Bitmap</code> 缓存，当不再使用<code>Bitmap</code> 时，就会被回收</li>
+<li>软引用—–内存不足时被回收，也可用于<code>Bitmap</code>回收，当内存不足时，可回收</li>
+<li>虚引用—-它指向的对象回收时，它本身会被加入到引用队列中，这样我们就知道它指向的对象何时被销毁</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/07/LeakCannary原理分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1692,171 +1874,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/28/Kotlin-let-with-run-also-apply区分/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/28/Kotlin-let-with-run-also-apply区分/" itemprop="url">Kotlin let with run also apply区分</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-28T15:24:21+08:00">
-                2018-04-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/28/Kotlin-let-with-run-also-apply区分/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/28/Kotlin-let-with-run-also-apply区分/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="https://upload-images.jianshu.io/upload_images/1948557-701b869e22eff1f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<h1 id="apply"><a href="#apply" class="headerlink" title="apply"></a>apply</h1><p>它与其它特殊之处在于，它返回本省对象：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> T.<span class="title">apply</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; <span class="built_in">Unit</span>): T &#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>例如：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt;().apply &#123;</span><br><span class="line">            add(<span class="string">"qq"</span>)</span><br><span class="line">            add(<span class="string">"mi"</span>)</span><br><span class="line">        &#125;.let &#123;<span class="comment">//this-&gt;ArrayList本身</span></span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"list==="</span>+it)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>打印结果：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list===[qq, mi]</span><br></pre></td></tr></table></figure>
-<p>这里<code>T</code> 就是 <code>ArrayList&lt;String&gt;()</code> 返回对象本身，也就是<code>ArrayList</code></p>
-<ul>
-<li><p>内部是 <code>this</code> 还是 <code>it</code> 这个倒没什么，编辑器一般都会有提示，如图：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-f6a5a83174af7964.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1540798437731.png"></p>
-</li>
-</ul>
-<p><code>apply</code> 是 <code>this</code> , <code>also</code> 是 <code>it</code> </p>
-<h1 id="run"><a href="#run" class="headerlink" title="run"></a>run</h1><ul>
-<li><p><code>run</code>:</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">run</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>返回最后一行，传入<code>block</code> 返回 最后一行，例如：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt;().run &#123;</span><br><span class="line">            add(<span class="string">"lala"</span>)</span><br><span class="line">            add(<span class="string">"kaka"</span>)</span><br><span class="line">            <span class="keyword">this</span>.<span class="keyword">get</span>(<span class="number">1</span>)</span><br><span class="line">        &#125;.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"返回：："</span>+it)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>打印：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">返回：：kaka</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="let"><a href="#let" class="headerlink" title="let"></a>let</h1><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">let</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>也是返回最后一行，但是它内部不能调用对象的方法：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">letGo</span><span class="params">()</span></span>: <span class="built_in">Int</span>&#123;</span><br><span class="line">        <span class="string">"qianqian"</span>.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,it)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>调用<code>letGO</code> 返回 <code>1</code> </p>
-<h1 id="with"><a href="#with" class="headerlink" title="with"></a>with</h1><p>类似于：<code>apply</code> + <code>let</code> 的结合</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> <span class="title">with</span><span class="params">(receiver: <span class="type">T</span>, block: <span class="type">T</span>.()</span></span> -&gt; R): R &#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>例如：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">with(ArrayList&lt;String&gt;())&#123;</span><br><span class="line">            add(<span class="string">"haha"</span>)</span><br><span class="line">            add(<span class="string">"heihei"</span>)</span><br><span class="line">            <span class="keyword">this</span><span class="comment">//最后返回ArrayList对象</span></span><br><span class="line">        &#125;.let &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"list==="</span>+it)<span class="comment">//打印：[haha,heihei]</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1907,7 +1924,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1920,7 +1937,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
