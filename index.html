@@ -273,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/16/Fragment相关/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/17/Fragment相关/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -292,7 +292,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/16/Fragment相关/" itemprop="url">Fragment相关</a></h1>
+                <a class="post-title-link" href="/2019/01/17/Fragment相关/" itemprop="url">Fragment相关</a></h1>
         
 
         <div class="post-meta">
@@ -304,8 +304,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-16T09:47:30+08:00">
-                2019-01-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-17T11:32:30+08:00">
+                2019-01-17
               </time>
             
 
@@ -323,9 +323,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/16/Fragment相关/#comments" itemprop="discussionUrl">
+                <a href="/2019/01/17/Fragment相关/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/16/Fragment相关/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/01/17/Fragment相关/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -407,7 +407,23 @@
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> </span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line"><span class="comment">// 在页面重启时，Fragment会被保存恢复，而此时再加载Fragment会重复加载，导致重叠 ;</span></span><br><span class="line">    <span class="keyword">if</span>(saveInstanceState == <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">// 或者 if(findFragmentByTag(mFragmentTag) == null)</span></span><br><span class="line">       <span class="comment">// 正常情况下去 加载根Fragment </span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h1 id="getFragmentManager，getSupportFragmentManager-，getChildFragmentManager三者之间的区别"><a href="#getFragmentManager，getSupportFragmentManager-，getChildFragmentManager三者之间的区别" class="headerlink" title="getFragmentManager，getSupportFragmentManager ，getChildFragmentManager三者之间的区别"></a>getFragmentManager，getSupportFragmentManager ，getChildFragmentManager三者之间的区别</h1><blockquote>
+<p>getSupportFragmentManager() :   主要用于支持3.0以下的Android系统API版本，3.0以上系统可以直接使用 <code>getFragmentManager()</code> . 因为 <code>fragment</code> 是3.0以后才出现的组件，所以在3.0以下的设备使用v4 包中的 <code>getSupportFragment()</code> ；</p>
+<p>getFragmentManager()  :  得到所在fragment的父容器的管理器；</p>
+<p>getChildFragmentManager() : 得到fragment里面子容器的管理器。</p>
+</blockquote>
+<ul>
+<li><p>一般的使用场景</p>
+<p>当 <code>Fragment</code> 嵌套 <code>Fragment</code> 时，需要使用 <code>getChildFragmentManager()</code></p>
+</li>
+</ul>
+<h1 id="FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景"><a href="#FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景" class="headerlink" title="FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景"></a>FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景</h1><blockquote>
+<p>对于经常使用 <code>viewpager</code> 的应该大概都知道就是： 当 <code>viewpager</code> 中的 <code>fragment</code> 数量多的时候用 <code>FragmentStatePagerAdapter</code> ,同样当<code>fragment</code> 比较少的时候，则使用 <code>FragmentPagerAdapter</code>.</p>
+</blockquote>
+<p>在 <code>FragmentPagerAdapter</code> 中的 <code>destroyItem</code> 中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(@NonNull ViewGroup container, <span class="keyword">int</span> position, @NonNull Object object)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.mCurTransaction == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mCurTransaction = <span class="keyword">this</span>.mFragmentManager.beginTransaction();</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//这里只是detach Fragment ,并没有做释放内存的操作，</span></span><br><span class="line">    	<span class="comment">//这样当fragment 比较多的时候，内存就会不够用，越用越多</span></span><br><span class="line">        <span class="keyword">this</span>.mCurTransaction.detach((Fragment)object);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>然后在看下 <code>FragmentStatePagerAdapter</code> 中的 <code>destroyItem</code>  : </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(@NonNull ViewGroup container, <span class="keyword">int</span> position, @NonNull Object object)</span> </span>&#123;</span><br><span class="line">        Fragment fragment = (Fragment)object;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.mCurTransaction == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mCurTransaction = <span class="keyword">this</span>.mFragmentManager.beginTransaction();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">this</span>.mSavedState.size() &lt;= position) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mSavedState.add((Object)<span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//判断是否add</span></span><br><span class="line">        <span class="keyword">this</span>.mSavedState.set(position, fragment.isAdded() ? <span class="keyword">this</span>.mFragmentManager.saveFragmentInstanceState(fragment) : <span class="keyword">null</span>);</span><br><span class="line">    	<span class="comment">//将该位置的fragment 设置为null</span></span><br><span class="line">        <span class="keyword">this</span>.mFragments.set(position, (Object)<span class="keyword">null</span>);</span><br><span class="line">    	<span class="comment">//这里进行了移除的操作,释放 fragment,减少内存</span></span><br><span class="line">    	<span class="comment">//所以当 fragment 比较多的时候使用FragmentStatePagerAdapter</span></span><br><span class="line">        <span class="keyword">this</span>.mCurTransaction.remove(fragment);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
           
         
       
