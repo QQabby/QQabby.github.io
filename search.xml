@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[View的刷新机制]]></title>
+    <url>%2F2019%2F01%2F18%2FView%E7%9A%84%E5%88%B7%E6%96%B0%E6%9C%BA%E5%88%B6%2F</url>
+    <content type="text"><![CDATA[在Android 布局体系种，父 View 负责刷新，子 View 负责布局展示。子View 如果要刷新，需要通知父View 来完成。 123456789101112131415161718//invalidate 最终调用到这里void invalidateInternal(int l, int t, int r, int b, boolean invalidateCache, boolean fullInvalidate) &#123; .... //这里特殊注意下这个 AttachInfo final AttachInfo ai = mAttachInfo; //得到父控件 final ViewParent p = mParent; if (p != null &amp;&amp; ai != null &amp;&amp; l &lt; r &amp;&amp; t &lt; b) &#123; //将attachInfo 信息保存在damage 中 final Rect damage = ai.mTmpInvalRect; damage.set(l, t, r, b); //父 View--&gt; p 调用自身invalidateChild 方法刷新 p.invalidateChild(this, damage); &#125; .... &#125; &#125; 在 invalidate 中，调用父 View 的 invalidateChild , 这是一个由低向上回溯的过程，每一层的父 View 都将自己的显示区域与传入的刷新 Rect 做交集，一直向上追溯直到 ViewRoot 那里结束，由 ViewRoot 对这个最终的刷新区域做刷新。 123public void invalidateChild(View child, Rect dirty) &#123; scheduleTraversals();&#125;]]></content>
+      <tags>
+        <tag>View的刷新机制</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[自定义View相关]]></title>
     <url>%2F2019%2F01%2F18%2F%E8%87%AA%E5%AE%9A%E4%B9%89View%E7%9B%B8%E5%85%B3%2F</url>
     <content type="text"><![CDATA[setContentView的过程 View 的绘制流程 首先 WindowManager 负责这个 DecorView 和 ViewRoot 相关联 每一个应用程序的窗口 DecorView 都有一个与之相对应得 ViewRoot对象 整体流程如下：]]></content>
