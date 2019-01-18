@@ -2,10 +2,10 @@
 <search>
   <entry>
     <title><![CDATA[自定义View相关]]></title>
-    <url>%2F2019%2F01%2F17%2F%E8%87%AA%E5%AE%9A%E4%B9%89View%E7%9B%B8%E5%85%B3%2F</url>
+    <url>%2F2019%2F01%2F18%2F%E8%87%AA%E5%AE%9A%E4%B9%89View%E7%9B%B8%E5%85%B3%2F</url>
     <content type="text"><![CDATA[setContentView的过程 View 的绘制流程 首先 WindowManager 负责这个 DecorView 和 ViewRoot 相关联 每一个应用程序的窗口 DecorView 都有一个与之相对应得 ViewRoot对象 整体流程如下：]]></content>
       <tags>
-        <tag>自定义view相关</tag>
+        <tag>View 绘制流程</tag>
       </tags>
   </entry>
   <entry>
