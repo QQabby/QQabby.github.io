@@ -273,6 +273,200 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/13/java基础二/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/13/java基础二/" itemprop="url">java基础二</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-13T09:47:55+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/13/java基础二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/13/java基础二/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-HashMap"><a href="#1-HashMap" class="headerlink" title="1. HashMap"></a>1. HashMap</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Cloneable</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>未完待续….仍需要查阅大量资料学习….</p>
+<h1 id="2-Java-内存分配"><a href="#2-Java-内存分配" class="headerlink" title="2.Java 内存分配"></a>2.Java 内存分配</h1><ul>
+<li>栈区：方法区内的局部变量，对象的引用等 优点：速度快，缺点：大小和生命周期必须是确定的。</li>
+<li>堆区：new出来的对象，垃圾回收器回收的是堆区的内存</li>
+<li>方法区（静态区）：静态变量，常量，保存类信息</li>
+</ul>
+<h1 id="3-垃圾"><a href="#3-垃圾" class="headerlink" title="3.垃圾"></a>3.垃圾</h1><blockquote>
+<p>什么是垃圾？要通过科学的方法才能判断是否是为垃圾，有两种方法</p>
+<ul>
+<li>引用计数法：可能会导致内部循环</li>
+<li>可达性分析：是否可达</li>
+</ul>
+</blockquote>
+<p>借助一个图快速理解  <strong>引用计数法</strong>：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-856824d0d0e05a67.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**循环问题*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Demo instance;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Demo a=<span class="keyword">new</span> Demo();</span><br><span class="line">        Demo b=<span class="keyword">new</span> Demo();</span><br><span class="line">        a.instance=b;</span><br><span class="line">        b.instance=a;</span><br><span class="line">        a=<span class="keyword">null</span>;</span><br><span class="line">        b=<span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再看下这个 <strong>可达性分析</strong> ：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-5edf039e8f4eb629.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>ObjD</code> 和 <code>ObjE</code> 虽然内部存在引用，但是定点不可达，所以也是垃圾回收的对象。</p>
+<h1 id="4-垃圾回收的方法"><a href="#4-垃圾回收的方法" class="headerlink" title="4.垃圾回收的方法"></a>4.垃圾回收的方法</h1><ul>
+<li><p>标记-清除：减少停顿时间，但会造成内存碎片</p>
+</li>
+<li><p>标记-整理：可以解决内存碎片，但是会增加停顿时间</p>
+</li>
+<li><p>复制清除：从一个地方拷贝到另一个地方，适合有大量回收的场景，比如：新生代回收</p>
+<ul>
+<li>优点：效率高于标记清除，活着的对象是整齐排列的，没有内存碎片</li>
+<li>缺点： 浪费空间，毕竟如果按照1：1比例划分空间的话，那么将会有50%的空间被浪费。不过在jvm中，新生代空间并不是按照1：1来划分的，而是按照8：1：1的比例分为一个<code>eden</code> 区 和两个<code>survivor(survivor0,survivor1)</code> 区，然后一个<code>eden</code> 区，两个<code>survivor</code> 区。大部分对象在<code>Eden</code> 区中生成。回收时先将<code>eden</code> 区存活对象复制到一个<code>survicor0</code> 区，然后清空<code>eden</code> 区，当这个<code>survivor0</code>区也存放满了时，则将<code>eden</code>区和<code>survivor0</code>区存活对象复制到另一个<code>survivor1</code> 区，然后清空<code>eden</code> 区和<code>survivor0</code> 区，此时<code>survivor0</code>区是空的，然后将<code>survivor0</code>区和<code>survivor1</code>区交换，即保持<code>survivor1</code>区为空，这样的过程也叫做<code>Minor GC</code>,每进行<code>Minor GC</code> 一次，存活着的对象的年龄就会+1，当存活着的对象的年龄到达15岁时，就会被送进年老代。 当然，当整个<code>survivor1</code>区不足以存放<code>Eden</code>和<code>survivor0</code>的存活对象时，也会将存活对象直接放到年老代。若是年老代也满了就会触发一次<code>Full GC</code>，也就是新生代，老年代都进行回收。</li>
+</ul>
+</li>
+<li><p>分代收集：把内存区域分成不同代，根据年代不同采取不同的策略；</p>
+<ul>
+<li>新生代：存放新创建的对象，采用复制回收方法</li>
+<li>年老代：这些对象垃圾回收的频率较低，采取标记整理法</li>
+<li>永久代：存放Java本身的一些数据，当类不再使用时，也会被回收</li>
+</ul>
+<p>手稿：</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-ecdfdaa2192d6319.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/400" alt="image.png"></p>
+<h1 id="5-Full-GC-触发的条件"><a href="#5-Full-GC-触发的条件" class="headerlink" title="5. Full GC 触发的条件"></a>5. Full GC 触发的条件</h1><ul>
+<li>调用 <code>System.gc</code> 时，系统建议执行<code>Full GC</code> 但是不必然执行</li>
+<li>年老代或者永久代空间不足</li>
+</ul>
+<h1 id="6-线程调度"><a href="#6-线程调度" class="headerlink" title="6. 线程调度"></a>6. 线程调度</h1><ul>
+<li><code>wait()</code> :  object 方法，必须在同步代码块中使用，使当前线程处于等待状态，释放锁</li>
+<li><code>notify()</code> ： 和 <code>wait</code> 联合使用，通知一个线程，具体通知哪个由jvm 决定，使用不当可能发生死锁</li>
+<li><code>notifyAll()</code> ： 和<code>wait</code>  方法联合使用，通知所有线程，具体哪个线程获得运行权 <code>jvm</code> 决定</li>
+<li><code>sleep()</code> ： 睡眠状态</li>
+</ul>
+<h1 id="7-线程同步"><a href="#7-线程同步" class="headerlink" title="7.线程同步"></a>7.线程同步</h1><ul>
+<li><code>Synchronzied</code> 修饰</li>
+<li><code>ThreadLocal</code> : 每个线程都有一个局部变量的副本，互不干扰。一种以空间换时间的方式。</li>
+<li>线程安全的容器和方法，可以实现线程同步，如： <code>Collections.SynchronizedList()</code> 将 <code>List</code> 转为线程同步；用<code>ConurrentHashMap</code> 实现<code>hashmap</code> 线程同步。</li>
+</ul>
+<blockquote>
+<p><code>volatile</code> 修饰的变量不会缓存在寄存器中，每次使用都会从主存器中读取；保证可见性，不保证原子性</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/12/Java基础知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1733,152 +1927,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/06/27/Kotlin-可观察属性/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/27/Kotlin-可观察属性/" itemprop="url">Kotlin-可观察属性</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-27T14:31:48+08:00">
-                2018-06-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/06/27/Kotlin-可观察属性/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/27/Kotlin-可观察属性/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>类似于观察者模式，当所监测的对象发生改变时，能够收到回调通知。</p>
-</blockquote>
-<p>例如：我们监测一个变量：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var str: String by Delegates.observable(<span class="string">"qianqian"</span>,&#123;</span><br><span class="line">        property: KProperty&lt;*&gt;, oldValue: String, newValue: String -&gt;</span><br><span class="line">        Log.i(<span class="string">"xx"</span>,<span class="string">"改变的属性名称：$&#123;property.name&#125; --- $&#123;oldValue&#125; -- $&#123;newValue&#125;"</span> )</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//点击一个按钮，改变str的值</span></span><br><span class="line">     <span class="function">fun <span class="title">foo</span><span class="params">(view : View)</span></span>&#123;</span><br><span class="line">        str = <span class="string">"haha"</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>这时候我们会发现，当改变<code>str</code> 的值的时候，会打印信息，也就是收到回调：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">改变的属性名称：str --- qianqian -- haha</span><br></pre></td></tr></table></figure></p>
-<p>再比如：检测对象里的其中一个属性：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> kotlin.properties.Delegates</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    var name: String by Delegates.observable(<span class="string">"&lt;no name&gt;"</span>) &#123;</span><br><span class="line">        prop, old, <span class="keyword">new</span> -&gt;</span><br><span class="line">        println(<span class="string">"$old -&gt; $new"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">fun <span class="title">main</span><span class="params">(args: Array&lt;String&gt;)</span> </span>&#123;</span><br><span class="line">    val user = User()</span><br><span class="line">    user.name = <span class="string">"first"</span></span><br><span class="line">    user.name = <span class="string">"second"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>打印信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;no name&gt; -&gt; first</span><br><span class="line">first -&gt; second</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1924,7 +1977,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1937,7 +1990,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
