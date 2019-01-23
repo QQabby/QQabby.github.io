@@ -273,6 +273,581 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/11/CAS机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/11/CAS机制/" itemprop="url">CAS机制</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-11T15:43:18+08:00">
+                2018-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/11/CAS机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/11/CAS机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>背景介绍：CAS 完整名称为 ： “Compare and Swap” 比较并替换。</p>
+<p>里面涉及三个基本操作数，内存地址值：V；旧的预期值：A；新的预期值：B。</p>
+<p>规则：当更新变量时，只有当内存地址里的值V = 旧的预期值A，才能被成功的更新为B。</p>
+</blockquote>
+<p>举个例子:</p>
+<ul>
+<li><p>在内存地址V中，存在一个变量值为10的值：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-47b1c8227b762c43.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+</li>
+<li><p>此时线程一，线程二 ，同时去操作这个变量，例如都想+1；</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-f3270a1b18e0640c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>对于线程一来说： A：10； B: 11； V: 10</p>
+<p>但是由于线程二比线程一执行的更快，此时线程二已经把内存地址V中的10更新为11.</p>
+</li>
+</ul>
+<p>​    那么当线程一再次执行更新操作，发现 V = 11,A = 10,  V≠A，更新失败。</p>
+<p>​    此时线程一需要重新读取内存中的值，并重新计算要更新的新值，计算后得出：</p>
+<p>​    A= 11，B= 12. 重新提交请求，这个过程称为自旋。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-079d6e98119d08b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>​    首先<code>Compare</code> V== A， 然后进行<code>swap</code> , V = 12，被更新为12.</p>
+<p>从思想上来说，<code>syncronized</code> 属于悲观锁，认为并发情况非常严重，<code>CAS</code> 机制属于乐观锁，认为并发情况并不是一种特别严重的情况，发生问题，不断尝试更新即可。</p>
+<blockquote>
+<p>使用场景：Atomic系列类，以及Lock系列类的底层实现；不适合高并发的场景，高并发还是 <code>syncronized</code> </p>
+</blockquote>
+<h1 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h1><ul>
+<li><p>CPU消耗大</p>
+<blockquote>
+<p>如果在多个线程并发去更新一个变量，多个线程同时去重复尝试更新某一个变量，却又一直不成功，循环往复就会给CPU造成很大的压力。</p>
+</blockquote>
+</li>
+<li><p>不能保证代码块的原子性</p>
+<blockquote>
+<p>CAS 可以保证一个变量的原子性，却无法保证整个代码块的原子性。</p>
+</blockquote>
+</li>
+<li><p>ABA问题—–最大的问题</p>
+</li>
+</ul>
+<h1 id="ABA-问题"><a href="#ABA-问题" class="headerlink" title="ABA 问题"></a>ABA 问题</h1><p>举例说明：</p>
+<p>假设有三个线程都要对内存地址V 中的 A 进行操作，</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-60314392b088122f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>线程一：旧的预期值：A；新的预期值：B</p>
+<p>线程二：旧的预期值：A；新的预期值：B</p>
+<p>线程三：还未开始工作</p>
+<ol>
+<li>线程一首先进行了操作，顺利将A更新为B：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
+</ol>
+<p>此时线程三上来了，它是：旧的预期值：B；新的预期值：A，此时发现：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>​                        V(B) == B(B)，更新成功，变为图下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-67f24f8970d8bf77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>此时线程二开始工作，线程二的目标是：旧的预期值：A；新的预期值：B，同样一比对，相同，于是也更新成功，变为如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-b40a30b649fba727.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>虽然从结果上来看，A 成功的变为 B，然后在实际涉及钱的时候，问题就大了。</p>
+<p>再次举例：</p>
+<p>小明银行卡里有200块钱，想取出100块钱，但是由于设备故障，提交了两次扣款申请。</p>
+<p>扣款申请1：旧的预估值：200，新的预估值：100</p>
+<p>扣款申请2：旧的预估值：200，新的预估值：100</p>
+<p>此时，扣款申请1提前进行了操作，扣款成功，小明银行卡里为100块钱；</p>
+<p>扣款申请2假设还在等待。//block</p>
+<p>此时小明的妈妈给小明存储100元，ok, 现在小明银行卡里就是200块钱。</p>
+<p>扣款申请2恢复正常，开始必对，旧的预估值：200，卡里余额200，成功，替换更新为100.  更新成功，那么此时小明银行卡里剩余金额：100块。</p>
+<p>哈哈！！！这显然是不对的，虽然值相同，但是中间操作改变了最终的结果。那如何解决这个问题呢？可以利用版本号，每修改成功一次V，都要设置一个版本号。每次更新的时候，不但要比对值还要比对版本号，就可以避免这种错误。</p>
+<p>好，就上面的例子说明下：</p>
+<p>当扣款申请1完成更新操作时，我们设置内存地址V中的值的版本号为：：01</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-910dc6244e7f8607.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>第二次操作：妈妈成功向卡里存入了100块</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-6c8c948395b44f41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>扣款申请2开始工作：</p>
+<p>旧的预估值：200，新的预估值：100；版本号为00</p>
+<p>而此时：V（200）= 旧的预估值（200）成立</p>
+<p>​        版本号（00） ≠ version（02） 不成立</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/07/HashMap-高并发导致的死循环/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/07/HashMap-高并发导致的死循环/" itemprop="url">HashMap 高并发导致的死循环</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-07T13:50:16+08:00">
+                2018-12-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/07/HashMap-高并发导致的死循环/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/07/HashMap-高并发导致的死循环/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; ++j) &#123;</span><br><span class="line">    </span><br><span class="line">     Entry&lt;K,V&gt; e = src[j];<span class="comment">//src 表示原table</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;</span><br><span class="line">        <span class="comment">//此处表示取出下一个位置的Entry(键值对)</span></span><br><span class="line">        Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">        <span class="comment">//计算得出在扩容后新数组table中的下标，因为扩容后要重新计算下标</span></span><br><span class="line">        <span class="comment">//未扩容前下标:index = hash(key) &amp; (length-1)</span></span><br><span class="line">        <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">        <span class="comment">//根据下标取出在新表newTable中的Entry&lt;K,V&gt;</span></span><br><span class="line">        e.next = newTable[i];</span><br><span class="line">        <span class="comment">//将当前e 赋值给newTable[i](Entry&lt;K,V&gt;)</span></span><br><span class="line">        newTable[i] = e;</span><br><span class="line">		<span class="comment">//将下一个next.Entry 赋值给当前的e	</span></span><br><span class="line">        e = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>举例说明下：</p>
+<p>原</p>
+<p><code>table</code>的信息排列是：<img src="https://upload-images.jianshu.io/upload_images/1948557-23de68a7bfa7c35e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>再次添加新元素的时候就需要扩容了，此时我们来类比下上述的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; ++j) &#123;</span><br><span class="line">    </span><br><span class="line">     Entry&lt;K,V&gt; e = src[j];<span class="comment">//src 表示原table</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;</span><br><span class="line">        <span class="comment">//next = Entry2</span></span><br><span class="line">        Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">        <span class="comment">//假设计算结果为3；循环第二次：假设Entry2计算的位置也是3</span></span><br><span class="line">        <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">       <span class="comment">//第一次Entry1.next = newTable[3]，此时newTable[3]还为null；所以是Entry1.next地址指向null</span></span><br><span class="line">       <span class="comment">//循环第二次：Entry2.next = Entry1</span></span><br><span class="line">        e.next = newTable[i];</span><br><span class="line">       <span class="comment">//newTable[3] = Entry1, 此时e是 Entry1;</span></span><br><span class="line">       <span class="comment">//循环第二次： newTable[3] = Entry2</span></span><br><span class="line">        newTable[i] = e;</span><br><span class="line">		<span class="comment">//Entry1 = Entry2,e 指向了Entry2,好再次循环;</span></span><br><span class="line">        <span class="comment">//循环第二次：e = null,跳出循环</span></span><br><span class="line">        e = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>变成如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-0311750fe51fc624.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>上述是属于正常情况的那种，假设我们现在有两个线程同时去 <code>put</code> 元素，二者均发现需要做扩容处理，那么又会出现什么情况呢？</p>
+<blockquote>
+<p>参考阅读网上的博客+自己理解记录</p>
+</blockquote>
+<p>当线程一 和 线程二 同时进行插入的时候刚好达到扩容的条件，然后同时开始进行 <code>Resize</code> 操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; src.length; ++j) &#123;</span><br><span class="line">    <span class="comment">//src 表示原table</span></span><br><span class="line">     Entry&lt;K,V&gt; e = src[j];</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;</span><br><span class="line">            Entry&lt;K&lt;V&gt; next = e.next;<span class="comment">//假设线程一执行到这里就被调度挂起了</span></span><br><span class="line">            <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">            newTable[i] = e;</span><br><span class="line">            e = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>线程一挂起，线程二继续操作，变成如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-5a88832ba483e707.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>线程二是 <code>rehash</code> 之后的样子，如上图：</p>
+<p>当前线程一来说：</p>
+<p> <code>e</code> 是: <code>key(3)</code></p>
+<p>  <code>next</code> 是： <code>key(7)</code></p>
+<p>线程一来了，被调度回来了，该人家执行了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;<span class="comment">//再次循环，e:key(7) next:key(3)</span></span><br><span class="line">    		<span class="comment">//假设线程一执行到这里就被调度挂起了,开始继续执行</span></span><br><span class="line">    		<span class="comment">//第二次循环：next = key(3),next 指向key(3)</span></span><br><span class="line">    		<span class="comment">//e:key(3) next:null</span></span><br><span class="line">           Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">           <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);<span class="comment">//根据线程二的计算不难推出线程一计算的i = 3</span></span><br><span class="line">           <span class="comment">//key(7).next 指向 key(3)</span></span><br><span class="line">    		<span class="comment">//key(3).next 指向 key(7)</span></span><br><span class="line">           e.next = newTable[i];</span><br><span class="line">    		<span class="comment">//first :   newTable[3] = key(3)</span></span><br><span class="line">    		<span class="comment">//second ： newTable[3] = key(7)</span></span><br><span class="line">    		<span class="comment">//third :   newTable[3] = key(3)</span></span><br><span class="line">           newTable[i] = e;</span><br><span class="line">    		<span class="comment">//e 指向key(7)</span></span><br><span class="line">    		<span class="comment">//e = key(3)</span></span><br><span class="line">    		<span class="comment">//e = null//退出循环</span></span><br><span class="line">           e = next</span><br></pre></td></tr></table></figure>
+<p>这样就产生死循环了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">key(<span class="number">7</span>).next 指向 key(<span class="number">3</span>)</span><br><span class="line">key(<span class="number">3</span>).next 指向 key(<span class="number">7</span>)</span><br></pre></td></tr></table></figure>
+<p>当我们取出一个key(5) 的一个值时，恰巧也是 <code>int i = 3</code> , 这样去取，就陷入<code>key(3),key(7)</code> 的死循环中去了。</p>
+<p>为了更清晰的展示每一次循环，我决定分开来展示：</p>
+<p>第一次：要从这个线程一恢复运行开始说起吧： <code>e: key(3) ;  next: key(7)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;</span><br><span class="line">            Entry&lt;K&lt;V&gt; next = e.next;<span class="comment">//第一次的时候，线程一被卡住在这里，当时状态是：e:key(3),next:key(7)  这应该都没什么问题</span></span><br><span class="line">    </span><br><span class="line">    		<span class="comment">//根据线程二的计算，这个值也应该是int i = 3</span></span><br><span class="line">            <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">    		<span class="comment">//key(3).next = newTable[3], 此时newTable[3]为null, key(3).next指向null</span></span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">    		<span class="comment">//newTable[3] = key(3)</span></span><br><span class="line">            newTable[i] = e;</span><br><span class="line">    		<span class="comment">//e = key(7),e指向key(7)</span></span><br><span class="line">            e = next</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>OK, 由于<code>e = key(7)</code> 不为<code>null</code> ,循环继续：</p>
+<p>第二次循环：经过上述循环，此时 <code>e: key(7),next: key(3)</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-4c55a39a57b101ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>由于线程二已经改变了这个整体<code>table</code> 的结构，当遍历到<code>key(7)</code> 时， <code>next: key(3)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;<span class="comment">//e:key(7) </span></span><br><span class="line">    		<span class="comment">//next = key(3)</span></span><br><span class="line">            Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">    		<span class="comment">//int i = 3</span></span><br><span class="line">            <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">    		<span class="comment">//key(7).next = key(3) , key(7).next指向key(3)</span></span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">    		<span class="comment">//newTable[3] = key(7)</span></span><br><span class="line">            newTable[i] = e;</span><br><span class="line">    		<span class="comment">//e = key(3) e指向key(3),不为null,循环继续</span></span><br><span class="line">            e = next</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三次循环：<code>e : key(3) next:null</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;<span class="comment">//e:key(3) </span></span><br><span class="line">    		<span class="comment">//next = null next指向null</span></span><br><span class="line">            Entry&lt;K&lt;V&gt; next = e.next;</span><br><span class="line">    		<span class="comment">//int i = 3</span></span><br><span class="line">            <span class="keyword">int</span> i= indexFor(e.hash,newCapacity);</span><br><span class="line">    		<span class="comment">//key(3).next = key(7) key(3).next指向key(7)</span></span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">    		<span class="comment">//newTable[3] = key(3)</span></span><br><span class="line">            newTable[i] = e;</span><br><span class="line">    		<span class="comment">//e = null, 循环结束</span></span><br><span class="line">            e = next</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时 <code>e : null, next:null</code>.  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//key(7).next指向key(3)</span></span><br><span class="line"><span class="comment">//key(3).next指向key(7)    这里产生死循环</span></span><br></pre></td></tr></table></figure>
+<p>图就是这样的：最后<code>newTable[3] = key(3)</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-7f234b18992d6432.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">         </p>
+<p>over.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/06/HashMap基本知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/06/HashMap基本知识/" itemprop="url">HashMap基本知识</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-06T14:49:49+08:00">
+                2018-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/06/HashMap基本知识/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/06/HashMap基本知识/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>自我总结</p>
+</blockquote>
+<h1 id="什么是-HashMap"><a href="#什么是-HashMap" class="headerlink" title="什么是 HashMap?"></a>什么是 HashMap?</h1><p>首先看下类继承关系：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-efe988cf10bdbe95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<blockquote>
+<p><code>HashMap</code> 是存储键值对的集合，一个 <code>key</code>–<code>value</code> , 这样的键值对也称为 <code>Entry</code> ，这些键值对分散存储于数组当中，组成 <code>HashMap</code> 的主干。</p>
+</blockquote>
+<ul>
+<li><p>特点</p>
+<p>其中 <code>key</code> 可为 <code>null</code> ；非线程安全；</p>
+</li>
+</ul>
+<p>其中 <code>put</code> 方法 和 <code>get</code> 方法比较重要。</p>
+<ul>
+<li><p><code>put</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> putVal(hash(key), key, value, <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">       Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">       <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">           n = (tab = resize()).length;</span><br><span class="line">       <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">           tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">           .....</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>首先根据 <code>key</code> 计算 <code>hash</code> 值 , 如何算出在 <code>Node</code> 数组中具体的下标呢？从上面代码我们可以大概看出：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i = (n-<span class="number">1</span>) &amp; hash</span><br></pre></td></tr></table></figure>
+<p>就是数组的长度 -1 &amp; <code>key</code> 的<code>hash</code> 值。</p>
+<p>得到数组下标后，再把这个键值对放入进去，完成了 <code>put</code> 操作。</p>
+<p>假设我们：  put(“qq”,”糖葫芦”) <code>hash(&quot;qq&quot;)</code>  = 2, 下标为2，那么结果如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-d546b4a3817d44ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>Entry1====&gt; [key = &quot;qq&quot;, value= &quot;糖葫芦&quot;]</code></p>
+<p>但是总会有那么一种情况，就是不同 <code>key</code> 计算的 <code>hash</code> 之后是相同的，假如我们新 <code>put(&quot;mi&quot;,value=&quot;milo&quot;)</code> <code>index = hash(&quot;mi&quot;) = 2</code> 也是数组下标为2，那么此时在下标为2的位置就会通过 <strong>链表</strong> 的形式存储相应的键值对。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-02db6c08604d274a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>HashMap</code> 数组的每一个元素不止是一个<code>Entry</code> 对象，也是一个链表的头节点。每一个<code>Entry</code>对象通过 <code>Next</code> 指针指向它的下个 <code>Entry</code> 节点。当再有新的 <code>Entry</code> 映射到这个冲突位置时，也就是计算出 <code>hash</code> 值也是2，只需要插入到对应的链表当中去即可，注意：新插入的会在之前的前面，称为 <strong>头插入</strong>， 被新 <code>put</code> 进入的新元素可能被用到的概率大一些。</p>
+<ul>
+<li><p><code>get</code> 方法</p>
+<p>了解了 <code>put</code> 方法，<code>get</code> 好理解些</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">        Node&lt;K,V&gt; e;</span><br><span class="line">        <span class="keyword">return</span> (e = getNode(hash(key), key)) == <span class="keyword">null</span> ? <span class="keyword">null</span> : e.value;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>第一步：同样 根据 <code>key</code> 算出 <code>hash</code> 值；</p>
+<p>第二步：根据 <code>hash</code>值和数组的长度 计算数组的下标 <code>index</code></p>
+<p>第三步：假设我们取出我们 <code>get(&quot;qq&quot;)</code> 对应的值，我们知道下标是2，且是一个链表，我们需要循环遍历整个链表，找到 <code>key = &quot;qq&quot;</code> 的<code>Entry</code>。 </p>
+</li>
+<li><p>HashMap的默认长度是多少？为什么要那么定义？</p>
+</li>
+</ul>
+<blockquote>
+<p><code>HashMap</code> 默认长度是16，也可以自定义长度必须是2幂次方。之所以选择16，是为了方便于 <code>key</code> 映射 <code>index</code> 的算法。</p>
+</blockquote>
+<p>为了实现一个均匀的 <code>HashMap</code> ,数组的长度必须是 2 的幂次方，将 <code>index = hash(key) &amp; (length-1)</code> 这样做的效率也更高，通过位运算的方式。</p>
+<p>举例：<code>book</code> 的 <code>hashcode</code>,结果为十进制的 3029737，二进制：1011100011101011101001；假定 <code>HashMap</code> 长度是默认的16， <code>length-1 = 15</code>,二进制： 1111；</p>
+<p><code>index = hash(key) &amp; (length-1)</code></p>
+<p>计算结果如下图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-3aafe8299c498f3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>二进制：1001；十进制：就是index= 9。</p>
+<p>那么假设我们自定义长度设置为：10. 那<code>length-1=9, 二进制就是：1001，我们重新计算下</code>index`, 如下图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-7c14459101e253f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>二进制为：1001 ；十进制就是： <code>index</code> = 9</p>
+<p>然后我们再尝试一个新的 <code>HashCode</code>:</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-db971df4f539f899.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>结果还是：1001；</p>
+<p>然后我们继续来一个新的 <code>HashCode</code>:</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-0109aae2931ed6ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>结果还是：1001，<code>index= 9</code>.</p>
+<p>也就是说，当 <code>HashMap</code> 长度为 10 的时候，多个 不同的<code>key</code>生成的 <code>index</code> 可能是相同的，相同的概率比较大，这样，显然不符合 <code>Hash</code> 算法均匀分布的原则。</p>
+<p>反观长度为16或者2的幂次方，<code>length-1</code> 的值是所有二进制全为1，这种情况下，<code>index</code> 的结果等同于<code>HashCode</code> 的后几位值，只有输入的 <code>HashCode</code> 本身分布均匀，<code>Hash</code> 算法的结果也是均匀的。        </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/28/RecycleView更清晰地观察缓存/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1418,600 +1993,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/19/时间复杂度/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/19/时间复杂度/" itemprop="url">时间复杂度</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-19T15:17:21+08:00">
-                2018-11-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/19/时间复杂度/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/19/时间复杂度/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>衡量代码的好坏，包括两个非常重要的指标：</p>
-<ul>
-<li>运行时间</li>
-<li>占用空间</li>
-</ul>
-</blockquote>
-<p>由于运行环境和输入规模的影响，代码的绝对执行时间是无法估计的，但是我们却可以预估代码的基本执行次数。我可以通俗的理解为：通过执行次数可以大概推算这个时间复杂度。</p>
-<p>示例：</p>
-<ul>
-<li><p>一个有序排列好的数组</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] arry = &#123;-<span class="number">5</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">22</span>,<span class="number">35</span>,<span class="number">46</span>&#125;,输入一个x，<span class="keyword">int</span> x = <span class="number">31</span></span><br></pre></td></tr></table></figure>
-<p>在数组中找出和为  <code>x</code>  的两个数，例如： 9 +22 = 31。要求时间复杂度为<code>O(n)</code>.</p>
-</li>
-</ul>
-<p>好，当我们看到这个问题的时候，我们认为这很容易嘛(先不考虑时间复杂度)，于是写了如下代码：</p>
-<p>第一种写法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">int</span>[] array = &#123;-<span class="number">5</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">22</span>,<span class="number">35</span>,<span class="number">46</span>&#125;;</span><br><span class="line"> <span class="keyword">int</span> sum = <span class="number">31</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getIndex</span><span class="params">(<span class="keyword">int</span>[] array,<span class="keyword">int</span> sum)</span></span>&#123;</span><br><span class="line">        <span class="comment">//sum 在数据中找出和为sum的两个数</span></span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;array.length;j++)&#123;</span><br><span class="line">                <span class="comment">//判断是否相加=sum</span></span><br><span class="line">                <span class="keyword">if</span>(array[i] + array[j] == sum)&#123;</span><br><span class="line">                    x = i;</span><br><span class="line">                    y = j;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"第一个数的为："</span>+array[x]);</span><br><span class="line">        System.out.println(<span class="string">"第二个数的为："</span>+array[y]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>根据我们上面对时间复杂度的了解，我们知道改算法的时间复杂度是 <code>O(n^2)</code>， 是最低的一种，可以说，那么我们如何把时间复杂度设置为<code>O(n)</code> ,线性复杂度，其实就是需要一遍<code>for</code> 循环；</p>
-<p>第二种算法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array = &#123;-<span class="number">5</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">22</span>,<span class="number">35</span>,<span class="number">46</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> sum = <span class="number">31</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">getSimpleIndex</span><span class="params">(<span class="keyword">int</span>[] array,<span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line">        HashMap&lt;Integer, Integer&gt; hm = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;<span class="comment">//第一次遍历数组，将元素和下标以K-V方式存入hm中</span></span><br><span class="line">            hm.put(array[i], i);<span class="comment">//key 为数组里面的值，value是下标</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++) &#123;<span class="comment">//第二次遍历数组，查找是否有和为target的元素对</span></span><br><span class="line">            <span class="keyword">if</span> (hm.containsKey(target - array[i]) &amp;&amp; (i != hm.get(target - array[i]))) &#123;</span><br><span class="line">                <span class="comment">//保证两个元素不是同一个，否则如果target恰好是某个元素的2倍时就不符合题意</span></span><br><span class="line">                x = i;</span><br><span class="line">                y = hm.get(target - array[i]);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(array[x]+<span class="string">" "</span>+array[y]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>这是一种典型以空间换时间的解法。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>常见的时间复杂度有如下：</p>
-<ul>
-<li>T(n) = O(n)</li>
-<li>T(n) = O(logn)</li>
-<li>T(n) = O(1)</li>
-<li>T(n) = O(n²)</li>
-</ul>
-<p>这四种时间复杂度谁用时更长，更节省时间呢？</p>
-<p>O(1) &lt; O(logn) &lt; O(n) &lt; O(n²)</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/19/java生产者消费者模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/19/java生产者消费者模式/" itemprop="url">java生产者消费者模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-19T11:01:34+08:00">
-                2018-11-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/19/java生产者消费者模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/19/java生产者消费者模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><code>Producter.java</code> 生产者：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生产者</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span>  <span class="class"><span class="keyword">class</span> <span class="title">Producter</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Queue&lt;Integer&gt; queue;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> maxSize;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Producter</span><span class="params">(String name,Queue&lt;Integer&gt; queue,<span class="keyword">int</span> maxSize)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(name);</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.queue = queue;</span><br><span class="line">        <span class="keyword">this</span>.maxSize = maxSize;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (queue)&#123;</span><br><span class="line">                <span class="keyword">while</span>(queue.size() == maxSize)&#123;</span><br><span class="line">                    <span class="keyword">try</span>&#123;</span><br><span class="line">                        System.out.println(<span class="string">"Queue is full,Productr["</span>+name+<span class="string">" ]thread waiting for"</span>);</span><br><span class="line">                        <span class="comment">//等待</span></span><br><span class="line">                        queue.wait();</span><br><span class="line">                    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(<span class="string">"["</span>+name+<span class="string">"] producting value:+"</span>+i );</span><br><span class="line">                queue.offer(i++);</span><br><span class="line">                queue.notifyAll();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    Thread.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">1000</span>));</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Consumer.java</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Queue&lt;Integer&gt; queue;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> maxSize;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Consumer</span><span class="params">(String name,Queue&lt;Integer&gt; queue,<span class="keyword">int</span> maxSize)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(name);</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.queue = queue;</span><br><span class="line">        <span class="keyword">this</span>.maxSize = maxSize;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (queue)&#123;</span><br><span class="line">                <span class="keyword">while</span> (queue.isEmpty())&#123;</span><br><span class="line">                    <span class="keyword">try</span>&#123;</span><br><span class="line">                        System.out.println(<span class="string">"Queue is empty,Consumer ["</span>+name+<span class="string">"] thread is waiting for Producer"</span>);</span><br><span class="line">                        <span class="comment">//如果为空，就等待</span></span><br><span class="line">                        queue.wait();</span><br><span class="line">                    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">int</span> x = queue.poll();</span><br><span class="line">                System.out.println(<span class="string">"["</span>+name+<span class="string">" Consumer value : "</span>+x);</span><br><span class="line">                queue.notifyAll();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    Thread.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">1000</span>));</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> <code>main.java</code>:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        Queue&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        Thread product1 = <span class="keyword">new</span> Producter(<span class="string">"p-1"</span>,queue,<span class="number">5</span>);</span><br><span class="line">        Thread product2 = <span class="keyword">new</span> Producter(<span class="string">"p-2"</span>,queue,<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        Thread consumer1 = <span class="keyword">new</span> Consumer(<span class="string">"C1"</span>,queue,<span class="number">5</span>);</span><br><span class="line">        Thread consumer2 = <span class="keyword">new</span> Consumer(<span class="string">"C2"</span>,queue,<span class="number">5</span>);</span><br><span class="line">        Thread consumer3 = <span class="keyword">new</span> Consumer(<span class="string">"C3"</span>,queue,<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        product1.start();</span><br><span class="line">        product2.start();</span><br><span class="line"></span><br><span class="line">        consumer1.start();</span><br><span class="line">        consumer2.start();</span><br><span class="line">        consumer3.start();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/15/Android知识点三/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/15/Android知识点三/" itemprop="url">Android知识点三</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-15T13:39:45+08:00">
-                2018-11-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/15/Android知识点三/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/15/Android知识点三/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-RecycleView-如何设置分割线的？"><a href="#1-RecycleView-如何设置分割线的？" class="headerlink" title="1. RecycleView 如何设置分割线的？"></a>1. RecycleView 如何设置分割线的？</h1><blockquote>
-<p>它是读取系统自带的属性 <code>R.attr.listDivider</code>  属性，来设置分割线的，支持横向和纵向。</p>
-</blockquote>
-<h1 id="2-RecycleView-分割线的样式如何修改？"><a href="#2-RecycleView-分割线的样式如何修改？" class="headerlink" title="2. RecycleView 分割线的样式如何修改？"></a>2. RecycleView 分割线的样式如何修改？</h1><ul>
-<li><p>第一种办法：因为 <code>R.attr.listDivider</code> 定义在系统样式中，那么我们可以重写这个属性修改，如下：</p>
-<p>在<code>styles.xml</code> 中添加该属性：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=<span class="string">"AppTheme"</span> parent=<span class="string">"Theme.AppCompat.Light.DarkActionBar"</span>&gt;</span><br><span class="line">        &lt;!-- Customize your theme here. --&gt;</span><br><span class="line">        ....</span><br><span class="line">        &lt;item name="android:listDivider"&gt;@drawable/drawable_bg&lt;/item&gt;</span><br><span class="line">    &lt;/style&gt;</span><br></pre></td></tr></table></figure>
-<p>其中 <code>drawable_bg</code> 为自定义分割线的<code>drawable</code>.</p>
-</li>
-<li><p>第二种办法：可以通过自带的 <code>setDrawable()</code> 改变，如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DividerItemDecoration itemDecoration = <span class="keyword">new</span> DividerItemDecoration(<span class="keyword">this</span>,DividerItemDecoration.VERTICAL);</span><br><span class="line">        Drawable drawable = getResources().getDrawable(R.drawable.drawable_bg);</span><br><span class="line">        itemDecoration.setDrawable(drawable);</span><br><span class="line">        recyclerView.addItemDecoration(itemDecoration);</span><br></pre></td></tr></table></figure>
-<h1 id="3-RecycleView-缓存"><a href="#3-RecycleView-缓存" class="headerlink" title="3. RecycleView 缓存"></a>3. RecycleView 缓存</h1><blockquote>
-<p>缓存涉及三个类，分别是：</p>
-</blockquote>
-<ul>
-<li><p><code>Recycler</code></p>
-</li>
-<li><p><code>RecycledViewPool</code></p>
-</li>
-<li><p><code>ViewCachedExtension</code> </p>
-</li>
-</ul>
-</li>
-<li><p><code>Recycler</code> : 用于管理已经废弃或者与 <code>RecyclerView</code> 分离的 <code>ViewHolder</code> </p>
-<ul>
-<li><code>mChangedScrap</code> : 与 <code>RecyclerView</code> 分离的 <code>ViewHolder</code> 列表</li>
-<li><code>mAttachedScrap</code> : 未与 <code>RecyclerView</code> 分离的 <code>ViewHolder</code> 列表</li>
-<li><code>mCachedViews</code> : <code>ViewHolder</code> 缓存列表</li>
-</ul>
-</li>
-<li><p><code>RecycledViewPool</code> : <code>ViewHolder</code> 缓存池</p>
-</li>
-<li><p><code>ViewCachedExtension</code> : 开发者可以控制的 <code>ViewHolder</code> 缓存的帮助类</p>
-</li>
-</ul>
-<p>获取缓存里的 <code>ViewHolder</code> 的关键方法是： <code>tryGetViewHolderForPositionByDeadline</code> 如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line">        <span class="function">ViewHolder <span class="title">tryGetViewHolderForPositionByDeadline</span><span class="params">(<span class="keyword">int</span> position,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">boolean</span> dryRun, <span class="keyword">long</span> deadlineNs)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (position &lt; <span class="number">0</span> || position &gt;= mState.getItemCount()) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Invalid item position "</span> + position</span><br><span class="line">                        + <span class="string">"("</span> + position + <span class="string">"). Item count:"</span> + mState.getItemCount()</span><br><span class="line">                        + exceptionLabel());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">boolean</span> fromScrapOrHiddenOrCache = <span class="keyword">false</span>;</span><br><span class="line">            ViewHolder holder = <span class="keyword">null</span>;</span><br><span class="line">            <span class="comment">// 0) If there is a changed scrap, try to find from there</span></span><br><span class="line">            <span class="comment">// 0) 如果需要改变废弃的view，从这里查找</span></span><br><span class="line">            <span class="keyword">if</span> (mState.isPreLayout()) &#123;</span><br><span class="line">                <span class="comment">//这里是 mChangedScrap 集合中取出</span></span><br><span class="line">                holder = getChangedScrapViewForPosition(position);</span><br><span class="line">                fromScrapOrHiddenOrCache = holder != <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 1) Find by position from scrap/hidden list/cache</span></span><br><span class="line">            <span class="comment">// 1） 这是从 mAttachedScrap 集合中查找</span></span><br><span class="line">            <span class="keyword">if</span> (holder == <span class="keyword">null</span>) &#123;</span><br><span class="line">                holder = getScrapOrHiddenOrCachedHolderForPosition(position, dryRun);</span><br><span class="line">                <span class="keyword">if</span> (holder != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!validateViewHolderForOffsetPosition(holder)) &#123;</span><br><span class="line">                        <span class="comment">// recycle holder (and unscrap if relevant) since it can't be used</span></span><br><span class="line">                        <span class="keyword">if</span> (!dryRun) &#123;</span><br><span class="line">                            <span class="comment">// we would like to recycle this but need to make sure it is not used by</span></span><br><span class="line">                            <span class="comment">// animation logic etc.</span></span><br><span class="line">                            holder.addFlags(ViewHolder.FLAG_INVALID);</span><br><span class="line">                            <span class="keyword">if</span> (holder.isScrap()) &#123;</span><br><span class="line">                                removeDetachedView(holder.itemView, <span class="keyword">false</span>);</span><br><span class="line">                                holder.unScrap();</span><br><span class="line">                            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (holder.wasReturnedFromScrap()) &#123;</span><br><span class="line">                                holder.clearReturnedFromScrapFlag();</span><br><span class="line">                            &#125;</span><br><span class="line">                            recycleViewHolderInternal(holder);</span><br><span class="line">                        &#125;</span><br><span class="line">                        holder = <span class="keyword">null</span>;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        fromScrapOrHiddenOrCache = <span class="keyword">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (holder == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">int</span> offsetPosition = mAdapterHelper.findPositionOffset(position);</span><br><span class="line">                <span class="keyword">if</span> (offsetPosition &lt; <span class="number">0</span> || offsetPosition &gt;= mAdapter.getItemCount()) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Inconsistency detected. Invalid item "</span></span><br><span class="line">                            + <span class="string">"position "</span> + position + <span class="string">"(offset:"</span> + offsetPosition + <span class="string">")."</span></span><br><span class="line">                            + <span class="string">"state:"</span> + mState.getItemCount() + exceptionLabel());</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">int</span> type = mAdapter.getItemViewType(offsetPosition);</span><br><span class="line">                <span class="comment">// 2) Find from scrap/cache via stable ids, if exists</span></span><br><span class="line">                <span class="comment">// 2）从 mCachedViews 集合中查找缓存</span></span><br><span class="line">                <span class="keyword">if</span> (mAdapter.hasStableIds()) &#123;</span><br><span class="line">                    holder = getScrapOrCachedViewForId(mAdapter.getItemId(offsetPosition),</span><br><span class="line">                            type, dryRun);</span><br><span class="line">                    <span class="keyword">if</span> (holder != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        <span class="comment">// update position</span></span><br><span class="line">                        holder.mPosition = offsetPosition;</span><br><span class="line">                        fromScrapOrHiddenOrCache = <span class="keyword">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (holder == <span class="keyword">null</span> &amp;&amp; mViewCacheExtension != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="comment">// We are NOT sending the offsetPosition because LayoutManager does not</span></span><br><span class="line">                    <span class="comment">// know it.</span></span><br><span class="line">                    <span class="comment">// 3 从mViewCacheExtension 获取</span></span><br><span class="line">                    <span class="keyword">final</span> View view = mViewCacheExtension</span><br><span class="line">                            .getViewForPositionAndType(<span class="keyword">this</span>, position, type);</span><br><span class="line">                    <span class="keyword">if</span> (view != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        holder = getChildViewHolder(view);</span><br><span class="line">                        <span class="keyword">if</span> (holder == <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"getViewForPositionAndType returned"</span></span><br><span class="line">                                    + <span class="string">" a view which does not have a ViewHolder"</span></span><br><span class="line">                                    + exceptionLabel());</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (holder.shouldIgnore()) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"getViewForPositionAndType returned"</span></span><br><span class="line">                                    + <span class="string">" a view that is ignored. You must call stopIgnoring before"</span></span><br><span class="line">                                    + <span class="string">" returning this view."</span> + exceptionLabel());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (holder == <span class="keyword">null</span>) &#123; <span class="comment">// fallback to pool</span></span><br><span class="line">                    <span class="keyword">if</span> (DEBUG) &#123;</span><br><span class="line">                        Log.d(TAG, <span class="string">"tryGetViewHolderForPositionByDeadline("</span></span><br><span class="line">                                + position + <span class="string">") fetching from shared pool"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// 4）从缓存池中获取 recycledViewPool</span></span><br><span class="line">                    holder = getRecycledViewPool().getRecycledView(type);</span><br><span class="line">                    <span class="keyword">if</span> (holder != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        holder.resetInternal();</span><br><span class="line">                        <span class="keyword">if</span> (FORCE_INVALIDATE_DISPLAY_LIST) &#123;</span><br><span class="line">                            invalidateDisplayListInt(holder);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (holder == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">long</span> start = getNanoTime();</span><br><span class="line">                    <span class="keyword">if</span> (deadlineNs != FOREVER_NS</span><br><span class="line">                            &amp;&amp; !mRecyclerPool.willCreateInTime(type, start, deadlineNs)) &#123;</span><br><span class="line">                        <span class="comment">// abort - we have a deadline we can't meet</span></span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">//如果都没有 就重新创建 createViewHolder</span></span><br><span class="line">                    holder = mAdapter.createViewHolder(RecyclerView.<span class="keyword">this</span>, type);</span><br><span class="line">                    .....</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>总结缓存的机制如下：</p>
-<ul>
-<li>1.从 <code>mChangedScrap</code> 或 <code>mAttachScrap</code> 中获取</li>
-<li>2.从 <code>mCacheViews</code></li>
-<li>3.从 <code>mRecycledViewPool</code> 缓存池中获取</li>
-</ul>
-<h1 id="4-RecycleView-刷新闪屏"><a href="#4-RecycleView-刷新闪屏" class="headerlink" title="4. RecycleView 刷新闪屏"></a>4. RecycleView 刷新闪屏</h1><p>一般刷新：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adapter.notifyItemChanged(<span class="number">0</span>); 参数：position</span><br></pre></td></tr></table></figure>
-<p>实际上会全部刷新，局部刷新应使用：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adapter.notifyItemChanged(<span class="number">0</span>,<span class="string">"q"</span>); 参数： position,payload</span><br></pre></td></tr></table></figure>
-<p>并且在 <code>adapter</code> 中重写方法： <code>`onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads)</code>方法`</p>
-<p><code>payloads</code> 的 <code>size</code> 始终为1.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(ViewHolder holder, <span class="keyword">int</span> position, List&lt;Object&gt; payloads)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(payloads.isEmpty())&#123;</span><br><span class="line">            onBindViewHolder(holder,position);</span><br><span class="line">     &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        String type = payloads.get(<span class="number">0</span>);<span class="comment">//获取为 q</span></span><br><span class="line">            holder.name.setText(list.get(position));</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<h1 id="5-RecycleView-和-listView"><a href="#5-RecycleView-和-listView" class="headerlink" title="5. RecycleView 和 listView"></a>5. RecycleView 和 listView</h1><p>//<a href="https://zhuanlan.zhihu.com/p/23339185" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/23339185</a></p>
-<ul>
-<li><p>缓存层级不同</p>
-<blockquote>
-<p>recycleView 比 listView 多两级缓存，支持开发者自定义缓存处理，支持多个recycleView共用同一个 recycleViewPool(缓存池)</p>
-</blockquote>
-</li>
-</ul>
-<p><code>listView</code> 缓存（两级缓存）：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>是否需要回调createView</th>
-<th>是否需要回调bindVIew</th>
-<th>生命周期</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mActiveViews</td>
-<td>否</td>
-<td>否</td>
-<td>onLayout函数周期内</td>
-<td>用于屏幕内itemView快速重用</td>
-</tr>
-<tr>
-<td>mScrapViews</td>
-<td>否</td>
-<td>是</td>
-<td>与mAdapter一致，当Adapter被更换时，mScrapViews即被清空</td>
-</tr>
-</tbody>
-</table>
-<p><code>RecycrleView</code> 缓存( 四级缓存)：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>是否回调createView</th>
-<th>回调bindVIew</th>
-<th>生命周期</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mAttachedScrap</td>
-<td>否</td>
-<td>否</td>
-<td>onLayout</td>
-<td>用于屏幕内itemView快速重用</td>
-</tr>
-<tr>
-<td>mCacheViews</td>
-<td>否</td>
-<td>否</td>
-<td>与mAdapter一致，当Adapter被更换时,mCacheVIews被缓存到mRecyclerPool</td>
-<td>默认缓存大小是2</td>
-</tr>
-<tr>
-<td>mViewCacheExtension</td>
-<td></td>
-<td></td>
-<td></td>
-<td>用户自定义实现</td>
-</tr>
-<tr>
-<td>mRecyclerPool</td>
-<td>否</td>
-<td>是</td>
-<td>与自身生命周期一致，不再引用时被释放</td>
-<td>默认大小是5</td>
-</tr>
-</tbody>
-</table>
-<p><code>ListView</code> 和 <code>RecyclerView</code> 缓存机制：</p>
-<ul>
-<li><code>mActiveViews</code> 和 <code>mAttachedScrap</code> 功能相似，意义在于快速重用屏幕上可见的列表项 <code>itemView</code>,而不需要重新<code>createView</code> 和 <code>bindView</code></li>
-<li><code>mScrapView</code> 和 <code>mCachedViews</code> + <code>mRecyclerViewPool</code> 功能相似，意义在于缓存离开屏幕的<code>itemView</code>,目的是让即将进入屏幕的 <code>itemView</code> 重用</li>
-<li><code>RecycleView</code> 的优势在于 <code>mCacheVIews</code> 的使用，可以做到屏幕外的列表项<code>itemView</code> 进入屏幕内时也无须<code>bindView</code> 快速重用； <code>mRecycleViewPool</code> 可以供多个<code>recycleView</code> 共同使用，在特定场景下，如<code>viewpager</code> 加多个列表页有优势。</li>
-</ul>
-<h1 id="6-RecycleView-的回收复用机制的内部实现都是哪个类完成的？"><a href="#6-RecycleView-的回收复用机制的内部实现都是哪个类完成的？" class="headerlink" title="6. RecycleView 的回收复用机制的内部实现都是哪个类完成的？"></a>6. RecycleView 的回收复用机制的内部实现都是哪个类完成的？</h1><blockquote>
-<p>RecycleView 的回收复用机制都是由内部类 <code>Recycler</code>  类，核心方法：<code>tryGetViewHolderForPositionByDeadline()</code> 方法中完成的。</p>
-</blockquote>
-<p>随笔源码记录：</p>
-<h1 id="复用机制"><a href="#复用机制" class="headerlink" title="复用机制"></a>复用机制</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> View <span class="title">getViewForPosition</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> getViewForPosition(position, <span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"><span class="function">View <span class="title">getViewForPosition</span><span class="params">(<span class="keyword">int</span> position, <span class="keyword">boolean</span> dryRun)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> tryGetViewHolderForPositionByDeadline(position, dryRun, 		               FOREVER_NS).itemView;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function">ViewHolder <span class="title">tryGetViewHolderForPositionByDeadline</span><span class="params">(<span class="keyword">int</span> position,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                 <span class="keyword">boolean</span> dryRun, <span class="keyword">long</span> deadlineNs)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//复用机制的原理</span></span><br><span class="line">    - <span class="number">1</span>.mCacheView</span><br><span class="line">    - <span class="number">2</span>.recyclerViewPool</span><br><span class="line">    - <span class="number">3</span>.扩展</span><br><span class="line">    - <span class="number">4</span>.都没有，重新创建一个ViewHolder(createViewHolder)   </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="回收机制"><a href="#回收机制" class="headerlink" title="回收机制"></a>回收机制</h1><blockquote>
-<p>也是 Recycler 类中的，核心方法：<code>recycleViewHolderInternal(holder)</code></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recycleView</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// This public recycle method tries to make view recycle-able since layout manager</span></span><br><span class="line">            <span class="comment">// intended to recycle this view (e.g. even if it is in scrap or change cache)</span></span><br><span class="line">            ViewHolder holder = getChildViewHolderInt(view);</span><br><span class="line">            <span class="keyword">if</span> (holder.isTmpDetached()) &#123;</span><br><span class="line">                removeDetachedView(view, <span class="keyword">false</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (holder.isScrap()) &#123;</span><br><span class="line">                holder.unScrap();</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (holder.wasReturnedFromScrap()) &#123;</span><br><span class="line">                holder.clearReturnedFromScrapFlag();</span><br><span class="line">            &#125;</span><br><span class="line">    		<span class="comment">//回收的内部实现</span></span><br><span class="line">            recycleViewHolderInternal(holder);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>回收的逻辑：由 <code>LayoutManager</code> 来遍历移出屏幕的卡位，然后对每个卡位进行回收操作，回收时，都是把 <code>viewHolder</code> 放在 <code>mCachedViews</code> 里面，如果<code>mCachedViews</code> 满了，那就在<code>mCachedViews</code> 里拿一个<code>ViewHolder</code> 扔到 <code>ViewPool</code> 缓存里，然后<code>mCachedViews</code> 就可以空出位置来放新回收的<code>ViewHolder</code> 了。</p>
-<blockquote>
-<p><code>mCachedViews</code> 里存放的 <code>ViewHolder</code> 只有原本位置的卡位才能复用</p>
-<p>参考链接：<a href="https://blog.csdn.net/xJ032w2j4cCjhOW8s8/article/details/79946425" target="_blank" rel="noopener">https://blog.csdn.net/xJ032w2j4cCjhOW8s8/article/details/79946425</a></p>
-</blockquote>
-<p>===================================================================================</p>
-<ul>
-<li><code>updateViewCacheSize()</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">updateViewCacheSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> extraCache = mLayout != <span class="keyword">null</span> ? mLayout.mPrefetchMaxCountObserved : <span class="number">0</span>;</span><br><span class="line">            mViewCacheMax = mRequestedCacheMax + extraCache;</span><br><span class="line">            ....</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在第一次向上滑动</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2062,7 +2043,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -2075,7 +2056,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

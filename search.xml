@@ -3,6 +3,81 @@
   
     
     <entry>
+      <title><![CDATA[描述一次完整的网络请求过程]]></title>
+      <url>/2019/01/22/%E6%8F%8F%E8%BF%B0%E4%B8%80%E6%AC%A1%E5%AE%8C%E6%95%B4%E7%9A%84%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B/</url>
+      <content type="html"><![CDATA[<ul>
+<li><ol>
+<li>DNS 解析</li>
+<li>TCP建立连接，三次握手，四次挥手</li>
+<li>客户端发送http 请求</li>
+<li>服务端响应客户端请求，返回数据</li>
+<li>客户端拿到数据，解析xml,显示到浏览器上。</li>
+</ol>
+</li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 网络 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[数据存储的方式]]></title>
+      <url>/2019/01/22/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%9A%84%E6%96%B9%E5%BC%8F/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>回忆Android中数据的存储方式有哪些，简单列举下。</p>
+</blockquote>
+<h1 id="1-SharedPreferences"><a href="#1-SharedPreferences" class="headerlink" title="1. SharedPreferences"></a>1. SharedPreferences</h1><blockquote>
+<p><code>Android</code> 自带的数据存储，以 <code>xml</code> 的形式存储在 <code>/data/data/packageName/shared_prefs</code></p>
+</blockquote>
+<p>这里提一下提交的两种方式： <code>commit</code> 和 <code>apply**</code>**</p>
+<ul>
+<li><p><strong><code>commit</code></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">        * Commit your preferences changes back from this Editor to the</span></span><br><span class="line"><span class="comment">        * &#123;<span class="doctag">@link</span> SharedPreferences&#125; object it is editing.  This atomically</span></span><br><span class="line"><span class="comment">        * performs the requested modifications, replacing whatever is currently</span></span><br><span class="line"><span class="comment">        * in the SharedPreferences.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        *如果两个都在修改提交，那么以最后一个为主。也就是后面会覆盖前面的</span></span><br><span class="line"><span class="comment">        * &lt;p&gt;Note that when two editors are modifying preferences at the same</span></span><br><span class="line"><span class="comment">        * time, the last one to call commit wins.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        *	如果你不关心返回结果在主线程中，考虑使用apply代替</span></span><br><span class="line"><span class="comment">        * &lt;p&gt;If you don't care about the return value and you're</span></span><br><span class="line"><span class="comment">        * using this from your application's main thread, consider</span></span><br><span class="line"><span class="comment">        * using &#123;<span class="doctag">@link</span> #apply&#125; instead.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        * 返回true 表示成功</span></span><br><span class="line"><span class="comment">        * <span class="doctag">@return</span> Returns true if the new values were successfully written</span></span><br><span class="line"><span class="comment">        * to persistent storage.</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">       <span class="function"><span class="keyword">boolean</span> <span class="title">commit</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><code>apply</code></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">       *先立即提交到内存中，然后异步提交到数据库中</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;Unlike &#123;<span class="doctag">@link</span> #commit&#125;, which writes its preferences out</span></span><br><span class="line"><span class="comment">       * to persistent storage synchronously, &#123;<span class="doctag">@link</span> #apply&#125;</span></span><br><span class="line"><span class="comment">       * commits its changes to the in-memory</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> SharedPreferences&#125; immediately but starts an</span></span><br><span class="line"><span class="comment">       * asynchronous commit to disk and you won't be notified of</span></span><br><span class="line"><span class="comment">       * any failures.  </span></span><br><span class="line"><span class="comment">       * </span></span><br><span class="line"><span class="comment">       * 如果这个&#123;<span class="doctag">@link</span> SharedPreferences&#125;上的editor执行常规的&#123;<span class="doctag">@link</span> #commit&#125;，而	            *&#123;<span class="doctag">@link</span> #apply&#125;仍然未完成，那么&#123;<span class="doctag">@link</span> #commit&#125;将阻塞，直到所有异步提交以及提交本身都          * 完成。</span></span><br><span class="line"><span class="comment">       * If another editor on this</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> SharedPreferences&#125; does a regular &#123;<span class="doctag">@link</span> #commit&#125;</span></span><br><span class="line"><span class="comment">       * while a &#123;<span class="doctag">@link</span> #apply&#125; is still outstanding, the</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #commit&#125; will block until all async commits are</span></span><br><span class="line"><span class="comment">       * completed as well as the commit itself.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * sharedPreferences在一个进程中是单例的，它是安全的apply ,如果你不需要返回值的话</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;As &#123;<span class="doctag">@link</span> SharedPreferences&#125; instances are singletons within</span></span><br><span class="line"><span class="comment">       * a process, it's safe to replace any instance of &#123;<span class="doctag">@link</span> #commit&#125; with</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #apply&#125; if you were already ignoring the return value.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * 不需要担心Android的生命周期，它会确保写入硬盘中再切换状态</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;You don't need to worry about Android component</span></span><br><span class="line"><span class="comment">       * lifecycles and their interaction with &lt;code&gt;apply()&lt;/code&gt;</span></span><br><span class="line"><span class="comment">       * writing to disk.  The framework makes sure in-flight disk</span></span><br><span class="line"><span class="comment">       * writes from &lt;code&gt;apply()&lt;/code&gt; complete before switching</span></span><br><span class="line"><span class="comment">       * states.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * &lt;p class='note'&gt;The SharedPreferences.Editor interface</span></span><br><span class="line"><span class="comment">       * isn't expected to be implemented directly.  However, if you</span></span><br><span class="line"><span class="comment">       * previously did implement it and are now getting errors</span></span><br><span class="line"><span class="comment">       * about missing &lt;code&gt;apply()&lt;/code&gt;, you can simply call</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #commit&#125; from &lt;code&gt;apply()&lt;/code&gt;.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="function"><span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>结论</strong></p>
+<ul>
+<li>在不考虑跨进程通信和返回值的情况下，可以优先选择 <code>apply</code> ，可以快速读取更新后的值。</li>
+</ul>
+<h1 id="2-文件存储（SD卡）"><a href="#2-文件存储（SD卡）" class="headerlink" title="2. 文件存储（SD卡）"></a>2. 文件存储（SD卡）</h1><h1 id="3-Sqlite"><a href="#3-Sqlite" class="headerlink" title="3. Sqlite"></a>3. Sqlite</h1><h1 id="4-ContentProvider"><a href="#4-ContentProvider" class="headerlink" title="4. ContentProvider"></a>4. ContentProvider</h1><h1 id="5-网络存储"><a href="#5-网络存储" class="headerlink" title="5. 网络存储"></a>5. 网络存储</h1>]]></content>
+      
+        
+        <tags>
+            
+            <tag> 存储 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[自定义View的构造方法]]></title>
+      <url>/2019/01/21/%E8%87%AA%E5%AE%9A%E4%B9%89View%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/</url>
+      <content type="html"><![CDATA[<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="comment">//在代码中直接new MyView()实例的时候，会调用第一个构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//在xml中布局文件中使用MyView的时候，会调用第二个构造函数；</span></span><br><span class="line">    <span class="comment">//在xml中布局文件中使用了MyView,并且还有自定义属性的时候，也是第二个构造函数。</span></span><br><span class="line">    <span class="comment">//当我们自定义属性了，通过obtainStyledAttributes，也是最终调用参数为3个的构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context,  AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>int defStyleAttr</code> : 这是当前 <code>Theme</code> 中包含的一个指向 <code>style</code> 的引用，当我们自定义属性时，默认从这个集合里面查找布局文件中配置属性值，传入0表示不向该 <code>defStyleAttr</code> 中查找值。</p>
+<p>属性赋值优先级次序表：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在xml中直接定义 &gt; 在xml中通过Style定义 &gt; 自定义view所在Activity的 Theme中指定Style引用 &gt; 构造函数中defStyleRes指定的默认值。</span><br></pre></td></tr></table></figure>]]></content>
+      
+        
+        <tags>
+            
+            <tag> 自定义View </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[事件分发中的onTouch 和onTouchEvent 有什么区别?]]></title>
       <url>/2019/01/21/%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%B8%AD%E7%9A%84onTouch-%E5%92%8ConTouchEvent-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/</url>
       <content type="html"><![CDATA[<blockquote>
