@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低）~120dpi density=0.75">
+<meta name="description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低240*320）~120dpi densi">
 <meta name="keywords" content="dpi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="获取手机屏幕的密度">
 <meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/04/24/获取手机屏幕的密度/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低）~120dpi density=0.75">
+<meta property="og:description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低240*320）~120dpi densi">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-24T07:46:08.424Z">
+<meta property="og:updated_time" content="2019-02-19T08:31:59.811Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="获取手机屏幕的密度">
-<meta name="twitter:description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低）~120dpi density=0.75">
+<meta name="twitter:description" content="目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。 第一种：根据手机分辨率进行计算(计算得出实际的dpi)比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401 参照下图： ldpi（低240*320）~120dpi densi">
 
 
 
@@ -358,16 +358,22 @@
         <p>目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。</p>
 <h1 id="第一种：根据手机分辨率进行计算-计算得出实际的dpi"><a href="#第一种：根据手机分辨率进行计算-计算得出实际的dpi" class="headerlink" title="第一种：根据手机分辨率进行计算(计算得出实际的dpi)"></a>第一种：根据手机分辨率进行计算(计算得出实际的dpi)</h1><p>比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：<br>(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)<br>dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401</p>
 <p>参照下图：</p>
-<pre><code>ldpi（低）~120dpi density=0.75
-mdpi（中）~160dpi density=1
-hdpi（高）~240dpi density=1.5
-xhdpi（超高）~320dpi density=2
-xxhdpi（超超高）~480dpi density=3
+<pre><code>ldpi（低240*320）~120dpi density=0.75
+mdpi（中320*480）~160dpi density=1
+hdpi（高480*800）~240dpi density=1.5
+xhdpi（超高720*1080）~320dpi density=2
+xxhdpi（超超高1080*1920）~480dpi density=3
 xxxhdpi（超超超高）~640dpi density=4
 </code></pre><p>对应图片的目录应该是：xxhdpi</p>
 <h1 id="第二种：通过代码方式-系统定义的dpi"><a href="#第二种：通过代码方式-系统定义的dpi" class="headerlink" title="第二种：通过代码方式(系统定义的dpi)"></a>第二种：通过代码方式(系统定义的dpi)</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> xdpi = getResources().getDisplayMetrics().xdpi;</span><br><span class="line"><span class="keyword">float</span> ydpi = getResources().getDisplayMetrics().ydpi;</span><br></pre></td></tr></table></figure>
 <p>不同手机获取的<code>xdpi ydpi</code> 值有的一模一样，有的有些差异，但是相差不会太大，两者获取的值近乎一样。</p>
 <p>两者计算出的结果并不完全相同，因为你们想，实际计算得出的<code>dpi</code> 很容易根据屏幕尺寸的不同，得出不同的<code>dpi</code> ，这样的话得到的值很多，无法适配。我查阅网上相关介绍，就是每个手机初始有一个固定的<code>dpi</code> ，分别是上述的：120，160，240，320，480，640，安卓实际进行缩放的时候按照的是系统定义的这些，而不是实际计算得出的<code>dpi</code>,这一点需要注意。</p>
+<h1 id="像素和dp之间的转化"><a href="#像素和dp之间的转化" class="headerlink" title="像素和dp之间的转化"></a>像素和dp之间的转化</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">px = dp * desity</span><br><span class="line"><span class="comment">// 这里的dpi就是上述第一种的计算方法</span></span><br><span class="line"><span class="comment">//dpi  = (√1920^2+1080^2 ) / 5.5(屏幕尺寸) ≈ 401</span></span><br><span class="line">desity = dpi / <span class="number">160</span></span><br><span class="line">所以：px = dp * (dpi/<span class="number">160</span>)</span><br></pre></td></tr></table></figure>
+<p><code>DisplayMetrics.java</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DisplayMetrics#density //就是我们熟知的desity</span><br><span class="line">DisplayMetrics#densityDpi //dpi</span><br><span class="line">DisplayMetrics#scaleDensity //字体缩放因子，正常情况下和density相同，但是我手动调整字体大小后会改变这个值</span><br></pre></td></tr></table></figure>
+<p>关于手机的 <code>density</code> 可以在 <code>/system/build.prop</code> 文件中查看的定义值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ro.sf.lcd_density=<span class="number">480</span> <span class="comment">// 这个字段</span></span><br></pre></td></tr></table></figure>
+<p>这个定义的数值，可能会跟计算得到的<code>density</code> 不相同。</p>
 
       
     </div>
@@ -555,7 +561,7 @@ xxxhdpi（超超超高）~640dpi density=4
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一种：根据手机分辨率进行计算-计算得出实际的dpi"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;-&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi" class="headerlink" title="&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;(&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi)"></a>&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;(&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二种：通过代码方式-系统定义的dpi"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;-&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi" class="headerlink" title="&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;(&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi)"></a>&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;(&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一种：根据手机分辨率进行计算-计算得出实际的dpi"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;-&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi" class="headerlink" title="&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;(&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi)"></a>&#x7B2C;&#x4E00;&#x79CD;&#xFF1A;&#x6839;&#x636E;&#x624B;&#x673A;&#x5206;&#x8FA8;&#x7387;&#x8FDB;&#x884C;&#x8BA1;&#x7B97;(&#x8BA1;&#x7B97;&#x5F97;&#x51FA;&#x5B9E;&#x9645;&#x7684;dpi)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二种：通过代码方式-系统定义的dpi"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;-&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi" class="headerlink" title="&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;(&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi)"></a>&#x7B2C;&#x4E8C;&#x79CD;&#xFF1A;&#x901A;&#x8FC7;&#x4EE3;&#x7801;&#x65B9;&#x5F0F;(&#x7CFB;&#x7EDF;&#x5B9A;&#x4E49;&#x7684;dpi)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#像素和dp之间的转化"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x50CF;&#x7D20;&#x548C;dp&#x4E4B;&#x95F4;&#x7684;&#x8F6C;&#x5316;" class="headerlink" title="&#x50CF;&#x7D20;&#x548C;dp&#x4E4B;&#x95F4;&#x7684;&#x8F6C;&#x5316;"></a>&#x50CF;&#x7D20;&#x548C;dp&#x4E4B;&#x95F4;&#x7684;&#x8F6C;&#x5316;</span></a></li></ol></div>
             
 
           </div>
