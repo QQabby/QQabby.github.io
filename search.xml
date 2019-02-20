@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[屏幕适配]]></title>
+    <url>%2F2019%2F02%2F19%2F%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%2F</url>
+    <content type="text"><![CDATA[屏幕适配的原理关于 dp,dpi 之间的计算关系，在 获取手机屏幕的密度 中都已经记录到。 日常适配 使用不同套图适配，一般我们都使用高分辨率的图，保证大多数设备显示没有问题。 这是我们经常很容易想到的方案，缺点也很明显，每次都设计多套图，apk体积变大，那么有没有办法我们尽可能只使用一套图，主要的分辨率有：1080 1920 和 1280 720，xhdpi 是首选。 使用.9 图 或者 svg 图 布局适配 使用权重适配，一般用于格局比较明朗的界面中 使用 dimens 适配（在不同的 values 下的创建不同的文件夹例如：values-1080*1920等，Android 手机分辨率越来越多，维护十分繁琐） dp适配 虽然在不同的设备上可以简单的适配，但是还是无法做到完完全全的适配，总结为： 因为 dpi 和 实际像素密度的差异导致使用 dp 做单位，没有很好的适配。 最小宽度限定符( 屏幕宽和高的较小值) 很大程度上减少了文件，values-sw160dp values-sw240dp 约束布局 推荐使用的约束布局 123456789&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/linearLayout2" android:layout_width="match_parent" android:layout_height="match_parent"&gt; //xxx&lt;/android.support.constraint.ConstraintLayout&gt; 今日头条适配方案 了解 直接修改系统的 density 之前的总结文章 获取手机屏幕的密度 中有记录到。 我们可以做个实验展示下： 设备信息为：1080 1920 尺寸：5 *dpi = 420, 我们设置按钮的宽度为 100dp 1234//我们可以手动计算下px = dp * densitydensity = dpi / 160 = 420/160 = 2.625px = 180 * 2.625 = 472.5 = 473px //与实际展示结果一致 那如果就是我们按照今日头条的适配方法，设计图是以：10801920 dpi= 480, density 为3来标注，那么实际屏幕就是：360dp 640dp, 也就是实际宽度为360dp. 以宽为 360dp 为标准，适配后展示： 1234同样是180dp, 像素为：540px, 即为屏幕的一半。底下205dp展示的作用是：如果未做适配，那么需要红色区域的宽度为205dp才能达到屏幕的一半，适配后，红色区域的宽度为180dp,即可达到屏幕一半，即达到适配的目的。这样适配后，不管dpi = 480 的手机还是在 dpi = 480 手机上设置宽度为180dp都展示为屏幕的一半。]]></content>
+      <tags>
+        <tag>屏幕适配</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[https]]></title>
-    <url>%2F2019%2F01%2F23%2Fhttps%2F</url>
+    <url>%2F2019%2F01%2F23%2FHTTPS%2F</url>
     <content type="text"><![CDATA[本文参考阅读理解：https://showme.codes/2017-02-20/understand-https/ https://baijiahao.baidu.com/s?id=1590626703682162118&amp;wfr=spider&amp;for=pc 对称加密 于是客户端和服务端都需要保存的加密算法和对应的密钥 非对称加密 即服务端将公钥下（数字签名过）发给客户端，客户端利用公钥进行信息加密，服务端收到信息利用私钥解密。 总结HTTPS 要使客户端与服务器端的通信过程得到安全保证，必须使用的对称加密算法，但是协商对称加密算法的过程，需要使用非对称加密算法来保证安全，然后直接使用非对称加密的过程本身也不安全，会有中间人篡改公钥的可能性，所以客户端与服务端不直接使用公钥，而是使用数字证书签发机构颁发的证书来保证非对称加密过程本身的安全。这样通过这些机制协商出一个对称加密算法，就此双方使用该算法进行加密解密。从而解决了客户端与服务端之间的通信安全问题。]]></content>
       <tags>
         <tag>HTTPS</tag>
