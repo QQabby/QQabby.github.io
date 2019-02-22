@@ -273,6 +273,152 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/17/INSTALL-FAILED-TEST-ONLY/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/17/INSTALL-FAILED-TEST-ONLY/" itemprop="url">INSTALL_FAILED_TEST_ONLY</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-17T13:42:08+08:00">
+                2018-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/17/INSTALL-FAILED-TEST-ONLY/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/17/INSTALL-FAILED-TEST-ONLY/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>莫名其妙更新了 studio的配置，然后打包签名，利用<code>adb install xx.apk</code> 安装就出现了 <code>INSTALL_FAILED_TEST_ONLY</code>,安装失败。心想也没干什么啊，查阅相关资料后，<br>原因是：<code>Android Studio 3.0</code>会在<code>debug apk</code>的<code>manifest</code>文件<code>application</code>标签里自动添加 <code>android:testOnly=&quot;true&quot;</code>属性</p>
+</blockquote>
+<p>网上有说：将这个<code>android:testOnly=&quot;false&quot;</code> 添加到 <code>Application</code> 标签中，但是还是没有成功。</p>
+<ul>
+<li>解决办法一：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install -t xx.apk</span><br></pre></td></tr></table></figure>
+<p>需要加上<code>-t</code>. 问题是解决了，可以安装成功了，但是对于以前qq 发送文件还是不能安装成功。</p>
+<ul>
+<li>解决办法二：<br>还是点击普通的绿色按钮安装，此时生成一个apk,我们再点击 <code>Build---&gt; Build Apk</code> 此时拿出 <code>output--&gt;apk--&gt;xx.apk</code> 可以正常安装了。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/14/Moved-Permanently/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1814,187 +1960,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/21/性能优化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/21/性能优化/" itemprop="url">性能优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T10:36:04+08:00">
-                2018-11-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/21/性能优化/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/21/性能优化/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li><p>布局优化</p>
-<ul>
-<li><p>减少布局层次，单一可以用<code>LinearLayout</code> 解决的页面不用 <code>RelativeLayout</code>,如果布局复杂，则用<code>RelativeLayout</code> 更好，毕竟比起布局嵌套，这种会好些</p>
-</li>
-<li><p><code>&lt;include&gt;</code> 标签使用，主要用于布局重用</p>
-<blockquote>
-<p>需要注意的是：此标签内，如果外面指定了 <code>id</code> 里面跟布局也定义<code>id</code> 以外部定义为准。同时如果里面定义了 类似于 <code>android:layout_width=&quot;wrap_content&quot;</code> 的属性，需配套 <code>android:layout_height=&quot;wrap_content&quot;</code> 同时使用。</p>
-</blockquote>
-</li>
-<li><p><code>&lt;merge&gt;</code> 标签一般和 <code>&lt;include&gt;</code> 标签配合使用。一般如果当前根布局例如是：<code>LinearLayout</code> ,<code>include</code> 的布局也是 <code>LinearLayout</code> ,那么 <code>include</code> 的根布局就可以使用 <code>&lt;merge&gt;</code> 标签代替<code>LinearLayout</code>.</p>
-</li>
-<li><p><code>&lt;ViewStub&gt;</code> 标签，意义为按需加载，轻量级，宽和高都是0，在实际开发中，有很多布局在正常情况下不会显示，比如网络异常的布局，这个时候没有必要在布局加载时就加载进来，通过<code>&lt;ViewStub&gt;</code> 就可以在需要用到的时候再加载，提高程序初始化的性能。</p>
-</li>
-</ul>
-</li>
-<li><p>绘制优化</p>
-<blockquote>
-<p>在 <code>onDraw()</code> 中不要创建新的局部对象，这是因为 <code>onDraw()</code> 可能会频繁的调用，这样就会在一瞬间产生大量的临时对象，这不仅占用过多的内存而且会导致系统频繁的gc, 降低程序的执行效率; 另外也不能做一些耗时的任务。</p>
-</blockquote>
-</li>
-<li><p>内存泄漏优化</p>
-<ul>
-<li><p>静态变量导致的内存泄漏</p>
-<p>例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Context mContext;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.layout_combine);</span><br><span class="line"></span><br><span class="line">        mContext = <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>单例模式导致的内存泄漏</p>
-</li>
-<li><p>属性动画导致的内存泄漏</p>
-<blockquote>
-<p>Android 3.0 之后，提供了属性动画，如果开启无限循环动画，隐藏后，未调用 <code>animator,cancel()</code> 来停止动画，也会发生内存泄漏，因为这个时候 <code>Activity</code> 的 <code>View</code> 被动画所持有，而 <code>View</code> 又持有 <code>Activity</code>, 最终<code>Activity</code> 无法释放。0- </p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>响应速度优化和ANR日志</p>
-<blockquote>
-<p>响应速度优化的核心是避免在主线程做耗时操作， <code>Activity</code> 5s 未做出响应， <code>Service</code> 10s未做出响应，就会出现 ANR ,查看 <code>\data\anr</code> 目录下的 <code>trace,txt</code> 文件分析产生 ANR 的原因</p>
-</blockquote>
-</li>
-<li><p>线程优化</p>
-<blockquote>
-<p>线程优化一般都是采用线程池，避免程序中存在大量的 Thread, 线程池可重用内部的线程，从而避免线程的创建和销毁所带来的性能开销。</p>
-</blockquote>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2045,7 +2010,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -2058,7 +2023,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

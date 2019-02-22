@@ -273,6 +273,166 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/22/Vollery源码阅读-——/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/22/Vollery源码阅读-——/" itemprop="url">Vollery源码阅读(——)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-22T19:16:34+08:00">
+                2019-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/22/Vollery源码阅读-——/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/22/Vollery源码阅读-——/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>写在最前面的话：送给还在迷茫看不懂的童鞋，跟着我一步步看，小白也能看懂，从而对整体有一个把握，分析的开始以基本使用为切入点，一步步深入。</p>
+<h1 id="1-创建获取-RequestQueue-对象"><a href="#1-创建获取-RequestQueue-对象" class="headerlink" title="1. 创建获取 RequestQueue 对象"></a>1. 创建获取 <code>RequestQueue</code> 对象</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RequestQueue mQueue = Volley.newRequestQueue(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>开始进入：：：<br><code>Vollery # newRequestQueue()</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestQueue <span class="title">newRequestQueue</span><span class="params">(Context context, HttpStack stack)</span> </span>&#123;</span><br><span class="line">        .....</span><br><span class="line">        <span class="keyword">if</span> (stack == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (VERSION.SDK_INT &gt;= <span class="number">9</span>) &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HurlStack();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HttpClientStack(AndroidHttpClient.newInstance(userAgent));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Network network = <span class="keyword">new</span> BasicNetwork((HttpStack)stack);</span><br><span class="line">        RequestQueue queue = <span class="keyword">new</span> RequestQueue(<span class="keyword">new</span> NoCache(), network);</span><br><span class="line">        queue.start();</span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>看到我开始罗列代码了，不要慌，还好不长，在能力范围内:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-0b6f05c72736cebd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>刚开始就根据不同的Android 系统版本，创建不同的对象，我们先可以大概了解一下 <code>HurlStack</code> 和  <code>HttpClientStack</code> 是啥？</p>
+<p><code>HurlStack.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HurlStack</span> <span class="keyword">implements</span> <span class="title">HttpStack</span> </span>&#123;</span><br><span class="line">      ....</span><br><span class="line">    <span class="function"><span class="keyword">public</span> HttpResponse <span class="title">performRequest</span><span class="params">(Request&lt;?&gt; request, </span></span></span><br><span class="line"><span class="function"><span class="params">                      Map&lt;String, String&gt;  additionalHeaders)</span> </span>&#123;</span><br><span class="line">            ....</span><br><span class="line">            URL parsedUrl = <span class="keyword">new</span> URL(url);</span><br><span class="line">            HttpURLConnection connection = <span class="keyword">this</span>.openConnection(parsedUrl, request); </span><br><span class="line">           ....</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>HttpClientStack.java</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class HttpClientStack implements HttpStack &#123;</span><br><span class="line">    protected final HttpClient mClient;</span><br><span class="line">    ...</span><br><span class="line">    public HttpResponse performRequest(Request&lt;?&gt; request, </span><br><span class="line">                         Map&lt;String, String&gt; additionalHeaders)  &#123;</span><br><span class="line">          ....</span><br><span class="line">         return this.mClient.execute(httpRequest)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>HttpStack.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HttpStack</span> </span>&#123;</span><br><span class="line">    <span class="function">HttpResponse <span class="title">performRequest</span><span class="params">(Request&lt;?&gt; var1, Map&lt;String, String&gt; var2)</span> </span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>看到这里我们大概明白了，原来是根据不同的系统版本，确定最终选择进行的网络请求，那为什么大于9 用 <code>HttpUrlConnection</code> 小于9用 <code>HttpClient</code> 呢？在这里不过多介绍了，网上一搜就知道了。</p>
+<p>Ok，那我们继续向下走，回到上面的代码，为了方便查看，我重新粘贴一份代码下来：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestQueue <span class="title">newRequestQueue</span><span class="params">(Context context, HttpStack stack)</span> </span>&#123;</span><br><span class="line">        .....</span><br><span class="line">        <span class="keyword">if</span> (stack == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (VERSION.SDK_INT &gt;= <span class="number">9</span>) &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HurlStack();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HttpClientStack(AndroidHttpClient.newInstance(userAgent));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//HttpStack 又一次被封装为Network接口类型</span></span><br><span class="line">        Network network = <span class="keyword">new</span> BasicNetwork((HttpStack)stack);</span><br><span class="line">        RequestQueue queue = <span class="keyword">new</span> RequestQueue(<span class="keyword">new</span> NoCache(), network);</span><br><span class="line">        queue.start();</span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>Network.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Network</span> </span>&#123;</span><br><span class="line">    <span class="function">NetworkResponse <span class="title">performRequest</span><span class="params">(Request&lt;?&gt; var1)</span> <span class="keyword">throws</span> VolleyError</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>哦 原来是接口，它的实现类 <code>BasicNetwork</code><br><code>BasicNetwork.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BasicNetwork</span> <span class="keyword">implements</span> <span class="title">Network</span> </span>&#123;</span><br><span class="line">    <span class="comment">//将网络请求的实例传入，方便后面的调用</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">BasicNetwork</span><span class="params">(HttpStack httpStack)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(httpStack, <span class="keyword">new</span> ByteArrayPool(DEFAULT_POOL_SIZE));</span><br><span class="line">    &#125;</span><br><span class="line">   ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>目前而止，那么它们之间的关系是啥样的呢，我画了一张图：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-87239ff08ea08ac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>很清晰吧，目前我们先不考虑这个 <code>BasicNetwork</code> 类中干了什么，我们先根据代码的思路一步步向下走，保证我们整体主干不变，避免陷入只见树木不见森林的局势。</p>
+<p>Ok，我们再次回到原来的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestQueue <span class="title">newRequestQueue</span><span class="params">(Context context, HttpStack stack)</span> </span>&#123;</span><br><span class="line">        .....</span><br><span class="line">        <span class="keyword">if</span> (stack == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (VERSION.SDK_INT &gt;= <span class="number">9</span>) &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HurlStack();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HttpClientStack(AndroidHttpClient.newInstance(userAgent));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//HttpStack 又一次被封装为Network接口类型，</span></span><br><span class="line">       <span class="comment">//创建BasicNetwork调用了构造方法是一个参数的</span></span><br><span class="line">        Network network = <span class="keyword">new</span> BasicNetwork((HttpStack)stack);</span><br><span class="line">      <span class="comment">//到这里了...........</span></span><br><span class="line">      <span class="comment">//创建一个 请求队列 RequestQueue,并且在构造函数中，传入了两个</span></span><br><span class="line">     <span class="comment">//参数，好，我们接下来就要去RequestQueue.java类中看一眼了。</span></span><br><span class="line">        RequestQueue queue = <span class="keyword">new</span> RequestQueue(<span class="keyword">new</span> NoCache(), network);</span><br><span class="line">        queue.start();</span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>RequestQueue.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RequestQueue</span><span class="params">(Cache cache, Network network)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(cache, network, <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RequestQueue</span><span class="params">(Cache cache, Network network, <span class="keyword">int</span> threadPoolSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(cache, network, threadPoolSize, <span class="keyword">new</span> ExecutorDelivery(<span class="keyword">new</span> Handler(Looper.getMainLooper())));</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RequestQueue</span><span class="params">(Cache cache, Network network, <span class="keyword">int</span> threadPoolSize, ResponseDelivery delivery)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mSequenceGenerator = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line">        <span class="keyword">this</span>.mWaitingRequests = <span class="keyword">new</span> HashMap();</span><br><span class="line">        <span class="keyword">this</span>.mCurrentRequests = <span class="keyword">new</span> HashSet();</span><br><span class="line">        <span class="keyword">this</span>.mCacheQueue = <span class="keyword">new</span> PriorityBlockingQueue();</span><br><span class="line">        <span class="keyword">this</span>.mNetworkQueue = <span class="keyword">new</span> PriorityBlockingQueue();</span><br><span class="line">        <span class="keyword">this</span>.mCache = cache;</span><br><span class="line">        <span class="keyword">this</span>.mNetwork = network;</span><br><span class="line">        <span class="keyword">this</span>.mDispatchers = <span class="keyword">new</span> NetworkDispatcher[threadPoolSize];</span><br><span class="line">        <span class="keyword">this</span>.mDelivery = delivery;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在构造方法中，传入一个<code>Cache</code> 对象，<code>network</code> 对象，默认初始化一个<code>threadPoolSize = 2</code>,还有一系列初始化操作.</p>
+<p>Ok,再次返回我们之前的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> ....</span><br><span class="line"> RequestQueue queue = <span class="keyword">new</span> RequestQueue(<span class="keyword">new</span> NoCache(), network);</span><br><span class="line">queue.start();</span><br></pre></td></tr></table></figure></p>
+<p><code>RequestQueue#start()</code> 方法了：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stop();</span><br><span class="line">        <span class="keyword">this</span>.mCacheDispatcher = <span class="keyword">new</span> CacheDispatcher(<span class="keyword">this</span>.mCacheQueue, <span class="keyword">this</span>.mNetworkQueue, <span class="keyword">this</span>.mCache, <span class="keyword">this</span>.mDelivery);</span><br><span class="line">        <span class="keyword">this</span>.mCacheDispatcher.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.mDispatchers.length; ++i) &#123;</span><br><span class="line">            NetworkDispatcher networkDispatcher = <span class="keyword">new</span> NetworkDispatcher(<span class="keyword">this</span>.mNetworkQueue, <span class="keyword">this</span>.mNetwork, <span class="keyword">this</span>.mCache, <span class="keyword">this</span>.mDelivery);</span><br><span class="line">            <span class="keyword">this</span>.mDispatchers[i] = networkDispatcher;</span><br><span class="line">            networkDispatcher.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里又创建了一个 <code>CacheDispatcher</code> 类。调用四个参数的构造方法。并调用了 <code>start()</code> 方法。<br>接下来，我们就认识下 <code>CacheDispatcher.java</code> 类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//原来它是一个线程</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CacheDispatcher</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"><span class="comment">//缓存队列，用BlockingQueue 管理存储</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;Request&lt;?&gt;&gt; mCacheQueue;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">CacheDispatcher</span><span class="params">(BlockingQueue&lt;Request&lt;?&gt;&gt; cacheQueue, BlockingQueue&lt;Request&lt;?&gt;&gt; networkQueue, Cache cache, ResponseDelivery delivery)</span> </span>&#123;</span><br><span class="line">       <span class="comment">//参数赋值</span></span><br><span class="line">        <span class="keyword">this</span>.mCacheQueue = cacheQueue;</span><br><span class="line">        <span class="keyword">this</span>.mNetworkQueue = networkQueue;</span><br><span class="line">        <span class="keyword">this</span>.mCache = cache;</span><br><span class="line">        <span class="keyword">this</span>.mDelivery = delivery;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//调用start 方法必定调用run 方法</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        .....</span><br><span class="line">        Process.setThreadPriority(<span class="number">10</span>);</span><br><span class="line">      <span class="comment">//这里初始化缓存，还记得我们之前默认传入了一个 NoCache 吗？</span></span><br><span class="line">    <span class="comment">//这里Cache 是接口，子类有两种NoCache 和 DiskBasedCache两种</span></span><br><span class="line">        <span class="keyword">this</span>.mCache.initialize();</span><br><span class="line">      <span class="comment">//嵌套了好多循环啊......因为要不断去读取是否有任务嘛，没有的时候就一直等待</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                    <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                          <span class="comment">// 表示从缓存队列中取出一个 Request, 那第一次肯定没有啊，就一直等待......</span></span><br><span class="line">                            <span class="keyword">final</span> Request&lt;?&gt; request = (Request)<span class="keyword">this</span>.mCacheQueue.take();</span><br><span class="line">                         .....这里我先省略了，因为还没真正到这一步</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>OK，返回到我们之前的操作：<br><code>RequestQueue.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> NetworkDispatcher[] mDispatchers ;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_NETWORK_THREAD_POOL_SIZE = <span class="number">2</span>;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">RequestQueue</span><span class="params">(Cache cache, Network network, <span class="keyword">int</span> threadPoolSize, ResponseDelivery delivery)</span> </span>&#123;</span><br><span class="line">         ....</span><br><span class="line">        <span class="keyword">this</span>.mDispatchers = <span class="keyword">new</span> NetworkDispatcher[threadPoolSize];</span><br><span class="line">        ....</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stop();</span><br><span class="line">        <span class="keyword">this</span>.mCacheDispatcher = <span class="keyword">new</span> CacheDispatcher(<span class="keyword">this</span>.mCacheQueue, <span class="keyword">this</span>.mNetworkQueue, <span class="keyword">this</span>.mCache, <span class="keyword">this</span>.mDelivery);</span><br><span class="line">        <span class="keyword">this</span>.mCacheDispatcher.start();</span><br><span class="line"></span><br><span class="line">      <span class="comment">//到这里啦，</span></span><br><span class="line">      <span class="comment">//从构造方法我们可以得知 mDispatchers.length = 2 ，上</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.mDispatchers.length; ++i) &#123;</span><br><span class="line">          </span><br><span class="line">            NetworkDispatcher networkDispatcher = <span class="keyword">new</span> NetworkDispatcher(<span class="keyword">this</span>.mNetworkQueue, <span class="keyword">this</span>.mNetwork, <span class="keyword">this</span>.mCache, <span class="keyword">this</span>.mDelivery);</span><br><span class="line">            <span class="keyword">this</span>.mDispatchers[i] = networkDispatcher;</span><br><span class="line">            networkDispatcher.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>循环遍历生成2 个 <code>NetworkDispatcher</code> 对象，并将 <code>NetworkDispatcher</code> 对象存储在一个 <code>mDispatchers</code> 的数组中去了，最后调用了 <code>start</code> 方法。<br>Ok，那接下来我们就看下这个 <code>NetworkDispatcher.java</code> 类了。</p>
+<p><code>NetworkDispatcher.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NetworkDispatcher</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">      <span class="comment">// 网络请求队列</span></span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;Request&lt;?&gt;&gt; mQueue；</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对象初始化</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">NetworkDispatcher</span><span class="params">(BlockingQueue&lt;Request&lt;?&gt;&gt; queue, Network network, Cache cache, ResponseDelivery delivery)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mQueue = queue;</span><br><span class="line">        <span class="keyword">this</span>.mNetwork = network;</span><br><span class="line">        <span class="keyword">this</span>.mCache = cache;</span><br><span class="line">        <span class="keyword">this</span>.mDelivery = delivery;</span><br><span class="line">    &#125;   </span><br><span class="line"><span class="comment">//既然是线程，调用 start 方法，必定调用 run 方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Process.setThreadPriority(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//线程也是，既然要做网络请求，就要一直等待获取</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            Request request;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                  <span class="comment">// 从网络请求队列中获取任务，那一开始我们初始化肯定没东西，队列里没请求任务</span></span><br><span class="line">                    request = (Request)<span class="keyword">this</span>.mQueue.take();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException var4) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.mQuit) &#123;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">      .....底部代码我也省略了，因为都是获取到请求之后所做的处理</span><br></pre></td></tr></table></figure></p>
+<p>至此，对于<code>RequestQueue</code>  的初始化第一步我们完成了对它的了解，你明白了吗？ 下一篇我们针对 <code>mQueue.add(request)</code> 真正需要进行网络请求进行继续分析。如果这篇文章有帮助到你，给个赞就是我最大的鼓励了，比心💗。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/19/屏幕适配/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1645,223 +1805,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/15/Animation动画相关知识点/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/15/Animation动画相关知识点/" itemprop="url">Animation动画相关知识点</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-15T09:47:10+08:00">
-                2019-01-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/15/Animation动画相关知识点/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/15/Animation动画相关知识点/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>关于 <code>Animation</code> 的一些回顾和总结</p>
-</blockquote>
-<h1 id="关于Animation-和-Animator"><a href="#关于Animation-和-Animator" class="headerlink" title="关于Animation 和 Animator"></a>关于Animation 和 Animator</h1><blockquote>
-<p><code>Animation</code> 是我们经常用到的一些动画，包括帧动画和补间动画，而 <code>Animator</code> 是<code>Android 3.0</code> 的时候推出的动画框架，也称为属性动画</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>版本兼容</th>
-<th>实现效率</th>
-<th>适用性</th>
-<th>是否产生内存泄漏</th>
-<th>使用效果</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Animation</td>
-<td>可兼容Android3.0以下的版本</td>
-<td>直接通过代码对矩阵进行处理</td>
-<td>仅对View对象有用</td>
-<td>不会</td>
-<td>假的移动</td>
-</tr>
-<tr>
-<td>Animator</td>
-<td>无法兼容，也没有向下兼容的support包</td>
-<td>通过设置对象的setter,getter方法，来达到动画目的，使用了java反射机制，可用于任意对象，效率低于Animation</td>
-<td>任意对象(但是需要有get/set方法)</td>
-<td>可能会，当设置为无限循环时，如果在Activity退出时没有及时将动画停止，属性动画会导致Activity无法释放而导致内存泄漏。</td>
-<td>真的位置变换</td>
-</tr>
-</tbody>
-</table>
-<h1 id="关于动画的基本使用"><a href="#关于动画的基本使用" class="headerlink" title="关于动画的基本使用"></a>关于动画的基本使用</h1><ul>
-<li><p><code>Animation</code> 相关动画的使用</p>
-<p><strong>帧动画</strong></p>
-<blockquote>
-<p>一般我们使用帧动画都是采取xml定义的方式</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// yun_anim.xml</span></span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;animation-list xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:oneshot=<span class="string">"false"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;item</span><br><span class="line">        android:drawable=<span class="string">"@mipmap/app_loading0"</span></span><br><span class="line">        android:duration=<span class="string">"150"</span> /&gt;</span><br><span class="line">    &lt;item</span><br><span class="line">        android:drawable=<span class="string">"@mipmap/app_loading1"</span></span><br><span class="line">        android:duration=<span class="string">"150"</span> /&gt;</span><br><span class="line">    &lt;item</span><br><span class="line">        android:drawable=<span class="string">"@mipmap/app_loading2"</span></span><br><span class="line">        android:duration=<span class="string">"150"</span> /&gt;</span><br><span class="line">    &lt;item</span><br><span class="line">        android:drawable=<span class="string">"@mipmap/app_loading3"</span></span><br><span class="line">        android:duration=<span class="string">"150"</span> /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/animation-list&gt;  </span><br><span class="line"><span class="comment">//将它定义成一个drawable,这样引用</span></span><br><span class="line">&lt;ImageView</span><br><span class="line">        android:id=<span class="string">"@+id/img_progress"</span></span><br><span class="line">        android:layout_width=<span class="string">"wrap_content"</span></span><br><span class="line">        android:layout_height=<span class="string">"wrap_content"</span></span><br><span class="line">        android:src=<span class="string">"@drawable/yun_anim"</span> /&gt;</span><br></pre></td></tr></table></figure>
-<p><strong>补间动画</strong></p>
-<blockquote>
-<p>包括一些平移(<code>Translate</code>)，旋转(<code>Rotate</code>)，透明度(<code>Alpha</code>)，缩放动画(<code>Scale</code>)，使用都差不多,可以在xml中创建使用也可以动态创建使用。</p>
-</blockquote>
-<p><code>xml</code> 中类似于这样：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这是一个动画集合</span></span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;set xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span> &gt;</span><br><span class="line"></span><br><span class="line">    &lt;translate</span><br><span class="line">        android:duration=<span class="string">"200"</span></span><br><span class="line">        android:fromYDelta=<span class="string">"100%p"</span></span><br><span class="line">        android:toYDelta=<span class="string">"0"</span> /&gt;</span><br><span class="line">&lt;/set&gt;</span><br><span class="line"><span class="comment">//使用xx布局文件的名称</span></span><br><span class="line">Animation translateAnimation = AnimationUtils.loadAnimation(<span class="keyword">this</span>, R.anim.xx);</span><br><span class="line">iv.startAnimation(translateAnimation);</span><br></pre></td></tr></table></figure>
-<p><code>java</code> 代码设置：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//位移动画，相应还有旋转其它类似</span></span><br><span class="line">Animation animation = <span class="keyword">new</span> TranslateAnimation(<span class="number">0</span>,<span class="number">100</span>,<span class="number">0</span>,<span class="number">100</span>)</span><br><span class="line">translateAnimation.setDuration(<span class="number">3000</span>);</span><br><span class="line">iv.startAnimation(translateAnimation);</span><br></pre></td></tr></table></figure>
-<p><strong>属性动画</strong></p>
-<blockquote>
-<p><code>ValueAnimator</code> 是属性动画的一个核心类</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ValueAnimator anim = ValueAnimator.ofFloat(<span class="number">0f</span>, <span class="number">1f</span>);  </span><br><span class="line">anim.setDuration(<span class="number">300</span>);  </span><br><span class="line">anim.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;  </span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">float</span> currentValue = (<span class="keyword">float</span>) animation.getAnimatedValue();  </span><br><span class="line">        Log.d(<span class="string">"TAG"</span>, <span class="string">"cuurent value is "</span> + currentValue);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;);  </span><br><span class="line">anim.start()</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><code>ObjectAnimator</code></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//透明度的变化，还可以位移啥的</span></span><br><span class="line">ObjectAnimator animator = ObjectAnimator.ofFloat(iv, <span class="string">"alpha"</span>, <span class="number">1f</span>, <span class="number">0f</span>, <span class="number">1f</span>);  </span><br><span class="line">animator.setDuration(<span class="number">5000</span>);  </span><br><span class="line">animator.start();  </span><br><span class="line">------------------------------</span><br><span class="line">ObjectAnimator animator = ObjectAnimator.ofFloat(iv, <span class="string">"rotation"</span>, <span class="number">0f</span>, <span class="number">180f</span>);  </span><br><span class="line">animator.setDuration(<span class="number">5000</span>);  </span><br><span class="line">animator.start();</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>官方一张图：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-70b61445cb4184f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><code>ValueAnimator</code> 是属性动画很重要的一个类，其中 <code>ObjectAnimator</code> 继承于 <code>ValueAnimator</code> ..</p>
-<h1 id="问题：那-ValueAnimator-到底是怎样实现初始值平滑过渡到结束值的呢？"><a href="#问题：那-ValueAnimator-到底是怎样实现初始值平滑过渡到结束值的呢？" class="headerlink" title="问题：那 ValueAnimator  到底是怎样实现初始值平滑过渡到结束值的呢？"></a>问题：那 <code>ValueAnimator</code>  到底是怎样实现初始值平滑过渡到结束值的呢？</h1><blockquote>
-<p>这个是由 <code>TypeEvaluator</code> 和 <code>TimeInterpolator</code> 共同决定的。</p>
-</blockquote>
-<p><strong>具体来说：<code>TypeEvaluator</code> 决定了从初始值过度到结束值过度的方式。<code>TimeInterpolator</code> 决定了动画从初始值过渡到结束值的节奏。</strong></p>
-<p>有个例子很恰当：你每天上班去公司，是选择地铁出行还是公交，还是骑行，选择从出发地到目的地的一种抵达方式，这个是 <code>TypeEvaluator</code>, 假如你选择骑行，是均速骑行到目的地还是先加速后减速，还是一开始慢后来快，这个就是 <code>TimeInterpolator</code> 决定的。</p>
-<p><strong>用<code>TypeEvaluator</code> 确定运动轨迹</strong></p>
-<p>一般来说，要定义运动轨迹，需要实现 <code>TypeEvaluator</code> </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PointEvaluator</span> <span class="keyword">implements</span> <span class="title">TypeEvaluator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * This function returns the result of linearly interpolating the start and end values, with</span></span><br><span class="line"><span class="comment">     * &lt;code&gt;fraction&lt;/code&gt; representing the proportion between the start and end values. The</span></span><br><span class="line"><span class="comment">     * calculation is a simple parametric calculation: &lt;code&gt;result = x0 + t * (x1 - x0)&lt;/code&gt;,</span></span><br><span class="line"><span class="comment">     * where &lt;code&gt;x0&lt;/code&gt; is &lt;code&gt;startValue&lt;/code&gt;, &lt;code&gt;x1&lt;/code&gt; is &lt;code&gt;endValue&lt;/code&gt;,</span></span><br><span class="line"><span class="comment">     * and &lt;code&gt;t&lt;/code&gt; is &lt;code&gt;fraction&lt;/code&gt;.</span></span><br><span class="line"><span class="comment">     *			</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> fraction   The fraction from the starting to the ending values 动画当前进行的进度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> startValue The start value.开始值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> endValue   The end value.结束值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> A linear interpolation between the start and end values, given the</span></span><br><span class="line"><span class="comment">     *         &lt;code&gt;fraction&lt;/code&gt; parameter.线性</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Point <span class="title">evaluate</span><span class="params">(<span class="keyword">float</span> fraction, Point startValue, Point endValue)</span> </span>&#123;</span><br><span class="line">      	<span class="comment">//自定义轨迹路线，假如我们做一个线性运动</span></span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">new</span> Point((<span class="keyword">int</span>)(startValue.getX()+endValue.getX()*fraction),</span><br><span class="line">                (<span class="keyword">int</span>)(startValue.getY()+endValue.getY()*fraction));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用的时候：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Point startP = <span class="keyword">new</span> Point(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">      Point endP = <span class="keyword">new</span> Point(<span class="number">500</span>,<span class="number">500</span>);</span><br><span class="line">      ValueAnimator valueAnimator = ValueAnimator.ofObject(<span class="keyword">new</span> PointEvaluator(), startP, endP);</span><br><span class="line">      valueAnimator.setDuration(<span class="number">5000</span>);</span><br><span class="line">      valueAnimator.setRepeatCount(<span class="number">10</span>);</span><br><span class="line">      valueAnimator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</span><br><span class="line">          <span class="meta">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</span><br><span class="line">              Point currentPoint = (Point) animation.getAnimatedValue();</span><br><span class="line">              iv.setX(currentPoint.getX());</span><br><span class="line">              iv.setY(currentPoint.getY());</span><br><span class="line">              current.setX(<span class="number">130</span>+currentPoint.getX());</span><br><span class="line">              current.setY(currentPoint.getY());</span><br><span class="line"></span><br><span class="line">              current.setText(<span class="string">""</span>);</span><br><span class="line">              current.setText(<span class="string">"x="</span>+currentPoint.getX()+<span class="string">"   y="</span>+currentPoint.getY());</span><br><span class="line"></span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      valueAnimator.start();</span><br></pre></td></tr></table></figure>
-<p>这样我们就完成了动画轨迹的定义。</p>
-<p>例如我们来一个最简单的线性运动：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-25a93ab5dac3f562.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="one.jpg"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-17842c6ce993f25e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="two.jpg"></p>
-<h1 id="TimeInterpolator"><a href="#TimeInterpolator" class="headerlink" title="TimeInterpolator"></a>TimeInterpolator</h1><blockquote>
-<p>前面说过，这个是用来控制动画从开始到结束的节奏的。Android 自己提供了几个自带的 <code>Interpolator</code>,当然同时也可以自定义实现。</p>
-</blockquote>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-d068e8aa57ec96d0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1912,7 +1855,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1925,7 +1868,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
