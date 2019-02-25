@@ -273,6 +273,208 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/17/Fragment相关/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/17/Fragment相关/" itemprop="url">Fragment相关</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-17T11:32:30+08:00">
+                2019-01-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/17/Fragment相关/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/17/Fragment相关/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Fragment-的概念"><a href="#Fragment-的概念" class="headerlink" title="Fragment 的概念"></a>Fragment 的概念</h1><blockquote>
+<p>关于 <code>Fragment</code> 如何用浅显的语言来描述它呢，我认为就是：<code>Activity</code> 就像是一个大屋子，大屋子里有很多房间，而这里的每个房间就是 <code>fragment</code> ,称为模块化的 <code>Activity</code>.</p>
+<p>并且 <code>fragment</code> 不能单独存在，必须依附于 <code>Activity</code>;</p>
+<p><code>fragment</code> 的生命周期受到外部 <code>Activity</code> 的影响；</p>
+<p><code>fragment</code> 有自己的生命周期；</p>
+</blockquote>
+<h1 id="Fragment-优点"><a href="#Fragment-优点" class="headerlink" title="Fragment 优点"></a>Fragment 优点</h1><ul>
+<li><code>Fragment</code> 可以将 <code>Activity</code> 分离成多个可重用的组件，每个都有各自的生命周期和UI</li>
+<li>灵活的UI设计，可以适用于不同的屏幕尺寸，手机，平板</li>
+<li><code>Fragment</code> 做为一个独立的模块可以轻松被 <code>Activity</code> 控制，添加，移除和替换</li>
+<li><code>Fragment</code> 切换流畅，比<code>Activity</code> 之间切换要好</li>
+</ul>
+<h1 id="Fragment与Activity的通信方式"><a href="#Fragment与Activity的通信方式" class="headerlink" title="Fragment与Activity的通信方式"></a>Fragment与Activity的通信方式</h1><ul>
+<li>可以选择第三方的 <code>EventBus</code> 等</li>
+<li><code>setArugments</code> 方法（<code>Activity</code> 向 <code>Fragment</code> 传递参数）</li>
+<li>自定义接口回调</li>
+<li>当然也可以强制类型转化，例如：<code>((MainActivity)getActivity()).text; fragment</code> 中获取宿主 <code>MainActivity</code> 里的一个 <code>public</code> 字段。 </li>
+<li>在SDK26 的API 引入了 <code>Activity.onAttachFragment(Fragment fragment)</code>, 可以将 <code>Activity</code> 的数据传递给 <code>Fragment</code>.</li>
+</ul>
+<h1 id="Fragment-生命周期"><a href="#Fragment-生命周期" class="headerlink" title="Fragment 生命周期"></a>Fragment 生命周期</h1><p>放上一张官网 <code>Fragment</code> 的生命周期图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-3138ae3693fe7bb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>挺清晰的，感觉和 <code>Activity</code> 的生命周期很像；</p>
+<ul>
+<li><p>程序启动： <code>onAttach()---&gt; onCreate()----&gt;onCreateView()----onActivityCreate()---&gt;onStart()----&gt; onResume()</code> 上图显示 <code>Fragment</code> 已经处于运行 <code>Active</code> 状态</p>
+</li>
+<li><p>后台状态： <code>onPause()---onStop()</code></p>
+</li>
+<li>切换到其他<code>Fragment</code>  :<code>onPause() ---&gt; onStop() ---&gt; onDestroyView()</code>,  当再次切换回来的时候就不执行 <code>onCreate()</code> 了，直接从 <code>onCreateView()</code> 开始执行</li>
+<li>锁屏： <code>onPause() ---&gt; onStop()</code></li>
+<li>点亮屏幕： <code>onStart() ---&gt; onResume()</code></li>
+<li>退出应用： <code>onPause() ---&gt; onStop() ----&gt; onDestroyView() -- &gt; onDestroy() ----onDetach()</code></li>
+<li>Home 键： <code>onPause() ---&gt; onStop()</code></li>
+</ul>
+<h1 id="Fragment的add与replace的区别"><a href="#Fragment的add与replace的区别" class="headerlink" title="Fragment的add与replace的区别"></a>Fragment的add与replace的区别</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">getSupportFragmentManager().beginTransaction()</span><br><span class="line">                .add(R.id.fragment_container, mainSpaceFragment)<span class="comment">//这是add</span></span><br><span class="line">                .show(mFragment).commit();</span><br><span class="line"><span class="comment">//replace</span></span><br></pre></td></tr></table></figure>
+<p><code>add</code> 方式添加的 <code>Fragment</code> ,在切换 <code>Fragment</code> 的时候不会刷新 <code>Fragment</code>,但是 <code>replace</code> 方式在切换 <code>Fragment</code> 的时候会重新创建，它会销毁之前的那个，add  方式只是隐藏了而不是销毁了, 一般开发使用的是 <code>add</code> 方式。</p>
+<h1 id="用Fragment可能会遇到的问题"><a href="#用Fragment可能会遇到的问题" class="headerlink" title="用Fragment可能会遇到的问题"></a>用Fragment可能会遇到的问题</h1><ul>
+<li><p><code>getActivity()</code> 为空</p>
+<blockquote>
+<p>我碰见这个问题的几率还挺大的，网上说是因为内存重启，重启的时候调用 <code>getActivity()</code> 的地方返回null.</p>
+</blockquote>
+</li>
+</ul>
+<p>产生的原因：当调用了 <code>getActivity()</code> 时，当前 <code>Fragment</code> 已经 <code>onDetach()</code> 脱离了宿主 <code>Activity</code>. </p>
+<p>解决的办法：当时在 <code>stackoverflow</code> 上看到过就是在使用之前先判断下 <code>isAdd()</code> 类似的方法</p>
+<ul>
+<li><p><code>Fragment</code> 重叠异常</p>
+<blockquote>
+<p>正确使用 hide,  show 的姿势。在类 <code>onCreate()</code> 的方法加载 <code>Fragment</code>, 并没有判断 <code>saveInstanceState == null</code> , 导致重复加载了同一个 <code>Fragment</code> 导致重叠。</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> </span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line"><span class="comment">// 在页面重启时，Fragment会被保存恢复，而此时再加载Fragment会重复加载，导致重叠 ;</span></span><br><span class="line">    <span class="keyword">if</span>(saveInstanceState == <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">// 或者 if(findFragmentByTag(mFragmentTag) == null)</span></span><br><span class="line">       <span class="comment">// 正常情况下去 加载根Fragment </span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="getFragmentManager，getSupportFragmentManager-，getChildFragmentManager三者之间的区别"><a href="#getFragmentManager，getSupportFragmentManager-，getChildFragmentManager三者之间的区别" class="headerlink" title="getFragmentManager，getSupportFragmentManager ，getChildFragmentManager三者之间的区别"></a>getFragmentManager，getSupportFragmentManager ，getChildFragmentManager三者之间的区别</h1><blockquote>
+<p>getSupportFragmentManager() :   主要用于支持3.0以下的Android系统API版本，3.0以上系统可以直接使用 <code>getFragmentManager()</code> . 因为 <code>fragment</code> 是3.0以后才出现的组件，所以在3.0以下的设备使用v4 包中的 <code>getSupportFragment()</code> ；</p>
+<p>getFragmentManager()  :  得到所在fragment的父容器的管理器；</p>
+<p>getChildFragmentManager() : 得到fragment里面子容器的管理器。</p>
+</blockquote>
+<ul>
+<li><p>一般的使用场景</p>
+<p>当 <code>Fragment</code> 嵌套 <code>Fragment</code> 时，需要使用 <code>getChildFragmentManager()</code></p>
+</li>
+</ul>
+<h1 id="FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景"><a href="#FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景" class="headerlink" title="FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景"></a>FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景</h1><blockquote>
+<p>对于经常使用 <code>viewpager</code> 的应该大概都知道就是： 当 <code>viewpager</code> 中的 <code>fragment</code> 数量多的时候用 <code>FragmentStatePagerAdapter</code> ,同样当<code>fragment</code> 比较少的时候，则使用 <code>FragmentPagerAdapter</code>.</p>
+</blockquote>
+<p>在 <code>FragmentPagerAdapter</code> 中的 <code>destroyItem</code> 中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(@NonNull ViewGroup container, <span class="keyword">int</span> position, @NonNull Object object)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.mCurTransaction == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mCurTransaction = <span class="keyword">this</span>.mFragmentManager.beginTransaction();</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//这里只是detach Fragment ,并没有做释放内存的操作，</span></span><br><span class="line">    	<span class="comment">//这样当fragment 比较多的时候，内存就会不够用，越用越多</span></span><br><span class="line">        <span class="keyword">this</span>.mCurTransaction.detach((Fragment)object);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>然后在看下 <code>FragmentStatePagerAdapter</code> 中的 <code>destroyItem</code>  : </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(@NonNull ViewGroup container, <span class="keyword">int</span> position, @NonNull Object object)</span> </span>&#123;</span><br><span class="line">        Fragment fragment = (Fragment)object;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.mCurTransaction == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mCurTransaction = <span class="keyword">this</span>.mFragmentManager.beginTransaction();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">this</span>.mSavedState.size() &lt;= position) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mSavedState.add((Object)<span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//判断是否add</span></span><br><span class="line">        <span class="keyword">this</span>.mSavedState.set(position, fragment.isAdded() ? <span class="keyword">this</span>.mFragmentManager.saveFragmentInstanceState(fragment) : <span class="keyword">null</span>);</span><br><span class="line">    	<span class="comment">//将该位置的fragment 设置为null</span></span><br><span class="line">        <span class="keyword">this</span>.mFragments.set(position, (Object)<span class="keyword">null</span>);</span><br><span class="line">    	<span class="comment">//这里进行了移除的操作,释放 fragment,减少内存</span></span><br><span class="line">    	<span class="comment">//所以当 fragment 比较多的时候使用FragmentStatePagerAdapter</span></span><br><span class="line">        <span class="keyword">this</span>.mCurTransaction.remove(fragment);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/15/Animation动画相关知识点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1741,166 +1943,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/19/进程保活大法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/19/进程保活大法/" itemprop="url">进程保活大法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-19T13:53:07+08:00">
-                2018-12-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/19/进程保活大法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/19/进程保活大法/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>收集整理android 进程保活方法</p>
-</blockquote>
-<h1 id="1像素Activity"><a href="#1像素Activity" class="headerlink" title="1像素Activity"></a>1像素Activity</h1><blockquote>
-<p>注册监听屏幕开启和屏幕关闭时的广播，当屏幕关闭时，开启1像素的 <code>Activity</code>,  当屏幕开启时，关闭1像素的 <code>Activity</code>. </p>
-</blockquote>
-<ul>
-<li><p>查看进程等级</p>
-<p>可以在<code>studio</code> 终端进行命令行, <code>pid</code> 进程<code>id</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell</span><br><span class="line">su</span><br><span class="line">cat proc/&#123;pid&#125;/oom_adj</span><br></pre></td></tr></table></figure>
-<p><code>OnePxActivity</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OnePxActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">launch</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(context,OnePxActivity.class);</span><br><span class="line">        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span><br><span class="line">        context.startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line"></span><br><span class="line">        Log.i(<span class="string">"qq"</span>,<span class="string">"OnPxActivity onCreate........."</span>);</span><br><span class="line">        Window window = getWindow();</span><br><span class="line">        window.setGravity(Gravity.START | Gravity.TOP);</span><br><span class="line"></span><br><span class="line">        WindowManager.LayoutParams params = window.getAttributes();</span><br><span class="line">        params.x = <span class="number">0</span>;</span><br><span class="line">        params.y = <span class="number">0</span>;</span><br><span class="line">        params.width = <span class="number">1</span>;</span><br><span class="line">        params.height = <span class="number">1</span>;</span><br><span class="line">        window.setAttributes(params);</span><br><span class="line"></span><br><span class="line">        KeepAliveManager.getInstance().setKeepAliveManager(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">        Log.i(<span class="string">"qq"</span>,<span class="string">"OnPxActivity onDestroy........."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>广播 ： 监听开启/关闭的广播</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KeepAliveReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(intent.getAction().equals(Intent.ACTION_SCREEN_ON))&#123;</span><br><span class="line">            <span class="comment">//屏幕点亮</span></span><br><span class="line">            Log.i(<span class="string">"qq"</span>,<span class="string">"收到屏幕开启广播"</span>);</span><br><span class="line">            KeepAliveManager.getInstance().finishOnePxActivity(context);</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(intent.getAction().equals(Intent.ACTION_SCREEN_OFF))&#123;</span><br><span class="line">            <span class="comment">//屏幕熄灭, 启动activity</span></span><br><span class="line">            Log.i(<span class="string">"qq"</span>,<span class="string">"收到屏幕关闭广播"</span>);</span><br><span class="line">            KeepAliveManager.getInstance().startOnePxActivity(context);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>辅助类：<code>KeepAliveManager</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KeepAliveManager</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">KeepAliveManager</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> KeepAliveManager mInstance = <span class="keyword">new</span> KeepAliveManager();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span>  WeakReference&lt;OnePxActivity&gt; mReference;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setKeepAliveManager</span><span class="params">(OnePxActivity activity)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mReference = <span class="keyword">new</span> WeakReference&lt;&gt;(activity);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> KeepAliveManager <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mInstance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startOnePxActivity</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">        OnePxActivity.launch(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">finishOnePxActivity</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">null</span> != mReference &amp;&amp; mReference.get() != <span class="keyword">null</span>)&#123;</span><br><span class="line">            mReference.get().finish();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> KeepAliveReceiver mReceiver;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerReceiver</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mReceiver = <span class="keyword">new</span> KeepAliveReceiver();</span><br><span class="line">        IntentFilter filter = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">        filter.addAction(Intent.ACTION_SCREEN_OFF);</span><br><span class="line">        filter.addAction(Intent.ACTION_SCREEN_ON);</span><br><span class="line">        context.registerReceiver(mReceiver,filter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unregisterReceiver</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">null</span> != mReceiver)&#123;</span><br><span class="line">            context.unregisterReceiver(mReceiver);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>MainActivity</code> 使用：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第一种方式</span></span><br><span class="line">        KeepAliveManager.getInstance().registerReceiver(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line"></span><br><span class="line">        KeepAliveManager.getInstance().unregisterReceiver(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>亲身实践了，发现确实<code>oom_adj</code> 变小，被杀死的概率比较低了，当屏幕变暗的时候。</p>
-<h1 id="前台服务"><a href="#前台服务" class="headerlink" title="前台服务"></a>前台服务</h1><p><code>ForegroundService.java</code>   :</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ForgroundService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> SERVICE_ID = <span class="number">1</span>;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">onStartCommand</span><span class="params">(Intent intent, <span class="keyword">int</span> flags, <span class="keyword">int</span> startId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(Build.VERSION.SDK_INT &lt; <span class="number">18</span>)&#123;</span><br><span class="line">            <span class="comment">//设置成前台服务，并且不显示通知栏消息</span></span><br><span class="line">            startForeground(SERVICE_ID,<span class="keyword">new</span> Notification());</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(Build.VERSION.SDK_INT &lt; <span class="number">26</span>)&#123;</span><br><span class="line">            startForeground(SERVICE_ID,<span class="keyword">new</span> Notification());</span><br><span class="line">            startService(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,InnerService.class));</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;<span class="comment">//android 8.0</span></span><br><span class="line"></span><br><span class="line">            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);</span><br><span class="line">            <span class="keyword">if</span>(manager != <span class="keyword">null</span>)&#123;</span><br><span class="line">                NotificationChannel channel = <span class="keyword">new</span> NotificationChannel(<span class="string">"channel"</span>,<span class="string">"name"</span>,NotificationManager.IMPORTANCE_NONE);</span><br><span class="line">                manager.createNotificationChannel(channel);</span><br><span class="line">                NotificationCompat.Builder builder = <span class="keyword">new</span> NotificationCompat.Builder(<span class="keyword">this</span>,<span class="string">"channel"</span>);</span><br><span class="line">				<span class="comment">//设置成前台服务，Android9.0 会有通知栏消息，需要添加新的权限</span></span><br><span class="line">                <span class="comment">//&lt;uses-permission android:name="android.permission.FOREGROUND_SERVICE"/&gt;</span></span><br><span class="line">                startForeground(SERVICE_ID,builder.build());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.onStartCommand(intent, flags, startId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">InnerService</span> <span class="keyword">extends</span> <span class="title">Service</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">onStartCommand</span><span class="params">(Intent intent, <span class="keyword">int</span> flags, <span class="keyword">int</span> startId)</span> </span>&#123;</span><br><span class="line">            startForeground(SERVICE_ID,<span class="keyword">new</span> Notification());</span><br><span class="line">            stopForeground(<span class="keyword">true</span>);</span><br><span class="line">            stopSelf();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.onStartCommand(intent, flags, startId);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="双进程守护"><a href="#双进程守护" class="headerlink" title="双进程守护"></a>双进程守护</h1><blockquote>
-<p>后续补上…</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1951,7 +1993,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>

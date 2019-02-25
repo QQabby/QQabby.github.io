@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Vollery," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="上节写到关于 Vollery 的前半部分，需要查看的点击 这里 , 这次主要查看当我们真正 add request 的时候做进一步查看。  我们还是从使用的方法作为我们的切入点： 1mQueue.add(postRequest);//当我们向队列中添加一个网络请求 跟进，查看 RequestQueue#add() 方法：12345678910111213141516171819202122232">
+<meta name="keywords" content="Vollery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vollery源码阅读(二)">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2019/02/25/Vollery源码阅读-二/index.html">
+<meta property="og:site_name" content="糖葫芦">
+<meta property="og:description" content="上节写到关于 Vollery 的前半部分，需要查看的点击 这里 , 这次主要查看当我们真正 add request 的时候做进一步查看。  我们还是从使用的方法作为我们的切入点： 1mQueue.add(postRequest);//当我们向队列中添加一个网络请求 跟进，查看 RequestQueue#add() 方法：12345678910111213141516171819202122232">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-944dd78521a7ec7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-9a1c8ae8647f803a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1948557-7bc4f1a61522e9fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-02-25T08:58:59.091Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vollery源码阅读(二)">
+<meta name="twitter:description" content="上节写到关于 Vollery 的前半部分，需要查看的点击 这里 , 这次主要查看当我们真正 add request 的时候做进一步查看。  我们还是从使用的方法作为我们的切入点： 1mQueue.add(postRequest);//当我们向队列中添加一个网络请求 跟进，查看 RequestQueue#add() 方法：12345678910111213141516171819202122232">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1948557-944dd78521a7ec7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/25/Vollery源码阅读-二/"/>
+
+
+
+
+
+  <title>Vollery源码阅读(二) | 糖葫芦</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">糖葫芦</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Suche
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/25/Vollery源码阅读-二/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vollery源码阅读(二)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-25T16:56:20+08:00">
+                2019-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/25/Vollery源码阅读-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/25/Vollery源码阅读-二/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>上节写到关于 <code>Vollery</code> 的前半部分，需要查看的点击 <a href="/2019/02/22/Vollery源码阅读-——">这里</a> , 这次主要查看当我们真正 <code>add request</code> 的时候做进一步查看。</p>
+</blockquote>
+<p>我们还是从使用的方法作为我们的切入点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mQueue.add(postRequest);<span class="comment">//当我们向队列中添加一个网络请求</span></span><br></pre></td></tr></table></figure>
+<p>跟进，查看 <code>RequestQueue#add()</code> 方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Staging area for requests that already have a duplicate request in</span></span><br><span class="line"><span class="comment">	 * flight.</span></span><br><span class="line"><span class="comment">	 * 存储有重复请求的request暂存区，我个人认为就是如果 正在处理A发出的一个请求，此时又来一个A发出同样的一个请求，那么第二个请求就会暂时保存在这个集合中</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Queue&lt;Request&lt;?&gt;&gt;&gt; mWaitingRequests = <span class="keyword">new</span> HashMap&lt;String, Queue&lt;Request&lt;?&gt;&gt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">Request&lt;T&gt; <span class="title">add</span><span class="params">(Request&lt;T&gt; request)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// Tag the request as belonging to this queue and add it to the set of</span></span><br><span class="line">		<span class="comment">// current requests.</span></span><br><span class="line">		request.setRequestQueue(<span class="keyword">this</span>);</span><br><span class="line">		<span class="keyword">synchronized</span> (mCurrentRequests) &#123;</span><br><span class="line">			mCurrentRequests.add(request);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Process requests in the order they are added.</span></span><br><span class="line">    	<span class="comment">//按照添加请求的顺序处理请求</span></span><br><span class="line">		request.setSequence(getSequenceNumber());</span><br><span class="line">		request.addMarker(<span class="string">"add-to-queue"</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// If the request is uncacheable, skip the cache queue and go straight</span></span><br><span class="line">		<span class="comment">// to the network.</span></span><br><span class="line">    	<span class="comment">//判断是否可以缓存了，不缓存就添加到网络请求队列中去return,前面已经说过这个 mNetworkQueue 存储管理网络请求队列的</span></span><br><span class="line">    	<span class="comment">//默认是可以缓存的，在Request的构造方法可以看到</span></span><br><span class="line">    	 <span class="comment">//public Request(int method, String url, ErrorListener listener) &#123;</span></span><br><span class="line">       		<span class="comment">// this.mShouldCache = true;</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">		<span class="keyword">if</span> (!request.shouldCache()) &#123;</span><br><span class="line">			mNetworkQueue.add(request);</span><br><span class="line">			<span class="keyword">return</span> request;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">    	<span class="comment">//直接到下面</span></span><br><span class="line">		<span class="comment">// Insert request into stage if there's already a request with the same</span></span><br><span class="line">		<span class="comment">// cache key in flight.</span></span><br><span class="line">		<span class="keyword">synchronized</span> (mWaitingRequests) &#123;</span><br><span class="line">            <span class="comment">//首先查看是否缓存过，取key</span></span><br><span class="line">			String cacheKey = request.getCacheKey();</span><br><span class="line">            <span class="comment">//如果缓存过</span></span><br><span class="line">			<span class="keyword">if</span> (mWaitingRequests.containsKey(cacheKey)) &#123;</span><br><span class="line">				<span class="comment">// There is already a request in flight. Queue up.</span></span><br><span class="line">				Queue&lt;Request&lt;?&gt;&gt; stagedRequests = mWaitingRequests</span><br><span class="line">						.get(cacheKey);</span><br><span class="line">				<span class="keyword">if</span> (stagedRequests == <span class="keyword">null</span>) &#123;</span><br><span class="line">					stagedRequests = <span class="keyword">new</span> LinkedList&lt;Request&lt;?&gt;&gt;();</span><br><span class="line">				&#125;</span><br><span class="line">				stagedRequests.add(request);</span><br><span class="line">                <span class="comment">//添加到暂时存储队列中</span></span><br><span class="line">				mWaitingRequests.put(cacheKey, stagedRequests);</span><br><span class="line">				</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//第一次请求，应该是进入到这里的</span></span><br><span class="line">				<span class="comment">// Insert 'null' queue for this cacheKey, indicating there is</span></span><br><span class="line">				<span class="comment">// now a request in</span></span><br><span class="line">				<span class="comment">// flight.</span></span><br><span class="line">                <span class="comment">//添加一个 null 队列，表示有一个请求正在进行</span></span><br><span class="line">				mWaitingRequests.put(cacheKey, <span class="keyword">null</span>);</span><br><span class="line">                <span class="comment">//添加到缓存队列中，那么我们接下来重点查看CacheDispatcher#run方法</span></span><br><span class="line">				mCacheQueue.add(request);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> request;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来就到 <code>CacheDispatcher#run()</code> 方法了，因为里面有值了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       </span><br><span class="line">        Process.setThreadPriority(<span class="number">10</span>);</span><br><span class="line">    	<span class="comment">//初始化缓存类型有两种目前：NoCache() 和 DiskBaseCache()</span></span><br><span class="line">        <span class="keyword">this</span>.mCache.initialize();</span><br><span class="line">		<span class="comment">//嵌套了好多 while 循环</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                    <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            <span class="comment">//从缓存队列中取出,在之前第一篇文章时，没展示下半部分，这次有请求就可以看下里面的逻辑了。</span></span><br><span class="line">                            <span class="keyword">final</span> Request&lt;?&gt; request = (Request)<span class="keyword">this</span>.mCacheQueue.take();</span><br><span class="line">                            request.addMarker(<span class="string">"cache-queue-take"</span>);</span><br><span class="line">                            <span class="comment">//请求未取消</span></span><br><span class="line">                            <span class="keyword">if</span> (request.isCanceled()) &#123;</span><br><span class="line">                                request.finish(<span class="string">"cache-discard-canceled"</span>);</span><br><span class="line">                            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                <span class="comment">//拿到缓存结果，请求信息都保存一个叫Entry内部类中</span></span><br><span class="line">                                Entry entry = <span class="keyword">this</span>.mCache.get(request.getCacheKey());</span><br><span class="line">                                <span class="comment">//有可能取出的缓存为null</span></span><br><span class="line">                                <span class="keyword">if</span> (entry == <span class="keyword">null</span>) &#123;</span><br><span class="line">                                    request.addMarker(<span class="string">"cache-miss"</span>);</span><br><span class="line">                                    <span class="comment">//如果清空了缓存，那就重新添加到网络请求队列中去</span></span><br><span class="line">                                    <span class="keyword">this</span>.mNetworkQueue.put(request);</span><br><span class="line">                                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!entry.isExpired()) &#123;<span class="comment">//判断是否过期</span></span><br><span class="line">                                    request.addMarker(<span class="string">"cache-hit"</span>);</span><br><span class="line">                                    <span class="comment">//拿到请求结果response</span></span><br><span class="line">                                    Response&lt;?&gt; response = request.parseNetworkResponse(<span class="keyword">new</span> NetworkResponse(entry.data, entry.responseHeaders));</span><br><span class="line">                                    request.addMarker(<span class="string">"cache-hit-parsed"</span>);</span><br><span class="line">                                    <span class="comment">//表示是否需要重新刷新</span></span><br><span class="line">                                    <span class="keyword">if</span> (!entry.refreshNeeded()) &#123;</span><br><span class="line">                                        <span class="comment">//不需要的话就直接分发给主线程了</span></span><br><span class="line">                                        <span class="keyword">this</span>.mDelivery.postResponse(request, response);</span><br><span class="line">                                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                        <span class="comment">//需要刷新，就重新进行网络请求</span></span><br><span class="line">                                        request.addMarker(<span class="string">"cache-hit-refresh-needed"</span>);</span><br><span class="line">                                        request.setCacheEntry(entry);</span><br><span class="line">                                        response.intermediate = <span class="keyword">true</span>;</span><br><span class="line">                                        <span class="keyword">this</span>.mDelivery.postResponse(request, response, <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                                                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">////需要刷新，就重新进行网络请求                                              </span></span><br><span class="line">                   CacheDispatcher.<span class="keyword">this</span>.mNetworkQueue.put(request);</span><br><span class="line">                                                &#125; <span class="keyword">catch</span> (InterruptedException var2) &#123;</span><br><span class="line">                                                    ;</span><br><span class="line">                                                &#125;</span><br><span class="line"></span><br><span class="line">                                            &#125;</span><br><span class="line">                                        &#125;);</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                    <span class="comment">//表示过期了，也重新进行请求</span></span><br><span class="line">                                    request.addMarker(<span class="string">"cache-hit-expired"</span>);</span><br><span class="line">                                    request.setCacheEntry(entry);</span><br><span class="line">                                    <span class="keyword">this</span>.mNetworkQueue.put(request);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (InterruptedException var4) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (<span class="keyword">this</span>.mQuit) &#123;</span><br><span class="line">                                <span class="keyword">return</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>关于 <code>CacheDispatcher#run</code> 类我画了一张图示:<br><img src="https://upload-images.jianshu.io/upload_images/1948557-944dd78521a7ec7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="CacheDispatcher.png"></p>
+<p>从这里我们知道，网络请求首先需要<code>mCacheDispatcher</code> 判断是否已缓存，若缓存了则直接 <code>postResponse</code> 如果没有，则重新进行网络请求，我们就直接添加到 <code>mNetworkQueue</code> 中，那第一次请求，肯定还未缓存， 那我们下面就又可以看这个 <code>NetworkDispatcher#run</code> 方法了，因为此时队列中有请求了，接下来我们再返回查看：</p>
+<p><code>NetworkDispatcher#run()</code> 方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    	<span class="comment">//设置线程优先级</span></span><br><span class="line">        Process.setThreadPriority(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            Request request;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//从这个网络请求队列中中取出一条request</span></span><br><span class="line">                    <span class="comment">//第二次这里有了，因为我们add 了 一个 request</span></span><br><span class="line">                    request = (Request)<span class="keyword">this</span>.mQueue.take();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException var4) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.mQuit) &#123;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//以下都是网络请求队列有网络请求任务时执行</span></span><br><span class="line">                request.addMarker(<span class="string">"network-queue-take"</span>);</span><br><span class="line">                <span class="keyword">if</span> (request.isCanceled()) &#123;<span class="comment">//判断是否取消</span></span><br><span class="line">                    request.finish(<span class="string">"network-discard-cancelled"</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//网络请求未取消</span></span><br><span class="line">                    <span class="keyword">this</span>.addTrafficStatsTag(request);</span><br><span class="line">                    <span class="comment">//处理网络请求，得到NetworkResponse</span></span><br><span class="line">                    NetworkResponse networkResponse = <span class="keyword">this</span>.mNetwork.performRequest(request);</span><br><span class="line">                    <span class="comment">//标识请求完成</span></span><br><span class="line">                    request.addMarker(<span class="string">"network-http-complete"</span>);</span><br><span class="line">                    <span class="keyword">if</span> (networkResponse.notModified &amp;&amp; request.hasHadResponseDelivered()) &#123;</span><br><span class="line">                        request.finish(<span class="string">"not-modified"</span>);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">//开始解析返回的结果，解析parseNetworkResponse可根据不同类型的方式进行解析，请看下图：</span></span><br><span class="line">                        Response&lt;?&gt; response = request.parseNetworkResponse(networkResponse);</span><br><span class="line">                        <span class="comment">//标识解析完成</span></span><br><span class="line">                        request.addMarker(<span class="string">"network-parse-complete"</span>);</span><br><span class="line">                        <span class="comment">//开始缓存请求结果，判断是否可以缓存，默认可以</span></span><br><span class="line">                        <span class="keyword">if</span> (request.shouldCache() &amp;&amp; response.cacheEntry != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">this</span>.mCache.put(request.getCacheKey(), response.cacheEntry);</span><br><span class="line">                            request.addMarker(<span class="string">"network-cache-written"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">						<span class="comment">//分发请求结果通过 mDelivery 完成</span></span><br><span class="line">                        request.markDelivered();</span><br><span class="line">                        <span class="keyword">this</span>.mDelivery.postResponse(request, response);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>解析 有<code>Json</code>  <code>Image</code> <code>String</code> 等多种类型。<br><img src="https://upload-images.jianshu.io/upload_images/1948557-9a1c8ae8647f803a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>到此基本分析完毕。奉上一个整体流程图，我在网上找到的，感觉还不错：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-7bc4f1a61522e9fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Vollery/" rel="tag"># Vollery</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/22/Vollery源码阅读-——/" rel="next" title="Vollery源码阅读(——)">
+                <i class="fa fa-chevron-left"></i> Vollery源码阅读(——)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">QQabby</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">Tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">QQabby</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://disqus.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2019/02/25/Vollery源码阅读-二/';
+          this.page.identifier = '2019/02/25/Vollery源码阅读-二/';
+          this.page.title = 'Vollery源码阅读(二)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://disqus.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

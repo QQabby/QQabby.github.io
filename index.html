@@ -273,6 +273,152 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/25/Vollery源码阅读-二/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/25/Vollery源码阅读-二/" itemprop="url">Vollery源码阅读(二)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-25T16:56:20+08:00">
+                2019-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/25/Vollery源码阅读-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/25/Vollery源码阅读-二/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>上节写到关于 <code>Vollery</code> 的前半部分，需要查看的点击 <a href="/2019/02/22/Vollery源码阅读-——">这里</a> , 这次主要查看当我们真正 <code>add request</code> 的时候做进一步查看。</p>
+</blockquote>
+<p>我们还是从使用的方法作为我们的切入点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mQueue.add(postRequest);<span class="comment">//当我们向队列中添加一个网络请求</span></span><br></pre></td></tr></table></figure>
+<p>跟进，查看 <code>RequestQueue#add()</code> 方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Staging area for requests that already have a duplicate request in</span></span><br><span class="line"><span class="comment">	 * flight.</span></span><br><span class="line"><span class="comment">	 * 存储有重复请求的request暂存区，我个人认为就是如果 正在处理A发出的一个请求，此时又来一个A发出同样的一个请求，那么第二个请求就会暂时保存在这个集合中</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Queue&lt;Request&lt;?&gt;&gt;&gt; mWaitingRequests = <span class="keyword">new</span> HashMap&lt;String, Queue&lt;Request&lt;?&gt;&gt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">Request&lt;T&gt; <span class="title">add</span><span class="params">(Request&lt;T&gt; request)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// Tag the request as belonging to this queue and add it to the set of</span></span><br><span class="line">		<span class="comment">// current requests.</span></span><br><span class="line">		request.setRequestQueue(<span class="keyword">this</span>);</span><br><span class="line">		<span class="keyword">synchronized</span> (mCurrentRequests) &#123;</span><br><span class="line">			mCurrentRequests.add(request);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Process requests in the order they are added.</span></span><br><span class="line">    	<span class="comment">//按照添加请求的顺序处理请求</span></span><br><span class="line">		request.setSequence(getSequenceNumber());</span><br><span class="line">		request.addMarker(<span class="string">"add-to-queue"</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// If the request is uncacheable, skip the cache queue and go straight</span></span><br><span class="line">		<span class="comment">// to the network.</span></span><br><span class="line">    	<span class="comment">//判断是否可以缓存了，不缓存就添加到网络请求队列中去return,前面已经说过这个 mNetworkQueue 存储管理网络请求队列的</span></span><br><span class="line">    	<span class="comment">//默认是可以缓存的，在Request的构造方法可以看到</span></span><br><span class="line">    	 <span class="comment">//public Request(int method, String url, ErrorListener listener) &#123;</span></span><br><span class="line">       		<span class="comment">// this.mShouldCache = true;</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">		<span class="keyword">if</span> (!request.shouldCache()) &#123;</span><br><span class="line">			mNetworkQueue.add(request);</span><br><span class="line">			<span class="keyword">return</span> request;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">    	<span class="comment">//直接到下面</span></span><br><span class="line">		<span class="comment">// Insert request into stage if there's already a request with the same</span></span><br><span class="line">		<span class="comment">// cache key in flight.</span></span><br><span class="line">		<span class="keyword">synchronized</span> (mWaitingRequests) &#123;</span><br><span class="line">            <span class="comment">//首先查看是否缓存过，取key</span></span><br><span class="line">			String cacheKey = request.getCacheKey();</span><br><span class="line">            <span class="comment">//如果缓存过</span></span><br><span class="line">			<span class="keyword">if</span> (mWaitingRequests.containsKey(cacheKey)) &#123;</span><br><span class="line">				<span class="comment">// There is already a request in flight. Queue up.</span></span><br><span class="line">				Queue&lt;Request&lt;?&gt;&gt; stagedRequests = mWaitingRequests</span><br><span class="line">						.get(cacheKey);</span><br><span class="line">				<span class="keyword">if</span> (stagedRequests == <span class="keyword">null</span>) &#123;</span><br><span class="line">					stagedRequests = <span class="keyword">new</span> LinkedList&lt;Request&lt;?&gt;&gt;();</span><br><span class="line">				&#125;</span><br><span class="line">				stagedRequests.add(request);</span><br><span class="line">                <span class="comment">//添加到暂时存储队列中</span></span><br><span class="line">				mWaitingRequests.put(cacheKey, stagedRequests);</span><br><span class="line">				</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//第一次请求，应该是进入到这里的</span></span><br><span class="line">				<span class="comment">// Insert 'null' queue for this cacheKey, indicating there is</span></span><br><span class="line">				<span class="comment">// now a request in</span></span><br><span class="line">				<span class="comment">// flight.</span></span><br><span class="line">                <span class="comment">//添加一个 null 队列，表示有一个请求正在进行</span></span><br><span class="line">				mWaitingRequests.put(cacheKey, <span class="keyword">null</span>);</span><br><span class="line">                <span class="comment">//添加到缓存队列中，那么我们接下来重点查看CacheDispatcher#run方法</span></span><br><span class="line">				mCacheQueue.add(request);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> request;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来就到 <code>CacheDispatcher#run()</code> 方法了，因为里面有值了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       </span><br><span class="line">        Process.setThreadPriority(<span class="number">10</span>);</span><br><span class="line">    	<span class="comment">//初始化缓存类型有两种目前：NoCache() 和 DiskBaseCache()</span></span><br><span class="line">        <span class="keyword">this</span>.mCache.initialize();</span><br><span class="line">		<span class="comment">//嵌套了好多 while 循环</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                    <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            <span class="comment">//从缓存队列中取出,在之前第一篇文章时，没展示下半部分，这次有请求就可以看下里面的逻辑了。</span></span><br><span class="line">                            <span class="keyword">final</span> Request&lt;?&gt; request = (Request)<span class="keyword">this</span>.mCacheQueue.take();</span><br><span class="line">                            request.addMarker(<span class="string">"cache-queue-take"</span>);</span><br><span class="line">                            <span class="comment">//请求未取消</span></span><br><span class="line">                            <span class="keyword">if</span> (request.isCanceled()) &#123;</span><br><span class="line">                                request.finish(<span class="string">"cache-discard-canceled"</span>);</span><br><span class="line">                            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                <span class="comment">//拿到缓存结果，请求信息都保存一个叫Entry内部类中</span></span><br><span class="line">                                Entry entry = <span class="keyword">this</span>.mCache.get(request.getCacheKey());</span><br><span class="line">                                <span class="comment">//有可能取出的缓存为null</span></span><br><span class="line">                                <span class="keyword">if</span> (entry == <span class="keyword">null</span>) &#123;</span><br><span class="line">                                    request.addMarker(<span class="string">"cache-miss"</span>);</span><br><span class="line">                                    <span class="comment">//如果清空了缓存，那就重新添加到网络请求队列中去</span></span><br><span class="line">                                    <span class="keyword">this</span>.mNetworkQueue.put(request);</span><br><span class="line">                                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!entry.isExpired()) &#123;<span class="comment">//判断是否过期</span></span><br><span class="line">                                    request.addMarker(<span class="string">"cache-hit"</span>);</span><br><span class="line">                                    <span class="comment">//拿到请求结果response</span></span><br><span class="line">                                    Response&lt;?&gt; response = request.parseNetworkResponse(<span class="keyword">new</span> NetworkResponse(entry.data, entry.responseHeaders));</span><br><span class="line">                                    request.addMarker(<span class="string">"cache-hit-parsed"</span>);</span><br><span class="line">                                    <span class="comment">//表示是否需要重新刷新</span></span><br><span class="line">                                    <span class="keyword">if</span> (!entry.refreshNeeded()) &#123;</span><br><span class="line">                                        <span class="comment">//不需要的话就直接分发给主线程了</span></span><br><span class="line">                                        <span class="keyword">this</span>.mDelivery.postResponse(request, response);</span><br><span class="line">                                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                        <span class="comment">//需要刷新，就重新进行网络请求</span></span><br><span class="line">                                        request.addMarker(<span class="string">"cache-hit-refresh-needed"</span>);</span><br><span class="line">                                        request.setCacheEntry(entry);</span><br><span class="line">                                        response.intermediate = <span class="keyword">true</span>;</span><br><span class="line">                                        <span class="keyword">this</span>.mDelivery.postResponse(request, response, <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                                                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">////需要刷新，就重新进行网络请求                                              </span></span><br><span class="line">                   CacheDispatcher.<span class="keyword">this</span>.mNetworkQueue.put(request);</span><br><span class="line">                                                &#125; <span class="keyword">catch</span> (InterruptedException var2) &#123;</span><br><span class="line">                                                    ;</span><br><span class="line">                                                &#125;</span><br><span class="line"></span><br><span class="line">                                            &#125;</span><br><span class="line">                                        &#125;);</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                    <span class="comment">//表示过期了，也重新进行请求</span></span><br><span class="line">                                    request.addMarker(<span class="string">"cache-hit-expired"</span>);</span><br><span class="line">                                    request.setCacheEntry(entry);</span><br><span class="line">                                    <span class="keyword">this</span>.mNetworkQueue.put(request);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (InterruptedException var4) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (<span class="keyword">this</span>.mQuit) &#123;</span><br><span class="line">                                <span class="keyword">return</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>关于 <code>CacheDispatcher#run</code> 类我画了一张图示:<br><img src="https://upload-images.jianshu.io/upload_images/1948557-944dd78521a7ec7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="CacheDispatcher.png"></p>
+<p>从这里我们知道，网络请求首先需要<code>mCacheDispatcher</code> 判断是否已缓存，若缓存了则直接 <code>postResponse</code> 如果没有，则重新进行网络请求，我们就直接添加到 <code>mNetworkQueue</code> 中，那第一次请求，肯定还未缓存， 那我们下面就又可以看这个 <code>NetworkDispatcher#run</code> 方法了，因为此时队列中有请求了，接下来我们再返回查看：</p>
+<p><code>NetworkDispatcher#run()</code> 方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    	<span class="comment">//设置线程优先级</span></span><br><span class="line">        Process.setThreadPriority(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            Request request;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//从这个网络请求队列中中取出一条request</span></span><br><span class="line">                    <span class="comment">//第二次这里有了，因为我们add 了 一个 request</span></span><br><span class="line">                    request = (Request)<span class="keyword">this</span>.mQueue.take();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException var4) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.mQuit) &#123;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//以下都是网络请求队列有网络请求任务时执行</span></span><br><span class="line">                request.addMarker(<span class="string">"network-queue-take"</span>);</span><br><span class="line">                <span class="keyword">if</span> (request.isCanceled()) &#123;<span class="comment">//判断是否取消</span></span><br><span class="line">                    request.finish(<span class="string">"network-discard-cancelled"</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//网络请求未取消</span></span><br><span class="line">                    <span class="keyword">this</span>.addTrafficStatsTag(request);</span><br><span class="line">                    <span class="comment">//处理网络请求，得到NetworkResponse</span></span><br><span class="line">                    NetworkResponse networkResponse = <span class="keyword">this</span>.mNetwork.performRequest(request);</span><br><span class="line">                    <span class="comment">//标识请求完成</span></span><br><span class="line">                    request.addMarker(<span class="string">"network-http-complete"</span>);</span><br><span class="line">                    <span class="keyword">if</span> (networkResponse.notModified &amp;&amp; request.hasHadResponseDelivered()) &#123;</span><br><span class="line">                        request.finish(<span class="string">"not-modified"</span>);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">//开始解析返回的结果，解析parseNetworkResponse可根据不同类型的方式进行解析，请看下图：</span></span><br><span class="line">                        Response&lt;?&gt; response = request.parseNetworkResponse(networkResponse);</span><br><span class="line">                        <span class="comment">//标识解析完成</span></span><br><span class="line">                        request.addMarker(<span class="string">"network-parse-complete"</span>);</span><br><span class="line">                        <span class="comment">//开始缓存请求结果，判断是否可以缓存，默认可以</span></span><br><span class="line">                        <span class="keyword">if</span> (request.shouldCache() &amp;&amp; response.cacheEntry != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">this</span>.mCache.put(request.getCacheKey(), response.cacheEntry);</span><br><span class="line">                            request.addMarker(<span class="string">"network-cache-written"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">						<span class="comment">//分发请求结果通过 mDelivery 完成</span></span><br><span class="line">                        request.markDelivered();</span><br><span class="line">                        <span class="keyword">this</span>.mDelivery.postResponse(request, response);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>解析 有<code>Json</code>  <code>Image</code> <code>String</code> 等多种类型。<br><img src="https://upload-images.jianshu.io/upload_images/1948557-9a1c8ae8647f803a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>到此基本分析完毕。奉上一个整体流程图，我在网上找到的，感觉还不错：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-7bc4f1a61522e9fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/22/Vollery源码阅读-——/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1603,208 +1749,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/17/Fragment相关/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/17/Fragment相关/" itemprop="url">Fragment相关</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-17T11:32:30+08:00">
-                2019-01-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/17/Fragment相关/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/17/Fragment相关/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Fragment-的概念"><a href="#Fragment-的概念" class="headerlink" title="Fragment 的概念"></a>Fragment 的概念</h1><blockquote>
-<p>关于 <code>Fragment</code> 如何用浅显的语言来描述它呢，我认为就是：<code>Activity</code> 就像是一个大屋子，大屋子里有很多房间，而这里的每个房间就是 <code>fragment</code> ,称为模块化的 <code>Activity</code>.</p>
-<p>并且 <code>fragment</code> 不能单独存在，必须依附于 <code>Activity</code>;</p>
-<p><code>fragment</code> 的生命周期受到外部 <code>Activity</code> 的影响；</p>
-<p><code>fragment</code> 有自己的生命周期；</p>
-</blockquote>
-<h1 id="Fragment-优点"><a href="#Fragment-优点" class="headerlink" title="Fragment 优点"></a>Fragment 优点</h1><ul>
-<li><code>Fragment</code> 可以将 <code>Activity</code> 分离成多个可重用的组件，每个都有各自的生命周期和UI</li>
-<li>灵活的UI设计，可以适用于不同的屏幕尺寸，手机，平板</li>
-<li><code>Fragment</code> 做为一个独立的模块可以轻松被 <code>Activity</code> 控制，添加，移除和替换</li>
-<li><code>Fragment</code> 切换流畅，比<code>Activity</code> 之间切换要好</li>
-</ul>
-<h1 id="Fragment与Activity的通信方式"><a href="#Fragment与Activity的通信方式" class="headerlink" title="Fragment与Activity的通信方式"></a>Fragment与Activity的通信方式</h1><ul>
-<li>可以选择第三方的 <code>EventBus</code> 等</li>
-<li><code>setArugments</code> 方法（<code>Activity</code> 向 <code>Fragment</code> 传递参数）</li>
-<li>自定义接口回调</li>
-<li>当然也可以强制类型转化，例如：<code>((MainActivity)getActivity()).text; fragment</code> 中获取宿主 <code>MainActivity</code> 里的一个 <code>public</code> 字段。 </li>
-<li>在SDK26 的API 引入了 <code>Activity.onAttachFragment(Fragment fragment)</code>, 可以将 <code>Activity</code> 的数据传递给 <code>Fragment</code>.</li>
-</ul>
-<h1 id="Fragment-生命周期"><a href="#Fragment-生命周期" class="headerlink" title="Fragment 生命周期"></a>Fragment 生命周期</h1><p>放上一张官网 <code>Fragment</code> 的生命周期图：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-3138ae3693fe7bb0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>挺清晰的，感觉和 <code>Activity</code> 的生命周期很像；</p>
-<ul>
-<li><p>程序启动： <code>onAttach()---&gt; onCreate()----&gt;onCreateView()----onActivityCreate()---&gt;onStart()----&gt; onResume()</code> 上图显示 <code>Fragment</code> 已经处于运行 <code>Active</code> 状态</p>
-</li>
-<li><p>后台状态： <code>onPause()---onStop()</code></p>
-</li>
-<li>切换到其他<code>Fragment</code>  :<code>onPause() ---&gt; onStop() ---&gt; onDestroyView()</code>,  当再次切换回来的时候就不执行 <code>onCreate()</code> 了，直接从 <code>onCreateView()</code> 开始执行</li>
-<li>锁屏： <code>onPause() ---&gt; onStop()</code></li>
-<li>点亮屏幕： <code>onStart() ---&gt; onResume()</code></li>
-<li>退出应用： <code>onPause() ---&gt; onStop() ----&gt; onDestroyView() -- &gt; onDestroy() ----onDetach()</code></li>
-<li>Home 键： <code>onPause() ---&gt; onStop()</code></li>
-</ul>
-<h1 id="Fragment的add与replace的区别"><a href="#Fragment的add与replace的区别" class="headerlink" title="Fragment的add与replace的区别"></a>Fragment的add与replace的区别</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">getSupportFragmentManager().beginTransaction()</span><br><span class="line">                .add(R.id.fragment_container, mainSpaceFragment)<span class="comment">//这是add</span></span><br><span class="line">                .show(mFragment).commit();</span><br><span class="line"><span class="comment">//replace</span></span><br></pre></td></tr></table></figure>
-<p><code>add</code> 方式添加的 <code>Fragment</code> ,在切换 <code>Fragment</code> 的时候不会刷新 <code>Fragment</code>,但是 <code>replace</code> 方式在切换 <code>Fragment</code> 的时候会重新创建，它会销毁之前的那个，add  方式只是隐藏了而不是销毁了, 一般开发使用的是 <code>add</code> 方式。</p>
-<h1 id="用Fragment可能会遇到的问题"><a href="#用Fragment可能会遇到的问题" class="headerlink" title="用Fragment可能会遇到的问题"></a>用Fragment可能会遇到的问题</h1><ul>
-<li><p><code>getActivity()</code> 为空</p>
-<blockquote>
-<p>我碰见这个问题的几率还挺大的，网上说是因为内存重启，重启的时候调用 <code>getActivity()</code> 的地方返回null.</p>
-</blockquote>
-</li>
-</ul>
-<p>产生的原因：当调用了 <code>getActivity()</code> 时，当前 <code>Fragment</code> 已经 <code>onDetach()</code> 脱离了宿主 <code>Activity</code>. </p>
-<p>解决的办法：当时在 <code>stackoverflow</code> 上看到过就是在使用之前先判断下 <code>isAdd()</code> 类似的方法</p>
-<ul>
-<li><p><code>Fragment</code> 重叠异常</p>
-<blockquote>
-<p>正确使用 hide,  show 的姿势。在类 <code>onCreate()</code> 的方法加载 <code>Fragment</code>, 并没有判断 <code>saveInstanceState == null</code> , 导致重复加载了同一个 <code>Fragment</code> 导致重叠。</p>
-</blockquote>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> </span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line"><span class="comment">// 在页面重启时，Fragment会被保存恢复，而此时再加载Fragment会重复加载，导致重叠 ;</span></span><br><span class="line">    <span class="keyword">if</span>(saveInstanceState == <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">// 或者 if(findFragmentByTag(mFragmentTag) == null)</span></span><br><span class="line">       <span class="comment">// 正常情况下去 加载根Fragment </span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="getFragmentManager，getSupportFragmentManager-，getChildFragmentManager三者之间的区别"><a href="#getFragmentManager，getSupportFragmentManager-，getChildFragmentManager三者之间的区别" class="headerlink" title="getFragmentManager，getSupportFragmentManager ，getChildFragmentManager三者之间的区别"></a>getFragmentManager，getSupportFragmentManager ，getChildFragmentManager三者之间的区别</h1><blockquote>
-<p>getSupportFragmentManager() :   主要用于支持3.0以下的Android系统API版本，3.0以上系统可以直接使用 <code>getFragmentManager()</code> . 因为 <code>fragment</code> 是3.0以后才出现的组件，所以在3.0以下的设备使用v4 包中的 <code>getSupportFragment()</code> ；</p>
-<p>getFragmentManager()  :  得到所在fragment的父容器的管理器；</p>
-<p>getChildFragmentManager() : 得到fragment里面子容器的管理器。</p>
-</blockquote>
-<ul>
-<li><p>一般的使用场景</p>
-<p>当 <code>Fragment</code> 嵌套 <code>Fragment</code> 时，需要使用 <code>getChildFragmentManager()</code></p>
-</li>
-</ul>
-<h1 id="FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景"><a href="#FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景" class="headerlink" title="FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景"></a>FragmentPagerAdapter与FragmentStatePagerAdapter的区别与使用场景</h1><blockquote>
-<p>对于经常使用 <code>viewpager</code> 的应该大概都知道就是： 当 <code>viewpager</code> 中的 <code>fragment</code> 数量多的时候用 <code>FragmentStatePagerAdapter</code> ,同样当<code>fragment</code> 比较少的时候，则使用 <code>FragmentPagerAdapter</code>.</p>
-</blockquote>
-<p>在 <code>FragmentPagerAdapter</code> 中的 <code>destroyItem</code> 中：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(@NonNull ViewGroup container, <span class="keyword">int</span> position, @NonNull Object object)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.mCurTransaction == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mCurTransaction = <span class="keyword">this</span>.mFragmentManager.beginTransaction();</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//这里只是detach Fragment ,并没有做释放内存的操作，</span></span><br><span class="line">    	<span class="comment">//这样当fragment 比较多的时候，内存就会不够用，越用越多</span></span><br><span class="line">        <span class="keyword">this</span>.mCurTransaction.detach((Fragment)object);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>然后在看下 <code>FragmentStatePagerAdapter</code> 中的 <code>destroyItem</code>  : </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(@NonNull ViewGroup container, <span class="keyword">int</span> position, @NonNull Object object)</span> </span>&#123;</span><br><span class="line">        Fragment fragment = (Fragment)object;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.mCurTransaction == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mCurTransaction = <span class="keyword">this</span>.mFragmentManager.beginTransaction();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">this</span>.mSavedState.size() &lt;= position) &#123;</span><br><span class="line">            <span class="keyword">this</span>.mSavedState.add((Object)<span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//判断是否add</span></span><br><span class="line">        <span class="keyword">this</span>.mSavedState.set(position, fragment.isAdded() ? <span class="keyword">this</span>.mFragmentManager.saveFragmentInstanceState(fragment) : <span class="keyword">null</span>);</span><br><span class="line">    	<span class="comment">//将该位置的fragment 设置为null</span></span><br><span class="line">        <span class="keyword">this</span>.mFragments.set(position, (Object)<span class="keyword">null</span>);</span><br><span class="line">    	<span class="comment">//这里进行了移除的操作,释放 fragment,减少内存</span></span><br><span class="line">    	<span class="comment">//所以当 fragment 比较多的时候使用FragmentStatePagerAdapter</span></span><br><span class="line">        <span class="keyword">this</span>.mCurTransaction.remove(fragment);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1855,7 +1799,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
