@@ -273,6 +273,147 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/06/27/Kotlin-可观察属性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/27/Kotlin-可观察属性/" itemprop="url">Kotlin-可观察属性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-27T14:31:48+08:00">
+                2018-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/27/Kotlin-可观察属性/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/27/Kotlin-可观察属性/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>类似于观察者模式，当所监测的对象发生改变时，能够收到回调通知。</p>
+</blockquote>
+<p>例如：我们监测一个变量：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var str: String by Delegates.observable(<span class="string">"qianqian"</span>,&#123;</span><br><span class="line">        property: KProperty&lt;*&gt;, oldValue: String, newValue: String -&gt;</span><br><span class="line">        Log.i(<span class="string">"xx"</span>,<span class="string">"改变的属性名称：$&#123;property.name&#125; --- $&#123;oldValue&#125; -- $&#123;newValue&#125;"</span> )</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//点击一个按钮，改变str的值</span></span><br><span class="line">     <span class="function">fun <span class="title">foo</span><span class="params">(view : View)</span></span>&#123;</span><br><span class="line">        str = <span class="string">"haha"</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这时候我们会发现，当改变<code>str</code> 的值的时候，会打印信息，也就是收到回调：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">改变的属性名称：str --- qianqian -- haha</span><br></pre></td></tr></table></figure></p>
+<p>再比如：检测对象里的其中一个属性：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> kotlin.properties.Delegates</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    var name: String by Delegates.observable(<span class="string">"&lt;no name&gt;"</span>) &#123;</span><br><span class="line">        prop, old, <span class="keyword">new</span> -&gt;</span><br><span class="line">        println(<span class="string">"$old -&gt; $new"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">fun <span class="title">main</span><span class="params">(args: Array&lt;String&gt;)</span> </span>&#123;</span><br><span class="line">    val user = User()</span><br><span class="line">    user.name = <span class="string">"first"</span></span><br><span class="line">    user.name = <span class="string">"second"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;no name&gt; -&gt; first</span><br><span class="line">first -&gt; second</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/28/Kotlin-let-with-run-also-apply区分/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1678,305 +1819,11 @@ xxxhdpi（超超超高）~640dpi density=4
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/02/28/Fragment-懒加载/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/28/Fragment-懒加载/" itemprop="url">Fragment 懒加载</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-28T17:47:41+08:00">
-                2018-02-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/28/Fragment-懒加载/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/28/Fragment-懒加载/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>因为项目中经常用到tabLayout + viewpager 结合使用，页面切换时要用到延迟加载的情况，所以单独写出一个demo，方便查看和便于使用</p>
-</blockquote>
-<h1 id="1-首先新建一个BaseLazyFragment"><a href="#1-首先新建一个BaseLazyFragment" class="headerlink" title="1.首先新建一个BaseLazyFragment"></a>1.首先新建一个<code>BaseLazyFragment</code></h1><pre><code>/**
- * Created by xuqianqian on 2018/2/28.
- */
-public  abstract class BaseLazyFragment extends Fragment {
-
-    protected View mRootView;
-    public Context mContext;
-    protected boolean isVisible;
-    private boolean isPrepared;
-    private boolean isLoad = false;
-
-    //最先执行
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getUserVisibleHint()) {//当前显示
-            isVisible = true;
-            if(!isLoad){
-                lazyLoad();
-            }
-        } else {
-            isVisible = false;
-            //onInvisible();
-        }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = getActivity();
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        if (mRootView == null) {
-            mRootView = getLayout();
-        }
-        return mRootView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        isPrepared = true;
-        //如果已经加载过了，就无需再重新加载
-        if(!isLoad){
-            lazyLoad();
-        }
-    }
-
-    /**
-     * 懒加载
-     */
-    protected void lazyLoad() {
-        if (!isPrepared || !isVisible) {
-            return;
-        }
-        isLoad = true;
-        initData();
-    }
-
-//    protected void onInvisible() {
-//
-//    }
-    //初始化布局View
-    public abstract View getLayout();
-
-    public abstract void initData();
-}
-</code></pre><h1 id="2-让你的fragment-extend-BaseLazyFragment"><a href="#2-让你的fragment-extend-BaseLazyFragment" class="headerlink" title="2.让你的fragment extend BaseLazyFragment"></a>2.让你的<code>fragment extend BaseLazyFragment</code></h1><pre><code>public class GankFragment extends BaseLazyFragment {
-
-String type;
-public static GankFragment newInstance(String type) {
-    GankFragment gankFragment = new GankFragment();
-    Bundle bundle = new Bundle();
-    bundle.putString(&quot;type&quot;, type);
-    gankFragment.setArguments(bundle);
-    return gankFragment;
-}
-//加载布局
-@Override
-public View getLayout() {
-
-    type = getArguments().getString(&quot;type&quot;);
-    TextView tv = new TextView(getActivity());
-    tv.setText(type);
-    tv.setGravity(Gravity.CENTER);
-    return tv;
-}
-
-@Override
-public void initData() {
-
-    //初始化一些控件，加载网络数据
-}
-
-}
-</code></pre><h1 id="3-剩下的就是FragmentPagerAdapter了"><a href="#3-剩下的就是FragmentPagerAdapter了" class="headerlink" title="3.剩下的就是FragmentPagerAdapter了"></a>3.剩下的就是FragmentPagerAdapter了</h1><pre><code>public class TitleAdapter extends FragmentPagerAdapter {
-
-private List&lt;Fragment&gt; fragments;
-
-private List&lt;String&gt; types;
-
-public TitleAdapter(FragmentManager fm, List&lt;Fragment&gt; fragments, List&lt;String&gt; types) {
-    super(fm);
-    this.fragments = fragments;
-    this.types = types;
-}
-
-@Override
-public Fragment getItem(int position) {
-    return fragments.get(position);
-}
-
-@Override
-public int getCount() {
-    return fragments.size();
-}
-
-@Override
-public CharSequence getPageTitle(int position) {
-    return types.get(position);
-}
-}
-</code></pre><p><code>MainActivity.java</code></p>
-<pre><code>private List&lt;String&gt; titles = new ArrayList&lt;&gt;();
-
-private List&lt;Fragment&gt; fragments = new ArrayList&lt;&gt;();
-TitleAdapter titleAdapter;
-
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-
-    TabLayout tablayout = findViewById(R.id.tablayout);
-    ViewPager viewpager = findViewById(R.id.viewpager);
-
-    titles.add(&quot;android&quot;);
-    titles.add(&quot;ios&quot;);
-    titles.add(&quot;web&quot;);
-    titles.add(&quot;java&quot;);
-
-    fragments.add(GankFragment.newInstance(&quot;android&quot;));
-    fragments.add(GankFragment.newInstance(&quot;ios&quot;));
-    fragments.add(GankFragment.newInstance(&quot;web&quot;));
-    fragments.add(GankFragment.newInstance(&quot;java&quot;));
-
-    titleAdapter = new TitleAdapter(getSupportFragmentManager(), fragments, titles);
-    viewpager.setAdapter(titleAdapter);
-    tablayout.setTabMode(TabLayout.MODE_FIXED);
-    tablayout.setupWithViewPager(viewpager);
-}
-</code></pre><p><a href="https://github.com/QQabby/LazyFragmentApplication" title="源码地址">https://github.com/QQabby/LazyFragmentApplication</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2022,7 +1869,7 @@ protected void onCreate(Bundle savedInstanceState) {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
