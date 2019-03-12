@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="断点续传," />
+  <meta name="keywords" content="生命周期," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="所谓断点续传，也就是要从文件已经下载的地方开始继续下载。所以在客户端浏览器传给 wen 服务器的时候要多加一条信息即：从哪里开始的问题。  假设：我们从服务器下载一个文件，需要从 2000070 这个字节后开始下载，之前已经下载过了，注意查看以下代码： 1234567get /down.zip http/1.0user-agent: netfoxrange: bytes=2000070-//新增">
-<meta name="keywords" content="断点续传">
+<meta name="description" content="主要针对屏幕旋转对 Activity 生命周期有何影响。  第一种情况在没有其它配置的情况下，通过日志打印屏幕旋转会调用的方法。 1//onPause()----onStop()-----onDestroy()-----onCreate() ---- onStart()---onResume() 第二种情况关于 android:configChanges  的配置，不同的值对生命周期也会有不同的">
+<meta name="keywords" content="生命周期">
 <meta property="og:type" content="article">
-<meta property="og:title" content="断点续传了解">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2019/01/14/断点续传了解/index.html">
+<meta property="og:title" content="屏幕旋转后Activity生命周期">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2019/03/12/屏幕旋转后Activity生命周期/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="所谓断点续传，也就是要从文件已经下载的地方开始继续下载。所以在客户端浏览器传给 wen 服务器的时候要多加一条信息即：从哪里开始的问题。  假设：我们从服务器下载一个文件，需要从 2000070 这个字节后开始下载，之前已经下载过了，注意查看以下代码： 1234567get /down.zip http/1.0user-agent: netfoxrange: bytes=2000070-//新增">
+<meta property="og:description" content="主要针对屏幕旋转对 Activity 生命周期有何影响。  第一种情况在没有其它配置的情况下，通过日志打印屏幕旋转会调用的方法。 1//onPause()----onStop()-----onDestroy()-----onCreate() ---- onStart()---onResume() 第二种情况关于 android:configChanges  的配置，不同的值对生命周期也会有不同的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-14T06:16:27.501Z">
+<meta property="og:updated_time" content="2019-03-12T03:02:56.803Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="断点续传了解">
-<meta name="twitter:description" content="所谓断点续传，也就是要从文件已经下载的地方开始继续下载。所以在客户端浏览器传给 wen 服务器的时候要多加一条信息即：从哪里开始的问题。  假设：我们从服务器下载一个文件，需要从 2000070 这个字节后开始下载，之前已经下载过了，注意查看以下代码： 1234567get /down.zip http/1.0user-agent: netfoxrange: bytes=2000070-//新增">
+<meta name="twitter:title" content="屏幕旋转后Activity生命周期">
+<meta name="twitter:description" content="主要针对屏幕旋转对 Activity 生命周期有何影响。  第一种情况在没有其它配置的情况下，通过日志打印屏幕旋转会调用的方法。 1//onPause()----onStop()-----onDestroy()-----onCreate() ---- onStart()---onResume() 第二种情况关于 android:configChanges  的配置，不同的值对生命周期也会有不同的">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/14/断点续传了解/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/12/屏幕旋转后Activity生命周期/"/>
 
 
 
 
 
-  <title>断点续传了解 | 糖葫芦</title>
+  <title>屏幕旋转后Activity生命周期 | 糖葫芦</title>
   
 
 
@@ -277,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/14/断点续传了解/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/12/屏幕旋转后Activity生命周期/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">断点续传了解</h1>
+          <h1 class="post-title" itemprop="name headline">屏幕旋转后Activity生命周期</h1>
         
 
         <div class="post-meta">
@@ -306,8 +306,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-14T10:11:16+08:00">
-                2019-01-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-12T10:05:45+08:00">
+                2019-03-12
               </time>
             
 
@@ -325,9 +325,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/14/断点续传了解/#comments" itemprop="discussionUrl">
+                <a href="/2019/03/12/屏幕旋转后Activity生命周期/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/14/断点续传了解/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/03/12/屏幕旋转后Activity生命周期/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -356,26 +356,21 @@
 
       
         <blockquote>
-<p>所谓断点续传，也就是要从文件已经下载的地方开始继续下载。所以在客户端浏览器传给 <code>wen</code> 服务器的时候要多加一条信息即：从哪里开始的问题。</p>
+<p>主要针对屏幕旋转对 Activity 生命周期有何影响。</p>
 </blockquote>
-<p>假设：我们从服务器下载一个文件，需要从 <code>2000070</code> 这个字节后开始下载，之前已经下载过了，注意查看以下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">get /down.zip http/<span class="number">1.0</span></span><br><span class="line"></span><br><span class="line">user-agent: netfox</span><br><span class="line"></span><br><span class="line">range: bytes=<span class="number">2000070</span>-<span class="comment">//新增加字段，range,这一行的意思就是告诉服务器我这个文件从2000070字节开始传输，前面的字节就不用传了。</span></span><br><span class="line"></span><br><span class="line">accept: text/html, image/gif, image/jpeg, *; q=.<span class="number">2</span>, *<span class="comment">/*; q=.2</span></span><br></pre></td></tr></table></figure>
-<p>服务器收到这条信息，就开始返回信息：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">206</span> <span class="comment">//注意此时服务器的返回码不再是200而是206</span></span><br><span class="line"></span><br><span class="line">content-length=<span class="number">106786028</span></span><br><span class="line"></span><br><span class="line">content-range=bytes <span class="number">2000070</span>-<span class="number">106786027</span>/<span class="number">106786028</span> <span class="comment">//这行也是服务器新增加字段，返回的字节是从2000070-106786027 之间的字节，之前的字节就不传了。</span></span><br><span class="line"></span><br><span class="line">date=mon, <span class="number">30</span> apr <span class="number">2001</span> <span class="number">12</span>:<span class="number">55</span>:<span class="number">20</span> gmt</span><br><span class="line"></span><br><span class="line">etag=w/<span class="string">"02ca57e173c11:95b"</span></span><br><span class="line"></span><br><span class="line">content-type=application/octet-stream</span><br><span class="line"></span><br><span class="line">server=microsoft-iis/<span class="number">5.0</span></span><br><span class="line"></span><br><span class="line">last-modified=mon, <span class="number">30</span> apr <span class="number">2001</span> <span class="number">12</span>:<span class="number">55</span>:<span class="number">20</span> gmt</span><br></pre></td></tr></table></figure>
-<p>以上差不多就是断点续传需要知道的知识和大致的原理。</p>
-<ul>
-<li><p>问题</p>
-<p> 用什么方法实现提交 <code>range:bytes=2000070-</code>  ？</p>
-</li>
-</ul>
-<blockquote>
-<p>使用最原始的 <code>socket</code> 肯定可以完成，不过很费事，用java的net包中提供了设置的方法，如下：</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">           URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.baidu.com"</span>);</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">			<span class="comment">//通过设置requestProperty</span></span><br><span class="line">               httpURLConnection.setRequestProperty(<span class="string">"rande"</span>,<span class="string">"bytes=2000070"</span>);</span><br><span class="line">			<span class="comment">//这样获取的输入流就是从2000070这个字节后开始的	</span></span><br><span class="line">               InputStream input = httpURLConnection.getInputStream();</span><br><span class="line"></span><br><span class="line">           &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
-<p>接下来：获取到流了，那么如何从流保存到文件中去呢？</p>
-<p>保存文件的方法，采用的是 <code>io</code> 包中的 <code>randomacessfile</code> 类。如下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上面文件已经获取到 inputStream--input</span></span><br><span class="line">RandomAccessFile saveFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"down.zip"</span>,<span class="string">"rw"</span>);<span class="comment">//down.zip下载文件名称</span></span><br><span class="line">saveFile.seek(<span class="number">2000070</span>);<span class="comment">//定位文件指针到这个 2000070 位置</span></span><br><span class="line"><span class="keyword">byte</span>[] b= <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="keyword">int</span> read;</span><br><span class="line"><span class="keyword">while</span>((read = input.read(b,<span class="number">0</span>,<span class="number">1024</span>))&gt;<span class="number">0</span>)&#123;</span><br><span class="line">saveFile.write(b,<span class="number">0</span>,read);</span><br></pre></td></tr></table></figure>
-<p>基本大概就是这样。</p>
+<h1 id="第一种情况"><a href="#第一种情况" class="headerlink" title="第一种情况"></a>第一种情况</h1><p>在没有其它配置的情况下，通过日志打印屏幕旋转会调用的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//onPause()----onStop()-----onDestroy()-----onCreate() ---- onStart()---onResume()</span></span><br></pre></td></tr></table></figure>
+<h1 id="第二种情况"><a href="#第二种情况" class="headerlink" title="第二种情况"></a>第二种情况</h1><p>关于 <code>android:configChanges</code>  的配置，不同的值对生命周期也会有不同的影响。这个值最常用的值包括： <code>orientation</code> 和 <code>keyboardHidden</code>,  分别用于避免因屏幕方向和可用键盘改变而导致的重启。</p>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;activity android:name=<span class="string">".MainActivity"</span></span><br><span class="line">            android:configChanges=<span class="string">"orientation|keyboardHidden"</span> / &gt;</span><br></pre></td></tr></table></figure>
+<p>当其中一个配置发生变化时， <code>MainActivity</code> 不会重启。 但是会收到 <code>onConfigurationChanged()</code> 的调用。向此方法传递 <code>Configuration</code> 对象指定新设备配置。可以通过读取 <code>Configuration</code>  中的字段，确定新配置。然后通过更新界面中使用的资源进行适当的更改。调用此方法时，Activity 的  Resources 对象会相应的进行更新，以根据新配置返回资源，这样，就能够在系统不重启 Activity 的情况下轻松重置 UI 的元素。</p>
+<p><strong>但是，我的编译版本高一些，实验，发现当配置以上configChanges 还是会重启 Activity,  并且没有回调 onConfigurationChanged() 的回调</strong></p>
+<p>而后，开始查阅文档说明，发现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">注意: 在Android3.2（API <span class="number">13</span>）开始，当设备在纵向和横向之间切换时， “屏幕尺寸”也会发生改变，因此，在开发针对 API <span class="number">13</span>或者更高版本的应用时（当然我们现在基本都是<span class="number">4.0</span> 以上），若要避免由于设备方向改变而导致运行时重启，则除了 <span class="string">"orientation"</span> 值以外，还必须添加 <span class="string">"screenSize"</span> 值， 也就是说，您必须声明：android:configChanges=<span class="string">"orientation|screenSize"</span>.</span><br></pre></td></tr></table></figure>
+<p>当添加新的配置 <code>screenSize</code> 之后，屏幕旋转回调如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// onConfigurationChanged invoked... 只会调用onConfigurationChanged（） 方法，并没有重启</span></span><br></pre></td></tr></table></figure>
+<p><strong>最后就是一些资源的变更，如果有些图像应该在横向和纵向之间切换，就必须在 onConfigurationChanged() 期间将每个资源重新分配给每个元素。</strong></p>
+<p> 文档地址：<a href="https://developer.android.com/guide/topics/resources/runtime-changes?hl=zh-cn" target="_blank" rel="noopener">https://developer.android.com/guide/topics/resources/runtime-changes?hl=zh-cn</a></p>
 
       
     </div>
@@ -403,7 +398,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/断点续传/" rel="tag"># 断点续传</a>
+            <a href="/tags/生命周期/" rel="tag"># 生命周期</a>
           
         </div>
       
@@ -416,8 +411,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/10/Serializable与Parcable的区别/" rel="next" title="Serializable与 Parcelable 的区别">
-                <i class="fa fa-chevron-left"></i> Serializable与 Parcelable 的区别
+              <a href="/2019/03/07/Handler中的IdleHandler/" rel="next" title="Handler中的IdleHandler">
+                <i class="fa fa-chevron-left"></i> Handler中的IdleHandler
               </a>
             
           </div>
@@ -425,10 +420,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/15/Animation动画相关知识点/" rel="prev" title="Animation动画相关知识点">
-                Animation动画相关知识点 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -490,8 +481,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -544,6 +544,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一种情况"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E00;&#x79CD;&#x60C5;&#x51B5;" class="headerlink" title="&#x7B2C;&#x4E00;&#x79CD;&#x60C5;&#x51B5;"></a>&#x7B2C;&#x4E00;&#x79CD;&#x60C5;&#x51B5;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二种情况"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E8C;&#x79CD;&#x60C5;&#x51B5;" class="headerlink" title="&#x7B2C;&#x4E8C;&#x79CD;&#x60C5;&#x51B5;"></a>&#x7B2C;&#x4E8C;&#x79CD;&#x60C5;&#x51B5;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -715,9 +731,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2019/01/14/断点续传了解/';
-          this.page.identifier = '2019/01/14/断点续传了解/';
-          this.page.title = '断点续传了解';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2019/03/12/屏幕旋转后Activity生命周期/';
+          this.page.identifier = '2019/03/12/屏幕旋转后Activity生命周期/';
+          this.page.title = '屏幕旋转后Activity生命周期';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';

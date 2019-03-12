@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Accueil
+            Startseite
           </a>
         </li>
       
@@ -202,7 +202,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -215,7 +215,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            recherche
+            Suche
           </a>
         </li>
       
@@ -273,6 +273,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/12/屏幕旋转后Activity生命周期/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/12/屏幕旋转后Activity生命周期/" itemprop="url">屏幕旋转后Activity生命周期</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-12T10:05:45+08:00">
+                2019-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/12/屏幕旋转后Activity生命周期/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/12/屏幕旋转后Activity生命周期/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>主要针对屏幕旋转对 Activity 生命周期有何影响。</p>
+</blockquote>
+<h1 id="第一种情况"><a href="#第一种情况" class="headerlink" title="第一种情况"></a>第一种情况</h1><p>在没有其它配置的情况下，通过日志打印屏幕旋转会调用的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//onPause()----onStop()-----onDestroy()-----onCreate() ---- onStart()---onResume()</span></span><br></pre></td></tr></table></figure>
+<h1 id="第二种情况"><a href="#第二种情况" class="headerlink" title="第二种情况"></a>第二种情况</h1><p>关于 <code>android:configChanges</code>  的配置，不同的值对生命周期也会有不同的影响。这个值最常用的值包括： <code>orientation</code> 和 <code>keyboardHidden</code>,  分别用于避免因屏幕方向和可用键盘改变而导致的重启。</p>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;activity android:name=<span class="string">".MainActivity"</span></span><br><span class="line">            android:configChanges=<span class="string">"orientation|keyboardHidden"</span> / &gt;</span><br></pre></td></tr></table></figure>
+<p>当其中一个配置发生变化时， <code>MainActivity</code> 不会重启。 但是会收到 <code>onConfigurationChanged()</code> 的调用。向此方法传递 <code>Configuration</code> 对象指定新设备配置。可以通过读取 <code>Configuration</code>  中的字段，确定新配置。然后通过更新界面中使用的资源进行适当的更改。调用此方法时，Activity 的  Resources 对象会相应的进行更新，以根据新配置返回资源，这样，就能够在系统不重启 Activity 的情况下轻松重置 UI 的元素。</p>
+<p><strong>但是，我的编译版本高一些，实验，发现当配置以上configChanges 还是会重启 Activity,  并且没有回调 onConfigurationChanged() 的回调</strong></p>
+<p>而后，开始查阅文档说明，发现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">注意: 在Android3.2（API <span class="number">13</span>）开始，当设备在纵向和横向之间切换时， “屏幕尺寸”也会发生改变，因此，在开发针对 API <span class="number">13</span>或者更高版本的应用时（当然我们现在基本都是<span class="number">4.0</span> 以上），若要避免由于设备方向改变而导致运行时重启，则除了 <span class="string">"orientation"</span> 值以外，还必须添加 <span class="string">"screenSize"</span> 值， 也就是说，您必须声明：android:configChanges=<span class="string">"orientation|screenSize"</span>.</span><br></pre></td></tr></table></figure>
+<p>当添加新的配置 <code>screenSize</code> 之后，屏幕旋转回调如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// onConfigurationChanged invoked... 只会调用onConfigurationChanged（） 方法，并没有重启</span></span><br></pre></td></tr></table></figure>
+<p><strong>最后就是一些资源的变更，如果有些图像应该在横向和纵向之间切换，就必须在 onConfigurationChanged() 期间将每个资源重新分配给每个元素。</strong></p>
+<p> 文档地址：<a href="https://developer.android.com/guide/topics/resources/runtime-changes?hl=zh-cn" target="_blank" rel="noopener">https://developer.android.com/guide/topics/resources/runtime-changes?hl=zh-cn</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/07/Handler中的IdleHandler/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -302,7 +452,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-07T14:02:20+08:00">
                 2019-03-07
@@ -445,7 +595,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-26T09:36:04+08:00">
                 2019-02-26
@@ -678,7 +828,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-25T16:56:20+08:00">
                 2019-02-25
@@ -824,7 +974,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-22T19:16:34+08:00">
                 2019-02-22
@@ -984,7 +1134,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-19T17:43:18+08:00">
                 2019-02-19
@@ -1161,7 +1311,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-23T10:11:15+08:00">
                 2019-01-23
@@ -1304,7 +1454,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-22T11:18:14+08:00">
                 2019-01-22
@@ -1448,7 +1598,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-22T09:48:33+08:00">
                 2019-01-22
@@ -1601,7 +1751,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-21T15:01:22+08:00">
                 2019-01-21
@@ -1697,150 +1847,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/21/事件分发中的onTouch-和onTouchEvent-有什么区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/21/事件分发中的onTouch-和onTouchEvent-有什么区别/" itemprop="url">事件分发中的onTouch 和onTouchEvent 有什么区别?</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posté le</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-21T10:17:04+08:00">
-                2019-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/21/事件分发中的onTouch-和onTouchEvent-有什么区别/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/21/事件分发中的onTouch-和onTouchEvent-有什么区别/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>当看到这两个方法时，我们大概就应该直到 <code>onTouchEvent</code> 是触摸反馈的事件， <code>onTouch</code> 为一个方法。</p>
-</blockquote>
-<p>像这种写法，我们经常看到:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//onTouch 方法</span></span><br><span class="line">layout.setOnTouchListener(<span class="keyword">new</span> View.OnTouchListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouch</span><span class="params">(View v, MotionEvent event)</span> </span>&#123;</span><br><span class="line">                <span class="comment">//返回值尤为重要，如果父控件设置了此方法并返回true，就不会再继续向下传递</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"><span class="comment">//onTouchEvent 方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">    ....</span><br><span class="line">        </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//分别处理事件的按下，移动，抬起等操作</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.onTouchEvent(event);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们直到事件的传递分发从 <code>diapatchTouchEvent()</code> 方法开始，可以看下该方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">	...</span><br><span class="line">        <span class="comment">//noinspection SimplifiableIfStatement</span></span><br><span class="line">            ListenerInfo li = mListenerInfo;</span><br><span class="line">    		<span class="comment">//这里判断是否设置了onTouchListener,控件是否可用，onTouch的返回值</span></span><br><span class="line">            <span class="keyword">if</span> (li != <span class="keyword">null</span> &amp;&amp; li.mOnTouchListener != <span class="keyword">null</span></span><br><span class="line">                    &amp;&amp; (mViewFlags &amp; ENABLED_MASK) == ENABLED</span><br><span class="line">                    &amp;&amp; li.mOnTouchListener.onTouch(<span class="keyword">this</span>, event)) &#123;</span><br><span class="line">                result = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//判断onTouchEvent 的返回值	</span></span><br><span class="line">            <span class="keyword">if</span> (!result &amp;&amp; onTouchEvent(event)) &#123;</span><br><span class="line">                result = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">    ...    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，程序优先判断了设置了 <code>onTouchListener</code> ，然后再判断 <code>onTouchEvent</code>, 即判断的先后顺序不同。</p>
-<p>在前面我们说到，如果设置了 <code>onTouchListener</code> 并且在重写 <code>onTouch</code> 方法中返回了 <code>true</code> ,表明消费这个控件的触摸事件，那么该控件的点击事件将无法收到，因为点击事件 <code>performOnClick</code> 是在 <code>onTouchEvent()</code> 方法中执行的，如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">switch</span> (action) &#123;</span><br><span class="line">               <span class="keyword">case</span> MotionEvent.ACTION_UP:</span><br><span class="line">             ...</span><br><span class="line">                   <span class="keyword">if</span> (mPerformClick == <span class="keyword">null</span>) &#123;</span><br><span class="line">                                                   mPerformClick = <span class="keyword">new</span> PerformClick();</span><br><span class="line">                                               &#125;</span><br><span class="line">                                               <span class="keyword">if</span> (!post(mPerformClick)) &#123;</span><br><span class="line">                                                   performClickInternal();</span><br><span class="line">                                               &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1891,8 +1897,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">72</span>
-                  <span class="site-state-item-name">articles</span>
+                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -1905,7 +1911,7 @@
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
                   <span class="site-state-item-count">57</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
             
@@ -1953,7 +1959,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -1961,7 +1967,7 @@
 
 
 
-  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
 
 
 

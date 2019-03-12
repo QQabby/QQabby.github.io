@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Accueil
+            Startseite
           </a>
         </li>
       
@@ -202,7 +202,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -215,7 +215,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            recherche
+            Suche
           </a>
         </li>
       
@@ -273,6 +273,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/28/RecycleView更清晰地观察缓存/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/28/RecycleView更清晰地观察缓存/" itemprop="url">RecycleView更清晰地观察缓存</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-28T15:05:09+08:00">
+                2018-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/28/RecycleView更清晰地观察缓存/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/28/RecycleView更清晰地观察缓存/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>为了更清晰的观察 <code>recycleView</code> 缓存复用，在看到有一篇文章是打印缓存相关信息后，觉着确实是一种办法，比打断点更合适查看缓存的变化情况，就尝试自己写了写。</p>
+</blockquote>
+<p>这里我主要利用反射观察的是：<code>mCachedViews</code> 和 <code>recycleViewPool</code>  里面的变化情况。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Class&lt;?&gt; class1 = Class.forName(<span class="string">"android.support.v7.widget.RecyclerView"</span>);</span><br><span class="line">            Field field = class1.getDeclaredField(<span class="string">"mRecycler"</span>);</span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            RecyclerView.Recycler recycler = (RecyclerView.Recycler) field.get(recyclerView);</span><br><span class="line">            Field field1 = recycler.getClass().getDeclaredField(<span class="string">"mCachedViews"</span>);</span><br><span class="line">            field1.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            ArrayList&lt;RecyclerView.ViewHolder&gt; mCachedViews = (ArrayList&lt;RecyclerView.ViewHolder&gt;) field1.get(recycler);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;mCachedViews.size();i++)&#123;</span><br><span class="line"></span><br><span class="line">                Log.i(<span class="string">"xx"</span>,<span class="string">"mCachedViews::"</span>+mCachedViews.get(i));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            RecyclerView.RecycledViewPool viewPool = recyclerView.getRecycledViewPool();</span><br><span class="line">            <span class="comment">//这里之所以能获取到 RecycledViewPool中的mScrpa，需要新建一个android.support.v7.widget包，将该类放入该包下即可访问到。</span></span><br><span class="line">            SparseArray&lt;RecyclerView.RecycledViewPool.ScrapData&gt; list = viewPool.mScrap;</span><br><span class="line">            <span class="comment">//这里传入的类型type 是我在adapter中定义的，如下：</span></span><br><span class="line">            <span class="comment">//@Override</span></span><br><span class="line">            <span class="comment">//public int getItemViewType(int position) &#123;</span></span><br><span class="line">                <span class="comment">//return 666;</span></span><br><span class="line">            <span class="comment">//&#125;</span></span><br><span class="line">            RecyclerView.RecycledViewPool.ScrapData spra = list.get(<span class="number">666</span>);</span><br><span class="line"></span><br><span class="line">            Field field2 = spra.getClass().getDeclaredField(<span class="string">"mScrapHeap"</span>);</span><br><span class="line">            ArrayList&lt;RecyclerView.ViewHolder&gt; mScrapHeap= (ArrayList&lt;RecyclerView.ViewHolder&gt;) field2.get(spra);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;mScrapHeap.size();i++)&#123;</span><br><span class="line">                    Log.i(<span class="string">"xx"</span>,<span class="string">"mScrapHeapInfo::"</span>+mScrapHeap.get(i));</span><br><span class="line">            &#125;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>,<span class="string">"================================================="</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            Log.i(<span class="string">"xx"</span>, <span class="string">"error"</span>);</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是：反射获取</p>
+<p>然后在 <code>recycleView</code> 滚动的时候，显示信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">recyclerView.addOnScrollListener(<span class="keyword">new</span> RecyclerView.OnScrollListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScrolled</span><span class="params">(RecyclerView recyclerView, <span class="keyword">int</span> dx, <span class="keyword">int</span> dy)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">super</span>.onScrolled(recyclerView, dx, dy);</span><br><span class="line"><span class="comment">//                int recycleCount = recyclerView.getRecycledViewPool().getRecycledViewCount(666);</span></span><br><span class="line"><span class="comment">//                Log.i("xx","recyclePoolCount::"+recycleCount);</span></span><br><span class="line"></span><br><span class="line">                getInfo();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<p>还有可以在 <code>adapter</code> 重写方法： <code>onViewRecycled(ViewHOlder holder)</code> 方法，可以查看最新被回收的位置<code>ViewHolder</code> ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewRecycled</span><span class="params">(ViewHolder holder)</span> </span>&#123;</span><br><span class="line">      Log.i(<span class="string">"xx"</span>,<span class="string">"holder被回收了"</span>+holder);<span class="comment">//可以拿到被回收holder的相关信息</span></span><br><span class="line">      <span class="keyword">super</span>.onViewRecycled(holder);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这样我们就可以通过日志的方式来近距离查看 <code>recyclerView</code> 复用回收。</p>
+</blockquote>
+<p>我们假设这样一个场景：总共假设有20个<code>item</code> ,使用 <code>GrideLayoutManager</code> 每行显示5个，一个屏幕差不多显示两行，如下图所示：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-27492586f55e0863.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt="image.png"></p>
+<p>我们在 <code>adapter</code> 的 <code>onCreateViewHolder</code> 和 <code>onBindViewHolder</code> 方法的地方都打印日志，并且重写 <code>onViewRecycled</code> 方法，查看 <code>View</code> 的回收情况。</p>
+<p>当我们向下滑动，将第一行的数据滑出屏幕后，我们发现打印日志如下：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-c2458832f3c67cb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>我们发现 2，3，4卡位的 <code>ViewHolder</code> 被回收了。这里的被回收是指添加到 <code>RecycleViewPool</code> 当中了。<br>此时 <code>mCachedViews</code> 中的缓存信息如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-0c788729353d624f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>从日志上来看，它缓存了：1，0，15，16，17，18，19共7个卡位的数据。</p>
+<blockquote>
+<p>这里补充一下：<code>mCachedViews</code> 的大小在源码定义中默认是:<br><code>static final int DEFAULT_CACHE_SIZE = 2;</code>（当然也可以自己设置，通过 <code>RecyclerView #setItemViewCacheSize</code>，一般不设置）经过我的多次实验观察，当每行设置为5列时，<code>mCachedViews.size == 2+ 5 = 7</code>,当每行是4时，<code>mCachedViews.size == 2+ 4 = 6</code>，所以此时就是<code>mCachedView.size 是7</code>。</p>
+</blockquote>
+<p>问题1：为什么<code>mCachedViews</code> 缓存的卡位是1，0，15，16，17，18，19？<br>要回答这个问题，首先应该明白当我们在滑动第三行展示的时候，此时 <code>RecyclerView</code> 创建了第四行的 <code>ViewHolder</code>,即 15，16，17，18，19因为它们未曾展示到屏幕上，所以被 <code>mCachedViews</code> 缓存，继续滑动，第一行数据移出屏幕之外，也要回收了，0，1，2，3，4，5 这5个是将要被缓存，但是<code>mCachedVIews</code> 已经缓存了5个，势必只能再添加两个，两外三个卡位的 <code>ViewHolder</code> 将要被回收，<code>GrideLayoutManager</code> 默认从右往左回收：</p>
+<p>第一次回收4，3卡位如图：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-838bccbb3e3a5030.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>第二次回收2卡位如图：</p>
+<blockquote>
+<p>因为此时缓存数量已到最大值7了，所以再次添加时，会移除第一个。代码如下：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int cachedViewSize = mCachedViews.size();</span><br><span class="line">                    if (cachedViewSize &gt;= mViewCacheMax &amp;&amp; cachedViewSize &gt; 0) &#123;</span><br><span class="line">                        recycleCachedViewAt(0);</span><br><span class="line">                        cachedViewSize--;</span><br><span class="line">                    &#125;</span><br></pre></td></tr></table></figure>
+<p>日志：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-9937ef01f3e9ab4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>新缓存的2卡位被插入<code>index = 1</code> 的位置。<br>如此，我们就可以知道当1卡位会回收时，<code>mCachedViews</code> 中缓存的信息应该是，先移除第0个，也就是<code>position= 3</code> 的 <code>ViewHolder</code>,插入到 <code>index = 1</code> 的位置，顺序应该是：2，1，15，16，17，18，19，好我们看下日志：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-8fa55d658c125d56.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>是的，不出我们所料，至此到最后我们就知道了，当0卡位被回收时，<code>mCachedViews</code> 的缓存信息就是：1，0，15，16，17，18，19. 被移除的<code>ViewHolder</code> 被添加到了 <code>RecycleViewPool</code> 当中了，从 <code>RecycleViewPool</code> 当中取出的 <code>ViewHolder</code> 类似于全新的，但是不会重新调用 <code>onCreateViewHolder</code>,会重新调用 <code>onBindViewHolder</code> 重新绑定数据。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/22/ConcurrentHashMap-原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -302,7 +469,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-22T14:12:28+08:00">
                 2018-11-22
@@ -497,7 +664,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T16:57:16+08:00">
                 2018-11-21
@@ -657,7 +824,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T16:24:09+08:00">
                 2018-11-21
@@ -801,7 +968,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-21T10:36:04+08:00">
                 2018-11-21
@@ -982,7 +1149,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-20T09:21:08+08:00">
                 2018-11-20
@@ -1129,7 +1296,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-19T19:26:51+08:00">
                 2018-11-19
@@ -1293,7 +1460,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-19T15:17:21+08:00">
                 2018-11-19
@@ -1458,7 +1625,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-19T11:01:34+08:00">
                 2018-11-19
@@ -1598,7 +1765,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-15T13:39:45+08:00">
                 2018-11-15
@@ -1878,220 +2045,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/14/Android知识点总结二/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/14/Android知识点总结二/" itemprop="url">Android知识点总结二</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posté le</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-14T14:41:52+08:00">
-                2018-11-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/14/Android知识点总结二/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/14/Android知识点总结二/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-Canvas-save-跟-Canvas-restore-的调用时机"><a href="#1-Canvas-save-跟-Canvas-restore-的调用时机" class="headerlink" title="1. Canvas.save()  跟 Canvas.restore()的调用时机"></a>1. Canvas.save()  跟 Canvas.restore()的调用时机</h1><blockquote>
-<p>save: 用来保存 <code>Canvas</code> 的状态。<code>save</code> 之后，可以调用<code>Canvas</code> 的平移，放缩，旋转等操作。</p>
-<p><code>restore</code>: 用来恢复<code>canvas</code> 之前保存的状态。防止<code>save</code> 后对<code>Canvas</code> 执行的操作对后续的绘制有影响。</p>
-</blockquote>
-<h1 id="2-Android-P-9-0-的新特性"><a href="#2-Android-P-9-0-的新特性" class="headerlink" title="2. Android P(9.0) 的新特性"></a>2. Android P(9.0) 的新特性</h1><ul>
-<li>支持WiFi室内定位</li>
-<li>适配刘海屏</li>
-<li>通知栏改进：可以显示对话，附加照片和表情等</li>
-<li>多摄像头api</li>
-<li>对于非 <code>http</code> 连接，将直接拦截，推荐使用<code>https</code></li>
-</ul>
-<h1 id="Android-8-0"><a href="#Android-8-0" class="headerlink" title="Android 8.0"></a>Android 8.0</h1><blockquote>
-<p>PHONE 权限组新增加两个权限</p>
-<ul>
-<li>ANSWER_PHONE_CALLS:允许您的应用通过编程方式接听呼入电话。要在您的应用中处理呼入电话，您可以使用 assceptRingingCall() 函数</li>
-<li>READ_PHONE_NUMBERS: 权限允许您的应用读取设备中存储的电话号码</li>
-</ul>
-</blockquote>
-<ul>
-<li><p>通知适配</p>
-<blockquote>
-<p>为了更好的管理通知的提醒，不想一些不重要的通知打扰用户，新增加用户渠道，用户可根据渠道屏蔽一些不重要的通知</p>
-</blockquote>
-</li>
-<li><p>安装apk</p>
-<blockquote>
-<p>在 AndroidManifest 文件中添加未知来源应用的权限：</p>
-<p><code>&lt;uses-permission android:name=&quot;android.permission.REQUEST_INSTALL_PACKAGES&quot;/&gt;</code> 这样系统会自动询问用户完成授权。</p>
-<p>也可以通过 <code>canRequestPackageInstalls</code> 查询是否有此权限，如果没有的话就使用 <code>Settings.ACTION_MANAGE_UNKNOW_APP_SOURCE</code> 引导用户安装未知应用权限去授权。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(Build,VERSION&gt;SDK_INT &gt;= <span class="number">26</span>)&#123;</span><br><span class="line">     Boolean isInstall = getPackageManager().canRequestPackageInstalls();<span class="comment">//26以上</span></span><br><span class="line">    <span class="keyword">if</span>(isInstall)&#123;</span><br><span class="line">        <span class="comment">//有此权限，安装应用</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//跳转到 安装未知应用 权限界面，引导用户开启权限</span></span><br><span class="line">        Uri selfPackageUri = Uri.parse(<span class="string">"package:"</span> + <span class="keyword">this</span>.getPackageName());</span><br><span class="line">                Intent intent = <span class="keyword">new</span> Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, selfPackageUri);</span><br><span class="line">                startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP)</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);</span><br><span class="line">        <span class="keyword">if</span> (requestCode == REQUEST_CODE_UNKNOWN_APP) &#123;</span><br><span class="line">            <span class="comment">//如果权限开启，则开始安装应用</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>静态广播无法正常接受</p>
-</li>
-</ul>
-<h1 id="Android-N-7-0-的新特性"><a href="#Android-N-7-0-的新特性" class="headerlink" title="Android N(7.0) 的新特性"></a>Android N(7.0) 的新特性</h1><ul>
-<li>私有文件外部将不能访问，通过<code>FileProvider</code> 可解决</li>
-<li><code>SharedPreferences</code> 进程间通信模式闪退，<code>SecurityException</code></li>
-</ul>
-<h1 id="Android-6-0"><a href="#Android-6-0" class="headerlink" title="Android 6.0"></a>Android 6.0</h1><ul>
-<li><p>运行时权限的申请</p>
-</li>
-<li><p><code>https</code> 的推荐</p>
-</li>
-</ul>
-<h1 id="3-APK-内容"><a href="#3-APK-内容" class="headerlink" title="3. APK 内容"></a>3. APK 内容</h1><ul>
-<li><code>assets</code> 存放需要打包到 <code>APK</code> 中的静态文件</li>
-<li><code>lib</code> 目录  <code>native</code>库</li>
-<li><code>res</code> 目录 存放应用程序的资源</li>
-<li>META-INF 存放应用程序签名和证书的目录</li>
-<li><code>AndroidManifest.xml</code> </li>
-<li><code>classes.dex</code></li>
-<li><code>resources.arsc</code> 资源配置文件</li>
-</ul>
-<h1 id="4-Binder-机制的优点"><a href="#4-Binder-机制的优点" class="headerlink" title="4. Binder 机制的优点"></a>4. Binder 机制的优点</h1><blockquote>
-<p><code>Linux</code> 中使用的 <code>IPC</code> 通信机制有：<code>pipe</code>(管道)，<code>signal</code>(信号量)，<code>Socket</code></p>
-<ul>
-<li><code>socket</code>:是一个通用接口，传输效率低，开销比较大；</li>
-<li>管道和消息队列：采用存储转发方式，所以至少需要拷贝2次数据，效率低，共享内存虽然在传输时没有拷贝数据，但其控制机制复杂，而 <code>Binder</code> 更好传输性能。</li>
-<li>安全性更高，可以建立私有通道，有身份标识（UID/PID）</li>
-<li>另外一个优点就是，通过<code>binder</code> 可以很方便的调用<code>server</code> 端的方法，犹如调用本地方法一样。</li>
-</ul>
-</blockquote>
-<h1 id="5-Gradle-的生命周期"><a href="#5-Gradle-的生命周期" class="headerlink" title="5. Gradle 的生命周期"></a>5. Gradle 的生命周期</h1><ul>
-<li><p>1.初始化</p>
-<blockquote>
-<p>初始化主要是读取 <code>settings.gragle</code> 文件，用于确定哪些项目参与构建，并创建<code>Project</code> 实例</p>
-</blockquote>
-</li>
-<li><p>2.配置</p>
-<blockquote>
-<p>配置阶段主要是为每个 <code>build.gradle</code> 文件配置 <code>project</code> 对象</p>
-</blockquote>
-</li>
-<li><p>3.执行</p>
-<blockquote>
-<p>主要根据 <code>gradle</code> 命令和传入参数创建并执行任务</p>
-</blockquote>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2142,8 +2095,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">72</span>
-                  <span class="site-state-item-name">articles</span>
+                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -2156,7 +2109,7 @@
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
                   <span class="site-state-item-count">57</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
             
@@ -2204,7 +2157,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -2212,7 +2165,7 @@
 
 
 
-  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
 
 
 
