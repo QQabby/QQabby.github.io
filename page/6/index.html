@@ -273,6 +273,381 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/09/19/AsyncTask源码解读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/19/AsyncTask源码解读/" itemprop="url">AsyncTask源码解读</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-19T18:03:42+08:00">
+                2018-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/19/AsyncTask源码解读/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/19/AsyncTask源码解读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>屡思路</p>
+<h1 id="1-初始-AsyncTask"><a href="#1-初始-AsyncTask" class="headerlink" title="1. 初始 AsyncTask"></a>1. 初始 AsyncTask</h1><p><code>AsyncTask</code> 这个类的声明如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public abstract class AsyncTask&lt;Params, Progress, Result&gt; &#123;</span><br><span class="line">  .....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>是一个抽象类<br><code>Params</code> 表示输入参数的类型<br><code>Progress</code> 表示后台任务的执行进度<br><code>Result</code> 表示返回结果的类型</p>
+<h1 id="2-使用"><a href="#2-使用" class="headerlink" title="2.使用"></a>2.使用</h1><blockquote>
+<p>在 <code>AsyncTask</code> 这个类的顶部有一些代码注释，里面讲述了如何使用一个 <code>AsyncTask</code>,如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">* &lt;p&gt;Here is an example of subclassing:&lt;/p&gt;</span><br><span class="line"> * &lt;pre class=&quot;prettyprint&quot;&gt;</span><br><span class="line"> * private class DownloadFilesTask extends AsyncTask&amp;lt;URL, Integer, Long&amp;gt; &#123;</span><br><span class="line"> *     protected Long doInBackground(URL... urls) &#123;</span><br><span class="line"> *         int count = urls.length;</span><br><span class="line"> *         long totalSize = 0;</span><br><span class="line"> *         for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line"> *             totalSize += Downloader.downloadFile(urls[i]);</span><br><span class="line"> *             publishProgress((int) ((i / (float) count) * 100));</span><br><span class="line"> *             // Escape early if cancel() is called</span><br><span class="line"> *             if (isCancelled()) break;</span><br><span class="line"> *         &#125;</span><br><span class="line"> *         return totalSize;</span><br><span class="line"> *     &#125;</span><br><span class="line"> *</span><br><span class="line"> *     protected void onProgressUpdate(Integer... progress) &#123;</span><br><span class="line"> *         setProgressPercent(progress[0]);</span><br><span class="line"> *     &#125;</span><br><span class="line"> *</span><br><span class="line"> *     protected void onPostExecute(Long result) &#123;</span><br><span class="line"> *         showDialog(&quot;Downloaded &quot; + result + &quot; bytes&quot;);</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"></span><br><span class="line">//user</span><br><span class="line">&lt;p&gt;Once created, a task is executed very simply:&lt;/p&gt;</span><br><span class="line"> * &lt;pre class=&quot;prettyprint&quot;&gt;</span><br><span class="line"> * new DownloadFilesTask().execute(url1, url2, url3);</span><br><span class="line"> * &lt;/pre&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="3-内部重要方法"><a href="#3-内部重要方法" class="headerlink" title="3. 内部重要方法"></a>3. 内部重要方法</h1><ul>
+<li><code>onPreExecute()</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@MainThread</span><br><span class="line">  protected void onPreExecute() &#123;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在主线程中运行，异步任务之前会被调用，一般用于做一些准备工作；</p>
+<ul>
+<li><code>doInBackground()</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@WorkerThread</span><br><span class="line"> protected abstract Result doInBackground(Params... params);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在线程池中运行，此方法一般用于执行异步任务，通过<code>publishProgress</code> 方法来更新进度；</p>
+<ul>
+<li><code>onProgressUpdate()</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@MainThread</span><br><span class="line">    protected void onProgressUpdate(Progress... values) &#123;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>主线程中运行，当通过<code>publishProgress</code> 方法调用后，<code>onProgressUpdate()</code> 方法会被调用；</p>
+<ul>
+<li><code>onPostExecute()</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@MainThread</span><br><span class="line">    protected void onPostExecute(Result result) &#123;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>主线程中运行，将返回的结果展示。</p>
+<h1 id="4-源码分析"><a href="#4-源码分析" class="headerlink" title="4.源码分析"></a>4.源码分析</h1><p>从它的 <code>execute</code> 方法开始：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> @MainThread</span><br><span class="line">    public final AsyncTask&lt;Params, Progress, Result&gt; execute(Params... params) &#123;</span><br><span class="line">      //sDefaultExecutor 定义如下，线程池</span><br><span class="line">        return executeOnExecutor(sDefaultExecutor, params);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private static volatile Executor sDefaultExecutor = SERIAL_EXECUTOR;</span><br><span class="line">public static final Executor SERIAL_EXECUTOR = new SerialExecutor();</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">@MainThread</span><br><span class="line">    public final AsyncTask&lt;Params, Progress, Result&gt; executeOnExecutor(Executor exec,</span><br><span class="line">            Params... params) &#123;</span><br><span class="line">      //首先判断是不是 PENDING</span><br><span class="line">        if (mStatus != Status.PENDING) &#123;</span><br><span class="line">            switch (mStatus) &#123;</span><br><span class="line">                case RUNNING:</span><br><span class="line">                    throw new IllegalStateException(&quot;Cannot execute task:&quot;</span><br><span class="line">                            + &quot; the task is already running.&quot;);</span><br><span class="line">                case FINISHED:</span><br><span class="line">                    throw new IllegalStateException(&quot;Cannot execute task:&quot;</span><br><span class="line">                            + &quot; the task has already been executed &quot;</span><br><span class="line">                            + &quot;(a task can be executed only once)&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      //将状态设置为 RUNNING 状态</span><br><span class="line">        mStatus = Status.RUNNING;</span><br><span class="line">      //1.调用了 onPreExecute() 方法</span><br><span class="line">        onPreExecute();</span><br><span class="line">      //将参数封装到 mWorker.mParams 中去了</span><br><span class="line">        mWorker.mParams = params;</span><br><span class="line">        //调用execute 将mFuture 传进去了</span><br><span class="line">        exec.execute(mFuture);</span><br><span class="line"></span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>为了弄明白整体流程，首页要搞明白上面的 <code>mWorker</code>  <code>mFuture</code> 是干嘛的。</p>
+<ul>
+<li><code>mWorker</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> private final WorkerRunnable&lt;Params, Result&gt; mWorker;</span><br><span class="line">//抽象类 并且实现了Callable 接口</span><br><span class="line">private static abstract class WorkerRunnable&lt;Params, Result&gt; implements Callable&lt;Result&gt; &#123;</span><br><span class="line">        Params[] mParams;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @SuppressWarnings(&#123;&quot;RawUseOfParameterizedType&quot;&#125;)</span><br><span class="line">    private static class AsyncTaskResult&lt;Data&gt; &#123;</span><br><span class="line">        final AsyncTask mTask;</span><br><span class="line">        final Data[] mData;</span><br><span class="line"></span><br><span class="line">        AsyncTaskResult(AsyncTask task, Data... data) &#123;</span><br><span class="line">            mTask = task;</span><br><span class="line">            mData = data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">//在AsyncTask 的构造方法中，分别对 mWorker, mFuture 进行了初始化</span><br><span class="line">public AsyncTask(@Nullable Looper callbackLooper) &#123;</span><br><span class="line">        mHandler = callbackLooper == null || callbackLooper == Looper.getMainLooper()</span><br><span class="line">            ? getMainHandler()</span><br><span class="line">            : new Handler(callbackLooper);</span><br><span class="line"></span><br><span class="line">        mWorker = new WorkerRunnable&lt;Params, Result&gt;() &#123;</span><br><span class="line">          //实现 了 call 方法</span><br><span class="line">            public Result call() throws Exception &#123;</span><br><span class="line">              //设置调用了为 true</span><br><span class="line">                mTaskInvoked.set(true);</span><br><span class="line">              //</span><br><span class="line">                Result result = null;</span><br><span class="line">                try &#123;</span><br><span class="line"></span><br><span class="line">                 //设置线程的优先级</span><br><span class="line">   Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);</span><br><span class="line">                    //noinspection unchecked</span><br><span class="line">                    //将 2. doInBackground的结果存储到 result 中</span><br><span class="line">                    result = doInBackground(mParams);</span><br><span class="line">                    Binder.flushPendingCommands();</span><br><span class="line">                &#125; catch (Throwable tr) &#123;</span><br><span class="line">                    mCancelled.set(true);</span><br><span class="line">                    throw tr;</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                  //最后执行postResult</span><br><span class="line">                    postResult(result);</span><br><span class="line">                &#125;</span><br><span class="line">              //返回结果</span><br><span class="line">                return result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        mFuture = new FutureTask&lt;Result&gt;(mWorker) &#123;</span><br><span class="line">            @Override</span><br><span class="line">            protected void done() &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    postResultIfNotInvoked(get());</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    android.util.Log.w(LOG_TAG, e);</span><br><span class="line">                &#125; catch (ExecutionException e) &#123;</span><br><span class="line">                    throw new RuntimeException(&quot;An error occurred while executing doInBackground()&quot;,</span><br><span class="line">                            e.getCause());</span><br><span class="line">                &#125; catch (CancellationException e) &#123;</span><br><span class="line">                    postResultIfNotInvoked(null);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><code>postResult(result)</code> 方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private Result postResult(Result result) &#123;</span><br><span class="line">       @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">       Message message = getHandler().obtainMessage(MESSAGE_POST_RESULT,</span><br><span class="line">               new AsyncTaskResult&lt;Result&gt;(this, result));</span><br><span class="line">       message.sendToTarget();</span><br><span class="line">       return result;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>发送一条 <code>MESSAGE_POST_RESULT</code> 的消息，并且将<code>result</code> 存入到了 <code>AsyncTaskResult</code>中的 <code>mData</code> 中去了，<br>其中 <code>AsyncTaskResult</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&#123;&quot;RawUseOfParameterizedType&quot;&#125;)</span><br><span class="line">    private static class AsyncTaskResult&lt;Data&gt; &#123;</span><br><span class="line">        final AsyncTask mTask;</span><br><span class="line">        final Data[] mData;</span><br><span class="line"></span><br><span class="line">        AsyncTaskResult(AsyncTask task, Data... data) &#123;</span><br><span class="line">            mTask = task;</span><br><span class="line">            mData = data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>getHandler</code> 获取一个 <code>Handler</code> ,我们看下 <code>handleMessage</code> 的<code>MESSAGE_POST_RESULT</code> 对这条消息的处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">private static class InternalHandler extends Handler &#123;</span><br><span class="line">       public InternalHandler(Looper looper) &#123;</span><br><span class="line">           super(looper);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       @SuppressWarnings(&#123;&quot;unchecked&quot;, &quot;RawUseOfParameterizedType&quot;&#125;)</span><br><span class="line">       @Override</span><br><span class="line">       public void handleMessage(Message msg) &#123;</span><br><span class="line">           AsyncTaskResult&lt;?&gt; result = (AsyncTaskResult&lt;?&gt;) msg.obj;</span><br><span class="line">           switch (msg.what) &#123;</span><br><span class="line">               case MESSAGE_POST_RESULT:</span><br><span class="line">                 //是他是他 就是他</span><br><span class="line">                   // There is only one result</span><br><span class="line">                   result.mTask.finish(result.mData[0]);</span><br><span class="line">                   break;</span><br><span class="line">               case MESSAGE_POST_PROGRESS:</span><br><span class="line">                   result.mTask.onProgressUpdate(result.mData);</span><br><span class="line">                   break;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中 <code>result</code> 是 <code>AsyncTaskResult</code> 类型，前面我们见到过的，<code>mTask</code> 当时我们传的是 <code>this</code> 也就是当前的 <code>AsyncTask</code> ,调用<code>finish</code> 方法，将<code>mData</code> 返回的结果传入进去，还记得我们前面看过的吗，将返回的结果存入<code>AsyncTaskResult.mData</code>中去了。</p>
+<p>下面看下 <code>finish</code>方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private void finish(Result result) &#123;</span><br><span class="line">      //判断是否取消，如果取消了，就不执行onPostExecute 了</span><br><span class="line">        if (isCancelled()) &#123;</span><br><span class="line">            onCancelled(result);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          //4. 就执行onPostExecute 方法了</span><br><span class="line">            onPostExecute(result);</span><br><span class="line">        &#125;</span><br><span class="line">      // 将状态标志为 finish</span><br><span class="line">        mStatus = Status.FINISHED;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>ok ，上述都是 <code>mWorker</code> 工作的，接下来是我们一开始说的 <code>mFuture</code></p>
+<ul>
+<li><code>mFuture</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">private final FutureTask&lt;Result&gt; mFuture;</span><br><span class="line"></span><br><span class="line">//初始化也是在AsyncTask 构造方法中执行的，在mWorker 之下，并且将mWorder 传入</span><br><span class="line">mFuture = new FutureTask&lt;Result&gt;(mWorker) &#123;</span><br><span class="line">            @Override</span><br><span class="line">            protected void done() &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    postResultIfNotInvoked(get());</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    android.util.Log.w(LOG_TAG, e);</span><br><span class="line">                &#125; catch (ExecutionException e) &#123;</span><br><span class="line">                    throw new RuntimeException(&quot;An error occurred while executing doInBackground()&quot;,</span><br><span class="line">                            e.getCause());</span><br><span class="line">                &#125; catch (CancellationException e) &#123;</span><br><span class="line">                    postResultIfNotInvoked(null);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>postResultIfNotInvoked(get());</code> 如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private void postResultIfNotInvoked(Result result) &#123;</span><br><span class="line">        final boolean wasTaskInvoked = mTaskInvoked.get();</span><br><span class="line">      //wasTaskInvoked 为true ,之前在 mWorker 中设置了为true</span><br><span class="line">//mWorker = new WorkerRunnable&lt;Params, Result&gt;() &#123;</span><br><span class="line">//            public Result call() throws Exception &#123;</span><br><span class="line"> //               mTaskInvoked.set(true);</span><br><span class="line"></span><br><span class="line">        if (!wasTaskInvoked) &#123;</span><br><span class="line">            postResult(result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>FutureTask</code> :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">我们知道mWorker implement Callable 接口，传入赋值给了callable 变量</span><br><span class="line"> public FutureTask(Callable&lt;V&gt; callable) &#123;</span><br><span class="line">        if (callable == null)</span><br><span class="line">            throw new NullPointerException();</span><br><span class="line">        this.callable = callable;</span><br><span class="line">        this.state = NEW;       // ensure visibility of callable</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">public void run() &#123;</span><br><span class="line">        if (state != NEW ||</span><br><span class="line">            !U.compareAndSwapObject(this, RUNNER, null, Thread.currentThread()))</span><br><span class="line">            return;</span><br><span class="line">        try &#123;</span><br><span class="line">          //callable 变量又赋值给了 c</span><br><span class="line">            Callable&lt;V&gt; c = callable;</span><br><span class="line">            if (c != null &amp;&amp; state == NEW) &#123;</span><br><span class="line">                V result;</span><br><span class="line">                boolean ran;</span><br><span class="line">                try &#123;</span><br><span class="line">                  //这里调用c.call 实际上就是调用 mWorker.call 方法</span><br><span class="line">//，由我们上面的分析知道，在mWorker.call 方法中最终会返回 result 结果</span><br><span class="line">                    result = c.call();</span><br><span class="line">                    ran = true;</span><br><span class="line">                &#125; catch (Throwable ex) &#123;</span><br><span class="line">                    result = null;</span><br><span class="line">                    ran = false;</span><br><span class="line">                    setException(ex);</span><br><span class="line">                &#125;</span><br><span class="line">                if (ran)</span><br><span class="line">                    set(result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            // runner must be non-null until state is settled to</span><br><span class="line">            // prevent concurrent calls to run()</span><br><span class="line">            runner = null;</span><br><span class="line">            // state must be re-read after nulling runner to prevent</span><br><span class="line">            // leaked interrupts</span><br><span class="line">            int s = state;</span><br><span class="line">            if (s &gt;= INTERRUPTING)</span><br><span class="line">                handlePossibleCancellationInterrupt(s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>ok ，这是 <code>mFuture</code>,还剩下最后一个：</p>
+<p><code>exec.execute(mFuture);</code></p>
+<p><code>exec</code> 就是 <code>sDefaultExecutor</code>  ,其实 就是 <code>SerialExecutor</code>,如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private static volatile Executor sDefaultExecutor = SERIAL_EXECUTOR;</span><br><span class="line"></span><br><span class="line">public static final Executor SERIAL_EXECUTOR = new SerialExecutor();</span><br></pre></td></tr></table></figure></p>
+<p><code>SerialExecutor</code> 如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">private static class SerialExecutor implements Executor &#123;</span><br><span class="line">       final ArrayDeque&lt;Runnable&gt; mTasks = new ArrayDeque&lt;Runnable&gt;();</span><br><span class="line">       Runnable mActive;</span><br><span class="line"></span><br><span class="line">       public synchronized void execute(final Runnable r) &#123;</span><br><span class="line">           mTasks.offer(new Runnable() &#123;</span><br><span class="line">               public void run() &#123;</span><br><span class="line">                   try &#123;</span><br><span class="line">                       r.run();</span><br><span class="line">                   &#125; finally &#123;</span><br><span class="line">                       scheduleNext();</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;);</span><br><span class="line">         //第一次肯定为null ，执行 scheduleNext</span><br><span class="line">           if (mActive == null) &#123;</span><br><span class="line">               scheduleNext();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       protected synchronized void scheduleNext() &#123;</span><br><span class="line">         //给 mActivie 赋值，mTasks.poll 会从第一个开始取</span><br><span class="line">           if ((mActive = mTasks.poll()) != null) &#123;</span><br><span class="line">               THREAD_POOL_EXECUTOR.execute(mActive);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面我们将 <code>mFuture</code> 传入，实际就是 <code>r</code>.<br><code>mTask</code> 是 <code>ArrayDeque&lt;Runnable&gt;</code> 姑且认为它是这个排队序列的吧。看下<code>offer</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">      插入一个 element 在队尾</span><br><span class="line">     * Inserts the specified element at the end of this deque.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt;This method is equivalent to &#123;@link #offerLast&#125;.</span><br><span class="line">     *</span><br><span class="line">     * @param e the element to add</span><br><span class="line">     * @return &#123;@code true&#125; (as specified by &#123;@link Queue#offer&#125;)</span><br><span class="line">     * @throws NullPointerException if the specified element is null</span><br><span class="line">     */</span><br><span class="line">    public boolean offer(E e) &#123;</span><br><span class="line">        return offerLast(e);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>看注释，也就是说是每次执行一个任务，都是在当前 <code>deque</code> 的队尾开始排队的。并且执行是串行的，因为当第二个线程过来的时候，判断 <code>mActive</code> 不为 <code>null</code> 将不会执行 <code>scheduleNext</code>.(我这个是8.0)源码，其实在 <code>android 3.0</code> 之后 <code>AsyncTask</code> 都是采用串行执行任务的。</p>
+<p>各个版本的不同如下：<br><code>android 1.6</code>之前 ——  串行<br><code>android 1.6-3.0</code> 之间 —– 并行<br><code>android 3.0</code> 之后 —– 串行</p>
+<p>尽管如此，我们仍然可以通过 调用 <code>executeOnExecutor</code> 来并行执行任务。</p>
+<p>ok ， 回到那个 <code>execute</code> 方法中，我们说调用了 <code>r.run</code> 实际山就是 调用 <code>mFuture.run</code> 方法：<br>上面我们展示过在 <code>mFuture.run</code> 方法中如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">                  //这里调用c.call 实际上就是调用 mWorker.call 方法</span><br><span class="line">//，由我们上面的分析知道，在mWorker.call 方法中最终会返回 result 结果</span><br><span class="line">                    result = c.call();</span><br><span class="line">                    ran = true;</span><br><span class="line">                &#125; catch (Throwable ex) &#123;</span><br><span class="line">                    result = null;</span><br><span class="line">                    ran = false;</span><br><span class="line">                    setException(ex);</span><br><span class="line">                &#125;</span><br></pre></td></tr></table></figure>
+<p>最终调用<code>mWorker.call</code>  方法，而在 <code>mWorker.call</code> 方法中，我们完成一系列的任务，调用了 <code>doInBackground</code> <code>onPostExecute</code> 完成了整个的调用过程。</p>
+<p>有的人可能已经注意到了 还差一个 <code>onProgressUpdate</code> 方法还没被调用，我们知道只有调用那个 <code>publishProgress</code> 方法的时候才能调用 <code>onProgressUpdate</code> ,那下面我们卡夏 <code>publishProgress</code> 方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@WorkerThread</span><br><span class="line">    protected final void publishProgress(Progress... values) &#123;</span><br><span class="line">        //如果没取消</span><br><span class="line">        if (!isCancelled()) &#123;</span><br><span class="line">    //会发送一个 MESSAGE_POST_PROGRESS 的消息            getHandler().obtainMessage(MESSAGE_POST_PROGRESS,</span><br><span class="line">                    new AsyncTaskResult&lt;Progress&gt;(this, values)).sendToTarget();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">private static class InternalHandler extends Handler &#123;</span><br><span class="line">        public InternalHandler(Looper looper) &#123;</span><br><span class="line">            super(looper);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @SuppressWarnings(&#123;&quot;unchecked&quot;, &quot;RawUseOfParameterizedType&quot;&#125;)</span><br><span class="line">        @Override</span><br><span class="line">        public void handleMessage(Message msg) &#123;</span><br><span class="line">            AsyncTaskResult&lt;?&gt; result = (AsyncTaskResult&lt;?&gt;) msg.obj;</span><br><span class="line">            switch (msg.what) &#123;</span><br><span class="line">                case MESSAGE_POST_RESULT:</span><br><span class="line">                    // There is only one result</span><br><span class="line">                    result.mTask.finish(result.mData[0]);</span><br><span class="line">                    break;</span><br><span class="line">                case MESSAGE_POST_PROGRESS://是他是他 就是他</span><br><span class="line">                    //3. 调用了 onProgressUpdate 方法了</span><br><span class="line">                    result.mTask.onProgressUpdate(result.mData);</span><br><span class="line">                    break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>会调用 <code>AsyncTask</code> 的 <code>onProgressUpdate</code> 方法了。结束。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><blockquote>
+<p><code>AsyncTask</code> 实现原理就内部维护了2个线程池+Handlder，2个线程池分别为：任务队列 线程池（SerialExecutor）,执行 线程池（Thread_pool_executor）真正执行具体的线程任务，任务完成最后通过 <code>InternalHandler</code> 发送消息 ，将执行任务的结果<code>post</code> 到主线程中。此线程池中执行任务的顺序，根据不同 <code>api</code> 版本的不同顺序略有不同，在<code>android 1.6</code>之前，是串行执行任务，在 <code>Android 1.6-3.0</code> 之间通过并行执行任务，<code>Android 3.0</code>之后就是默认串行执行任务了，当然我们也可以通过调用<code>executeOnExecuteor</code> 并行执行。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/09/11/Service启动过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Service启动过程/" itemprop="url">Service 启动过程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-11T09:38:47+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/11/Service启动过程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/11/Service启动过程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>看完 <code>Activity</code> 的启动过程，发现 <code>Service</code> 的启动过程相对来说就比较简单了。</p>
+</blockquote>
+<p>要说起启动过程，就得从 <code>startService</code> 开始：</p>
+<h1 id="1-startService"><a href="#1-startService" class="headerlink" title="1.startService"></a>1.startService</h1><p>根据源码的跳转，发现跳转到 <code>ContextWrapper</code> 这个类中，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public ComponentName startService(Intent service) &#123;</span><br><span class="line">        return mBase.startService(service);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中 <code>mBase</code> 是类型是：<code>Context</code> 类型，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class ContextWrapper extends Context &#123;</span><br><span class="line">    Context mBase;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>而我们又知道 <code>Context</code> 是一个抽象类 ，实现者是 <code>ContextImpl</code> ,所以我们应该是查看<code>ContextImpl</code> 这个类中的 <code>startService(service)</code> 方法。</p>
+<p><code>ContextImpl</code> 中的方法定义如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public ComponentName startService(Intent service) &#123;</span><br><span class="line">        warnIfCallingFromSystemProcess();</span><br><span class="line">        return startServiceCommon(service, false, mUser);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 <code>startService</code> 中又调用了 <code>startServiceCommon(service,(requirForeground:false),mUser)</code> 这个方法，继续跟进：</p>
+<h1 id="2-startServiceCommon"><a href="#2-startServiceCommon" class="headerlink" title="2.startServiceCommon"></a>2.startServiceCommon</h1><p><code>startServiceCommon</code> 方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">private ComponentName startServiceCommon(Intent service, boolean requireForeground,</span><br><span class="line">            UserHandle user) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">          //校验要启动的service</span><br><span class="line">            validateServiceIntent(service);</span><br><span class="line">            service.prepareToLeaveProcess(this);</span><br><span class="line">            ComponentName cn = ActivityManager.getService().startService(</span><br><span class="line">                mMainThread.getApplicationThread(), service, service.resolveTypeIfNeeded(</span><br><span class="line">                            getContentResolver()), requireForeground,</span><br><span class="line">                            getOpPackageName(), user.getIdentifier());</span><br><span class="line">            if (cn != null) &#123;</span><br><span class="line">                if (cn.getPackageName().equals(&quot;!&quot;)) &#123;</span><br><span class="line">                    throw new SecurityException(</span><br><span class="line">                            &quot;Not allowed to start service &quot; + service</span><br><span class="line">                            + &quot; without permission &quot; + cn.getClassName());</span><br><span class="line">                &#125; else if (cn.getPackageName().equals(&quot;!!&quot;)) &#123;</span><br><span class="line">                    throw new SecurityException(</span><br><span class="line">                            &quot;Unable to start service &quot; + service</span><br><span class="line">                            + &quot;: &quot; + cn.getClassName());</span><br><span class="line">                &#125; else if (cn.getPackageName().equals(&quot;?&quot;)) &#123;</span><br><span class="line">                    throw new IllegalStateException(</span><br><span class="line">                            &quot;Not allowed to start service &quot; + service + &quot;: &quot; + cn.getClassName());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return cn;</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            throw e.rethrowFromSystemServer();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里面有几个需要说明一下：</p>
+<ul>
+<li><code>ActivityManager.getService()</code>  点进去查看<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * @hide</span><br><span class="line">     */</span><br><span class="line">    public static IActivityManager getService() &#123;</span><br><span class="line">        return IActivityManagerSingleton.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static final Singleton&lt;IActivityManager&gt; IActivityManagerSingleton =</span><br><span class="line">            new Singleton&lt;IActivityManager&gt;() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                protected IActivityManager create() &#123;</span><br><span class="line">                    final IBinder b = ServiceManager.getService(Context.ACTIVITY_SERVICE);</span><br><span class="line">                    final IActivityManager am = IActivityManager.Stub.asInterface(b);</span><br><span class="line">                    return am;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>首先是返回的类型是 <code>IActivityManager</code> 类型，其中在<code>create</code> 方法中，拿到远程服务的<code>Binder</code> 对象，其中<code>IActivityManager.Stub.asInterface(b)</code> 不知道大家有没有想起<code>AIDL</code> 这就很熟悉了，就是拿到远程服务的代理对象：<code>IActivityManager</code>,通过代理对象调用远程的方法，是应用进程与服务进程通信的媒介，如果没猜错的话就是在<code>ActivityManagerService</code> 中实现了，查看<code>ActivityManagerService</code> 类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class ActivityManagerService extends IActivityManager.Stub</span><br><span class="line">        implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback &#123;</span><br><span class="line">.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>果然不出所料，<code>AMS extend  IActivityManager.Stub</code>  .</p>
+<ul>
+<li><code>mMainThread.getApplicationThread()</code> 首先明白 <code>mMainThread</code> 是 <code>ActivityThread</code> 类的实例变量，通过<code>getApplicationThread()</code> 方法拿到一个 <code>ApplicationThread</code> 类的实例：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public ApplicationThread getApplicationThread()</span><br><span class="line">    &#123;</span><br><span class="line">        return mAppThread;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>而<code>ApplicationThread</code> 类定义如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private class ApplicationThread extends IApplicationThread.Stub &#123;</span><br><span class="line">.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>发现 <code>ApplicationThread</code> 是 <code>ActivityThread</code> 的一个内部类.并且实现了 <code>IApplicationThread.Stub</code> ,而我们又把这个类型传入给了<code>AMS</code>,相当于远程服务拿到了一个访问应用进程的代理，类型为：<code>IApplicationThread</code></p>
+<blockquote>
+<p>总结：到目前为止，客户端拿到了远程服务的代理<code>（IActivityManager）</code>, 服务端拿到了客户端的代理<code>（IApplicationThread）</code>,它们互相拿到各自进程的代理类，是它们进行进程间通信的基础。</p>
+</blockquote>
+<p>ok ,我们回到最初那个地方：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ComponentName cn = ActivityManager.getService().startService(</span><br><span class="line">                mMainThread.getApplicationThread(), service, service.resolveTypeIfNeeded(</span><br><span class="line">                            getContentResolver()), requireForeground,</span><br><span class="line">                            getOpPackageName(), user.getIdentifier());</span><br></pre></td></tr></table></figure></p>
+<p>通过前面的分析我们知道：<code>ActivityManager.getService().</code> 实际就是 <code>AMS</code> 远程代理，最终在<code>AMS</code> 中完成，我们去 <code>AMS</code> 代码中查看下 <code>startService</code> 代码：</p>
+<h1 id="3-ActivityManagerService-startService"><a href="#3-ActivityManagerService-startService" class="headerlink" title="3.ActivityManagerService.  startService"></a>3.ActivityManagerService.  startService</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public ComponentName startService(IApplicationThread caller, Intent service,</span><br><span class="line">            String resolvedType, boolean requireForeground, String callingPackage, int userId)</span><br><span class="line">            throws TransactionTooLargeException &#123;</span><br><span class="line">        enforceNotIsolatedCaller(&quot;startService&quot;);</span><br><span class="line">        // Refuse possible leaked file descriptors</span><br><span class="line">        if (service != null &amp;&amp; service.hasFileDescriptors() == true) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;File descriptors passed in Intent&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (callingPackage == null) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;callingPackage cannot be null&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (DEBUG_SERVICE) Slog.v(TAG_SERVICE,</span><br><span class="line">                &quot;*** startService: &quot; + service + &quot; type=&quot; + resolvedType + &quot; fg=&quot; + requireForeground);</span><br><span class="line">        synchronized(this) &#123;</span><br><span class="line">            final int callingPid = Binder.getCallingPid();</span><br><span class="line">            final int callingUid = Binder.getCallingUid();</span><br><span class="line">            final long origId = Binder.clearCallingIdentity();</span><br><span class="line">            ComponentName res;</span><br><span class="line">            try &#123;</span><br><span class="line">                // 又调用了startServiceLocked 方法</span><br><span class="line">                res = mServices.startServiceLocked(caller, service,</span><br><span class="line">                        resolvedType, callingPid, callingUid,</span><br><span class="line">                        requireForeground, callingPackage, userId);</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                Binder.restoreCallingIdentity(origId);</span><br><span class="line">            &#125;</span><br><span class="line">            return res;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><code>startServiceLocked</code> 方法很复杂，大概如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ComponentName startServiceLocked(IApplicationThread caller, Intent service, String resolvedType,</span><br><span class="line">            int callingPid, int callingUid, boolean fgRequired, String callingPackage, final int userId)</span><br><span class="line">            throws TransactionTooLargeException &#123;</span><br><span class="line"></span><br><span class="line">.....</span><br><span class="line">ServiceRecord r = res.record;//启动service的信息保存在 serviceRecord 中</span><br><span class="line">....</span><br><span class="line">   ComponentName cmp = startServiceInnerLocked(smap, service, r, callerFg, addToStarting);</span><br><span class="line">        return cmp;</span><br><span class="line">.....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>内部又调用了：<code>startServiceInnerLocked</code> 方法</p>
+<h1 id="4-startServiceInnerLocked"><a href="#4-startServiceInnerLocked" class="headerlink" title="4.startServiceInnerLocked"></a>4.startServiceInnerLocked</h1><p>如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ComponentName startServiceInnerLocked(ServiceMap smap, Intent service, ServiceRecord r,</span><br><span class="line">            boolean callerFg, boolean addToStarting) throws TransactionTooLargeException &#123;</span><br><span class="line">...</span><br><span class="line">  String error = bringUpServiceLocked(r, service.getFlags(), callerFg, false, false);</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>又调用： <code>bringUpServiceLocked</code></p>
+<h1 id="5-bringUpServiceLocked"><a href="#5-bringUpServiceLocked" class="headerlink" title="5.bringUpServiceLocked"></a>5.bringUpServiceLocked</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> private String bringUpServiceLocked(ServiceRecord r, int intentFlags, boolean execInFg,</span><br><span class="line">            boolean whileRestarting, boolean permissionsReviewRequired)</span><br><span class="line">            throws TransactionTooLargeException &#123;</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">realStartServiceLocked(r, app, execInFg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而后又调用了 <code>realStartServiceLocked(r, app, execInFg);</code> </p>
+<h1 id="6-realStartServiceLocked"><a href="#6-realStartServiceLocked" class="headerlink" title="6.realStartServiceLocked"></a>6.realStartServiceLocked</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private final void realStartServiceLocked(ServiceRecord r,</span><br><span class="line">            ProcessRecord app, boolean execInFg) throws RemoteException &#123;</span><br><span class="line">      ....</span><br><span class="line">          app.thread.scheduleCreateService(r, r.serviceInfo,</span><br><span class="line">                    mAm.compatibilityInfoForPackageLocked(r.serviceInfo.applicationInfo),</span><br><span class="line">                    app.repProcState);</span><br><span class="line">      ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>app.thread</code>  是 <code>IApplicationThread</code> 类型，就是远程调用客户端进程里的方法，<code>scheduleCreateService</code> ,而我们又知道 <code>ApplicationThread</code> 实现了 <code>IApplicationThread</code>，所以就查看 <code>ApplicationThread</code> 类中的 <code>scheduleCreateService</code>方法，前面我们说过<code>ApplicationThread</code> 是 <code>ActivityThread</code> 的一个内部类，查看：</p>
+<h1 id="7-ApplicationThread-scheduleCreateService"><a href="#7-ApplicationThread-scheduleCreateService" class="headerlink" title="7.ApplicationThread.scheduleCreateService"></a>7.ApplicationThread.scheduleCreateService</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public final void scheduleCreateService(IBinder token,</span><br><span class="line">                ServiceInfo info, CompatibilityInfo compatInfo, int processState) &#123;</span><br><span class="line">            updateProcessState(processState, false);</span><br><span class="line">            CreateServiceData s = new CreateServiceData();</span><br><span class="line">            s.token = token;</span><br><span class="line">            s.info = info;</span><br><span class="line">            s.compatInfo = compatInfo;</span><br><span class="line"></span><br><span class="line">            sendMessage(H.CREATE_SERVICE, s);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>发现内部通过发送一个 <code>CREATE_SERVICE</code> 的消息，<code>H</code> 是 <code>Handle</code>,继续查看：<br><code>handleMessage</code> 方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">case CREATE_SERVICE:</span><br><span class="line">                    Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, (&quot;serviceCreate: &quot; + String.valueOf(msg.obj)));</span><br><span class="line">                    handleCreateService((CreateServiceData)msg.obj);</span><br><span class="line">                    Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);</span><br><span class="line">                    break;</span><br></pre></td></tr></table></figure>
+<p>到 <code>handleCreateService</code> 中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">private void handleCreateService(CreateServiceData data) &#123;</span><br><span class="line">        // If we are getting ready to gc after going to the background, well</span><br><span class="line">        // we are back active so skip it.</span><br><span class="line">        unscheduleGcIdler();</span><br><span class="line"></span><br><span class="line">        LoadedApk packageInfo = getPackageInfoNoCheck(</span><br><span class="line">                data.info.applicationInfo, data.compatInfo);</span><br><span class="line">        Service service = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            java.lang.ClassLoader cl = packageInfo.getClassLoader();</span><br><span class="line">            service = (Service) cl.loadClass(data.info.name).newInstance();</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            if (!mInstrumentation.onException(service, e)) &#123;</span><br><span class="line">                throw new RuntimeException(</span><br><span class="line">                    &quot;Unable to instantiate service &quot; + data.info.name</span><br><span class="line">                    + &quot;: &quot; + e.toString(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            if (localLOGV) Slog.v(TAG, &quot;Creating service &quot; + data.info.name);</span><br><span class="line">          //创建context</span><br><span class="line">            ContextImpl context = ContextImpl.createAppContext(this, packageInfo);</span><br><span class="line">            context.setOuterContext(service);</span><br><span class="line">          //创建Application</span><br><span class="line">            Application app = packageInfo.makeApplication(false, mInstrumentation);</span><br><span class="line">  //通过attach 方法，将context application ，service 连接起来</span><br><span class="line">            service.attach(context, this, data.info.name, data.token, app,</span><br><span class="line">                    ActivityManager.getService());</span><br><span class="line">          //调用service oncreate方法</span><br><span class="line">            service.onCreate();</span><br><span class="line">            mServices.put(data.token, service);</span><br><span class="line">            try &#123;</span><br><span class="line">                ActivityManager.getService().serviceDoneExecuting(</span><br><span class="line">                        data.token, SERVICE_DONE_EXECUTING_ANON, 0, 0);</span><br><span class="line">            &#125; catch (RemoteException e) &#123;</span><br><span class="line">                throw e.rethrowFromSystemServer();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            if (!mInstrumentation.onException(service, e)) &#123;</span><br><span class="line">                throw new RuntimeException(</span><br><span class="line">                    &quot;Unable to create service &quot; + data.info.name</span><br><span class="line">                    + &quot;: &quot; + e.toString(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>service.onCreate();</code> ok ，调用了 <code>onCreate</code> 方法，至此，<code>service</code>的启动过程的就完成了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/08/16/TransitionDrawable/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1482,353 +1857,6 @@ xxxhdpi（超超超高）~640dpi density=4
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/22/Android知识点总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/22/Android知识点总结/" itemprop="url">Android知识点总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-22T10:20:32+08:00">
-                2018-03-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/22/Android知识点总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/22/Android知识点总结/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>网上别人列出一些来，我把它拿过来了，需要自己一项一项复习查阅，以后有会继续添加新的，特此总结。</p>
-</blockquote>
-<ul>
-<li><p><a href="/2018/03/22/四大组件是什么与它们的生命周期（及Fragment）">四大组件是什么与它们的生命周期（及Fragment）</a>;</p>
-</li>
-<li><p><a href="/2018/01/09/Activity启动模式">Acitivty的四种启动模式与特点</a>。</p>
-</li>
-<li><p><a href="/2018/04/24/获取手机屏幕的密度">获取手机屏幕的密度</a></p>
-</li>
-<li><p>Activity状态保存与恢复。</p>
-</li>
-<li><p>Service的生命周期，启动方法，有什么区别。</p>
-</li>
-<li><p>service和activity怎么进行数据交互。</p>
-</li>
-<li><p>怎么保证service不被杀死。</p>
-</li>
-<li><p>广播使用的方式和场景以及广播的几种分类。</p>
-</li>
-<li><p>Intent的使用方法，可以传递哪些数据类型。</p>
-</li>
-<li><p>ContentProvider使用方法。</p>
-</li>
-<li><p>ContentProvider、ContentResolver、ContentObserver 之间的关系。</p>
-</li>
-<li><p>Thread、AsycTask、IntentService的使用场景与特点。</p>
-</li>
-<li><p>FrameLayout 、 LinearLayout 、 RelativeLayout 各自特点及绘制效率对比。</p>
-</li>
-<li><p>Android的数据存储形式。</p>
-</li>
-<li><p>Android两种序列化的区别和作用。</p>
-</li>
-<li><p>Sqlite的基本操作。</p>
-</li>
-<li><p>Android中的MVC、MVP模式。</p>
-</li>
-<li><p>Merge、ViewStub的作用。</p>
-</li>
-<li><p>动画有哪几类，各有什么特点？</p>
-</li>
-<li><p>Handler、Loop消息队列模型，各部分的作用。</p>
-</li>
-<li><p>Android的消息机制，子线程更新UI的方法和原理。</p>
-</li>
-<li><p>Android怎么加速启动Activity。</p>
-</li>
-<li><p>App的启动过程。</p>
-</li>
-<li><p>Android优化方法。</p>
-</li>
-<li><p>如何防止内存泄漏？</p>
-</li>
-<li><p>Android中弱引用与软引用的应用场景。</p>
-</li>
-<li><p>Bitmap的四种属性，如何加载大图（inJustDecodeBounds）。</p>
-</li>
-<li><p>View与View Group分类。自定义View过程：onMeasure()、onLayout()、onDraw()。</p>
-</li>
-<li><p>View刷新机制和绘制流程。</p>
-</li>
-<li><p>Activity、Window、View的联系和理解。</p>
-</li>
-<li><p>invalidate和requestLayout的区别及使用。</p>
-</li>
-<li><p>Touch事件分发机制和冲突处理。</p>
-</li>
-<li><p>Android IPC:Binder原理。</p>
-</li>
-<li><p>Android5.0（UI库）、6.0（权限）、7.0特性、8.0特性。</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/14/Kotlin-传递数据/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/14/Kotlin-传递数据/" itemprop="url">Kotlin 传递数据</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-14T14:05:50+08:00">
-                2018-03-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/14/Kotlin-传递数据/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/14/Kotlin-传递数据/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>今天在掘金看到使用 <code>Kotlin</code> 高阶函数传递<code>Intent</code> 数据很简洁，觉着可以试试，并应用到项目中去，自己再加以理解，记录笔记，方便查阅。掘金原文章地址：<a href="https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/0TuDlsfBtO7wP9TwI8CeJw</a></p>
-</blockquote>
-<p>传统的<code>Intent</code> 数据传递我就不介绍了，只介绍<code>Kotlin</code>实现方式：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//目标 假设叫`KTestActivity4`  定义   </span></span><br><span class="line">object IntentOptions&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_KEY = <span class="string">"key for message"</span></span><br><span class="line"></span><br><span class="line">        var Intent.message: String?</span><br><span class="line">            get() = getStringExtra(MSG_KEY)</span><br><span class="line">            set(message) &#123;</span><br><span class="line">                putExtra(MSG_KEY,message)</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//跳转时 </span></span><br><span class="line">with(KTestActivity4.IntentOptions)&#123;</span><br><span class="line">            intent = Intent(<span class="keyword">this</span><span class="meta">@KTestActivity</span>5,KTestActivity4::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class">            <span class="title">intent</span>.<span class="title">message</span> </span>= <span class="string">"I am KTestActivity5"</span></span><br><span class="line">             startActivity(intent)</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line">with(IntentOptions)&#123;</span><br><span class="line">            var message= intent.message</span><br><span class="line">            Toast.makeText(<span class="keyword">this</span><span class="meta">@KTestActivity</span>4,<span class="string">"显示信息："</span>+message,Toast.LENGTH_SHORT).show()</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
-<p>假设有多个数据传递：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">object IntentOptions&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_KEY = <span class="string">"key for message"</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> val MSG_ID = <span class="string">"ID for message"</span></span><br><span class="line"></span><br><span class="line">        var Intent.message: String?</span><br><span class="line">            get() = getStringExtra(MSG_KEY)</span><br><span class="line">            set(message) &#123;</span><br><span class="line">                putExtra(MSG_KEY,message)</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="comment">// 再多增加一条即可</span></span><br><span class="line">          var Intent.id: String?</span><br><span class="line">              get() = getStringExtra(MSG_ID)</span><br><span class="line">              set(id) &#123;</span><br><span class="line">                putExtra(MSG_ID,id)</span><br><span class="line">              &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// 传递时</span></span><br><span class="line">with(KTestActivity4.IntentOptions)&#123;</span><br><span class="line">            intent = Intent(<span class="keyword">this</span><span class="meta">@KTestActivity</span>5,KTestActivity4::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line"><span class="class">            <span class="title">intent</span>.<span class="title">message</span> </span>= <span class="string">"I am KTestActivity5"</span></span><br><span class="line">             intent.id = <span class="string">"I am id"</span></span><br><span class="line">             startActivity(intent)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
-<p>还有另外一种传递方式：委托机制，不是特别明白。国外大神封装的<code>github</code>地址：<a href="https://github.com/Takhion/android-extras-delegates">https://github.com/Takhion/android-extras-delegates</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1879,7 +1907,7 @@ xxxhdpi（超超超高）~640dpi density=4
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1892,7 +1920,7 @@ xxxhdpi（超超超高）~640dpi density=4
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

@@ -273,6 +273,302 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/13/Handler中的Printer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/13/Handler中的Printer/" itemprop="url">Handler中的Printer</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-13T11:43:49+08:00">
+                2019-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/13/Handler中的Printer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/13/Handler中的Printer/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在 <code>Looper#loop()</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Looper me = myLooper();<span class="comment">//这里主线程的Looper</span></span><br><span class="line">		...xxx</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            Message msg = queue.next(); <span class="comment">// might block</span></span><br><span class="line">            <span class="keyword">if</span> (msg == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="comment">// No message indicates that the message queue is quitting.</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// This must be in a local variable, in case a UI event sets the logger</span></span><br><span class="line">            <span class="comment">//给 UI 事件设置一个日志</span></span><br><span class="line">            <span class="keyword">final</span> Printer logging = me.mLogging;</span><br><span class="line">            <span class="keyword">if</span> (logging != <span class="keyword">null</span>) &#123;</span><br><span class="line">                logging.println(<span class="string">"&gt;&gt;&gt;&gt;&gt; Dispatching to "</span> + msg.target + <span class="string">" "</span> +</span><br><span class="line">                        msg.callback + <span class="string">": "</span> + msg.what);</span><br><span class="line">            &#125;</span><br><span class="line">			...xx</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//线程分发消息给Handler</span></span><br><span class="line">                <span class="comment">//msg.target 指的是 Handler</span></span><br><span class="line">                msg.target.dispatchMessage(msg);</span><br><span class="line">                dispatchEnd = needEndTime ? SystemClock.uptimeMillis() : <span class="number">0</span>;</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">               ....xx</span><br><span class="line">            &#125;</span><br><span class="line">			....xx</span><br><span class="line">            <span class="keyword">if</span> (logging != <span class="keyword">null</span>) &#123;</span><br><span class="line">                logging.println(<span class="string">"&lt;&lt;&lt;&lt;&lt; Finished to "</span> + msg.target + <span class="string">" "</span> + msg.callback);</span><br><span class="line">            &#125;</span><br><span class="line">			....xx</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这个 <code>Printer</code> 日志给我打印了主线程分发消息之前打印一个日志，分发完成之后又打印一条日志，分别是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Dispatching to + 目标Handler + msg.what;</span><br><span class="line"></span><br><span class="line">Finished to + 目标Handler,分发完成</span><br></pre></td></tr></table></figure>
+<p>我们知道这个在应用程序启动的入口 <code>ActivityThread#main</code> 方法，初始化了主线程的 <code>Looper</code> . 同时也有一个 <code>Handler H</code> ,  <code>Activity</code> 的生命周期就是通过向 <code>H</code> 发送消息来完成的。</p>
+<p><code>Android</code> 是消息驱动的，这大概就是这个意思吧。如果我们可以得知主线程每个<code>message</code>的消耗时间，可以间接用来分析每个方法的耗时，从而进行一个优化工作，可以给主线程的<code>Looper</code> 设置一个<code>Printer</code>， 如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Looper.myLooper().setMessageLogging(<span class="keyword">new</span> Printer() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">println</span><span class="params">(String x)</span> </span>&#123;</span><br><span class="line">			xxx...                </span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br></pre></td></tr></table></figure>
+<p>如果有另外一条线程，记录我们执行前的堆栈信息，同时记录每次 <code>dispatchMessage</code> 方法耗时，算出二者之差，当超过某个时间的时候，认为该方法耗时过长，需要进行优化。到这里你可能想到了 <code>BlockCannary</code> 是的它基本上就是利用了这个原理，来分析优化的。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/12/接口和抽象类的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/12/接口和抽象类的区别/" itemprop="url">接口和抽象类的区别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-12T11:16:35+08:00">
+                2019-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/12/接口和抽象类的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/12/接口和抽象类的区别/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>关于接口和抽象类应用还是挺广泛的，设计模式中基本都是接口和抽象类的反复使用实现（当然单例模式特殊点），关于二者的区别，我在网上找到了一个很好的例子去形容它们，一起来了解下吧。</p>
+</blockquote>
+<p><strong>抽象类</strong> ： 表示的是这个类是什么，能干什么，例如：男人，女人，它们的抽象类就是人，那么人能吃饭，狗狗也能吃饭，那么也就是 吃饭 可以定义成 <strong>接口</strong>，让其它类去实现它。</p>
+<ul>
+<li><ol>
+<li>抽象类一般被子类单继承，就是只能继承一个，但是可以实现多个接口。（还是上面那个例子，男人，女人只能继承于人，不能又继承于人又继承动物，但是可以吃饭，同时也可以叫，表示多个接口）</li>
+<li>抽象类中可以没有抽象方法，也就是说抽象类中可以做方法声明，也可以做方法实现</li>
+</ol>
+</li>
+</ul>
+<p>当你关注要给事物本质的时候，用抽象类；当你关注一个操作的时候，用接口。</p>
+<h1 id="FPS-Frame-Per-Second-流畅度测试"><a href="#FPS-Frame-Per-Second-流畅度测试" class="headerlink" title="FPS(Frame Per Second) 流畅度测试"></a>FPS(Frame Per Second) 流畅度测试</h1><blockquote>
+<p>FPS 就是1s 内 <code>SurfaceFLinger</code> 提交到屏幕的帧数。</p>
+<p>SurfaceFLinger : Android 系统服务，负责管理Android系统的帧缓冲区，既显示屏幕</p>
+</blockquote>
+<p>60fps 是最恰当的帧率，是用户能感知到的最流畅的帧率。作为开发者，你必须要保证你的所有操作在16ms(1000毫秒/60帧)内完成一些计算，网络，渲染等这些操作，才能保证应用在使用过程的流畅性。</p>
+<p>Android 4.1 引入的 Vertical Synchronization(垂直同步) 的缩写。我们可以把它看作是一种定时中断，目的是改善Android的流畅程度。</p>
+<p>同时还有一个Triple Buffer,  当双 Buffer 不够用时。</p>
+<p>Android中有一个叫画图的打杂工——Choreographer对象。用于协调 animations,input, drawing 的时序，并且每个Looper共用一个Choreographer 对象。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/12/屏幕旋转后Activity生命周期/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1556,297 +1852,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/22/数据存储的方式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/22/数据存储的方式/" itemprop="url">数据存储的方式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-22T09:48:33+08:00">
-                2019-01-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/22/数据存储的方式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/22/数据存储的方式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>回忆Android中数据的存储方式有哪些，简单列举下。</p>
-</blockquote>
-<h1 id="1-SharedPreferences"><a href="#1-SharedPreferences" class="headerlink" title="1. SharedPreferences"></a>1. SharedPreferences</h1><blockquote>
-<p><code>Android</code> 自带的数据存储，以 <code>xml</code> 的形式存储在 <code>/data/data/packageName/shared_prefs</code></p>
-</blockquote>
-<p>这里提一下提交的两种方式： <code>commit</code> 和 <code>apply**</code>**</p>
-<ul>
-<li><p><strong><code>commit</code></strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">        * Commit your preferences changes back from this Editor to the</span></span><br><span class="line"><span class="comment">        * &#123;<span class="doctag">@link</span> SharedPreferences&#125; object it is editing.  This atomically</span></span><br><span class="line"><span class="comment">        * performs the requested modifications, replacing whatever is currently</span></span><br><span class="line"><span class="comment">        * in the SharedPreferences.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        *如果两个都在修改提交，那么以最后一个为主。也就是后面会覆盖前面的</span></span><br><span class="line"><span class="comment">        * &lt;p&gt;Note that when two editors are modifying preferences at the same</span></span><br><span class="line"><span class="comment">        * time, the last one to call commit wins.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        *	如果你不关心返回结果在主线程中，考虑使用apply代替</span></span><br><span class="line"><span class="comment">        * &lt;p&gt;If you don't care about the return value and you're</span></span><br><span class="line"><span class="comment">        * using this from your application's main thread, consider</span></span><br><span class="line"><span class="comment">        * using &#123;<span class="doctag">@link</span> #apply&#125; instead.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        * 返回true 表示成功</span></span><br><span class="line"><span class="comment">        * <span class="doctag">@return</span> Returns true if the new values were successfully written</span></span><br><span class="line"><span class="comment">        * to persistent storage.</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">       <span class="function"><span class="keyword">boolean</span> <span class="title">commit</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong><code>apply</code></strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">       *先立即提交到内存中，然后异步提交到数据库中</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;Unlike &#123;<span class="doctag">@link</span> #commit&#125;, which writes its preferences out</span></span><br><span class="line"><span class="comment">       * to persistent storage synchronously, &#123;<span class="doctag">@link</span> #apply&#125;</span></span><br><span class="line"><span class="comment">       * commits its changes to the in-memory</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> SharedPreferences&#125; immediately but starts an</span></span><br><span class="line"><span class="comment">       * asynchronous commit to disk and you won't be notified of</span></span><br><span class="line"><span class="comment">       * any failures.  </span></span><br><span class="line"><span class="comment">       * </span></span><br><span class="line"><span class="comment">       * 如果这个&#123;<span class="doctag">@link</span> SharedPreferences&#125;上的editor执行常规的&#123;<span class="doctag">@link</span> #commit&#125;，而	            *&#123;<span class="doctag">@link</span> #apply&#125;仍然未完成，那么&#123;<span class="doctag">@link</span> #commit&#125;将阻塞，直到所有异步提交以及提交本身都          * 完成。</span></span><br><span class="line"><span class="comment">       * If another editor on this</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> SharedPreferences&#125; does a regular &#123;<span class="doctag">@link</span> #commit&#125;</span></span><br><span class="line"><span class="comment">       * while a &#123;<span class="doctag">@link</span> #apply&#125; is still outstanding, the</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #commit&#125; will block until all async commits are</span></span><br><span class="line"><span class="comment">       * completed as well as the commit itself.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * sharedPreferences在一个进程中是单例的，它是安全的apply ,如果你不需要返回值的话</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;As &#123;<span class="doctag">@link</span> SharedPreferences&#125; instances are singletons within</span></span><br><span class="line"><span class="comment">       * a process, it's safe to replace any instance of &#123;<span class="doctag">@link</span> #commit&#125; with</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #apply&#125; if you were already ignoring the return value.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * 不需要担心Android的生命周期，它会确保写入硬盘中再切换状态</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;You don't need to worry about Android component</span></span><br><span class="line"><span class="comment">       * lifecycles and their interaction with &lt;code&gt;apply()&lt;/code&gt;</span></span><br><span class="line"><span class="comment">       * writing to disk.  The framework makes sure in-flight disk</span></span><br><span class="line"><span class="comment">       * writes from &lt;code&gt;apply()&lt;/code&gt; complete before switching</span></span><br><span class="line"><span class="comment">       * states.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * &lt;p class='note'&gt;The SharedPreferences.Editor interface</span></span><br><span class="line"><span class="comment">       * isn't expected to be implemented directly.  However, if you</span></span><br><span class="line"><span class="comment">       * previously did implement it and are now getting errors</span></span><br><span class="line"><span class="comment">       * about missing &lt;code&gt;apply()&lt;/code&gt;, you can simply call</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #commit&#125; from &lt;code&gt;apply()&lt;/code&gt;.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="function"><span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><strong>结论</strong></p>
-<ul>
-<li>在不考虑跨进程通信和返回值的情况下，可以优先选择 <code>apply</code> ，可以快速读取更新后的值。</li>
-</ul>
-<h1 id="2-文件存储（SD卡）"><a href="#2-文件存储（SD卡）" class="headerlink" title="2. 文件存储（SD卡）"></a>2. 文件存储（SD卡）</h1><h1 id="3-Sqlite"><a href="#3-Sqlite" class="headerlink" title="3. Sqlite"></a>3. Sqlite</h1><h1 id="4-ContentProvider"><a href="#4-ContentProvider" class="headerlink" title="4. ContentProvider"></a>4. ContentProvider</h1><h1 id="5-网络存储"><a href="#5-网络存储" class="headerlink" title="5. 网络存储"></a>5. 网络存储</h1>
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/21/自定义View的构造方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/21/自定义View的构造方法/" itemprop="url">自定义View的构造方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-21T15:01:22+08:00">
-                2019-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/21/自定义View的构造方法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/21/自定义View的构造方法/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="comment">//在代码中直接new MyView()实例的时候，会调用第一个构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//在xml中布局文件中使用MyView的时候，会调用第二个构造函数；</span></span><br><span class="line">    <span class="comment">//在xml中布局文件中使用了MyView,并且还有自定义属性的时候，也是第二个构造函数。</span></span><br><span class="line">    <span class="comment">//当我们自定义属性了，通过obtainStyledAttributes，也是最终调用参数为3个的构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context,  AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中 <code>int defStyleAttr</code> : 这是当前 <code>Theme</code> 中包含的一个指向 <code>style</code> 的引用，当我们自定义属性时，默认从这个集合里面查找布局文件中配置属性值，传入0表示不向该 <code>defStyleAttr</code> 中查找值。</p>
-<p>属性赋值优先级次序表：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在xml中直接定义 &gt; 在xml中通过Style定义 &gt; 自定义view所在Activity的 Theme中指定Style引用 &gt; 构造函数中defStyleRes指定的默认值。</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1897,7 +1902,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1910,7 +1915,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

@@ -273,6 +273,297 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/22/数据存储的方式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/22/数据存储的方式/" itemprop="url">数据存储的方式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-22T09:48:33+08:00">
+                2019-01-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/22/数据存储的方式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/22/数据存储的方式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>回忆Android中数据的存储方式有哪些，简单列举下。</p>
+</blockquote>
+<h1 id="1-SharedPreferences"><a href="#1-SharedPreferences" class="headerlink" title="1. SharedPreferences"></a>1. SharedPreferences</h1><blockquote>
+<p><code>Android</code> 自带的数据存储，以 <code>xml</code> 的形式存储在 <code>/data/data/packageName/shared_prefs</code></p>
+</blockquote>
+<p>这里提一下提交的两种方式： <code>commit</code> 和 <code>apply**</code>**</p>
+<ul>
+<li><p><strong><code>commit</code></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">        * Commit your preferences changes back from this Editor to the</span></span><br><span class="line"><span class="comment">        * &#123;<span class="doctag">@link</span> SharedPreferences&#125; object it is editing.  This atomically</span></span><br><span class="line"><span class="comment">        * performs the requested modifications, replacing whatever is currently</span></span><br><span class="line"><span class="comment">        * in the SharedPreferences.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        *如果两个都在修改提交，那么以最后一个为主。也就是后面会覆盖前面的</span></span><br><span class="line"><span class="comment">        * &lt;p&gt;Note that when two editors are modifying preferences at the same</span></span><br><span class="line"><span class="comment">        * time, the last one to call commit wins.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        *	如果你不关心返回结果在主线程中，考虑使用apply代替</span></span><br><span class="line"><span class="comment">        * &lt;p&gt;If you don't care about the return value and you're</span></span><br><span class="line"><span class="comment">        * using this from your application's main thread, consider</span></span><br><span class="line"><span class="comment">        * using &#123;<span class="doctag">@link</span> #apply&#125; instead.</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        * 返回true 表示成功</span></span><br><span class="line"><span class="comment">        * <span class="doctag">@return</span> Returns true if the new values were successfully written</span></span><br><span class="line"><span class="comment">        * to persistent storage.</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">       <span class="function"><span class="keyword">boolean</span> <span class="title">commit</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><code>apply</code></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">       *先立即提交到内存中，然后异步提交到数据库中</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;Unlike &#123;<span class="doctag">@link</span> #commit&#125;, which writes its preferences out</span></span><br><span class="line"><span class="comment">       * to persistent storage synchronously, &#123;<span class="doctag">@link</span> #apply&#125;</span></span><br><span class="line"><span class="comment">       * commits its changes to the in-memory</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> SharedPreferences&#125; immediately but starts an</span></span><br><span class="line"><span class="comment">       * asynchronous commit to disk and you won't be notified of</span></span><br><span class="line"><span class="comment">       * any failures.  </span></span><br><span class="line"><span class="comment">       * </span></span><br><span class="line"><span class="comment">       * 如果这个&#123;<span class="doctag">@link</span> SharedPreferences&#125;上的editor执行常规的&#123;<span class="doctag">@link</span> #commit&#125;，而	            *&#123;<span class="doctag">@link</span> #apply&#125;仍然未完成，那么&#123;<span class="doctag">@link</span> #commit&#125;将阻塞，直到所有异步提交以及提交本身都          * 完成。</span></span><br><span class="line"><span class="comment">       * If another editor on this</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> SharedPreferences&#125; does a regular &#123;<span class="doctag">@link</span> #commit&#125;</span></span><br><span class="line"><span class="comment">       * while a &#123;<span class="doctag">@link</span> #apply&#125; is still outstanding, the</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #commit&#125; will block until all async commits are</span></span><br><span class="line"><span class="comment">       * completed as well as the commit itself.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * sharedPreferences在一个进程中是单例的，它是安全的apply ,如果你不需要返回值的话</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;As &#123;<span class="doctag">@link</span> SharedPreferences&#125; instances are singletons within</span></span><br><span class="line"><span class="comment">       * a process, it's safe to replace any instance of &#123;<span class="doctag">@link</span> #commit&#125; with</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #apply&#125; if you were already ignoring the return value.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * 不需要担心Android的生命周期，它会确保写入硬盘中再切换状态</span></span><br><span class="line"><span class="comment">       * &lt;p&gt;You don't need to worry about Android component</span></span><br><span class="line"><span class="comment">       * lifecycles and their interaction with &lt;code&gt;apply()&lt;/code&gt;</span></span><br><span class="line"><span class="comment">       * writing to disk.  The framework makes sure in-flight disk</span></span><br><span class="line"><span class="comment">       * writes from &lt;code&gt;apply()&lt;/code&gt; complete before switching</span></span><br><span class="line"><span class="comment">       * states.</span></span><br><span class="line"><span class="comment">       *</span></span><br><span class="line"><span class="comment">       * &lt;p class='note'&gt;The SharedPreferences.Editor interface</span></span><br><span class="line"><span class="comment">       * isn't expected to be implemented directly.  However, if you</span></span><br><span class="line"><span class="comment">       * previously did implement it and are now getting errors</span></span><br><span class="line"><span class="comment">       * about missing &lt;code&gt;apply()&lt;/code&gt;, you can simply call</span></span><br><span class="line"><span class="comment">       * &#123;<span class="doctag">@link</span> #commit&#125; from &lt;code&gt;apply()&lt;/code&gt;.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="function"><span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>结论</strong></p>
+<ul>
+<li>在不考虑跨进程通信和返回值的情况下，可以优先选择 <code>apply</code> ，可以快速读取更新后的值。</li>
+</ul>
+<h1 id="2-文件存储（SD卡）"><a href="#2-文件存储（SD卡）" class="headerlink" title="2. 文件存储（SD卡）"></a>2. 文件存储（SD卡）</h1><h1 id="3-Sqlite"><a href="#3-Sqlite" class="headerlink" title="3. Sqlite"></a>3. Sqlite</h1><h1 id="4-ContentProvider"><a href="#4-ContentProvider" class="headerlink" title="4. ContentProvider"></a>4. ContentProvider</h1><h1 id="5-网络存储"><a href="#5-网络存储" class="headerlink" title="5. 网络存储"></a>5. 网络存储</h1>
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/21/自定义View的构造方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/21/自定义View的构造方法/" itemprop="url">自定义View的构造方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-21T15:01:22+08:00">
+                2019-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/21/自定义View的构造方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/21/自定义View的构造方法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="comment">//在代码中直接new MyView()实例的时候，会调用第一个构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//在xml中布局文件中使用MyView的时候，会调用第二个构造函数；</span></span><br><span class="line">    <span class="comment">//在xml中布局文件中使用了MyView,并且还有自定义属性的时候，也是第二个构造函数。</span></span><br><span class="line">    <span class="comment">//当我们自定义属性了，通过obtainStyledAttributes，也是最终调用参数为3个的构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyView</span><span class="params">(Context context,  AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>int defStyleAttr</code> : 这是当前 <code>Theme</code> 中包含的一个指向 <code>style</code> 的引用，当我们自定义属性时，默认从这个集合里面查找布局文件中配置属性值，传入0表示不向该 <code>defStyleAttr</code> 中查找值。</p>
+<p>属性赋值优先级次序表：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在xml中直接定义 &gt; 在xml中通过Style定义 &gt; 自定义view所在Activity的 Theme中指定Style引用 &gt; 构造函数中defStyleRes指定的默认值。</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/21/事件分发中的onTouch-和onTouchEvent-有什么区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1574,321 +1865,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/04/IOC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/04/IOC/" itemprop="url">IOC</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-04T15:28:01+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/04/IOC/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/04/IOC/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>以下内容是我最近在学习 <code>Spring Boot</code> <code>Spring MVC</code> 过程中，针对 <code>ioc</code> 控制反转所了解到的内容。</p>
-</blockquote>
-<h1 id="实践步骤"><a href="#实践步骤" class="headerlink" title="实践步骤"></a>实践步骤</h1><ul>
-<li>使用 Spring Boot, Spring 如何实现 IOC</li>
-<li>使用 <code>maven</code></li>
-</ul>
-<blockquote>
-<p>java oop : 每次都是自己 new 对象，不够方便，核心原因是产生了代码的偶合。</p>
-<p>目标：希望容器给我对象，直接获得对象；</p>
-<p>IOC:  控制反转，表示把对象的控制权交给容器</p>
-</blockquote>
-<p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Student <span class="title">getStudent</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Student stu = <span class="keyword">new</span> Student();</span><br><span class="line">        stu.setName(<span class="string">"糖葫芦"</span>);</span><br><span class="line">        stu.setAge(<span class="string">"18"</span>);</span><br><span class="line">        <span class="keyword">return</span> stu;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">在另外一个类 SpringBootIocApplicationTests.java 中：</span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">    Student student;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextLoads</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">//这里可以直接拿到</span></span><br><span class="line">        System.out.println(<span class="string">"student:"</span>+student.getName());</span><br><span class="line">        <span class="comment">//student:糖葫芦</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h1 id="Maven-项目"><a href="#Maven-项目" class="headerlink" title="Maven 项目"></a>Maven 项目</h1><p>如果不用 <code>Spring Boot</code> ,创建 <code>Maven</code> 项目进行实现：</p>
-<ul>
-<li><p>使用 <code>ide</code> 创建 <code>maven</code> 项目</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-ea6711b4d7e0dd01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-</li>
-</ul>
-<p>注意勾选 <code>create from..</code></p>
-<p>要实现控制反转，需要我们导入 <code>Spring Context</code> 配置，在 <code>maven</code> 官网：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-29301f3172d18176.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>搜索 <code>Spring</code>, 底下有很多版本，导入你想导入的版本，点击进去，看到：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-7a98eb230a6b228e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>将红色框部分，拷贝到 项目的 <code>pom.xml</code> 文件中，如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;project </span><br><span class="line"></span><br><span class="line">	......</span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;!-- https:<span class="comment">//mvnrepository.com/artifact/org.springframework/spring-context --&gt;</span></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.3.20.RELEASE&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
-<p>然后我们还需要手动设置配置文件：在 <code>resources</code> 文件夹下，创建一个 <code>xml</code> ,我们可以这么创建 <code>xml</code>,可以帮助我们自带一些配置，如下：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-1876403145bb9ff7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><code>applicationContext.xml</code> :</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></span><br><span class="line">       xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean id=<span class="string">"student"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"Student"</span>&gt;&lt;!--将这个bean加入到spring的ioc容器--&gt;</span><br><span class="line">        &lt;property name="name" value="糖葫芦"&gt;&lt;/property&gt;&lt;!--给bean的pname属性赋值--&gt;</span><br><span class="line">        &lt;property name="age" value="18"&gt;&lt;/property&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
-<p>最后，如何获取呢？通过 <code>ApplicationContext</code> 获取：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">       ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext.xml"</span>);</span><br><span class="line">	<span class="comment">//传入xml 中定义的bean 的 id </span></span><br><span class="line">       Student student = (Student) context.getBean(<span class="string">"student"</span>);</span><br><span class="line"></span><br><span class="line">       System.out.println(<span class="string">"student::"</span>+student.getName()+ <span class="string">"::::age::"</span>+student.getAge());</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>这样我们就可以拿到我们在 <code>xml</code> 中定义的 <code>bean</code> 的内容了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/25/组件化随笔/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/25/组件化随笔/" itemprop="url">组件化随笔</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-25T14:44:59+08:00">
-                2018-12-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/25/组件化随笔/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/25/组件化随笔/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>随着技术越来越发展，代码越来越臃肿，经常会牵一发而动全身，发生bug的概率也比较高，组件化一定程度上成了我们必不可少的一个部分，使用组件化能够：</p>
-<ul>
-<li>提高代码的复用性</li>
-<li>降低组件之间的耦合性，一定程度上减少bug的产生</li>
-</ul>
-</blockquote>
-<p>设计组件化：</p>
-<ul>
-<li>分层设计，app壳工程，业务组件，功能组件，基础组件。</li>
-<li>业务组件为了防止相互引用出现死循环，每一个业务组件设计成两个module,  一个 export module,一个 implement module.  互相依赖 export modult 即可。</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-873e195f5a7233c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1939,7 +1915,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1952,7 +1928,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Handler中的Printer]]></title>
+    <url>%2F2019%2F03%2F13%2FHandler%E4%B8%AD%E7%9A%84Printer%2F</url>
+    <content type="text"><![CDATA[在 Looper#loop() 方法。 123456789101112131415161718192021222324252627282930313233public static void loop() &#123; final Looper me = myLooper();//这里主线程的Looper ...xxx for (;;) &#123; Message msg = queue.next(); // might block if (msg == null) &#123; // No message indicates that the message queue is quitting. return; &#125; // This must be in a local variable, in case a UI event sets the logger //给 UI 事件设置一个日志 final Printer logging = me.mLogging; if (logging != null) &#123; logging.println("&gt;&gt;&gt;&gt;&gt; Dispatching to " + msg.target + " " + msg.callback + ": " + msg.what); &#125; ...xx try &#123; //线程分发消息给Handler //msg.target 指的是 Handler msg.target.dispatchMessage(msg); dispatchEnd = needEndTime ? SystemClock.uptimeMillis() : 0; &#125; finally &#123; ....xx &#125; ....xx if (logging != null) &#123; logging.println("&lt;&lt;&lt;&lt;&lt; Finished to " + msg.target + " " + msg.callback); &#125; ....xx &#125; &#125; 这个 Printer 日志给我打印了主线程分发消息之前打印一个日志，分发完成之后又打印一条日志，分别是： 123Dispatching to + 目标Handler + msg.what;Finished to + 目标Handler,分发完成 我们知道这个在应用程序启动的入口 ActivityThread#main 方法，初始化了主线程的 Looper . 同时也有一个 Handler H , Activity 的生命周期就是通过向 H 发送消息来完成的。 Android 是消息驱动的，这大概就是这个意思吧。如果我们可以得知主线程每个message的消耗时间，可以间接用来分析每个方法的耗时，从而进行一个优化工作，可以给主线程的Looper 设置一个Printer， 如下： 123456Looper.myLooper().setMessageLogging(new Printer() &#123; @Override public void println(String x) &#123; xxx... &#125; &#125;); 如果有另外一条线程，记录我们执行前的堆栈信息，同时记录每次 dispatchMessage 方法耗时，算出二者之差，当超过某个时间的时候，认为该方法耗时过长，需要进行优化。到这里你可能想到了 BlockCannary 是的它基本上就是利用了这个原理，来分析优化的。]]></content>
+      <tags>
+        <tag>Logging</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[接口和抽象类的区别]]></title>
+    <url>%2F2019%2F03%2F12%2F%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%8C%BA%E5%88%AB%2F</url>
+    <content type="text"><![CDATA[关于接口和抽象类应用还是挺广泛的，设计模式中基本都是接口和抽象类的反复使用实现（当然单例模式特殊点），关于二者的区别，我在网上找到了一个很好的例子去形容它们，一起来了解下吧。 抽象类 ： 表示的是这个类是什么，能干什么，例如：男人，女人，它们的抽象类就是人，那么人能吃饭，狗狗也能吃饭，那么也就是 吃饭 可以定义成 接口，让其它类去实现它。 抽象类一般被子类单继承，就是只能继承一个，但是可以实现多个接口。（还是上面那个例子，男人，女人只能继承于人，不能又继承于人又继承动物，但是可以吃饭，同时也可以叫，表示多个接口） 抽象类中可以没有抽象方法，也就是说抽象类中可以做方法声明，也可以做方法实现 当你关注要给事物本质的时候，用抽象类；当你关注一个操作的时候，用接口。 FPS(Frame Per Second) 流畅度测试 FPS 就是1s 内 SurfaceFLinger 提交到屏幕的帧数。 SurfaceFLinger : Android 系统服务，负责管理Android系统的帧缓冲区，既显示屏幕 60fps 是最恰当的帧率，是用户能感知到的最流畅的帧率。作为开发者，你必须要保证你的所有操作在16ms(1000毫秒/60帧)内完成一些计算，网络，渲染等这些操作，才能保证应用在使用过程的流畅性。 Android 4.1 引入的 Vertical Synchronization(垂直同步) 的缩写。我们可以把它看作是一种定时中断，目的是改善Android的流畅程度。 同时还有一个Triple Buffer, 当双 Buffer 不够用时。 Android中有一个叫画图的打杂工——Choreographer对象。用于协调 animations,input, drawing 的时序，并且每个Looper共用一个Choreographer 对象。]]></content>
+      <tags>
+        <tag>接口和抽象类</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[屏幕旋转后Activity生命周期]]></title>
     <url>%2F2019%2F03%2F12%2F%E5%B1%8F%E5%B9%95%E6%97%8B%E8%BD%AC%E5%90%8EActivity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%2F</url>
     <content type="text"><![CDATA[主要针对屏幕旋转对 Activity 生命周期有何影响。 第一种情况在没有其它配置的情况下，通过日志打印屏幕旋转会调用的方法。 1//onPause()----onStop()-----onDestroy()-----onCreate() ---- onStart()---onResume() 第二种情况关于 android:configChanges 的配置，不同的值对生命周期也会有不同的影响。这个值最常用的值包括： orientation 和 keyboardHidden, 分别用于避免因屏幕方向和可用键盘改变而导致的重启。 例如： 12&lt;activity android:name=".MainActivity" android:configChanges="orientation|keyboardHidden" / &gt; 当其中一个配置发生变化时， MainActivity 不会重启。 但是会收到 onConfigurationChanged() 的调用。向此方法传递 Configuration 对象指定新设备配置。可以通过读取 Configuration 中的字段，确定新配置。然后通过更新界面中使用的资源进行适当的更改。调用此方法时，Activity 的 Resources 对象会相应的进行更新，以根据新配置返回资源，这样，就能够在系统不重启 Activity 的情况下轻松重置 UI 的元素。 但是，我的编译版本高一些，实验，发现当配置以上configChanges 还是会重启 Activity, 并且没有回调 onConfigurationChanged() 的回调 而后，开始查阅文档说明，发现： 1注意: 在Android3.2（API 13）开始，当设备在纵向和横向之间切换时， “屏幕尺寸”也会发生改变，因此，在开发针对 API 13或者更高版本的应用时（当然我们现在基本都是4.0 以上），若要避免由于设备方向改变而导致运行时重启，则除了 "orientation" 值以外，还必须添加 "screenSize" 值， 也就是说，您必须声明：android:configChanges="orientation|screenSize". 当添加新的配置 screenSize 之后，屏幕旋转回调如下： 1// onConfigurationChanged invoked... 只会调用onConfigurationChanged（） 方法，并没有重启 最后就是一些资源的变更，如果有些图像应该在横向和纵向之间切换，就必须在 onConfigurationChanged() 期间将每个资源重新分配给每个元素。 文档地址：https://developer.android.com/guide/topics/resources/runtime-changes?hl=zh-cn]]></content>
