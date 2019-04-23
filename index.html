@@ -273,6 +273,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/04/23/二叉树/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/23/二叉树/" itemprop="url">二叉树</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-23T13:44:35+08:00">
+                2019-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/23/二叉树/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/04/23/二叉树/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-简述"><a href="#1-简述" class="headerlink" title="1. 简述"></a>1. 简述</h1><p>一个节点有不超过2个子节点，超过2个是多路树，不属于二叉树。</p>
+<h1 id="2-二叉搜索树"><a href="#2-二叉搜索树" class="headerlink" title="2. 二叉搜索树"></a>2. 二叉搜索树</h1><p>左节点比根节点小，比根节点大的为右节点；</p>
+<h2 id="2-1-二叉搜索树的遍历"><a href="#2-1-二叉搜索树的遍历" class="headerlink" title="2.1 二叉搜索树的遍历"></a>2.1 二叉搜索树的遍历</h2><p>分为前序，中序和后序，使用最多的是中序；</p>
+<p><strong>前序</strong>  ： 根节点——-&gt;左节点———-&gt;右节点；</p>
+<p><strong>中序</strong> ： 左节点——-&gt; 根节点———&gt;右节点；</p>
+<p><strong>后序</strong> ： 左节点——&gt; 右节点——–&gt;根节点</p>
+<p>示例代码：</p>
+<p><code>Node.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> data;</span><br><span class="line">    <span class="keyword">public</span> Node leftNode;</span><br><span class="line">    <span class="keyword">public</span> Node rightNode;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>BinarySearchTree.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 二叉搜索树（Binary Search Tree）</span></span><br><span class="line"><span class="comment"> * 要求是：若他的左子树不为null,则左子树上的所有节点的值均小于根节点；</span></span><br><span class="line"><span class="comment"> * 若右子树不为null，则右子树上的所有节点的值均大于根节点；</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinarySearchTree</span> <span class="keyword">implements</span> <span class="title">ITree</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//根节点</span></span><br><span class="line">    <span class="keyword">private</span> Node root;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">find</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//查找节点</span></span><br><span class="line">        Node current = root;</span><br><span class="line">        <span class="keyword">if</span>(root.data == key)&#123;<span class="comment">//如果刚好是根节点</span></span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(current != <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(current.data &gt; key)&#123;</span><br><span class="line">                    <span class="comment">//当前节点比查找值大，要去左测节点查找</span></span><br><span class="line">                    current = current.leftNode;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(current.data == key)&#123;</span><br><span class="line">                    <span class="keyword">return</span> current;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    current = current.rightNode;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">getRoot</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//要插入新的节点</span></span><br><span class="line">        Node newNode = <span class="keyword">new</span> Node(key);</span><br><span class="line">        <span class="comment">//如果没有根节点</span></span><br><span class="line">        <span class="keyword">if</span>(root == <span class="keyword">null</span>)&#123;</span><br><span class="line">            root = newNode;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">//如果有根节点，需要判断与根节点的比较大小</span></span><br><span class="line">            Node current = root;</span><br><span class="line">            Node parentNode = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">while</span>(current!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                parentNode = current;</span><br><span class="line">                <span class="keyword">if</span>(current.data &gt; key)&#123;</span><br><span class="line">                    <span class="comment">//当前值比插入值大，需要搜索左节点</span></span><br><span class="line">                    current = current.leftNode;</span><br><span class="line">                    <span class="keyword">if</span>(current == <span class="keyword">null</span>)&#123;</span><br><span class="line">                        parentNode.leftNode = newNode;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="comment">//找右节点</span></span><br><span class="line">                    current = current.rightNode;</span><br><span class="line">                    <span class="keyword">if</span>(current == <span class="keyword">null</span>)&#123;</span><br><span class="line">                        parentNode.rightNode = newNode;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//前序</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node current)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//前序是：根节点-左节点-右节点</span></span><br><span class="line">        <span class="comment">//默认从顶部进行遍历</span></span><br><span class="line">        <span class="keyword">if</span>(current!= <span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.println(current.data);</span><br><span class="line">            preOrder(current.leftNode);</span><br><span class="line">            preOrder(current.rightNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//中序</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">middleOrder</span><span class="params">(Node current)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//中序：左节点-根节点-右节点 , 中序是最常用的</span></span><br><span class="line">        <span class="keyword">if</span>(current!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            middleOrder(current.leftNode);</span><br><span class="line">            System.out.println(current.data);</span><br><span class="line">            middleOrder(current.rightNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//后序</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">(Node current)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//后序：左节点-右节点-根节点</span></span><br><span class="line">        postOrder(current.leftNode);</span><br><span class="line">        postOrder(current.rightNode);</span><br><span class="line">        System.out.println(current.data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//查找最小值</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">findMin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//从根节点开始查找</span></span><br><span class="line">        Node currentNode = root;</span><br><span class="line">        <span class="keyword">while</span>(currentNode != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(currentNode.leftNode == <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> currentNode;</span><br><span class="line">            &#125;</span><br><span class="line">            currentNode = currentNode.leftNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> currentNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">findMax</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//一直寻找右节点</span></span><br><span class="line">        Node currentNode = root;</span><br><span class="line">        Node maxNode = currentNode;</span><br><span class="line">        <span class="keyword">while</span> (currentNode!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            maxNode = currentNode;</span><br><span class="line">            currentNode = currentNode.rightNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除节点(最简单的做法是给节点加一个属性isDelete)</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 1.该节点没有子节点</span></span><br><span class="line"><span class="comment">     * 2.该节点只有1个子节点</span></span><br><span class="line"><span class="comment">     * 3.该节点有2个节点（最复杂）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">delete</span><span class="params">(<span class="keyword">int</span> deleteKey)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//要删除节点首先要找到删除节点的父节点</span></span><br><span class="line"><span class="comment">//        Node currentNode = root;</span></span><br><span class="line"><span class="comment">//        Node parentNode = currentNode;</span></span><br><span class="line"><span class="comment">//        boolean isLeftNode = false;</span></span><br><span class="line"><span class="comment">//        while(currentNode != null)&#123;</span></span><br><span class="line"><span class="comment">//            parentNode = currentNode;</span></span><br><span class="line"><span class="comment">//            if(currentNode.data &gt; deleteKey)&#123;</span></span><br><span class="line"><span class="comment">//                isLeftNode = true;</span></span><br><span class="line"><span class="comment">//                currentNode = currentNode.leftNode;</span></span><br><span class="line"><span class="comment">//            &#125;else&#123;</span></span><br><span class="line"><span class="comment">//                isLeftNode = false;</span></span><br><span class="line"><span class="comment">//                currentNode = currentNode.rightNode;</span></span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><code>Test.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">BinarySearchTree binarySearchTree = <span class="keyword">new</span> BinarySearchTree();</span><br><span class="line">binarySearchTree.insert(<span class="number">30</span>);</span><br><span class="line">binarySearchTree.insert(<span class="number">25</span>);</span><br><span class="line">binarySearchTree.insert(<span class="number">20</span>);</span><br><span class="line">binarySearchTree.insert(<span class="number">31</span>);</span><br><span class="line">binarySearchTree.middleOrder(binarySearchTree.getRoot());</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/13/Handler中的Printer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -363,160 +510,6 @@
 <p><code>Android</code> 是消息驱动的，这大概就是这个意思吧。如果我们可以得知主线程每个<code>message</code>的消耗时间，可以间接用来分析每个方法的耗时，从而进行一个优化工作，可以给主线程的<code>Looper</code> 设置一个<code>Printer</code>， 如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Looper.myLooper().setMessageLogging(<span class="keyword">new</span> Printer() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">println</span><span class="params">(String x)</span> </span>&#123;</span><br><span class="line">			xxx...                </span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br></pre></td></tr></table></figure>
 <p>如果有另外一条线程，记录我们执行前的堆栈信息，同时记录每次 <code>dispatchMessage</code> 方法耗时，算出二者之差，当超过某个时间的时候，认为该方法耗时过长，需要进行优化。到这里你可能想到了 <code>BlockCannary</code> 是的它基本上就是利用了这个原理，来分析优化的。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/03/12/接口和抽象类的区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/12/接口和抽象类的区别/" itemprop="url">接口和抽象类的区别</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-12T11:16:35+08:00">
-                2019-03-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/12/接口和抽象类的区别/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/12/接口和抽象类的区别/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>关于接口和抽象类应用还是挺广泛的，设计模式中基本都是接口和抽象类的反复使用实现（当然单例模式特殊点），关于二者的区别，我在网上找到了一个很好的例子去形容它们，一起来了解下吧。</p>
-</blockquote>
-<p><strong>抽象类</strong> ： 表示的是这个类是什么，能干什么，例如：男人，女人，它们的抽象类就是人，那么人能吃饭，狗狗也能吃饭，那么也就是 吃饭 可以定义成 <strong>接口</strong>，让其它类去实现它。</p>
-<ul>
-<li><ol>
-<li>抽象类一般被子类单继承，就是只能继承一个，但是可以实现多个接口。（还是上面那个例子，男人，女人只能继承于人，不能又继承于人又继承动物，但是可以吃饭，同时也可以叫，表示多个接口）</li>
-<li>抽象类中可以没有抽象方法，也就是说抽象类中可以做方法声明，也可以做方法实现</li>
-</ol>
-</li>
-</ul>
-<p>当你关注要给事物本质的时候，用抽象类；当你关注一个操作的时候，用接口。</p>
-<h1 id="FPS-Frame-Per-Second-流畅度测试"><a href="#FPS-Frame-Per-Second-流畅度测试" class="headerlink" title="FPS(Frame Per Second) 流畅度测试"></a>FPS(Frame Per Second) 流畅度测试</h1><blockquote>
-<p>FPS 就是1s 内 <code>SurfaceFLinger</code> 提交到屏幕的帧数。</p>
-<p>SurfaceFLinger : Android 系统服务，负责管理Android系统的帧缓冲区，既显示屏幕</p>
-</blockquote>
-<p>60fps 是最恰当的帧率，是用户能感知到的最流畅的帧率。作为开发者，你必须要保证你的所有操作在16ms(1000毫秒/60帧)内完成一些计算，网络，渲染等这些操作，才能保证应用在使用过程的流畅性。</p>
-<p>Android 4.1 引入的 Vertical Synchronization(垂直同步) 的缩写。我们可以把它看作是一种定时中断，目的是改善Android的流畅程度。</p>
-<p>同时还有一个Triple Buffer,  当双 Buffer 不够用时。</p>
-<p>Android中有一个叫画图的打杂工——Choreographer对象。用于协调 animations,input, drawing 的时序，并且每个Looper共用一个Choreographer 对象。</p>
 
           
         
