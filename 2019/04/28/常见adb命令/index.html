@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java," />
+  <meta name="keywords" content="adb," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="衡量代码的好坏，包括两个非常重要的指标：  运行时间 占用空间   由于运行环境和输入规模的影响，代码的绝对执行时间是无法估计的，但是我们却可以预估代码的基本执行次数。我可以通俗的理解为：通过执行次数可以大概推算这个时间复杂度。 示例：  一个有序排列好的数组 1int[] arry = &amp;#123;-5,-1,0,5,9,11,13,15,22,35,46&amp;#125;,输入一个x，int x">
-<meta name="keywords" content="java">
+<meta name="description" content="1. 查看当前设备1adb devices 2. 查看连接设备的详细信息1adb devices -l 3.查看当前交互的Activity信息12adb shell;//进入adb shell 里dumpsys activity | grep &quot;mFoc&quot;">
+<meta name="keywords" content="adb">
 <meta property="og:type" content="article">
-<meta property="og:title" content="时间复杂度">
-<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2018/11/19/时间复杂度/index.html">
+<meta property="og:title" content="常见adb命令">
+<meta property="og:url" content="https://github.com/QQabby/QQabby.github.io.git/2019/04/28/常见adb命令/index.html">
 <meta property="og:site_name" content="糖葫芦">
-<meta property="og:description" content="衡量代码的好坏，包括两个非常重要的指标：  运行时间 占用空间   由于运行环境和输入规模的影响，代码的绝对执行时间是无法估计的，但是我们却可以预估代码的基本执行次数。我可以通俗的理解为：通过执行次数可以大概推算这个时间复杂度。 示例：  一个有序排列好的数组 1int[] arry = &amp;#123;-5,-1,0,5,9,11,13,15,22,35,46&amp;#125;,输入一个x，int x">
+<meta property="og:description" content="1. 查看当前设备1adb devices 2. 查看连接设备的详细信息1adb devices -l 3.查看当前交互的Activity信息12adb shell;//进入adb shell 里dumpsys activity | grep &quot;mFoc&quot;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-08T07:15:44.809Z">
+<meta property="og:updated_time" content="2019-04-28T06:43:37.301Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="时间复杂度">
-<meta name="twitter:description" content="衡量代码的好坏，包括两个非常重要的指标：  运行时间 占用空间   由于运行环境和输入规模的影响，代码的绝对执行时间是无法估计的，但是我们却可以预估代码的基本执行次数。我可以通俗的理解为：通过执行次数可以大概推算这个时间复杂度。 示例：  一个有序排列好的数组 1int[] arry = &amp;#123;-5,-1,0,5,9,11,13,15,22,35,46&amp;#125;,输入一个x，int x">
+<meta name="twitter:title" content="常见adb命令">
+<meta name="twitter:description" content="1. 查看当前设备1adb devices 2. 查看连接设备的详细信息1adb devices -l 3.查看当前交互的Activity信息12adb shell;//进入adb shell 里dumpsys activity | grep &quot;mFoc&quot;">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/19/时间复杂度/"/>
+  <link rel="canonical" href="https://github.com/QQabby/QQabby.github.io.git/2019/04/28/常见adb命令/"/>
 
 
 
 
 
-  <title>时间复杂度 | 糖葫芦</title>
+  <title>常见adb命令 | 糖葫芦</title>
   
 
 
@@ -277,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/11/19/时间复杂度/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/04/28/常见adb命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="QQabby">
@@ -294,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">时间复杂度</h1>
+          <h1 class="post-title" itemprop="name headline">常见adb命令</h1>
         
 
         <div class="post-meta">
@@ -306,8 +306,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-19T15:17:21+08:00">
-                2018-11-19
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-28T14:39:47+08:00">
+                2019-04-28
               </time>
             
 
@@ -325,9 +325,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/11/19/时间复杂度/#comments" itemprop="discussionUrl">
+                <a href="/2019/04/28/常见adb命令/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/19/时间复杂度/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/04/28/常见adb命令/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,37 +355,9 @@
       
 
       
-        <blockquote>
-<p>衡量代码的好坏，包括两个非常重要的指标：</p>
-<ul>
-<li>运行时间</li>
-<li>占用空间</li>
-</ul>
-</blockquote>
-<p>由于运行环境和输入规模的影响，代码的绝对执行时间是无法估计的，但是我们却可以预估代码的基本执行次数。我可以通俗的理解为：通过执行次数可以大概推算这个时间复杂度。</p>
-<p>示例：</p>
-<ul>
-<li><p>一个有序排列好的数组</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] arry = &#123;-<span class="number">5</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">22</span>,<span class="number">35</span>,<span class="number">46</span>&#125;,输入一个x，<span class="keyword">int</span> x = <span class="number">31</span></span><br></pre></td></tr></table></figure>
-<p>在数组中找出和为  <code>x</code>  的两个数，例如： 9 +22 = 31。要求时间复杂度为<code>O(n)</code>.</p>
-</li>
-</ul>
-<p>好，当我们看到这个问题的时候，我们认为这很容易嘛(先不考虑时间复杂度)，于是写了如下代码：</p>
-<p>第一种写法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">int</span>[] array = &#123;-<span class="number">5</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">22</span>,<span class="number">35</span>,<span class="number">46</span>&#125;;</span><br><span class="line"> <span class="keyword">int</span> sum = <span class="number">31</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getIndex</span><span class="params">(<span class="keyword">int</span>[] array,<span class="keyword">int</span> sum)</span></span>&#123;</span><br><span class="line">        <span class="comment">//sum 在数据中找出和为sum的两个数</span></span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;array.length;j++)&#123;</span><br><span class="line">                <span class="comment">//判断是否相加=sum</span></span><br><span class="line">                <span class="keyword">if</span>(array[i] + array[j] == sum)&#123;</span><br><span class="line">                    x = i;</span><br><span class="line">                    y = j;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"第一个数的为："</span>+array[x]);</span><br><span class="line">        System.out.println(<span class="string">"第二个数的为："</span>+array[y]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>根据我们上面对时间复杂度的了解，我们知道改算法的时间复杂度是 <code>O(n^2)</code>， 是最低的一种，可以说，那么我们如何把时间复杂度设置为<code>O(n)</code> ,线性复杂度，其实就是需要一遍<code>for</code> 循环；</p>
-<p>第二种算法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] array = &#123;-<span class="number">5</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">22</span>,<span class="number">35</span>,<span class="number">46</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> sum = <span class="number">31</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">getSimpleIndex</span><span class="params">(<span class="keyword">int</span>[] array,<span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line">        HashMap&lt;Integer, Integer&gt; hm = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;<span class="comment">//第一次遍历数组，将元素和下标以K-V方式存入hm中</span></span><br><span class="line">            hm.put(array[i], i);<span class="comment">//key 为数组里面的值，value是下标</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++) &#123;<span class="comment">//第二次遍历数组，查找是否有和为target的元素对</span></span><br><span class="line">            <span class="keyword">if</span> (hm.containsKey(target - array[i]) &amp;&amp; (i != hm.get(target - array[i]))) &#123;</span><br><span class="line">                <span class="comment">//保证两个元素不是同一个，否则如果target恰好是某个元素的2倍时就不符合题意</span></span><br><span class="line">                x = i;</span><br><span class="line">                y = hm.get(target - array[i]);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(array[x]+<span class="string">" "</span>+array[y]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>这是一种典型以空间换时间的解法。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>常见的时间复杂度有如下：</p>
-<ul>
-<li>T(n) = O(n)</li>
-<li>T(n) = O(logn)</li>
-<li>T(n) = O(1)</li>
-<li>T(n) = O(n²)</li>
-</ul>
-<p>这四种时间复杂度谁用时更长，更节省时间呢？</p>
-<p>O(1) &lt; O(logn) &lt; O(n) &lt; O(n²)</p>
+        <h1 id="1-查看当前设备"><a href="#1-查看当前设备" class="headerlink" title="1. 查看当前设备"></a>1. 查看当前设备</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb devices</span><br></pre></td></tr></table></figure>
+<h1 id="2-查看连接设备的详细信息"><a href="#2-查看连接设备的详细信息" class="headerlink" title="2. 查看连接设备的详细信息"></a>2. 查看连接设备的详细信息</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb devices -l</span><br></pre></td></tr></table></figure>
+<h1 id="3-查看当前交互的Activity信息"><a href="#3-查看当前交互的Activity信息" class="headerlink" title="3.查看当前交互的Activity信息"></a>3.查看当前交互的Activity信息</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb shell;<span class="comment">//进入adb shell 里</span></span><br><span class="line">dumpsys activity | grep <span class="string">"mFoc"</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -413,7 +385,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/adb/" rel="tag"># adb</a>
           
         </div>
       
@@ -426,8 +398,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/19/java生产者消费者模式/" rel="next" title="java生产者消费者模式">
-                <i class="fa fa-chevron-left"></i> java生产者消费者模式
+              <a href="/2019/04/23/二叉树/" rel="next" title="二叉树">
+                <i class="fa fa-chevron-left"></i> 二叉树
               </a>
             
           </div>
@@ -435,10 +407,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/19/RxJava/" rel="prev" title="RxJava">
-                RxJava <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -573,7 +541,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-查看当前设备"><span class="nav-number">1.</span> <span class="nav-text"><a href="#1-&#x67E5;&#x770B;&#x5F53;&#x524D;&#x8BBE;&#x5907;" class="headerlink" title="1. &#x67E5;&#x770B;&#x5F53;&#x524D;&#x8BBE;&#x5907;"></a>1. &#x67E5;&#x770B;&#x5F53;&#x524D;&#x8BBE;&#x5907;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-查看连接设备的详细信息"><span class="nav-number">2.</span> <span class="nav-text"><a href="#2-&#x67E5;&#x770B;&#x8FDE;&#x63A5;&#x8BBE;&#x5907;&#x7684;&#x8BE6;&#x7EC6;&#x4FE1;&#x606F;" class="headerlink" title="2. &#x67E5;&#x770B;&#x8FDE;&#x63A5;&#x8BBE;&#x5907;&#x7684;&#x8BE6;&#x7EC6;&#x4FE1;&#x606F;"></a>2. &#x67E5;&#x770B;&#x8FDE;&#x63A5;&#x8BBE;&#x5907;&#x7684;&#x8BE6;&#x7EC6;&#x4FE1;&#x606F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-查看当前交互的Activity信息"><span class="nav-number">3.</span> <span class="nav-text"><a href="#3-&#x67E5;&#x770B;&#x5F53;&#x524D;&#x4EA4;&#x4E92;&#x7684;Activity&#x4FE1;&#x606F;" class="headerlink" title="3.&#x67E5;&#x770B;&#x5F53;&#x524D;&#x4EA4;&#x4E92;&#x7684;Activity&#x4FE1;&#x606F;"></a>3.&#x67E5;&#x770B;&#x5F53;&#x524D;&#x4EA4;&#x4E92;&#x7684;Activity&#x4FE1;&#x606F;</span></a></li></ol></div>
             
 
           </div>
@@ -750,9 +718,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2018/11/19/时间复杂度/';
-          this.page.identifier = '2018/11/19/时间复杂度/';
-          this.page.title = '时间复杂度';
+          this.page.url = 'https://github.com/QQabby/QQabby.github.io.git/2019/04/28/常见adb命令/';
+          this.page.identifier = '2019/04/28/常见adb命令/';
+          this.page.title = '常见adb命令';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://disqus.disqus.com/embed.js';
