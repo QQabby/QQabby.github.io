@@ -235,7 +235,7 @@
     </span>
     <div class="local-search-input-wrapper">
       <input autocomplete="off"
-             placeholder="Cerca..." spellcheck="false"
+             placeholder="Searching..." spellcheck="false"
              type="text" id="local-search-input">
     </div>
   </div>
@@ -259,6 +259,161 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/14/断点续传了解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/14/断点续传了解/" itemprop="url">断点续传了解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-14T10:11:16+08:00">
+                2019-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/14/断点续传了解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/14/断点续传了解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>所谓断点续传，也就是要从文件已经下载的地方开始继续下载。所以在客户端浏览器传给 <code>wen</code> 服务器的时候要多加一条信息即：从哪里开始的问题。</p>
+</blockquote>
+<p>假设：我们从服务器下载一个文件，需要从 <code>2000070</code> 这个字节后开始下载，之前已经下载过了，注意查看以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">get /down.zip http/<span class="number">1.0</span></span><br><span class="line"></span><br><span class="line">user-agent: netfox</span><br><span class="line"></span><br><span class="line">range: bytes=<span class="number">2000070</span>-<span class="comment">//新增加字段，range,这一行的意思就是告诉服务器我这个文件从2000070字节开始传输，前面的字节就不用传了。</span></span><br><span class="line"></span><br><span class="line">accept: text/html, image/gif, image/jpeg, *; q=.<span class="number">2</span>, *<span class="comment">/*; q=.2</span></span><br></pre></td></tr></table></figure>
+<p>服务器收到这条信息，就开始返回信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">206</span> <span class="comment">//注意此时服务器的返回码不再是200而是206</span></span><br><span class="line"></span><br><span class="line">content-length=<span class="number">106786028</span></span><br><span class="line"></span><br><span class="line">content-range=bytes <span class="number">2000070</span>-<span class="number">106786027</span>/<span class="number">106786028</span> <span class="comment">//这行也是服务器新增加字段，返回的字节是从2000070-106786027 之间的字节，之前的字节就不传了。</span></span><br><span class="line"></span><br><span class="line">date=mon, <span class="number">30</span> apr <span class="number">2001</span> <span class="number">12</span>:<span class="number">55</span>:<span class="number">20</span> gmt</span><br><span class="line"></span><br><span class="line">etag=w/<span class="string">"02ca57e173c11:95b"</span></span><br><span class="line"></span><br><span class="line">content-type=application/octet-stream</span><br><span class="line"></span><br><span class="line">server=microsoft-iis/<span class="number">5.0</span></span><br><span class="line"></span><br><span class="line">last-modified=mon, <span class="number">30</span> apr <span class="number">2001</span> <span class="number">12</span>:<span class="number">55</span>:<span class="number">20</span> gmt</span><br></pre></td></tr></table></figure>
+<p>以上差不多就是断点续传需要知道的知识和大致的原理。</p>
+<ul>
+<li><p>问题</p>
+<p> 用什么方法实现提交 <code>range:bytes=2000070-</code>  ？</p>
+</li>
+</ul>
+<blockquote>
+<p>使用最原始的 <code>socket</code> 肯定可以完成，不过很费事，用java的net包中提供了设置的方法，如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">           URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.baidu.com"</span>);</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">			<span class="comment">//通过设置requestProperty</span></span><br><span class="line">               httpURLConnection.setRequestProperty(<span class="string">"rande"</span>,<span class="string">"bytes=2000070"</span>);</span><br><span class="line">			<span class="comment">//这样获取的输入流就是从2000070这个字节后开始的	</span></span><br><span class="line">               InputStream input = httpURLConnection.getInputStream();</span><br><span class="line"></span><br><span class="line">           &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>接下来：获取到流了，那么如何从流保存到文件中去呢？</p>
+<p>保存文件的方法，采用的是 <code>io</code> 包中的 <code>randomacessfile</code> 类。如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上面文件已经获取到 inputStream--input</span></span><br><span class="line">RandomAccessFile saveFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"down.zip"</span>,<span class="string">"rw"</span>);<span class="comment">//down.zip下载文件名称</span></span><br><span class="line">saveFile.seek(<span class="number">2000070</span>);<span class="comment">//定位文件指针到这个 2000070 位置</span></span><br><span class="line"><span class="keyword">byte</span>[] b= <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="keyword">int</span> read;</span><br><span class="line"><span class="keyword">while</span>((read = input.read(b,<span class="number">0</span>,<span class="number">1024</span>))&gt;<span class="number">0</span>)&#123;</span><br><span class="line">saveFile.write(b,<span class="number">0</span>,read);</span><br></pre></td></tr></table></figure>
+<p>基本大概就是这样。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -1675,147 +1830,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/12/14/Moved-Permanently/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/14/Moved-Permanently/" itemprop="url">Moved Permanently</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-14T10:11:37+08:00">
-                2018-12-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/14/Moved-Permanently/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/14/Moved-Permanently/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>关于下载文件中包含重定向问题的解决方案。<br>之前下载文件没问题，但是今天遇到一个下载文件里包含重定向，还是用之前的下载文件的方法就不行了，默认浏览器打开下载，是自动重定向的。</p>
-</blockquote>
-<p>这是我以前的下载文件的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DownloadTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>, <span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> String <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>&#123;</span><br><span class="line">            String result = <span class="string">""</span>;</span><br><span class="line">            OutputStream output = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                URL url = <span class="keyword">new</span> URL(params[<span class="number">0</span>]);</span><br><span class="line">                <span class="comment">// 创建一个HttpURLConnection连接</span></span><br><span class="line">                URLConnection urlConn = (URLConnection ) url</span><br><span class="line">                        .openConnection();</span><br><span class="line">              </span><br><span class="line">                InputStream input = urlConn.getInputStream();</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 文件夹</span></span><br><span class="line">                File dir = <span class="keyword">new</span> File(Constant.K0_VOICE_DIR);</span><br><span class="line">                <span class="keyword">if</span> (!dir.exists()) &#123;</span><br><span class="line">                    dir.mkdirs();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 本地文件</span></span><br><span class="line">                File file = <span class="keyword">new</span> File(Constant.K0_VOICE_DIR + params[<span class="number">1</span>]);</span><br><span class="line">                <span class="keyword">if</span> (!file.exists()) &#123;</span><br><span class="line">                    file.createNewFile();</span><br><span class="line">                    <span class="comment">// 写入本地</span></span><br><span class="line">                    output = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">                    result = file.getAbsolutePath();</span><br><span class="line">                    <span class="keyword">byte</span> buffer[] = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4</span>*<span class="number">1024</span>];</span><br><span class="line">                    <span class="keyword">int</span> inputSize = -<span class="number">1</span>;</span><br><span class="line">                    <span class="keyword">while</span> ((inputSize = input.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                        output.write(buffer, <span class="number">0</span>, inputSize);</span><br><span class="line">                    &#125;</span><br><span class="line">                    output.flush();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    output.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.onPreExecute();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(String result)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">         <span class="comment">//下载完成.....</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">super</span>.onPostExecute(result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>按照这个下载，你会发现下载的例如<code>mp3</code> 会无法播放，点开查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt; a href=&quot;https:xxxx&quot;&gt;Moved Permanently&lt;/ a&gt;.</span><br></pre></td></tr></table></figure></p>
-<p><code>href</code> 里包含一个新的链接。需要添加如下代码，获取新的链接地址下载：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> URLConnection urlConn = (URLConnection ) url</span><br><span class="line">                        .openConnection();</span><br><span class="line">//下载的文件中含有重定向链接</span><br><span class="line"> String redirect = urlConn.getHeaderField(&quot;Location&quot;);</span><br><span class="line">  if (redirect != null)&#123;</span><br><span class="line">     urlConn = new URL(redirect).openConnection();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<p>奉上我在 <code>stackoverflow</code> 上找到的答案：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-095d000258975357.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1866,7 +1880,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-count">78</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1879,7 +1893,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
