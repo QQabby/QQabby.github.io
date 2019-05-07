@@ -273,326 +273,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/19/屏幕适配/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/19/屏幕适配/" itemprop="url">屏幕适配</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-19T17:43:18+08:00">
-                2019-02-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/19/屏幕适配/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/19/屏幕适配/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="屏幕适配的原理"><a href="#屏幕适配的原理" class="headerlink" title="屏幕适配的原理"></a>屏幕适配的原理</h1><p>关于 <code>dp,dpi</code> 之间的计算关系，在 <a href="/2018/04/24/获取手机屏幕的密度">获取手机屏幕的密度</a> 中都已经记录到。</p>
-<h1 id="日常适配"><a href="#日常适配" class="headerlink" title="日常适配"></a>日常适配</h1><ul>
-<li><p>使用不同套图适配，一般我们都使用高分辨率的图，保证大多数设备显示没有问题。</p>
-<blockquote>
-<p>这是我们经常很容易想到的方案，缺点也很明显，每次都设计多套图，apk体积变大，那么有没有办法我们尽可能只使用一套图，主要的分辨率有：1080 <em> 1920 和 1280 </em> 720，xhdpi 是首选。</p>
-</blockquote>
-</li>
-<li><p>使用<code>.9</code> 图 或者 <code>svg</code> 图</p>
-</li>
-<li><p>布局适配</p>
-<ul>
-<li>使用权重适配，一般用于格局比较明朗的界面中</li>
-</ul>
-</li>
-<li><p>使用 <code>dimens</code> 适配（在不同的 <code>values</code> 下的创建不同的文件夹例如：values-1080*1920等，Android 手机分辨率越来越多，维护十分繁琐）</p>
-</li>
-</ul>
-<p><strong>dp适配</strong></p>
-<blockquote>
-<p>虽然在不同的设备上可以简单的适配，但是还是无法做到完完全全的适配，总结为：</p>
-<p>因为 <code>dpi</code> 和 实际像素密度的差异导致使用 <code>dp</code> 做单位，没有很好的适配。</p>
-</blockquote>
-<p><strong>最小宽度限定符</strong>( 屏幕宽和高的较小值)</p>
-<blockquote>
-<p>很大程度上减少了文件，<code>values-sw160dp</code>  <code>values-sw240dp</code></p>
-</blockquote>
-<p><strong>约束布局</strong></p>
-<blockquote>
-<p>推荐使用的约束布局</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;android.support.constraint.ConstraintLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    xmlns:app=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span><br><span class="line">    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span></span><br><span class="line">    android:id=<span class="string">"@+id/linearLayout2"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span>&gt;</span><br><span class="line">    <span class="comment">//xxx</span></span><br><span class="line">&lt;/android.support.constraint.ConstraintLayout&gt;</span><br></pre></td></tr></table></figure>
-<p><strong>今日头条适配方案</strong></p>
-<blockquote>
-<p><a href="&quot;https://mp.weixin.qq.com/s/d9QCoBP6kV9VSWvVldVVwA&quot;">了解</a>   直接修改系统的 <code>density</code>  之前的总结文章 <a href="/2018/04/24/获取手机屏幕的密度">获取手机屏幕的密度</a>  中有记录到。</p>
-</blockquote>
-<p>我们可以做个实验展示下：</p>
-<p>设备信息为：1080 <em> 1920 尺寸：5 <em>*dpi = 420,</em></em> 我们设置按钮的宽度为 100dp</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-080aa6429fc3a94f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//我们可以手动计算下</span></span><br><span class="line">px = dp * density</span><br><span class="line">density = dpi / <span class="number">160</span> = <span class="number">420</span>/<span class="number">160</span> = <span class="number">2.625</span></span><br><span class="line">px = <span class="number">180</span> * <span class="number">2.625</span> = <span class="number">472.5</span> = <span class="number">473</span>px <span class="comment">//与实际展示结果一致</span></span><br></pre></td></tr></table></figure>
-<p>那如果就是我们按照今日头条的适配方法，设计图是以：1080<em>1920 <strong>dpi= 480</strong>, density 为3来标注，那么实际屏幕就是：360dp </em> 640dp, 也就是实际宽度为360dp.</p>
-<p>以宽为 360dp  为标准，适配后展示：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">同样是<span class="number">180</span>dp, 像素为：<span class="number">540</span>px, 即为屏幕的一半。</span><br><span class="line">底下<span class="number">205</span>dp展示的作用是：如果未做适配，那么需要红色区域的宽度为<span class="number">205</span>dp才能达到屏幕的一半，适配后，红色区域的宽度为<span class="number">180</span>dp,即可达到屏幕一半，即达到适配的目的。</span><br><span class="line"></span><br><span class="line">这样适配后，不管dpi = <span class="number">480</span> 的手机还是在 dpi = <span class="number">480</span> 手机上设置宽度为<span class="number">180</span>dp都展示为屏幕的一半。</span><br></pre></td></tr></table></figure>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-66aea02c0ad03bc8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/23/HTTPS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/23/HTTPS/" itemprop="url">HTTPS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-23T10:11:15+08:00">
-                2019-01-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/23/HTTPS/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/23/HTTPS/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>本文参考阅读理解：<a href="https://showme.codes/2017-02-20/understand-https/" target="_blank" rel="noopener">https://showme.codes/2017-02-20/understand-https/</a> </p>
-<p><a href="https://baijiahao.baidu.com/s?id=1590626703682162118&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1590626703682162118&amp;wfr=spider&amp;for=pc</a></p>
-</blockquote>
-<p><strong>对称加密</strong></p>
-<p>于是客户端和服务端都需要保存的加密算法和对应的密钥</p>
-<p><strong>非对称加密</strong></p>
-<p>即服务端将公钥下（数字签名过）发给客户端，客户端利用公钥进行信息加密，服务端收到信息利用私钥解密。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>HTTPS</code> 要使客户端与服务器端的通信过程得到安全保证，必须使用的对称加密算法，但是协商对称加密算法的过程，需要使用非对称加密算法来保证安全，然后直接使用非对称加密的过程本身也不安全，会有中间人篡改公钥的可能性，所以客户端与服务端不直接使用公钥，而是使用数字证书签发机构颁发的证书来保证非对称加密过程本身的安全。这样通过这些机制协商出一个对称加密算法，就此双方使用该算法进行加密解密。从而解决了客户端与服务端之间的通信安全问题。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/22/描述一次完整的网络请求过程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1862,6 +1542,324 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/14/断点续传了解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/14/断点续传了解/" itemprop="url">断点续传了解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-14T10:11:16+08:00">
+                2019-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/14/断点续传了解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/14/断点续传了解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>所谓断点续传，也就是要从文件已经下载的地方开始继续下载。所以在客户端浏览器传给 <code>wen</code> 服务器的时候要多加一条信息即：从哪里开始的问题。</p>
+</blockquote>
+<p>假设：我们从服务器下载一个文件，需要从 <code>2000070</code> 这个字节后开始下载，之前已经下载过了，注意查看以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">get /down.zip http/<span class="number">1.0</span></span><br><span class="line"></span><br><span class="line">user-agent: netfox</span><br><span class="line"></span><br><span class="line">range: bytes=<span class="number">2000070</span>-<span class="comment">//新增加字段，range,这一行的意思就是告诉服务器我这个文件从2000070字节开始传输，前面的字节就不用传了。</span></span><br><span class="line"></span><br><span class="line">accept: text/html, image/gif, image/jpeg, *; q=.<span class="number">2</span>, *<span class="comment">/*; q=.2</span></span><br></pre></td></tr></table></figure>
+<p>服务器收到这条信息，就开始返回信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">206</span> <span class="comment">//注意此时服务器的返回码不再是200而是206</span></span><br><span class="line"></span><br><span class="line">content-length=<span class="number">106786028</span></span><br><span class="line"></span><br><span class="line">content-range=bytes <span class="number">2000070</span>-<span class="number">106786027</span>/<span class="number">106786028</span> <span class="comment">//这行也是服务器新增加字段，返回的字节是从2000070-106786027 之间的字节，之前的字节就不传了。</span></span><br><span class="line"></span><br><span class="line">date=mon, <span class="number">30</span> apr <span class="number">2001</span> <span class="number">12</span>:<span class="number">55</span>:<span class="number">20</span> gmt</span><br><span class="line"></span><br><span class="line">etag=w/<span class="string">"02ca57e173c11:95b"</span></span><br><span class="line"></span><br><span class="line">content-type=application/octet-stream</span><br><span class="line"></span><br><span class="line">server=microsoft-iis/<span class="number">5.0</span></span><br><span class="line"></span><br><span class="line">last-modified=mon, <span class="number">30</span> apr <span class="number">2001</span> <span class="number">12</span>:<span class="number">55</span>:<span class="number">20</span> gmt</span><br></pre></td></tr></table></figure>
+<p>以上差不多就是断点续传需要知道的知识和大致的原理。</p>
+<ul>
+<li><p>问题</p>
+<p> 用什么方法实现提交 <code>range:bytes=2000070-</code>  ？</p>
+</li>
+</ul>
+<blockquote>
+<p>使用最原始的 <code>socket</code> 肯定可以完成，不过很费事，用java的net包中提供了设置的方法，如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">           URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.baidu.com"</span>);</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">			<span class="comment">//通过设置requestProperty</span></span><br><span class="line">               httpURLConnection.setRequestProperty(<span class="string">"rande"</span>,<span class="string">"bytes=2000070"</span>);</span><br><span class="line">			<span class="comment">//这样获取的输入流就是从2000070这个字节后开始的	</span></span><br><span class="line">               InputStream input = httpURLConnection.getInputStream();</span><br><span class="line"></span><br><span class="line">           &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>接下来：获取到流了，那么如何从流保存到文件中去呢？</p>
+<p>保存文件的方法，采用的是 <code>io</code> 包中的 <code>randomacessfile</code> 类。如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上面文件已经获取到 inputStream--input</span></span><br><span class="line">RandomAccessFile saveFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"down.zip"</span>,<span class="string">"rw"</span>);<span class="comment">//down.zip下载文件名称</span></span><br><span class="line">saveFile.seek(<span class="number">2000070</span>);<span class="comment">//定位文件指针到这个 2000070 位置</span></span><br><span class="line"><span class="keyword">byte</span>[] b= <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="keyword">int</span> read;</span><br><span class="line"><span class="keyword">while</span>((read = input.read(b,<span class="number">0</span>,<span class="number">1024</span>))&gt;<span class="number">0</span>)&#123;</span><br><span class="line">saveFile.write(b,<span class="number">0</span>,read);</span><br></pre></td></tr></table></figure>
+<p>基本大概就是这样。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/10/Serializable与Parcable的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/10/Serializable与Parcable的区别/" itemprop="url">Serializable与 Parcelable 的区别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T10:12:21+08:00">
+                2019-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/10/Serializable与Parcable的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/10/Serializable与Parcable的区别/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>序列化的两种方式，一种是 <code>java</code> 提供的 <code>Serilizable</code> 和 <code>Android</code> 自身提供的 <code>Parcelable</code>.</p>
+</blockquote>
+<h1 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">  	<span class="comment">//默认方式最好设置为1L,因为 java sdk 会自动进行hash计算，并生成唯一的</span></span><br><span class="line">     <span class="comment">//UID值。手动设置serialVersionUID的好处是当前class如果改变了成员变量，</span></span><br><span class="line">     <span class="comment">//比如增加或删除之后，这个UID是不改变的，反序列化不会失效。</span></span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">     ....</span><br><span class="line"> &#125;</span><br><span class="line"><span class="comment">//Parcable 类似</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">     <span class="keyword">private</span> String name;</span><br><span class="line">     <span class="keyword">private</span> String lastName;</span><br><span class="line">	...</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;UserInfo&gt; CREATOR = <span class="keyword">new</span> Creator&lt;UserInfo&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> UserInfo <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> UserInfo(in);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> UserInfo[] newArray(<span class="keyword">int</span> size) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> UserInfo[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel dest, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">        dest.writeString(name);</span><br><span class="line">        dest.writeString(lastName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><ul>
+<li>存储媒介的不同</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>存储媒介</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serializable</td>
+<td>使用的IO读写存储在硬盘上，序列化过程使用了反射技术，并且期间产生临时对象（？）,从而引起频繁的GC。</td>
+<td>代码少</td>
+</tr>
+<tr>
+<td>Parcelable</td>
+<td>使用的IO读写在内存中，内存的读写速度肯定优于硬盘读写速度，所以Parcelable的性能上优于Serializable.</td>
+<td>代码写起来比较多</td>
+</tr>
+</tbody>
+</table>
+<p>具体到开发中用哪个，个人觉着要考虑要传递对象的大小，如果对象比较大，手机内存比较小，可能会报出 <code>TransactionTooLargeException: The Binder transaction failed because it was too large .</code> 此时就要考虑使用 <code>Parcelable</code> 了，如果对象不是特别大，使用 <code>Serializable</code> 还是挺合适的，毕竟实现比较简单。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1912,7 +1910,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">78</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1925,7 +1923,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
