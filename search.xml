@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[内存泄漏排查方法]]></title>
+    <url>%2F2019%2F05%2F24%2F%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E6%8E%92%E6%9F%A5%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[2. 内存泄漏2.1 点击Android studio 中 Profiler 这样的一个图标打开后，运行程序，点击 record , 反复进去目标 Activity ，点击强制 GC 最后点击 stop : 然后点击 Arrange by package : 找到自己的应用包名： 点击 类似这样的图标，dump hprof 文件 。 我用idea 开发工具打开后： 点击右上角那个运行按钮，出现以下： 然后继续点开 Leaked Activities 选项 ： 这样我们就知道是 LeakActivity 发生了 泄漏 ，那如何去找到泄漏的原因需要使用 MAT 工具； 以上是检测泄漏 Activity 的方式之一，通常我也会在做这个之前，做一个小的判断，通过 adb 命令，判断内存情况，同样也是反复进出 目标Activity , 然后打印内存信息。 1adb shell dumpsys meminfo "packageName| pid" 观察 Activities 的数量，反复进出目标Activity , 如果 Activities 只增加而不减少，那么目标 Activity 基本上就发生内存泄漏了。 2.2 MAT借助 sdk 里 platform-tools 中的 hprof-conv.exe 进行hprof 文件转化，转化命令为： 12//示例hprof-conv -z test.hprof test1.hprof 文件名我就叫 test , 转化后为 test1.hprof , 转化后的文件用 Mat 工具打开： 然后点击左上角的这个按钮： 然后在显示的 Historgram 中输入之前泄漏的 Activity : 将搜索到的结果，右键，去除 软引用，弱引用，虚引用的对象： 筛选得出结果： 发现 LeakActivity 被这个 callback –MyRunnable 引用，发现原因进一步就可以解决了。 泄漏的LeakActivity.java 的代码： 1234567891011121314151617181920public class LeakActivity extends AppCompatActivity &#123; @Override protected void onCreate(@Nullable Bundle savedInstanceState) &#123; super.onCreate(savedInstanceState); setContentView(R.layout.layout_leak1); handler.postDelayed(new MyRunnable(),10000); &#125; private Handler handler = new Handler(); class MyRunnable implements Runnable&#123; @Override public void run() &#123; Log.i("qq &gt;&gt;&gt;","test"); &#125; &#125;&#125;]]></content>
+      <tags>
+        <tag>内存泄漏</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[常见adb命令]]></title>
     <url>%2F2019%2F04%2F28%2F%E5%B8%B8%E8%A7%81adb%E5%91%BD%E4%BB%A4%2F</url>
     <content type="text"><![CDATA[1. 查看当前设备1adb devices 2. 查看连接设备的详细信息1adb devices -l 3.查看当前交互的Activity信息12adb shell;//进入adb shell 里dumpsys activity | grep "mFoc"]]></content>

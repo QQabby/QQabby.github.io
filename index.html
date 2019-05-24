@@ -273,6 +273,175 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/05/24/内存泄漏排查方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/24/内存泄漏排查方法/" itemprop="url">内存泄漏排查方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-24T11:42:01+08:00">
+                2019-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/24/内存泄漏排查方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/24/内存泄漏排查方法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="2-内存泄漏"><a href="#2-内存泄漏" class="headerlink" title="2. 内存泄漏"></a>2. 内存泄漏</h1><h2 id="2-1-点击Android-studio-中-Profiler-这样的一个图标"><a href="#2-1-点击Android-studio-中-Profiler-这样的一个图标" class="headerlink" title="2.1 点击Android studio 中 Profiler  这样的一个图标"></a>2.1 点击Android studio 中 Profiler <img src="https://upload-images.jianshu.io/upload_images/1948557-85f0cb492b671745.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"> 这样的一个图标</h2><p>打开后，运行程序，点击 <code>record</code> , 反复进去目标 Activity ，点击强制 GC  最后点击 <code>stop</code> :</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-051937b328143feb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>然后点击 <code>Arrange by package</code> :</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-3f399bf8a39dc153.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>找到自己的应用包名：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-09cc22144306d910.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>点击 <img src="https://upload-images.jianshu.io/upload_images/1948557-3bb60fd1d8c236b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p> 类似这样的图标，dump hprof 文件 。</p>
+<p>我用idea 开发工具打开后：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-7219e3e2547dbb5a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>点击右上角那个运行按钮，出现以下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-2bfb5ff1335d9868.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>然后继续点开 <code>Leaked Activities</code> 选项 ：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-1545d3dd0145fb7c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>这样我们就知道是 <code>LeakActivity</code> 发生了 泄漏 ，那如何去找到泄漏的原因需要使用 MAT 工具；</p>
+<blockquote>
+<p>以上是检测泄漏 Activity 的方式之一，通常我也会在做这个之前，做一个小的判断，通过 adb 命令，判断内存情况，同样也是反复进出 目标Activity , 然后打印内存信息。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell dumpsys meminfo <span class="string">"packageName| pid"</span></span><br></pre></td></tr></table></figure>
+<p> <img src="https://upload-images.jianshu.io/upload_images/1948557-fa9118558695ac6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>观察 Activities 的数量，反复进出目标Activity , 如果 Activities 只增加而不减少，那么目标 Activity 基本上就发生内存泄漏了。</p>
+<h2 id="2-2-MAT"><a href="#2-2-MAT" class="headerlink" title="2.2 MAT"></a>2.2 MAT</h2><p>借助 sdk 里 platform-tools 中的 hprof-conv.exe 进行hprof 文件转化，转化命令为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//示例</span></span><br><span class="line">hprof-conv -z test.hprof test1.hprof</span><br></pre></td></tr></table></figure>
+<p>文件名我就叫  test , 转化后为 test1.hprof , 转化后的文件用 Mat 工具打开：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-7d16dd4f25d4c5e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>然后点击左上角的这个按钮：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-c689ac98d2bb8588.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>然后在显示的 <code>Historgram</code> 中输入之前泄漏的 <code>Activity</code> :</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-8722d67926e7de0b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>将搜索到的结果，右键，去除 软引用，弱引用，虚引用的对象：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-295b1fe85085e2e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>筛选得出结果：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1948557-305e526f182a9f08.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>发现 <code>LeakActivity</code>  被这个 callback –MyRunnable 引用，发现原因进一步就可以解决了。</p>
+<p>泄漏的<code>LeakActivity.java</code> 的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LeakActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.layout_leak1);</span><br><span class="line"></span><br><span class="line">        handler.postDelayed(<span class="keyword">new</span> MyRunnable(),<span class="number">10000</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Handler handler = <span class="keyword">new</span> Handler();</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            Log.i(<span class="string">"qq &gt;&gt;&gt;"</span>,<span class="string">"test"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/04/28/常见adb命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1695,149 +1864,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/01/23/HTTPS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/23/HTTPS/" itemprop="url">HTTPS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-23T10:11:15+08:00">
-                2019-01-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/23/HTTPS/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/23/HTTPS/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>本文参考阅读理解：<a href="https://showme.codes/2017-02-20/understand-https/" target="_blank" rel="noopener">https://showme.codes/2017-02-20/understand-https/</a> </p>
-<p><a href="https://baijiahao.baidu.com/s?id=1590626703682162118&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1590626703682162118&amp;wfr=spider&amp;for=pc</a></p>
-</blockquote>
-<p><strong>对称加密</strong></p>
-<p>于是客户端和服务端都需要保存的加密算法和对应的密钥</p>
-<p><strong>非对称加密</strong></p>
-<p>即服务端将公钥下（数字签名过）发给客户端，客户端利用公钥进行信息加密，服务端收到信息利用私钥解密。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>HTTPS</code> 要使客户端与服务器端的通信过程得到安全保证，必须使用的对称加密算法，但是协商对称加密算法的过程，需要使用非对称加密算法来保证安全，然后直接使用非对称加密的过程本身也不安全，会有中间人篡改公钥的可能性，所以客户端与服务端不直接使用公钥，而是使用数字证书签发机构颁发的证书来保证非对称加密过程本身的安全。这样通过这些机制协商出一个对称加密算法，就此双方使用该算法进行加密解密。从而解决了客户端与服务端之间的通信安全问题。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1888,7 +1914,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">77</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1901,7 +1927,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
