@@ -662,7 +662,7 @@
       
         
           
-            <p>  ● standard 标准模式<br>​    简述：对于使用standard模式的活动，系统不会在乎这个活动是否已经在返回栈中存在，每次启动都会创建该活动的一个新的实例。<br>例如：A启动A，A再接着启动A,A再接着启动A,，然后再分别出栈，如图所示：<br>​<br><img src="http://upload-images.jianshu.io/upload_images/1948557-bf56470a07ad09ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+            <p>  ● standard 标准模式<br>​    简述：对于使用standard模式的活动，系统不会在乎这个活动是否已经在返回栈中存在，每次启动都会创建该活动的一个新的实例。<br>例如：A启动A，A再接着启动A,A再接着启动A,，然后再分别出栈，如图所示：<br>​<br><img src="http://hanyuba.easyd.club/1948557-bf56470a07ad09ea.png" alt="image.png"></p>
 <p>  ● singleTop<br>简述：当活动的启动模式指定为 singleTop ,在启动活动时如果发现返回栈的栈顶已经<br>是该活动，则认为可以直接使用它，不会再创建新的活动实例。<br>例如：如果快速点击一个按钮，进入Activity，要保证启动的Activity不为多个，可以使用<br>将Activity的启动模式改为 singleTop，就不会启动多个了。如图所示：<br>​<br><img src="http://upload-images.jianshu.io/upload_images/1948557-d5f43b4894e1a4f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <p>  ● singleTask<br>简述：当活动的启动模式指定为singleTask，每次启动该活动时候，它会先在系统中查找属性值taskaffinity等于它的属性值taskAffinity的任务存在；如果存在这样的任务，他就会这个任务中启动，否则就会在新任务中启动。因此，如果我们想要设置了“singleTask”启动模式的Activity在新的任务中启动，就要为它设置一个独立的taskAffinity属性值。</p>
 <p>如果设置了“singleTask”启动模式的Activity不是在新的任务中启动时，它会在已有的任务中查看是否已经存在在相应的Activity实例，如果存在，就会把位于这个Activity实例上面的Activity全部结束掉，即最终这个Activity实例会位于任务的堆栈顶端中。</p>
@@ -1425,7 +1425,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
