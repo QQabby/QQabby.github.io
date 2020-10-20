@@ -273,6 +273,324 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2020/10/20/Activity启动总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/10/20/Activity启动总结/" itemprop="url">Activity启动总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-20T11:38:31+08:00">
+                2020-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/20/Activity启动总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/10/20/Activity启动总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在上一篇文章中，我们通过跟踪源码了解了 <code>Activity 大致的启动流程</code> ，相信你也肯定看的晕头转向的，没关系，今天这篇文章是放松篇，帮你即使不看源码也能掌握。</p>
+<p>其实就是一个跨进程通信的过程，从客户端进程到服务端进程，再最后转到客户端进程中去，来一张流程图更清晰。</p>
+<p> <img src="https://upload-images.jianshu.io/upload_images/1948557-9385028297677a24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tanghulu_img.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2020/10/20/Activity启动流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/10/20/Activity启动流程/" itemprop="url">Activity启动流程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-20T11:36:39+08:00">
+                2020-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/20/Activity启动流程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/10/20/Activity启动流程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在研究启动优化方面的知识，那么对于 <code>Activity</code> 的启动过程这方面的知识自然是逃不掉的，那么废话不多说，我们开始梳理。</p>
+<p><code>（文中基于sdk28, 不少有代码片段的地方，可能比较枯燥，我们只要把握主要流程即可~）</code></p>
+<h1 id="1-启动"><a href="#1-启动" class="headerlink" title="1. 启动"></a>1. 启动</h1><p>启动包括冷启动和热启动，本篇我们主要围绕冷启动做简述。<code>（还不清楚冷启动和热启动的区别，就自行Google哦）</code></p>
+<h1 id="2-点击一个应用图标"><a href="#2-点击一个应用图标" class="headerlink" title="2. 点击一个应用图标"></a>2. 点击一个应用图标</h1><p>当我们在手机桌面开始点击一个应用图标的时候，此时应用就启动起来了，那么背后究竟发生了什么事，我们一起来看一下：</p>
+<h2 id="2-1-startActivity"><a href="#2-1-startActivity" class="headerlink" title="2.1 startActivity"></a>2.1 startActivity</h2><p><code>Activity#startActivity</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(Intent intent, @Nullable Bundle options)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (options != <span class="keyword">null</span>) &#123;<span class="comment">//不传 options为null</span></span><br><span class="line">            startActivityForResult(intent, -<span class="number">1</span>, options);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            startActivityForResult(intent, -<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>Activity#startActivityForResult</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityForResult</span><span class="params">(@RequiresPermission Intent intent, <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">            @Nullable Bundle options)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            options = transferSpringboardActivityOptions(options);</span><br><span class="line">            Instrumentation.ActivityResult ar = -----------<span class="comment">//注释1</span></span><br><span class="line">                mInstrumentation.execStartActivity(</span><br><span class="line">                    <span class="keyword">this</span>, mMainThread.getApplicationThread(), mToken, <span class="keyword">this</span>,</span><br><span class="line">                    intent, requestCode, options);        </span><br><span class="line">          ....</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>注释1处： <code>mInstrumentation</code> 为 <code>Instrumentation</code> 类型，调用了 <code>execStartActivity</code> 方法，其中 <code>mMainThread.getApplicationThread()</code> 需要我们重点关注。</p>
+<p><code>mMainThread</code> —–&gt; <code>ActivityThread</code> 类型<br><code>getApplicationThread()</code> 返回 <code>ApplicationThread</code> 类型， 而 <code>ApplicationThread</code> 则是 <code>ActivityThread</code> 的一个内部类，大致如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ActivityThread</span></span>&#123;</span><br><span class="line">...</span><br><span class="line">  <span class="function"><span class="keyword">public</span> ApplicationThread <span class="title">getApplicationThread</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mAppThread;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">ApplicationThread</span> <span class="keyword">extends</span> <span class="title">IApplicationThread</span>.<span class="title">Stub</span> </span>&#123;</span><br><span class="line">            .....</span><br><span class="line">  &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>OK ,直到了 <code>ApplicationThread</code> 我们继续，调用了 <code>Instrumentation.execStartActivity</code> 我们需要点进去看一下：</p>
+<h2 id="2-2-Instrumentation-execStartActivity"><a href="#2-2-Instrumentation-execStartActivity" class="headerlink" title="2.2 Instrumentation#execStartActivity"></a>2.2 Instrumentation#execStartActivity</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ActivityResult <span class="title">execStartActivity</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            Context who, IBinder contextThread, IBinder token, Activity target,</span></span></span><br><span class="line"><span class="function"><span class="params">            Intent intent, <span class="keyword">int</span> requestCode, Bundle options)</span> </span>&#123;</span><br><span class="line">        IApplicationThread whoThread = (IApplicationThread) contextThread; <span class="comment">//-----&gt;注释1</span></span><br><span class="line">        ...</span><br><span class="line">   </span><br><span class="line">            intent.migrateExtraStreamToClipData();</span><br><span class="line">            intent.prepareToLeaveProcess(who);</span><br><span class="line">            <span class="keyword">int</span> result = ActivityManager.getService() <span class="comment">//-------&gt;注释2</span></span><br><span class="line">                .startActivity(whoThread, who.getBasePackageName(), intent,</span><br><span class="line">                        intent.resolveTypeIfNeeded(who.getContentResolver()),</span><br><span class="line">                        token, target != <span class="keyword">null</span> ? target.mEmbeddedID : <span class="keyword">null</span>,</span><br><span class="line">                        requestCode, <span class="number">0</span>, <span class="keyword">null</span>, options);</span><br><span class="line">            checkStartActivityResult(result, intent);</span><br><span class="line">       ...</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>注释1： 其中我们上面说的 <code>ApplicationThread</code> 被转化成 <code>IApplicationThread</code> 是一个 <code>IBinder</code> 类型 , 因为<code>ApplicationThread</code>继承了 <code>IApplicationThread.Stub</code> 是不是很眼熟，类似于我们那个<code>aidl</code> 自动生成的那个代码，你可以认为是代理类。</p>
+<p>接着往下，注释2： <code>ActivityManager.getService</code> 返回 <code>IActivityManager</code> 类型 ，看下面代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IActivityManager <span class="title">getService</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> IActivityManagerSingleton.get();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton&lt;IActivityManager&gt; IActivityManagerSingleton =</span><br><span class="line">           <span class="keyword">new</span> Singleton&lt;IActivityManager&gt;() &#123;</span><br><span class="line">               <span class="meta">@Override</span></span><br><span class="line">               <span class="function"><span class="keyword">protected</span> IActivityManager <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                   <span class="keyword">final</span> IBinder b = ServiceManager.getService(Context.ACTIVITY_SERVICE);</span><br><span class="line">                   <span class="keyword">final</span> IActivityManager am = IActivityManager.Stub.asInterface(b);</span><br><span class="line">                   <span class="keyword">return</span> am;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;;</span><br></pre></td></tr></table></figure></p>
+<p><code>ServiceManager</code> 获取到服务，其实就是我们的 <code>ActivityManagerService</code> 对象，它继承了<code>IActivityManager.Stub</code> 为具体实现类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityManagerService</span> <span class="keyword">extends</span> <span class="title">IActivityManager</span>.<span class="title">Stub</span>..</span>&#123;</span><br><span class="line">  ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最终调用实际是 <code>ActivityManagerService 的 startActiviy</code>方法，通过获取远程服务获取到代理类，调用了远程服务，<strong>此时由客户端进程转换到远程服务端进程</strong>。</p>
+<h2 id="2-3-ActivityManagerService-startActivity"><a href="#2-3-ActivityManagerService-startActivity" class="headerlink" title="2.3 ActivityManagerService#startActivity"></a>2.3 ActivityManagerService#startActivity</h2><p><code>ActivityManagerService</code> 这里简称 <code>AMS</code>,这里代码就比较多了，我们只看一些对流程上比较重要的方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">startActivity</span><span class="params">(IApplicationThread caller, String callingPackage,</span></span></span><br><span class="line"><span class="function"><span class="params">            Intent intent, String resolvedType, IBinder resultTo, String resultWho, <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">int</span> startFlags, ProfilerInfo profilerInfo, Bundle bOptions)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> startActivityAsUser(caller, callingPackage, intent, resolvedType, resultTo,</span><br><span class="line">                resultWho, requestCode, startFlags, profilerInfo, bOptions,</span><br><span class="line">                UserHandle.getCallingUserId());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>里面可以看到又调用了 <code>startActivityAsUser()</code> 方法，继续走：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">startActivityAsUser</span><span class="params">(IApplicationThread caller, String callingPackage,</span></span></span><br><span class="line"><span class="function"><span class="params">            Intent intent, String resolvedType, IBinder resultTo, String resultWho, <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">int</span> startFlags, ProfilerInfo profilerInfo, Bundle bOptions, <span class="keyword">int</span> userId,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">boolean</span> validateIncomingUser)</span> </span>&#123;</span><br><span class="line">           ...</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> Switch to user app stacks here.</span></span><br><span class="line">        <span class="keyword">return</span> mActivityStartController.obtainStarter(intent, <span class="string">"startActivityAsUser"</span>)</span><br><span class="line">                .setCaller(caller)</span><br><span class="line">                .setCallingPackage(callingPackage)</span><br><span class="line">                .setResolvedType(resolvedType)</span><br><span class="line">                .setResultTo(resultTo)</span><br><span class="line">                .setResultWho(resultWho)</span><br><span class="line">                .setRequestCode(requestCode)</span><br><span class="line">                .setStartFlags(startFlags)</span><br><span class="line">                .setProfilerInfo(profilerInfo)</span><br><span class="line">                .setActivityOptions(bOptions)</span><br><span class="line">                .setMayWait(userId)</span><br><span class="line">                .execute();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>只看到最后调用了一个 <code>execute()</code> 方法，那么看是谁的 <code>execute()</code> 方法， <code>obtainStarter()</code> 方法返回 <code>ActivityStarter</code> 类型的对象，那么就是它的，走进去看看：<br><code>ActivityStarter#execute</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (mRequest.mayWait) &#123;</span><br><span class="line">                <span class="keyword">return</span> startActivityMayWait(mRequest.caller, mRequest.callingUid,</span><br><span class="line">                        mRequest.callingPackage, mRequest.intent, mRequest.resolvedType,</span><br><span class="line">                        mRequest.voiceSession, mRequest.voiceInteractor, mRequest.resultTo,</span><br><span class="line">                        mRequest.resultWho, mRequest.requestCode, mRequest.startFlags,</span><br><span class="line">                        mRequest.profilerInfo, mRequest.waitResult, mRequest.globalConfig,</span><br><span class="line">                        mRequest.activityOptions, mRequest.ignoreTargetSecurity, mRequest.userId,</span><br><span class="line">                        mRequest.inTask, mRequest.reason,</span><br><span class="line">                        mRequest.allowPendingRemoteAnimationRegistryLookup);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> startActivity(mRequest.caller, mRequest.intent, mRequest.ephemeralIntent,</span><br><span class="line">                        mRequest.resolvedType, mRequest.activityInfo, mRequest.resolveInfo,</span><br><span class="line">                        mRequest.voiceSession, mRequest.voiceInteractor, mRequest.resultTo,</span><br><span class="line">                        mRequest.resultWho, mRequest.requestCode, mRequest.callingPid,</span><br><span class="line">                        mRequest.callingUid, mRequest.callingPackage, mRequest.realCallingPid,</span><br><span class="line">                        mRequest.realCallingUid, mRequest.startFlags, mRequest.activityOptions,</span><br><span class="line">                        mRequest.ignoreTargetSecurity, mRequest.componentSpecified,</span><br><span class="line">                        mRequest.outActivity, mRequest.inTask, mRequest.reason,</span><br><span class="line">                        mRequest.allowPendingRemoteAnimationRegistryLookup);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            onExecutionComplete();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个 <code>mRequest.mayWait</code> 为 <code>true</code> ,因为前面我们在启动的时候设置了：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-c72b19bee1416712.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/1948557-e47dc6a2136f1bb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>所以我们就可以直接看  <code>startActivityMayWait</code> 这个方法了。</p>
+<p>这个方法就比较长了，我看了好长时间，看到最后方法返回 <code>res</code>,自然而然就比较关注这个 <code>res</code> 赋值是什么，赋值我拿了出来：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">startActivityMayWait</span><span class="params">(IApplicationThread caller, <span class="keyword">int</span> callingUid,</span></span></span><br><span class="line"><span class="function"><span class="params">            String callingPackage, Intent intent, String resolvedType,</span></span></span><br><span class="line"><span class="function"><span class="params">            IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,</span></span></span><br><span class="line"><span class="function"><span class="params">            IBinder resultTo, String resultWho, <span class="keyword">int</span> requestCode, <span class="keyword">int</span> startFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">            ProfilerInfo profilerInfo, WaitResult outResult,</span></span></span><br><span class="line"><span class="function"><span class="params">            Configuration globalConfig, SafeActivityOptions options, <span class="keyword">boolean</span> ignoreTargetSecurity,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">int</span> userId, TaskRecord inTask, String reason,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">boolean</span> allowPendingRemoteAnimationRegistryLookup)</span> </span>&#123;</span><br><span class="line">      ....</span><br><span class="line">              <span class="keyword">final</span> ActivityRecord[] outRecord = <span class="keyword">new</span> ActivityRecord[<span class="number">1</span>];</span><br><span class="line">              <span class="keyword">int</span> res = startActivity(caller, intent, ephemeralIntent, resolvedType, aInfo, rInfo,</span><br><span class="line">                    voiceSession, voiceInteractor, resultTo, resultWho, requestCode, callingPid,</span><br><span class="line">                    callingUid, callingPackage, realCallingPid, realCallingUid, startFlags, options,</span><br><span class="line">                    ignoreTargetSecurity, componentSpecified, outRecord, inTask, reason,</span><br><span class="line">                    allowPendingRemoteAnimationRegistryLookup);</span><br><span class="line">              <span class="keyword">return</span> res;</span><br><span class="line">      ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个 <code>startActivity</code> 继续调用调用:<br><img src="https://upload-images.jianshu.io/upload_images/1948557-c3c0baa2bb4469e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>方法里最终 <code>return</code> 又还是继续调用 <code>startActivity</code> 方法 ：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-4eecc2ae5eee94e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">startActivity</span><span class="params">(<span class="keyword">final</span> ActivityRecord r, ActivityRecord sourceRecord,</span></span></span><br><span class="line"><span class="function"><span class="params">                IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> startFlags, <span class="keyword">boolean</span> doResume, ActivityOptions options, TaskRecord inTask,</span></span></span><br><span class="line"><span class="function"><span class="params">                ActivityRecord[] outActivity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = START_CANCELED;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            mService.mWindowManager.deferSurfaceLayout();</span><br><span class="line">            result = startActivityUnchecked(r, sourceRecord, voiceSession, voiceInteractor,</span><br><span class="line">                    startFlags, doResume, options, inTask, outActivity);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// If we are not able to proceed, disassociate the activity from the task. Leaving an</span></span><br><span class="line">            <span class="comment">// activity in an incomplete state can lead to issues, such as performing operations</span></span><br><span class="line">            <span class="comment">// without a window container.</span></span><br><span class="line">            <span class="keyword">final</span> ActivityStack stack = mStartActivity.getStack();</span><br><span class="line">            <span class="keyword">if</span> (!ActivityManager.isStartResultSuccessful(result) &amp;&amp; stack != <span class="keyword">null</span>) &#123;</span><br><span class="line">                stack.finishActivityLocked(mStartActivity, RESULT_CANCELED,</span><br><span class="line">                        <span class="keyword">null</span> <span class="comment">/* intentResultData */</span>, <span class="string">"startActivity"</span>, <span class="keyword">true</span> <span class="comment">/* oomAdj */</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            mService.mWindowManager.continueSurfaceLayout();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        postStartActivityProcessing(r, result, mTargetStack);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>因为最后返回 <code>result</code> 所以我们还是看 <code>result</code> 的赋值， 调用了 <code>startActivityUnchecked</code> 方法 最后返回 <code>START_SUCCESS</code> 应该就是最后的方法了吧，目测感觉应该要到头了，看了一下这个方法有点长：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">startActivityUnchecked</span><span class="params">(<span class="keyword">final</span> ActivityRecord r, ActivityRecord sourceRecord,</span></span></span><br><span class="line"><span class="function"><span class="params">            IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">int</span> startFlags, <span class="keyword">boolean</span> doResume, ActivityOptions options, TaskRecord inTask,</span></span></span><br><span class="line"><span class="function"><span class="params">            ActivityRecord[] outActivity)</span> </span>&#123;</span><br><span class="line">        ....</span><br><span class="line">        <span class="comment">//把目标栈移动到前台</span></span><br><span class="line">       reusedActivity = setTargetStackAndMoveToFrontIfNeeded(reusedActivity);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (dontStart) &#123;</span><br><span class="line">          </span><br><span class="line">            topStack.mLastPausedActivity = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">if</span> (mDoResume) &#123;</span><br><span class="line">                mSupervisor.resumeFocusedStackTopActivityLocked();<span class="comment">//--------注释1</span></span><br><span class="line">            &#125;           </span><br><span class="line">          ...</span><br><span class="line">          result = setTaskFromReuseOrCreateNewTask(taskToAffiliate, topStack);<span class="comment">//-------注释2</span></span><br><span class="line">        &#125;</span><br><span class="line">        ....</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> START_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注释1：<code>ActivityStackSupervisor</code> 负责将目标 <code>Activity</code> 放于栈顶 ；<br>注释2：复用或者创建新的任务栈 ；</p>
+<h2 id="2-4-ActivityStackSupervisor-resumeFocusedStackTopActivityLocked"><a href="#2-4-ActivityStackSupervisor-resumeFocusedStackTopActivityLocked" class="headerlink" title="2.4 ActivityStackSupervisor#resumeFocusedStackTopActivityLocked"></a>2.4 ActivityStackSupervisor#resumeFocusedStackTopActivityLocked</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">resumeFocusedStackTopActivityLocked</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> resumeFocusedStackTopActivityLocked(<span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">resumeFocusedStackTopActivityLocked</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            ActivityStack targetStack, ActivityRecord target, ActivityOptions targetOptions)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!readyToResume()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (targetStack != <span class="keyword">null</span> &amp;&amp; isFocusedStack(targetStack)) &#123;</span><br><span class="line">            <span class="keyword">return</span> targetStack.resumeTopActivityUncheckedLocked(target, targetOptions);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> ActivityRecord r = mFocusedStack.topRunningActivityLocked();</span><br><span class="line">        <span class="keyword">if</span> (r == <span class="keyword">null</span> || !r.isState(RESUMED)) &#123;</span><br><span class="line">            mFocusedStack.resumeTopActivityUncheckedLocked(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (r.isState(RESUMED)) &#123;</span><br><span class="line">            <span class="comment">// Kick off any lingering app transitions form the MoveTaskToFront operation.</span></span><br><span class="line">            mFocusedStack.executeAppTransition(targetOptions);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><code>result = resumeTopActivityInnerLocked(prev, options)</code><br>这个方法就比较长,参考其它资料，里面比较重要的就是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.....</span><br><span class="line"><span class="keyword">if</span> (next.app != <span class="keyword">null</span> &amp;&amp; next.app.thread != <span class="keyword">null</span>) &#123;</span><br><span class="line">  <span class="comment">//把要启动Activity进程信息封装在一个 ClientTransaction 对象中了</span></span><br><span class="line"><span class="keyword">final</span> ClientTransaction transaction = ClientTransaction.obtain(next.app.thread,</span><br><span class="line">                            next.appToken);</span><br><span class="line"><span class="comment">//如果要启动的activity已经存在，就该resume了</span></span><br><span class="line">mStackSupervisor.scheduleResumeTopActivities();</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="comment">//如果进程不存在，就要启动新的Activity</span></span><br><span class="line">     mStackSupervisor.startSpecificActivityLocked(next, <span class="keyword">true</span>, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
+<p>假如是第一次启动 <code>Activity</code> 就执行 <code>mStackSupervisor.startSpecificActivityLocked()</code> 方法，继续跟进去：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">startSpecificActivityLocked</span><span class="params">(ActivityRecord r,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">boolean</span> andResume, <span class="keyword">boolean</span> checkConfig)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Is this activity's application already running?</span></span><br><span class="line">        ProcessRecord app = mService.getProcessRecordLocked(r.processName,</span><br><span class="line">                r.info.applicationInfo.uid, <span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">        getLaunchTimeTracker().setLaunchTime(r);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (app != <span class="keyword">null</span> &amp;&amp; app.thread != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> ((r.info.flags&amp;ActivityInfo.FLAG_MULTIPROCESS) == <span class="number">0</span></span><br><span class="line">                        || !<span class="string">"android"</span>.equals(r.info.packageName)) &#123;</span><br><span class="line">                    <span class="comment">// Don't add this if it is a platform component that is marked</span></span><br><span class="line">                    <span class="comment">// to run in multiple processes, because this is actually</span></span><br><span class="line">                    <span class="comment">// part of the framework so doesn't make sense to track as a</span></span><br><span class="line">                    <span class="comment">// separate apk in the process.</span></span><br><span class="line">                    app.addPackage(r.info.packageName, r.info.applicationInfo.longVersionCode,</span><br><span class="line">                            mService.mProcessStats);</span><br><span class="line">                &#125;</span><br><span class="line">                realStartActivityLocked(r, app, andResume, checkConfig);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">                Slog.w(TAG, <span class="string">"Exception when starting activity "</span></span><br><span class="line">                        + r.intent.getComponent().flattenToShortString(), e);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If a dead object exception was thrown -- fall through to</span></span><br><span class="line">            <span class="comment">// restart the application.</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mService.startProcessLocked(r.processName, r.info.applicationInfo, <span class="keyword">true</span>, <span class="number">0</span>,</span><br><span class="line">                <span class="string">"activity"</span>, r.intent.getComponent(), <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>继续执行那就是 <code>realStartActivityLocked()</code> 方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">realStartActivityLocked</span><span class="params">(ActivityRecord r, ProcessRecord app,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">boolean</span> andResume, <span class="keyword">boolean</span> checkConfig)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line"></span><br><span class="line">  ....</span><br><span class="line">      <span class="comment">// Create activity launch transaction. 创建启动Activity的事务</span></span><br><span class="line">                <span class="keyword">final</span> ClientTransaction clientTransaction = ClientTransaction.obtain(app.thread,</span><br><span class="line">                        r.appToken);</span><br><span class="line">                <span class="comment">//回调callback 是 LaunchActivityItem</span></span><br><span class="line">                clientTransaction.addCallback(LaunchActivityItem.obtain(<span class="keyword">new</span> Intent(r.intent),</span><br><span class="line">                        System.identityHashCode(r), r.info,</span><br><span class="line">                        mergedConfiguration.getGlobalConfiguration(),</span><br><span class="line">                        mergedConfiguration.getOverrideConfiguration(), r.compat,</span><br><span class="line">                        r.launchedFromPackage, task.voiceInteractor, app.repProcState, r.icicle,</span><br><span class="line">                        r.persistentState, results, newIntents, mService.isNextTransitionForward(),</span><br><span class="line">                        profilerInfo));</span><br><span class="line">                 <span class="keyword">final</span> ActivityLifecycleItem lifecycleItem;</span><br><span class="line">                <span class="keyword">if</span> (andResume) &#123;</span><br><span class="line">                    lifecycleItem = ResumeActivityItem.obtain(mService.isNextTransitionForward());</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    lifecycleItem = PauseActivityItem.obtain();</span><br><span class="line">                &#125;</span><br><span class="line">                clientTransaction.setLifecycleStateRequest(lifecycleItem);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Schedule transaction. 最后开始执行了</span></span><br><span class="line">                mService.getLifecycleManager().scheduleTransaction(clientTransaction);</span><br><span class="line">  ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里可以看到生命周期的回调被封装成一个一个的 <code>Item</code>  ,例如 ： <code>LaunchActivityItem</code> , <code>ResumeActivityItem</code> , <code>PauseActivityItem</code> 光看名字也能大概猜出一点来。</p>
+<p>这里 <code>mService</code> 就是 <code>AMS</code> , <code>getLifecycleManager()</code> 获取到 <code>ClientLifecycleManager</code> 对象 ， 调用 <code>scheduleTransaction</code> 方法 ；</p>
+<h2 id="2-5-ClientLifecycleManager-scheduleTransaction"><a href="#2-5-ClientLifecycleManager-scheduleTransaction" class="headerlink" title="2.5 ClientLifecycleManager#scheduleTransaction"></a>2.5 ClientLifecycleManager#scheduleTransaction</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">scheduleTransaction</span><span class="params">(ClientTransaction transaction)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> IApplicationThread client = transaction.getClient();</span><br><span class="line">        transaction.schedule();</span><br><span class="line">        <span class="keyword">if</span> (!(client <span class="keyword">instanceof</span> Binder)) &#123;</span><br><span class="line">            <span class="comment">// If client is not an instance of Binder - it's a remote call and at this point it is</span></span><br><span class="line">            <span class="comment">// safe to recycle the object. All objects used for local calls will be recycled after</span></span><br><span class="line">            <span class="comment">// the transaction is executed on client in ActivityThread.</span></span><br><span class="line">            transaction.recycle();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-6-ClientTransaction-schedule"><a href="#2-6-ClientTransaction-schedule" class="headerlink" title="2.6 ClientTransaction#schedule"></a>2.6 ClientTransaction#schedule</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">schedule</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">       mClient.scheduleTransaction(<span class="keyword">this</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p><code>mClient</code> 是 <code>IApplicationThread</code> 就是 <code>ApplicationThread</code> , 而 <code>ApplicationThread</code> 是 <code>ActivityThread</code> 的一个内部类，执行了 <code>scheduleTransaction</code> 方法。</p>
+<p>此时你会发现，由原来的 <code>Client</code> 进程 ———&gt; <code>AMS</code>进程 ，现在又回到了 客户端进程了。 </p>
+<p> <code>Client</code> 进程 ———&gt; <code>AMS</code>进程  ———&gt; <code>Client</code> 进程  </p>
+<h2 id="2-7-ActivityThread-ApplicationThread-scheduleTransaction"><a href="#2-7-ActivityThread-ApplicationThread-scheduleTransaction" class="headerlink" title="2.7 ActivityThread#ApplicationThread # scheduleTransaction"></a>2.7 ActivityThread#ApplicationThread # scheduleTransaction</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityThread</span> <span class="keyword">extends</span> <span class="title">ClientTransactionHandler</span> </span>&#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">scheduleTransaction</span><span class="params">(ClientTransaction transaction)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</span><br><span class="line">            ActivityThread.<span class="keyword">this</span>.scheduleTransaction(transaction);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为 <code>ActivityThread</code> 继承了 <code>ClientTransactionHandler</code> ，在父类中实现了这个方法：</p>
+<h2 id="2-8-ClientTransactionHandler-scheduleTransaction"><a href="#2-8-ClientTransactionHandler-scheduleTransaction" class="headerlink" title="2.8 ClientTransactionHandler#scheduleTransaction"></a>2.8 ClientTransactionHandler#scheduleTransaction</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">scheduleTransaction</span><span class="params">(ClientTransaction transaction)</span> </span>&#123;</span><br><span class="line">        transaction.preExecute(<span class="keyword">this</span>);</span><br><span class="line">        sendMessage(ActivityThread.H.EXECUTE_TRANSACTION, transaction);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>终于看到点能看懂的代码了，开始切换主线程了，因为看到了 <code>sendMessage</code> , 哈哈。<br>发送了一个 <code>ActivityThread.H.EXECUTE_TRANSACTION</code> 消息 ，<code>obj</code> 为 <code>transaction</code> , 继续到 <code>ActivityThread</code> 中看下：</p>
+<h2 id="2-9-ActivityThread-mH"><a href="#2-9-ActivityThread-mH" class="headerlink" title="2.9 ActivityThread#mH"></a>2.9 ActivityThread#mH</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityThread</span> <span class="keyword">extends</span> <span class="title">ClientTransactionHandler</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//内部类H</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">H</span> <span class="keyword">extends</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line">      <span class="comment">//很多消息类型,找到我们刚才发的消息类型 为159</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIND_APPLICATION        = <span class="number">110</span>;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXIT_APPLICATION        = <span class="number">111</span>;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RECEIVER                = <span class="number">113</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXECUTE_TRANSACTION = <span class="number">159</span>;</span><br><span class="line">        ........</span><br><span class="line">    <span class="comment">//处理消息</span></span><br><span class="line">    <span class="keyword">case</span> EXECUTE_TRANSACTION:</span><br><span class="line">                    <span class="keyword">final</span> ClientTransaction transaction = (ClientTransaction) msg.obj;</span><br><span class="line">                    mTransactionExecutor.execute(transaction);</span><br><span class="line">                   </span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>找到对应的消息类型，开始处理消息，取出之前的 <code>ClientTransaction</code> , 并调用 其 <code>execute</code> 方法，继续跟进：</p>
+<p>然后你会发现 在 <code>ClientTransaction</code> 类中并没有 <code>execute</code> 方法，因为前面我们说过把生命周期都封装成一个一个的 <code>Item</code> 了， 启动 <code>Activity</code> 是 <code>LauncheActivityItem</code><br>所以我们应该去看 <code>LaunchActivityItem</code></p>
+<h2 id="3-0-LaunchActivityItem-execute"><a href="#3-0-LaunchActivityItem-execute" class="headerlink" title="3.0 LaunchActivityItem#execute"></a>3.0 LaunchActivityItem#execute</h2><p>该类继承了 <code>ClientTransactionItem</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LaunchActivityItem</span> <span class="keyword">extends</span> <span class="title">ClientTransactionItem</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(ClientTransactionHandler client, IBinder token,</span></span></span><br><span class="line"><span class="function"><span class="params">            PendingTransactionActions pendingActions)</span> </span>&#123;</span><br><span class="line">        Trace.traceBegin(TRACE_TAG_ACTIVITY_MANAGER, <span class="string">"activityStart"</span>);</span><br><span class="line">        ActivityClientRecord r = <span class="keyword">new</span> ActivityClientRecord(token, mIntent, mIdent, mInfo,</span><br><span class="line">                mOverrideConfig, mCompatInfo, mReferrer, mVoiceInteractor, mState, mPersistentState,</span><br><span class="line">                mPendingResults, mPendingNewIntents, mIsForward,</span><br><span class="line">                mProfilerInfo, client);</span><br><span class="line">        client.handleLaunchActivity(r, pendingActions, <span class="keyword">null</span> <span class="comment">/* customIntent */</span>);</span><br><span class="line">        Trace.traceEnd(TRACE_TAG_ACTIVITY_MANAGER);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>啊哈 ，好熟悉的代码，调用 <code>handleLaunchActivity</code> 方法，就是 <code>ActivityThread</code> 中的，继续走：</p>
+<h2 id="3-1-ActivityThread-handleLaunchActivity"><a href="#3-1-ActivityThread-handleLaunchActivity" class="headerlink" title="3.1 ActivityThread#handleLaunchActivity"></a>3.1 ActivityThread#handleLaunchActivity</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Activity <span class="title">handleLaunchActivity</span><span class="params">(ActivityClientRecord r,</span></span></span><br><span class="line"><span class="function"><span class="params">            PendingTransactionActions pendingActions, Intent customIntent)</span> </span>&#123;</span><br><span class="line">     </span><br><span class="line">         ...</span><br><span class="line">        <span class="keyword">final</span> Activity a = performLaunchActivity(r, customIntent);</span><br><span class="line">       ....</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-2-ActivityThread-performLaunchActivity"><a href="#3-2-ActivityThread-performLaunchActivity" class="headerlink" title="3.2 ActivityThread#performLaunchActivity"></a>3.2 ActivityThread#performLaunchActivity</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Activity <span class="title">performLaunchActivity</span><span class="params">(ActivityClientRecord r, Intent customIntent)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//创建ContextImpl</span></span><br><span class="line">     ContextImpl appContext = createBaseContextForActivity(r);</span><br><span class="line">        Activity activity = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        java.lang.ClassLoader cl = appContext.getClassLoader();</span><br><span class="line">          <span class="comment">//根据类名反射出要启动的Activity</span></span><br><span class="line">         activity = mInstrumentation.newActivity(</span><br><span class="line">                    cl, component.getClassName(), r.intent);</span><br><span class="line">            StrictMode.incrementExpectedActivityCount(activity.getClass());</span><br><span class="line">            r.intent.setExtrasClassLoader(cl);</span><br><span class="line">            r.intent.prepareToEnterProcess();</span><br><span class="line">            <span class="keyword">if</span> (r.state != <span class="keyword">null</span>) &#123;</span><br><span class="line">                r.state.setClassLoader(cl);</span><br><span class="line">            &#125;</span><br><span class="line">          <span class="comment">//创建Application对象</span></span><br><span class="line">           Application app = r.packageInfo.makeApplication(<span class="keyword">false</span>, mInstrumentation);</span><br><span class="line">          <span class="comment">//创建Window对象</span></span><br><span class="line">          Window window = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">if</span> (r.mPendingRemoveWindow != <span class="keyword">null</span> &amp;&amp; r.mPreserveWindow) &#123;</span><br><span class="line">                    window = r.mPendingRemoveWindow;</span><br><span class="line">                    r.mPendingRemoveWindow = <span class="keyword">null</span>;</span><br><span class="line">                    r.mPendingRemoveWindowManager = <span class="keyword">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                appContext.setOuterContext(activity);</span><br><span class="line">          <span class="comment">//调用 attach方法</span></span><br><span class="line">                activity.attach(appContext, <span class="keyword">this</span>, getInstrumentation(), r.token,</span><br><span class="line">                        r.ident, app, r.intent, r.activityInfo, title, r.parent,</span><br><span class="line">                        r.embeddedID, r.lastNonConfigurationInstances, config,</span><br><span class="line">                        r.referrer, r.voiceInteractor, window, r.configCallback);</span><br><span class="line"></span><br><span class="line">          <span class="comment">//调用Activity 的 onCreate() 方法</span></span><br><span class="line">           mInstrumentation.callActivityOnCreate(activity, r.state);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void callActivityOnCreate(Activity activity, Bundle icicle,</span><br><span class="line">            PersistableBundle persistentState) &#123;</span><br><span class="line">        prePerformCreate(activity);</span><br><span class="line">        activity.performCreate(icicle, persistentState);</span><br><span class="line">        postPerformCreate(activity);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-3-Activity-performCreate"><a href="#3-3-Activity-performCreate" class="headerlink" title="3.3 Activity#performCreate"></a>3.3 Activity#performCreate</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">performCreate</span><span class="params">(Bundle icicle)</span> </span>&#123;</span><br><span class="line">        performCreate(icicle, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">performCreate</span><span class="params">(Bundle icicle, PersistableBundle persistentState)</span> </span>&#123;</span><br><span class="line">        mCanEnterPictureInPicture = <span class="keyword">true</span>;</span><br><span class="line">        restoreHasCurrentPermissionRequest(icicle);</span><br><span class="line">        <span class="keyword">if</span> (persistentState != <span class="keyword">null</span>) &#123;</span><br><span class="line">            onCreate(icicle, persistentState); <span class="comment">// 调用其 onCreate 方法</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            onCreate(icicle);</span><br><span class="line">        &#125;        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>终于走到头了，看到了 <code>onCreate()</code> 方法，由于文章篇幅过长，总结放到下一篇，路过的朋友如果对你有帮助，能否为辛苦的糖葫芦点个赞👍再走啊~</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/05/24/内存泄漏排查方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1527,343 +1845,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/22/Vollery源码阅读-——/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/22/Vollery源码阅读-——/" itemprop="url">Vollery源码阅读(——)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-22T19:16:34+08:00">
-                2019-02-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/22/Vollery源码阅读-——/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/22/Vollery源码阅读-——/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>写在最前面的话：送给还在迷茫看不懂的童鞋，跟着我一步步看，小白也能看懂，从而对整体有一个把握，分析的开始以基本使用为切入点，一步步深入。</p>
-<h1 id="1-创建获取-RequestQueue-对象"><a href="#1-创建获取-RequestQueue-对象" class="headerlink" title="1. 创建获取 RequestQueue 对象"></a>1. 创建获取 <code>RequestQueue</code> 对象</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RequestQueue mQueue = Volley.newRequestQueue(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>开始进入：：：<br><code>Vollery # newRequestQueue()</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestQueue <span class="title">newRequestQueue</span><span class="params">(Context context, HttpStack stack)</span> </span>&#123;</span><br><span class="line">        .....</span><br><span class="line">        <span class="keyword">if</span> (stack == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (VERSION.SDK_INT &gt;= <span class="number">9</span>) &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HurlStack();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HttpClientStack(AndroidHttpClient.newInstance(userAgent));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Network network = <span class="keyword">new</span> BasicNetwork((HttpStack)stack);</span><br><span class="line">        RequestQueue queue = <span class="keyword">new</span> RequestQueue(<span class="keyword">new</span> NoCache(), network);</span><br><span class="line">        queue.start();</span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>看到我开始罗列代码了，不要慌，还好不长，在能力范围内:</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1948557-0b6f05c72736cebd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>刚开始就根据不同的Android 系统版本，创建不同的对象，我们先可以大概了解一下 <code>HurlStack</code> 和  <code>HttpClientStack</code> 是啥？</p>
-<p><code>HurlStack.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HurlStack</span> <span class="keyword">implements</span> <span class="title">HttpStack</span> </span>&#123;</span><br><span class="line">      ....</span><br><span class="line">    <span class="function"><span class="keyword">public</span> HttpResponse <span class="title">performRequest</span><span class="params">(Request&lt;?&gt; request, </span></span></span><br><span class="line"><span class="function"><span class="params">                      Map&lt;String, String&gt;  additionalHeaders)</span> </span>&#123;</span><br><span class="line">            ....</span><br><span class="line">            URL parsedUrl = <span class="keyword">new</span> URL(url);</span><br><span class="line">            HttpURLConnection connection = <span class="keyword">this</span>.openConnection(parsedUrl, request); </span><br><span class="line">           ....</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p><code>HttpClientStack.java</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class HttpClientStack implements HttpStack &#123;</span><br><span class="line">    protected final HttpClient mClient;</span><br><span class="line">    ...</span><br><span class="line">    public HttpResponse performRequest(Request&lt;?&gt; request, </span><br><span class="line">                         Map&lt;String, String&gt; additionalHeaders)  &#123;</span><br><span class="line">          ....</span><br><span class="line">         return this.mClient.execute(httpRequest)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><code>HttpStack.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HttpStack</span> </span>&#123;</span><br><span class="line">    <span class="function">HttpResponse <span class="title">performRequest</span><span class="params">(Request&lt;?&gt; var1, Map&lt;String, String&gt; var2)</span> </span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>看到这里我们大概明白了，原来是根据不同的系统版本，确定最终选择进行的网络请求，那为什么大于9 用 <code>HttpUrlConnection</code> 小于9用 <code>HttpClient</code> 呢？在这里不过多介绍了，网上一搜就知道了。</p>
-<p>Ok，那我们继续向下走，回到上面的代码，为了方便查看，我重新粘贴一份代码下来：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestQueue <span class="title">newRequestQueue</span><span class="params">(Context context, HttpStack stack)</span> </span>&#123;</span><br><span class="line">        .....</span><br><span class="line">        <span class="keyword">if</span> (stack == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (VERSION.SDK_INT &gt;= <span class="number">9</span>) &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HurlStack();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HttpClientStack(AndroidHttpClient.newInstance(userAgent));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//HttpStack 又一次被封装为Network接口类型</span></span><br><span class="line">        Network network = <span class="keyword">new</span> BasicNetwork((HttpStack)stack);</span><br><span class="line">        RequestQueue queue = <span class="keyword">new</span> RequestQueue(<span class="keyword">new</span> NoCache(), network);</span><br><span class="line">        queue.start();</span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p><code>Network.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Network</span> </span>&#123;</span><br><span class="line">    <span class="function">NetworkResponse <span class="title">performRequest</span><span class="params">(Request&lt;?&gt; var1)</span> <span class="keyword">throws</span> VolleyError</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>哦 原来是接口，它的实现类 <code>BasicNetwork</code><br><code>BasicNetwork.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BasicNetwork</span> <span class="keyword">implements</span> <span class="title">Network</span> </span>&#123;</span><br><span class="line">    <span class="comment">//将网络请求的实例传入，方便后面的调用</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">BasicNetwork</span><span class="params">(HttpStack httpStack)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(httpStack, <span class="keyword">new</span> ByteArrayPool(DEFAULT_POOL_SIZE));</span><br><span class="line">    &#125;</span><br><span class="line">   ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>目前而止，那么它们之间的关系是啥样的呢，我画了一张图：<br><img src="https://upload-images.jianshu.io/upload_images/1948557-87239ff08ea08ac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>很清晰吧，目前我们先不考虑这个 <code>BasicNetwork</code> 类中干了什么，我们先根据代码的思路一步步向下走，保证我们整体主干不变，避免陷入只见树木不见森林的局势。</p>
-<p>Ok，我们再次回到原来的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestQueue <span class="title">newRequestQueue</span><span class="params">(Context context, HttpStack stack)</span> </span>&#123;</span><br><span class="line">        .....</span><br><span class="line">        <span class="keyword">if</span> (stack == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (VERSION.SDK_INT &gt;= <span class="number">9</span>) &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HurlStack();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                stack = <span class="keyword">new</span> HttpClientStack(AndroidHttpClient.newInstance(userAgent));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//HttpStack 又一次被封装为Network接口类型，</span></span><br><span class="line">       <span class="comment">//创建BasicNetwork调用了构造方法是一个参数的</span></span><br><span class="line">        Network network = <span class="keyword">new</span> BasicNetwork((HttpStack)stack);</span><br><span class="line">      <span class="comment">//到这里了...........</span></span><br><span class="line">      <span class="comment">//创建一个 请求队列 RequestQueue,并且在构造函数中，传入了两个</span></span><br><span class="line">     <span class="comment">//参数，好，我们接下来就要去RequestQueue.java类中看一眼了。</span></span><br><span class="line">        RequestQueue queue = <span class="keyword">new</span> RequestQueue(<span class="keyword">new</span> NoCache(), network);</span><br><span class="line">        queue.start();</span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p><code>RequestQueue.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RequestQueue</span><span class="params">(Cache cache, Network network)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(cache, network, <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RequestQueue</span><span class="params">(Cache cache, Network network, <span class="keyword">int</span> threadPoolSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(cache, network, threadPoolSize, <span class="keyword">new</span> ExecutorDelivery(<span class="keyword">new</span> Handler(Looper.getMainLooper())));</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RequestQueue</span><span class="params">(Cache cache, Network network, <span class="keyword">int</span> threadPoolSize, ResponseDelivery delivery)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mSequenceGenerator = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line">        <span class="keyword">this</span>.mWaitingRequests = <span class="keyword">new</span> HashMap();</span><br><span class="line">        <span class="keyword">this</span>.mCurrentRequests = <span class="keyword">new</span> HashSet();</span><br><span class="line">        <span class="keyword">this</span>.mCacheQueue = <span class="keyword">new</span> PriorityBlockingQueue();</span><br><span class="line">        <span class="keyword">this</span>.mNetworkQueue = <span class="keyword">new</span> PriorityBlockingQueue();</span><br><span class="line">        <span class="keyword">this</span>.mCache = cache;</span><br><span class="line">        <span class="keyword">this</span>.mNetwork = network;</span><br><span class="line">        <span class="keyword">this</span>.mDispatchers = <span class="keyword">new</span> NetworkDispatcher[threadPoolSize];</span><br><span class="line">        <span class="keyword">this</span>.mDelivery = delivery;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>在构造方法中，传入一个<code>Cache</code> 对象，<code>network</code> 对象，默认初始化一个<code>threadPoolSize = 2</code>,还有一系列初始化操作.</p>
-<p>Ok,再次返回我们之前的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> ....</span><br><span class="line"> RequestQueue queue = <span class="keyword">new</span> RequestQueue(<span class="keyword">new</span> NoCache(), network);</span><br><span class="line">queue.start();</span><br></pre></td></tr></table></figure></p>
-<p><code>RequestQueue#start()</code> 方法了：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stop();</span><br><span class="line">        <span class="keyword">this</span>.mCacheDispatcher = <span class="keyword">new</span> CacheDispatcher(<span class="keyword">this</span>.mCacheQueue, <span class="keyword">this</span>.mNetworkQueue, <span class="keyword">this</span>.mCache, <span class="keyword">this</span>.mDelivery);</span><br><span class="line">        <span class="keyword">this</span>.mCacheDispatcher.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.mDispatchers.length; ++i) &#123;</span><br><span class="line">            NetworkDispatcher networkDispatcher = <span class="keyword">new</span> NetworkDispatcher(<span class="keyword">this</span>.mNetworkQueue, <span class="keyword">this</span>.mNetwork, <span class="keyword">this</span>.mCache, <span class="keyword">this</span>.mDelivery);</span><br><span class="line">            <span class="keyword">this</span>.mDispatchers[i] = networkDispatcher;</span><br><span class="line">            networkDispatcher.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>这里又创建了一个 <code>CacheDispatcher</code> 类。调用四个参数的构造方法。并调用了 <code>start()</code> 方法。<br>接下来，我们就认识下 <code>CacheDispatcher.java</code> 类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//原来它是一个线程</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CacheDispatcher</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"><span class="comment">//缓存队列，用BlockingQueue 管理存储</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;Request&lt;?&gt;&gt; mCacheQueue;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">CacheDispatcher</span><span class="params">(BlockingQueue&lt;Request&lt;?&gt;&gt; cacheQueue, BlockingQueue&lt;Request&lt;?&gt;&gt; networkQueue, Cache cache, ResponseDelivery delivery)</span> </span>&#123;</span><br><span class="line">       <span class="comment">//参数赋值</span></span><br><span class="line">        <span class="keyword">this</span>.mCacheQueue = cacheQueue;</span><br><span class="line">        <span class="keyword">this</span>.mNetworkQueue = networkQueue;</span><br><span class="line">        <span class="keyword">this</span>.mCache = cache;</span><br><span class="line">        <span class="keyword">this</span>.mDelivery = delivery;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//调用start 方法必定调用run 方法</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        .....</span><br><span class="line">        Process.setThreadPriority(<span class="number">10</span>);</span><br><span class="line">      <span class="comment">//这里初始化缓存，还记得我们之前默认传入了一个 NoCache 吗？</span></span><br><span class="line">    <span class="comment">//这里Cache 是接口，子类有两种NoCache 和 DiskBasedCache两种</span></span><br><span class="line">        <span class="keyword">this</span>.mCache.initialize();</span><br><span class="line">      <span class="comment">//嵌套了好多循环啊......因为要不断去读取是否有任务嘛，没有的时候就一直等待</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                    <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                          <span class="comment">// 表示从缓存队列中取出一个 Request, 那第一次肯定没有啊，就一直等待......</span></span><br><span class="line">                            <span class="keyword">final</span> Request&lt;?&gt; request = (Request)<span class="keyword">this</span>.mCacheQueue.take();</span><br><span class="line">                         .....这里我先省略了，因为还没真正到这一步</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>OK，返回到我们之前的操作：<br><code>RequestQueue.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> NetworkDispatcher[] mDispatchers ;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_NETWORK_THREAD_POOL_SIZE = <span class="number">2</span>;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">RequestQueue</span><span class="params">(Cache cache, Network network, <span class="keyword">int</span> threadPoolSize, ResponseDelivery delivery)</span> </span>&#123;</span><br><span class="line">         ....</span><br><span class="line">        <span class="keyword">this</span>.mDispatchers = <span class="keyword">new</span> NetworkDispatcher[threadPoolSize];</span><br><span class="line">        ....</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stop();</span><br><span class="line">        <span class="keyword">this</span>.mCacheDispatcher = <span class="keyword">new</span> CacheDispatcher(<span class="keyword">this</span>.mCacheQueue, <span class="keyword">this</span>.mNetworkQueue, <span class="keyword">this</span>.mCache, <span class="keyword">this</span>.mDelivery);</span><br><span class="line">        <span class="keyword">this</span>.mCacheDispatcher.start();</span><br><span class="line"></span><br><span class="line">      <span class="comment">//到这里啦，</span></span><br><span class="line">      <span class="comment">//从构造方法我们可以得知 mDispatchers.length = 2 ，上</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.mDispatchers.length; ++i) &#123;</span><br><span class="line">          </span><br><span class="line">            NetworkDispatcher networkDispatcher = <span class="keyword">new</span> NetworkDispatcher(<span class="keyword">this</span>.mNetworkQueue, <span class="keyword">this</span>.mNetwork, <span class="keyword">this</span>.mCache, <span class="keyword">this</span>.mDelivery);</span><br><span class="line">            <span class="keyword">this</span>.mDispatchers[i] = networkDispatcher;</span><br><span class="line">            networkDispatcher.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>循环遍历生成2 个 <code>NetworkDispatcher</code> 对象，并将 <code>NetworkDispatcher</code> 对象存储在一个 <code>mDispatchers</code> 的数组中去了，最后调用了 <code>start</code> 方法。<br>Ok，那接下来我们就看下这个 <code>NetworkDispatcher.java</code> 类了。</p>
-<p><code>NetworkDispatcher.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NetworkDispatcher</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">      <span class="comment">// 网络请求队列</span></span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;Request&lt;?&gt;&gt; mQueue；</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对象初始化</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">NetworkDispatcher</span><span class="params">(BlockingQueue&lt;Request&lt;?&gt;&gt; queue, Network network, Cache cache, ResponseDelivery delivery)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mQueue = queue;</span><br><span class="line">        <span class="keyword">this</span>.mNetwork = network;</span><br><span class="line">        <span class="keyword">this</span>.mCache = cache;</span><br><span class="line">        <span class="keyword">this</span>.mDelivery = delivery;</span><br><span class="line">    &#125;   </span><br><span class="line"><span class="comment">//既然是线程，调用 start 方法，必定调用 run 方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Process.setThreadPriority(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//线程也是，既然要做网络请求，就要一直等待获取</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            Request request;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                  <span class="comment">// 从网络请求队列中获取任务，那一开始我们初始化肯定没东西，队列里没请求任务</span></span><br><span class="line">                    request = (Request)<span class="keyword">this</span>.mQueue.take();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException var4) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.mQuit) &#123;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">      .....底部代码我也省略了，因为都是获取到请求之后所做的处理</span><br></pre></td></tr></table></figure></p>
-<p>至此，对于<code>RequestQueue</code>  的初始化第一步我们完成了对它的了解，你明白了吗？ 下一篇我们针对 <code>mQueue.add(request)</code> 真正需要进行网络请求进行继续分析。如果这篇文章有帮助到你，给个赞就是我最大的鼓励了，比心💗。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2019/02/19/屏幕适配/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/19/屏幕适配/" itemprop="url">屏幕适配</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-19T17:43:18+08:00">
-                2019-02-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/19/屏幕适配/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/19/屏幕适配/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="屏幕适配的原理"><a href="#屏幕适配的原理" class="headerlink" title="屏幕适配的原理"></a>屏幕适配的原理</h1><p>关于 <code>dp,dpi</code> 之间的计算关系，在 <a href="/2018/04/24/获取手机屏幕的密度">获取手机屏幕的密度</a> 中都已经记录到。</p>
-<h1 id="日常适配"><a href="#日常适配" class="headerlink" title="日常适配"></a>日常适配</h1><ul>
-<li><p>使用不同套图适配，一般我们都使用高分辨率的图，保证大多数设备显示没有问题。</p>
-<blockquote>
-<p>这是我们经常很容易想到的方案，缺点也很明显，每次都设计多套图，apk体积变大，那么有没有办法我们尽可能只使用一套图，主要的分辨率有：1080 <em> 1920 和 1280 </em> 720，xhdpi 是首选。</p>
-</blockquote>
-</li>
-<li><p>使用<code>.9</code> 图 或者 <code>svg</code> 图</p>
-</li>
-<li><p>布局适配</p>
-<ul>
-<li>使用权重适配，一般用于格局比较明朗的界面中</li>
-</ul>
-</li>
-<li><p>使用 <code>dimens</code> 适配（在不同的 <code>values</code> 下的创建不同的文件夹例如：values-1080*1920等，Android 手机分辨率越来越多，维护十分繁琐）</p>
-</li>
-</ul>
-<p><strong>dp适配</strong></p>
-<blockquote>
-<p>虽然在不同的设备上可以简单的适配，但是还是无法做到完完全全的适配，总结为：</p>
-<p>因为 <code>dpi</code> 和 实际像素密度的差异导致使用 <code>dp</code> 做单位，没有很好的适配。</p>
-</blockquote>
-<p><strong>最小宽度限定符</strong>( 屏幕宽和高的较小值)</p>
-<blockquote>
-<p>很大程度上减少了文件，<code>values-sw160dp</code>  <code>values-sw240dp</code></p>
-</blockquote>
-<p><strong>约束布局</strong></p>
-<blockquote>
-<p>推荐使用的约束布局</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;android.support.constraint.ConstraintLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    xmlns:app=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span><br><span class="line">    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span></span><br><span class="line">    android:id=<span class="string">"@+id/linearLayout2"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span>&gt;</span><br><span class="line">    <span class="comment">//xxx</span></span><br><span class="line">&lt;/android.support.constraint.ConstraintLayout&gt;</span><br></pre></td></tr></table></figure>
-<p><strong>今日头条适配方案</strong></p>
-<blockquote>
-<p><a href="&quot;https://mp.weixin.qq.com/s/d9QCoBP6kV9VSWvVldVVwA&quot;">了解</a>   直接修改系统的 <code>density</code>  之前的总结文章 <a href="/2018/04/24/获取手机屏幕的密度">获取手机屏幕的密度</a>  中有记录到。</p>
-</blockquote>
-<p>我们可以做个实验展示下：</p>
-<p>设备信息为：1080 <em> 1920 尺寸：5 <em>*dpi = 420,</em></em> 我们设置按钮的宽度为 100dp</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-080aa6429fc3a94f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//我们可以手动计算下</span></span><br><span class="line">px = dp * density</span><br><span class="line">density = dpi / <span class="number">160</span> = <span class="number">420</span>/<span class="number">160</span> = <span class="number">2.625</span></span><br><span class="line">px = <span class="number">180</span> * <span class="number">2.625</span> = <span class="number">472.5</span> = <span class="number">473</span>px <span class="comment">//与实际展示结果一致</span></span><br></pre></td></tr></table></figure>
-<p>那如果就是我们按照今日头条的适配方法，设计图是以：1080<em>1920 <strong>dpi= 480</strong>, density 为3来标注，那么实际屏幕就是：360dp </em> 640dp, 也就是实际宽度为360dp.</p>
-<p>以宽为 360dp  为标准，适配后展示：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">同样是<span class="number">180</span>dp, 像素为：<span class="number">540</span>px, 即为屏幕的一半。</span><br><span class="line">底下<span class="number">205</span>dp展示的作用是：如果未做适配，那么需要红色区域的宽度为<span class="number">205</span>dp才能达到屏幕的一半，适配后，红色区域的宽度为<span class="number">180</span>dp,即可达到屏幕一半，即达到适配的目的。</span><br><span class="line"></span><br><span class="line">这样适配后，不管dpi = <span class="number">480</span> 的手机还是在 dpi = <span class="number">480</span> 手机上设置宽度为<span class="number">180</span>dp都展示为屏幕的一半。</span><br></pre></td></tr></table></figure>
-<p><img src="https://upload-images.jianshu.io/upload_images/1948557-66aea02c0ad03bc8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1914,7 +1895,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-count">79</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1927,7 +1908,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

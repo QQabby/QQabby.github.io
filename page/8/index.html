@@ -273,6 +273,403 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/30/微信小程序速查笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/30/微信小程序速查笔记/" itemprop="url">微信小程序速查笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-30T16:46:46+08:00">
+                2018-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/30/微信小程序速查笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/30/微信小程序速查笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>这个微信小程序也出来好长时间了，一直想做一个属于自己的小程序，这不说动手就动手实现一个吧，比较简易，中间也遇到不少问题，记录一下，方便以后自己查阅。</p>
+</blockquote>
+<h1 id="微信小程序的结构"><a href="#微信小程序的结构" class="headerlink" title="微信小程序的结构"></a>微信小程序的结构</h1><p><img src="http://upload-images.jianshu.io/upload_images/1948557-4007311aabb448cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/800" alt="image.png"></p>
+<p>默认没有这么些文件夹的，只有<code>index</code> ，然后这个标识 <code>app</code> 开头的文件都是一些全局的设置。可以自己查看下，都有注释，就从这个配置开始说。</p>
+<h1 id="修改启动页面"><a href="#修改启动页面" class="headerlink" title="修改启动页面"></a>修改启动页面</h1><p>默认启动页面是<code>index</code>页面，如果要修改，打开<code>app.json</code>配置文件，在顶部你会发现有一个<code>pages</code>的配置，如下：</p>
+<pre><code>&quot;pages&quot;: [
+
+&quot;pages/home/home&quot;
+</code></pre><p>只需要将我们的想要显示的页面的路径写在 <strong>第一个</strong> 就可以成为启动页，特别注意路径一定要正确。</p>
+<p>当然你会新建很多页面，所有的页面都必须写在这个里面，不然跳转的时候会找不到。</p>
+<h1 id="底部tab栏切换"><a href="#底部tab栏切换" class="headerlink" title="底部tab栏切换"></a>底部tab栏切换</h1><p>就是底部<code>tab</code>栏切换,同样还是在<code>app.json</code> 配置文件中修改如下：</p>
+<pre><code>  &quot;tabBar&quot;: {
+  &quot;color&quot;: &quot;#333333&quot;,
+  &quot;selectedColor&quot;: &quot;#2B91D8&quot;,
+  &quot;backgroundColor&quot;: &quot;#eee&quot;,
+  &quot;borderStyle&quot;: &quot;white&quot;,
+      &quot;list&quot;: [
+    {
+  &quot;pagePath&quot;: &quot;pages/home/home&quot;,
+  &quot;text&quot;: &quot;首页&quot;,
+  &quot;iconPath&quot;: &quot;pages/home/images/tab_icon_home_nor.png&quot;,
+  &quot;selectedIconPath&quot;: &quot;pages/home/images/tab_icon_home_pre.png&quot;
+    },
+    {
+  &quot;pagePath&quot;: &quot;pages/myCenter/myCenter&quot;,
+  &quot;text&quot;: &quot;我的&quot;,
+  &quot;iconPath&quot;: &quot;pages/home/images/tab_icon_center_nor.png&quot;,
+  &quot;selectedIconPath&quot;: &quot;pages/home/images/tab_icon_center_pre.png&quot;
+    }
+  ]
+},
+</code></pre><p>这里的 <code>pagePath</code> 就是页面的路径，<code>text</code>文字，<code>iconPath</code>图标，注意图片一定要带后缀，<code>selectedIconPath</code>点击态的图标，各自换成你自己的就行，问题不会太大。</p>
+<h1 id="加载中"><a href="#加载中" class="headerlink" title="加载中"></a>加载中</h1><p>如下：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-8f82d095641d4734.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="image.png"></p>
+<p>有标签可以直接显示这个,在<code>wxml</code>文件中编写：</p>
+<pre><code>&lt;loading hidden=&quot;{{hidden}}&quot; bindchange=&quot;loadingChange&quot;&gt;  
+       加载中...  
+&lt;/loading&gt;  
+</code></pre><p>   <code></code> 可以控制显示还是隐藏，在<code>.js</code>文件中可以控制：</p>
+<pre><code>data: {
+    hidden: false,
+  }
+</code></pre><p> 可以在<code>data</code> 底下配置默认值，<code>hidden: false</code> 默认不显示，赋值的时候必须在这里面写：</p>
+<pre><code>that.setData({
+    hidden: true
+  })
+</code></pre><h1 id="网络请求"><a href="#网络请求" class="headerlink" title="网络请求"></a>网络请求</h1><pre><code> wx.request({
+//网络请求地址url
+url: &apos;https://xx&apos;,
+header: {
+  // &apos;content-type&apos;: &apos;application/x-www-form-urlencoded&apos;
+  &apos;content-type&apos;: &apos;application/json&apos;
+  // &apos;content-type&apos;: &apos;text/xml&apos;
+},
+//请求头参数配置
+data: {
+  page: pageNo,
+  timestamp: timeStamps
+
+},
+method: &quot;POST&quot;,
+
+success: function (res) {
+
+  //xmlstring2json  是我使用第三方xml转json的一个库
+  var xml2json = require(&apos;..//lib/xmlstring2json/dist/xml2json&apos;);
+  var json = JSON.stringify(xml2json(res.data), null, 4);
+
+
+  var jsonObject = xml2json(res.data);
+  var jokeObject = jsonObject.root.joke
+  //timestamp
+  if(pageNo == 0){
+    timeStamps = jsonObject.root.timestamp.text
+  }
+
+
+ // console.log(&apos;json::&apos; + jsonObject.root.timestamp.text)
+  // var data = new Array();
+  // for (var i = 0; i &lt; jokeObject.length;i++){
+  //   var text = JSON.stringify(jokeObject[i].text).replace(&quot;#&quot;, &quot;&quot;)
+  //   //JSON.parse(text).text
+  //   var value = JSON.parse(text).text;
+  //   data.push(value)
+  // }
+  // console.log(&apos;data::：&apos; + jokeObject[0].text.text );
+
+  // var l =  jokeObject;
+  var l;
+  if(pageNo == 0){
+    l = jokeObject
+
+  }else{
+    var l = that.data.list;
+    for (var i = 0; i &lt; jokeObject.length; i++) {
+      l.push(jokeObject[i])
+    } 
+  }
+    //页面绑定的数据赋值
+  that.setData({
+    list: l
+  })
+
+  pageNo++
+
+  that.setData({
+    hidden: true
+  })
+},
+fail : function(s){
+  wx.showModal({
+    title: &apos;提示&apos;,
+    content: &apos;请求接口失败&apos; + JSON.stringify(s)
+  })
+}
+</code></pre><p>要进行网络请求，首先测试阶段可以将开发工具里的：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1948557-8bed851f43caa7a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>最后一个选项勾选上，不校验…,同时管理员还需在后台配置网络请求的域名，两个缺一不可。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" itemprop="url">如何给TextView上的drawable上的图片添加动画？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-24T16:29:52+08:00">
+                2018-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>可能你遇到过这样的场景，就是在 <code>xml</code> 里，给<code>TextView</code>添加了一个<code>drawableLeft</code>或者<code>drawableRight</code>等，你想给这个图片添加一个动画，然而你会发现当你给这个<code>TextView</code>加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。</p>
+<h1 id="第一种做法"><a href="#第一种做法" class="headerlink" title="第一种做法"></a>第一种做法</h1><blockquote>
+<p>也是比较通俗的方法，说这个<code>drawable 单独弄成ImageView</code>不就好了，在<code>xml</code>里新增一个<code>ImageView</code> 是吧，干嘛非要加在一个标签里面，要相信布局都是很强大的，肯定可以实现效果。</p>
+</blockquote>
+<h1 id="第二种做法"><a href="#第二种做法" class="headerlink" title="第二种做法"></a>第二种做法</h1><blockquote>
+<p>你说真的没办法，必须写在一个里面，也是有办法的，那就不能在<code>xml</code>里设置<code>drawableLeft</code>了，代码设置，如下：  </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AnimationDrawable d = (AnimationDrawable) getResources().getDrawable(R.drawable.animation_draw);  </span><br><span class="line">d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());</span><br><span class="line"> messageText.setCompoundDrawables(d, null, null, null);</span><br></pre></td></tr></table></figure>
+<p>这个具体的动画在这个<code>animation_draw</code>里，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;animation-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">                android:oneshot=&quot;false&quot;</span><br><span class="line">       &gt;</span><br><span class="line"></span><br><span class="line">    &lt;item android:drawable=&quot;@drawable/ic_launcher&quot;</span><br><span class="line">           android:duration=&quot;500&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/animation-list&gt;</span><br></pre></td></tr></table></figure>
+<p>这是一个帧动画，里面可以放很多的<code>item</code>,从而形成动画,碰到了这种情况记录下，方便以后查阅。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/16/Android-O-新特性-AutoSizing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1373,7 +1770,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-count">79</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1386,7 +1783,7 @@ lruCache.put(&quot;3&quot;, bitmap3);
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>

@@ -273,6 +273,297 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/24/获取手机屏幕的密度/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/24/获取手机屏幕的密度/" itemprop="url">获取手机屏幕的密度</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-24T15:45:35+08:00">
+                2018-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/24/获取手机屏幕的密度/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/24/获取手机屏幕的密度/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>目前有两种方式，一种是根据手机的分辨率计算，另外一种是通过代码获取。</p>
+<h1 id="第一种：根据手机分辨率进行计算-计算得出实际的dpi"><a href="#第一种：根据手机分辨率进行计算-计算得出实际的dpi" class="headerlink" title="第一种：根据手机分辨率进行计算(计算得出实际的dpi)"></a>第一种：根据手机分辨率进行计算(计算得出实际的dpi)</h1><p>比如我的手机魅族分辨率是：1920*1080，屏幕尺寸大小是：5.5寸的，那么计算：<br>(宽的平方+高的平方之后开根号，最后除以屏幕的尺寸)<br>dpi  = (√1920^2+1080^2 ) / 5.5 ≈ 401</p>
+<p>参照下图：</p>
+<pre><code>ldpi（低240*320）~120dpi density=0.75
+mdpi（中320*480）~160dpi density=1
+hdpi（高480*800）~240dpi density=1.5
+xhdpi（超高720*1080）~320dpi density=2
+xxhdpi（超超高1080*1920）~480dpi density=3
+xxxhdpi（超超超高）~640dpi density=4
+</code></pre><p>对应图片的目录应该是：xxhdpi</p>
+<h1 id="第二种：通过代码方式-系统定义的dpi"><a href="#第二种：通过代码方式-系统定义的dpi" class="headerlink" title="第二种：通过代码方式(系统定义的dpi)"></a>第二种：通过代码方式(系统定义的dpi)</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> xdpi = getResources().getDisplayMetrics().xdpi;</span><br><span class="line"><span class="keyword">float</span> ydpi = getResources().getDisplayMetrics().ydpi;</span><br></pre></td></tr></table></figure>
+<p>不同手机获取的<code>xdpi ydpi</code> 值有的一模一样，有的有些差异，但是相差不会太大，两者获取的值近乎一样。</p>
+<p>两者计算出的结果并不完全相同，因为你们想，实际计算得出的<code>dpi</code> 很容易根据屏幕尺寸的不同，得出不同的<code>dpi</code> ，这样的话得到的值很多，无法适配。我查阅网上相关介绍，就是每个手机初始有一个固定的<code>dpi</code> ，分别是上述的：120，160，240，320，480，640，安卓实际进行缩放的时候按照的是系统定义的这些，而不是实际计算得出的<code>dpi</code>,这一点需要注意。</p>
+<h1 id="像素和dp之间的转化"><a href="#像素和dp之间的转化" class="headerlink" title="像素和dp之间的转化"></a>像素和dp之间的转化</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">px = dp * desity</span><br><span class="line"><span class="comment">// 这里的dpi就是上述第一种的计算方法</span></span><br><span class="line"><span class="comment">//dpi  = (√1920^2+1080^2 ) / 5.5(屏幕尺寸) ≈ 401</span></span><br><span class="line">desity = dpi / <span class="number">160</span></span><br><span class="line">所以：px = dp * (dpi/<span class="number">160</span>)</span><br></pre></td></tr></table></figure>
+<p><code>DisplayMetrics.java</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DisplayMetrics#density //就是我们熟知的desity</span><br><span class="line">DisplayMetrics#densityDpi //dpi</span><br><span class="line">DisplayMetrics#scaleDensity //字体缩放因子，正常情况下和density相同，但是我手动调整字体大小后会改变这个值</span><br></pre></td></tr></table></figure>
+<p>关于手机的 <code>density</code> 可以在 <code>/system/build.prop</code> 文件中查看的定义值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ro.sf.lcd_density=<span class="number">480</span> <span class="comment">// 这个字段</span></span><br></pre></td></tr></table></figure>
+<p>这个定义的数值，可能会跟计算得到的<code>density</code> 不相同。</p>
+<h1 id="今日头条适配核心代码"><a href="#今日头条适配核心代码" class="headerlink" title="今日头条适配核心代码"></a>今日头条适配核心代码</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> sNoncompatScaledDensity;</span><br><span class="line"><span class="keyword">float</span> sNoncompatDensity;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCustomerDensity</span><span class="params">(Activity activity, <span class="keyword">final</span> Application application)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        DisplayMetrics displayMetrics = application.getResources().getDisplayMetrics();</span><br><span class="line">        Log.e(<span class="string">"xx"</span>,<span class="string">"density::"</span>+displayMetrics.density);</span><br><span class="line">        <span class="keyword">float</span> targetDensity = displayMetrics.widthPixels / <span class="number">360f</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> targetDensityDpi = (<span class="keyword">int</span>) (targetDensity * <span class="number">160</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(sNoncompatDensity == <span class="number">0</span>)&#123;</span><br><span class="line">            sNoncompatDensity = displayMetrics.density;</span><br><span class="line">            sNoncompatScaledDensity = displayMetrics.scaledDensity;</span><br><span class="line"></span><br><span class="line">            application.registerComponentCallbacks(<span class="keyword">new</span> ComponentCallbacks() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onConfigurationChanged</span><span class="params">(Configuration newConfig)</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(newConfig != <span class="keyword">null</span> &amp;&amp; newConfig.fontScale &gt; <span class="number">0</span>)&#123;</span><br><span class="line"></span><br><span class="line">                        sNoncompatScaledDensity = application.getResources().getDisplayMetrics().scaledDensity;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLowMemory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">float</span> targetScaleDensity = targetDensity * (sNoncompatScaledDensity / sNoncompatDensity);</span><br><span class="line"></span><br><span class="line">        displayMetrics.density = targetDensity;</span><br><span class="line">        displayMetrics.scaledDensity = targetScaleDensity;</span><br><span class="line">        displayMetrics.densityDpi = targetDensityDpi;</span><br><span class="line"></span><br><span class="line">        DisplayMetrics activityDisplayMetrics = activity.getResources().getDisplayMetrics();</span><br><span class="line">        activityDisplayMetrics.density = targetDensity;</span><br><span class="line">        activityDisplayMetrics.scaledDensity = targetScaleDensity;</span><br><span class="line">        activityDisplayMetrics.densityDpi = targetDensityDpi;</span><br><span class="line"></span><br><span class="line">        Log.e(<span class="string">"xx"</span>,<span class="string">"修改后的density::"</span>+displayMetrics.density);</span><br><span class="line">        btn.postDelayed(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                Log.e(<span class="string">"xx"</span>,<span class="string">"width::"</span>+btn.getWidth());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="number">1000</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/04/08/EventBus-为什么订阅的方法必须是public？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="QQabby">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="糖葫芦">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/08/EventBus-为什么订阅的方法必须是public？/" itemprop="url">EventBus 为什么订阅的方法必须是public？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T16:30:37+08:00">
+                2018-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/08/EventBus-为什么订阅的方法必须是public？/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/08/EventBus-为什么订阅的方法必须是public？/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在看了源码之后发现是这样的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">findUsingReflectionInSingleClass</span><span class="params">(FindState findState)</span> </span>&#123;</span><br><span class="line">        Method[] methods;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// This is faster than getMethods, especially when subscribers are fat classes like Activities </span></span><br><span class="line">            <span class="comment">//获取所有声明的方法</span></span><br><span class="line">            methods = findState.clazz.getDeclaredMethods();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable th) &#123;</span><br><span class="line">            <span class="comment">// Workaround for java.lang.NoClassDefFoundError, see https://github.com/greenrobot/EventBus/issues/149</span></span><br><span class="line">            methods = findState.clazz.getMethods();</span><br><span class="line">            findState.skipSuperClasses = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (Method method : methods) &#123;</span><br><span class="line">            <span class="comment">//获取方法的标识符</span></span><br><span class="line">            <span class="keyword">int</span> modifiers = method.getModifiers();</span><br><span class="line">            <span class="comment">//方法的标识符必须是public </span></span><br><span class="line">            <span class="keyword">if</span> ((modifiers &amp; Modifier.PUBLIC) != <span class="number">0</span> &amp;&amp; (modifiers &amp; MODIFIERS_IGNORE) == <span class="number">0</span>) &#123;</span><br><span class="line">                Class&lt;?&gt;[] parameterTypes = method.getParameterTypes();</span><br><span class="line">                <span class="keyword">if</span> (parameterTypes.length == <span class="number">1</span>) &#123;</span><br><span class="line">                    Subscribe subscribeAnnotation = method.getAnnotation(Subscribe.class);</span><br><span class="line">                    <span class="keyword">if</span> (subscribeAnnotation != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        Class&lt;?&gt; eventType = parameterTypes[<span class="number">0</span>];</span><br><span class="line">                        <span class="keyword">if</span> (findState.checkAdd(method, eventType)) &#123;</span><br><span class="line">                            ThreadMode threadMode = subscribeAnnotation.threadMode();</span><br><span class="line">                            findState.subscriberMethods.add(<span class="keyword">new</span> SubscriberMethod(method, eventType, threadMode,</span><br><span class="line">                                    subscribeAnnotation.priority(), subscribeAnnotation.sticky()));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (strictMethodVerification &amp;&amp; method.isAnnotationPresent(Subscribe.class)) &#123;</span><br><span class="line">                    String methodName = method.getDeclaringClass().getName() + <span class="string">"."</span> + method.getName();</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> EventBusException(<span class="string">"@Subscribe method "</span> + methodName +</span><br><span class="line">                            <span class="string">"must have exactly 1 parameter but has "</span> + parameterTypes.length);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (strictMethodVerification &amp;&amp; method.isAnnotationPresent(Subscribe.class)) &#123;</span><br><span class="line">              <span class="comment">//否则抛出异常 ，说这个方法必须加上@Subscribe ,并且是public 的，不能是静态的，抽象的</span></span><br><span class="line">                String methodName = method.getDeclaringClass().getName() + <span class="string">"."</span> + method.getName();</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> EventBusException(methodName +</span><br><span class="line">                        <span class="string">" is a illegal @Subscribe method: must be public, non-static, and non-abstract"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后就没有然后了，之前怀疑<code>private</code> 修饰的方法，反射后不能被其他类调用，后来查了相关资料，发现可以，后来去网上寻找无果，后来在我微信关注的公众号里，群主伯特说：虽然可以反射调用<code>private</code> 的方法，但是必须通过<code>setAccess</code>来修改访问权限。说是修改，实则破坏了<code>java</code>中的作用域，迫不得已不推荐这么做。<code>EventBus</code> 作为三方库，显然不会在你设置为<code>private</code> 时，好心办坏事，强制访问。</p>
+<p>仅此而已，仅此而已。分享给还不知道的童鞋。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+  
+   </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/03/23/Activity状态保存与恢复/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1665,403 +1956,6 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/30/微信小程序速查笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/30/微信小程序速查笔记/" itemprop="url">微信小程序速查笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-30T16:46:46+08:00">
-                2018-01-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/30/微信小程序速查笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/30/微信小程序速查笔记/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>这个微信小程序也出来好长时间了，一直想做一个属于自己的小程序，这不说动手就动手实现一个吧，比较简易，中间也遇到不少问题，记录一下，方便以后自己查阅。</p>
-</blockquote>
-<h1 id="微信小程序的结构"><a href="#微信小程序的结构" class="headerlink" title="微信小程序的结构"></a>微信小程序的结构</h1><p><img src="http://upload-images.jianshu.io/upload_images/1948557-4007311aabb448cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/800" alt="image.png"></p>
-<p>默认没有这么些文件夹的，只有<code>index</code> ，然后这个标识 <code>app</code> 开头的文件都是一些全局的设置。可以自己查看下，都有注释，就从这个配置开始说。</p>
-<h1 id="修改启动页面"><a href="#修改启动页面" class="headerlink" title="修改启动页面"></a>修改启动页面</h1><p>默认启动页面是<code>index</code>页面，如果要修改，打开<code>app.json</code>配置文件，在顶部你会发现有一个<code>pages</code>的配置，如下：</p>
-<pre><code>&quot;pages&quot;: [
-
-&quot;pages/home/home&quot;
-</code></pre><p>只需要将我们的想要显示的页面的路径写在 <strong>第一个</strong> 就可以成为启动页，特别注意路径一定要正确。</p>
-<p>当然你会新建很多页面，所有的页面都必须写在这个里面，不然跳转的时候会找不到。</p>
-<h1 id="底部tab栏切换"><a href="#底部tab栏切换" class="headerlink" title="底部tab栏切换"></a>底部tab栏切换</h1><p>就是底部<code>tab</code>栏切换,同样还是在<code>app.json</code> 配置文件中修改如下：</p>
-<pre><code>  &quot;tabBar&quot;: {
-  &quot;color&quot;: &quot;#333333&quot;,
-  &quot;selectedColor&quot;: &quot;#2B91D8&quot;,
-  &quot;backgroundColor&quot;: &quot;#eee&quot;,
-  &quot;borderStyle&quot;: &quot;white&quot;,
-      &quot;list&quot;: [
-    {
-  &quot;pagePath&quot;: &quot;pages/home/home&quot;,
-  &quot;text&quot;: &quot;首页&quot;,
-  &quot;iconPath&quot;: &quot;pages/home/images/tab_icon_home_nor.png&quot;,
-  &quot;selectedIconPath&quot;: &quot;pages/home/images/tab_icon_home_pre.png&quot;
-    },
-    {
-  &quot;pagePath&quot;: &quot;pages/myCenter/myCenter&quot;,
-  &quot;text&quot;: &quot;我的&quot;,
-  &quot;iconPath&quot;: &quot;pages/home/images/tab_icon_center_nor.png&quot;,
-  &quot;selectedIconPath&quot;: &quot;pages/home/images/tab_icon_center_pre.png&quot;
-    }
-  ]
-},
-</code></pre><p>这里的 <code>pagePath</code> 就是页面的路径，<code>text</code>文字，<code>iconPath</code>图标，注意图片一定要带后缀，<code>selectedIconPath</code>点击态的图标，各自换成你自己的就行，问题不会太大。</p>
-<h1 id="加载中"><a href="#加载中" class="headerlink" title="加载中"></a>加载中</h1><p>如下：<br><img src="http://upload-images.jianshu.io/upload_images/1948557-8f82d095641d4734.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="image.png"></p>
-<p>有标签可以直接显示这个,在<code>wxml</code>文件中编写：</p>
-<pre><code>&lt;loading hidden=&quot;{{hidden}}&quot; bindchange=&quot;loadingChange&quot;&gt;  
-       加载中...  
-&lt;/loading&gt;  
-</code></pre><p>   <code></code> 可以控制显示还是隐藏，在<code>.js</code>文件中可以控制：</p>
-<pre><code>data: {
-    hidden: false,
-  }
-</code></pre><p> 可以在<code>data</code> 底下配置默认值，<code>hidden: false</code> 默认不显示，赋值的时候必须在这里面写：</p>
-<pre><code>that.setData({
-    hidden: true
-  })
-</code></pre><h1 id="网络请求"><a href="#网络请求" class="headerlink" title="网络请求"></a>网络请求</h1><pre><code> wx.request({
-//网络请求地址url
-url: &apos;https://xx&apos;,
-header: {
-  // &apos;content-type&apos;: &apos;application/x-www-form-urlencoded&apos;
-  &apos;content-type&apos;: &apos;application/json&apos;
-  // &apos;content-type&apos;: &apos;text/xml&apos;
-},
-//请求头参数配置
-data: {
-  page: pageNo,
-  timestamp: timeStamps
-
-},
-method: &quot;POST&quot;,
-
-success: function (res) {
-
-  //xmlstring2json  是我使用第三方xml转json的一个库
-  var xml2json = require(&apos;..//lib/xmlstring2json/dist/xml2json&apos;);
-  var json = JSON.stringify(xml2json(res.data), null, 4);
-
-
-  var jsonObject = xml2json(res.data);
-  var jokeObject = jsonObject.root.joke
-  //timestamp
-  if(pageNo == 0){
-    timeStamps = jsonObject.root.timestamp.text
-  }
-
-
- // console.log(&apos;json::&apos; + jsonObject.root.timestamp.text)
-  // var data = new Array();
-  // for (var i = 0; i &lt; jokeObject.length;i++){
-  //   var text = JSON.stringify(jokeObject[i].text).replace(&quot;#&quot;, &quot;&quot;)
-  //   //JSON.parse(text).text
-  //   var value = JSON.parse(text).text;
-  //   data.push(value)
-  // }
-  // console.log(&apos;data::：&apos; + jokeObject[0].text.text );
-
-  // var l =  jokeObject;
-  var l;
-  if(pageNo == 0){
-    l = jokeObject
-
-  }else{
-    var l = that.data.list;
-    for (var i = 0; i &lt; jokeObject.length; i++) {
-      l.push(jokeObject[i])
-    } 
-  }
-    //页面绑定的数据赋值
-  that.setData({
-    list: l
-  })
-
-  pageNo++
-
-  that.setData({
-    hidden: true
-  })
-},
-fail : function(s){
-  wx.showModal({
-    title: &apos;提示&apos;,
-    content: &apos;请求接口失败&apos; + JSON.stringify(s)
-  })
-}
-</code></pre><p>要进行网络请求，首先测试阶段可以将开发工具里的：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1948557-8bed851f43caa7a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>最后一个选项勾选上，不校验…,同时管理员还需在后台配置网络请求的域名，两个缺一不可。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/QQabby/QQabby.github.io.git/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="QQabby">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="糖葫芦">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" itemprop="url">如何给TextView上的drawable上的图片添加动画？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-24T16:29:52+08:00">
-                2018-01-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/24/如何给TextView上的drawableEnd等上的图片添加动画？/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>可能你遇到过这样的场景，就是在 <code>xml</code> 里，给<code>TextView</code>添加了一个<code>drawableLeft</code>或者<code>drawableRight</code>等，你想给这个图片添加一个动画，然而你会发现当你给这个<code>TextView</code>加动画吧并不是我们想要的，我们只想要那个图片做动画，文字不需要做任何动画，目前可以有两种做法。</p>
-<h1 id="第一种做法"><a href="#第一种做法" class="headerlink" title="第一种做法"></a>第一种做法</h1><blockquote>
-<p>也是比较通俗的方法，说这个<code>drawable 单独弄成ImageView</code>不就好了，在<code>xml</code>里新增一个<code>ImageView</code> 是吧，干嘛非要加在一个标签里面，要相信布局都是很强大的，肯定可以实现效果。</p>
-</blockquote>
-<h1 id="第二种做法"><a href="#第二种做法" class="headerlink" title="第二种做法"></a>第二种做法</h1><blockquote>
-<p>你说真的没办法，必须写在一个里面，也是有办法的，那就不能在<code>xml</code>里设置<code>drawableLeft</code>了，代码设置，如下：  </p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AnimationDrawable d = (AnimationDrawable) getResources().getDrawable(R.drawable.animation_draw);  </span><br><span class="line">d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());</span><br><span class="line"> messageText.setCompoundDrawables(d, null, null, null);</span><br></pre></td></tr></table></figure>
-<p>这个具体的动画在这个<code>animation_draw</code>里，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;animation-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">                android:oneshot=&quot;false&quot;</span><br><span class="line">       &gt;</span><br><span class="line"></span><br><span class="line">    &lt;item android:drawable=&quot;@drawable/ic_launcher&quot;</span><br><span class="line">           android:duration=&quot;500&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/animation-list&gt;</span><br></pre></td></tr></table></figure>
-<p>这是一个帧动画，里面可以放很多的<code>item</code>,从而形成动画,碰到了这种情况记录下，方便以后查阅。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-	
-	<div>
-  
-   </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2112,7 +2006,7 @@ fail : function(s){
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-count">79</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -2125,7 +2019,7 @@ fail : function(s){
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
